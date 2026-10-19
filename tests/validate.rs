@@ -23,6 +23,79 @@ fn tmp_deck(tag: &str, deck_yaml: &str, pages: &[(&str, &str)]) -> String {
 const MINIMAL_DECK: &str = "version: v2\nsize: [960, 540]\npages:\n  - pages/p.page\n";
 
 #[test]
+fn display_only_math_environment_must_own_its_paragraph() {
+    let inline_page = r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [0, 0, 400, 80]
+    content:
+      text: '<p>text <latex>\begin{align} a &= b \end{align}</latex> more</p>'
+"#;
+    let entry = tmp_deck("latex-align-inline", MINIMAL_DECK, &[("p.page", inline_page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        issues.iter().any(|d| d.message.contains("display-only")),
+        "inline align must be reported the way the compiler rejects it: {issues:?}"
+    );
+
+    // The same environment on a line of its own is what the compiler renders as
+    // display math, and `aligned` may be used inside running text.
+    let display_page = r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [0, 0, 400, 80]
+    content:
+      text: '<p><latex>\begin{align} a &= b \\ c &= d \end{align}</latex></p>'
+  - elementId: t2
+    elementType: text
+    bounds: [0, 100, 400, 80]
+    content:
+      text: '<p>where \( \begin{aligned} a &= b \\ c &= d \end{aligned} \) holds</p>'
+"#;
+    let entry = tmp_deck("latex-align-display", MINIMAL_DECK, &[("p.page", display_page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(issues.is_empty(), "display math must stay clean: {issues:?}");
+}
+
+#[test]
+fn macro_definitions_are_not_reported_as_unsupported() {
+    let page = r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [0, 0, 400, 80]
+    content:
+      text: '<latex>\newcommand{\R}{\mathbb{R}}\def\norm#1{\left|#1\right|} \norm{x} \in \R^n</latex>'
+"#;
+    let entry = tmp_deck("latex-macros", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(issues.is_empty(), "user macros must validate cleanly: {issues:?}");
+
+    let bad_page = r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [0, 0, 400, 80]
+    content:
+      text: '<latex>\newcommand{\R}{a}\newcommand{\R}{b} \R</latex>'
+"#;
+    let entry = tmp_deck("latex-macros-bad", MINIMAL_DECK, &[("p.page", bad_page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        issues
+            .iter()
+            .any(|d| d.message.contains("already defined") && !d.is_warning()),
+        "a broken macro definition must be an error: {issues:?}"
+    );
+}
+
+#[test]
 fn demo_fixture_reports_unsupported_chart() {
     let project = pptd::load_project(Path::new(FIXTURE)).unwrap();
     let issues = validate_project(&project);

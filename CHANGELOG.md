@@ -4,6 +4,20 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.4.1] - 2026-10-19
+
+### 新增
+
+- **多行对齐公式**：`\begin{align}`、`align*`、`aligned`、`gather`、`gathered`、`split`、`eqnarray` 编译为原生 OMML 方程数组（`<m:eqArr>`，每行一个 `<m:e>`，`&` 对齐点写成 `&` 文本 run，与 Word 线性格式及微软 `MML2OMML.XSL` 一致）；`align`/`gather`/`eqnarray` 为显示式环境，必须独占段落，混排时明确报错
+- **公式内宏定义**：`\newcommand`（含 `[n]` 与 `[n][default]`）、`\renewcommand`、`\providecommand`、`\def`（含 `#1#2` 参数）在解析前展开；宏作用域为单个公式，递归定义触发展开上限错误；`pptd check` 的 LaTeX 诊断改为先展开再检查，用户自定义宏不再误报
+- `pptd convert` 反向编译 `<m:eqArr>` 为 `\begin{aligned} … \end{aligned}`，保留 `&` 对齐点
+
+### 修复
+
+- **花括号分组破坏公式结构**：`{\frac{a}{b}} + c` 过去被压平成文本 `a/b+c`，现在保留完整分式结构（`{x + \frac{a}{b}}` 同理）
+- **大运算符贪婪吞噬**：`\sum_{i=1}^{n} A + \sum_{j=1}^{m} B` 过去把第二个求和嵌套进第一个求和的被操作数，现在按 TeX 语义只取紧随其后的一个原子
+- 幻灯片根节点补上 `mc:Ignorable="a14"`，不理解 `a14` 数学扩展的阅读器会按 OOXML 规则跳过，而不是判定文件损坏
+
 ## [1.4.0] - 2026-10-19
 
 ### 新增

@@ -4,7 +4,7 @@ set -euo pipefail
 # pptd standalone installer for open-pptd
 REPOS=("shiquda/open-pptd-skill")
 REPO="${REPOS[0]}"
-VERSION="1.4.0"
+VERSION="1.4.1"
 INSTALL_DIR="${HOME}/.local/bin"
 INSTALL_DIR_SPECIFIED=0
 FORCE=0

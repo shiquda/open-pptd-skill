@@ -416,6 +416,9 @@ impl<'a> PptxWriter<'a> {
                 ("xmlns:a14", "http://schemas.microsoft.com/office/drawing/2010/main"),
                 ("xmlns:m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
                 ("xmlns:mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+                // Math lives in `a14:m`; a consumer that does not know the
+                // extension must skip it instead of failing on the part.
+                ("mc:Ignorable", "a14"),
             ],
         );
         x.start("p:cSld", &[]);

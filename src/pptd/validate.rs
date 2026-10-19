@@ -920,23 +920,58 @@ fn check_rich_text_tags(text: &Text, page_idx: usize, out: &mut Vec<Diagnostic>)
 /// check exists to prevent, so every unsupported command is a hard error.
 fn check_latex_commands(text: &Text, page_idx: usize, out: &mut Vec<Diagnostic>) {
     let raw = text.content.text.as_str();
-    for (delimiter, body) in latex_bodies(raw) {
-        for command in crate::pptx::math::unsupported_latex_commands(body) {
+    for span in latex_bodies(raw) {
+        for problem in crate::pptx::math::latex_problems(span.body) {
             diag(
                 out,
                 page_idx,
                 format!(
-                    "text `{}` uses unsupported LaTeX command `{command}` inside `{delimiter}`",
-                    text.common.element_id
+                    "text `{}`: {problem} (inside `{}`)",
+                    text.common.element_id, span.open
                 ),
             );
         }
     }
+    for paragraph in paragraphs(raw) {
+        let spans = latex_bodies(paragraph);
+        let [span] = spans.as_slice() else {
+            continue;
+        };
+        if !crate::pptx::math::requires_display_paragraph(span.body) {
+            continue;
+        }
+        // The environment owns its paragraph when nothing but whitespace and
+        // tags surrounds it — that is the shape the compiler renders as display
+        // math. Anything else would be compiled inline and fail.
+        let remainder = paragraph.replacen(
+            &format!("{}{}{}", span.open, span.body, span.close),
+            "",
+            1,
+        );
+        if strip_tags(&remainder).trim().is_empty() {
+            continue;
+        }
+        diag(
+            out,
+            page_idx,
+            format!(
+                "text `{}`: a display-only math environment (align/gather/eqnarray) needs a paragraph of its own (inside `{}`)",
+                text.common.element_id, span.open
+            ),
+        );
+    }
+}
+
+/// A LaTeX formula span inside rich text, with the delimiters that introduced it.
+struct LatexSpan<'a> {
+    open: &'static str,
+    close: &'static str,
+    body: &'a str,
 }
 
 /// Every LaTeX body in a rich-text string: `<latex>…</latex>` tags and
-/// `\(…\)` inline delimiters, paired with the delimiter that introduced them.
-fn latex_bodies(raw: &str) -> Vec<(&'static str, &str)> {
+/// `\(…\)` inline delimiters, paired with the delimiters that introduced them.
+fn latex_bodies(raw: &str) -> Vec<LatexSpan<'_>> {
     const TAG_OPEN: &str = "<latex>";
     const TAG_CLOSE: &str = "</latex>";
     let mut out = Vec::new();
@@ -946,7 +981,11 @@ fn latex_bodies(raw: &str) -> Vec<(&'static str, &str)> {
         let Some(end) = after.find(TAG_CLOSE) else {
             break;
         };
-        out.push((TAG_OPEN, &after[..end]));
+        out.push(LatexSpan {
+            open: TAG_OPEN,
+            close: TAG_CLOSE,
+            body: &after[..end],
+        });
         rest = &after[end + TAG_CLOSE.len()..];
     }
     let mut rest = raw;
@@ -955,8 +994,31 @@ fn latex_bodies(raw: &str) -> Vec<(&'static str, &str)> {
         let Some(end) = after.find("\\)") else {
             break;
         };
-        out.push(("\\(", &after[..end]));
+        out.push(LatexSpan {
+            open: "\\(",
+            close: "\\)",
+            body: &after[..end],
+        });
         rest = &after[end + 2..];
+    }
+    out
+}
+
+/// The paragraphs of a rich-text string: the contents of each `<p>…</p>`, or the
+/// whole string when it carries no paragraph tags.
+fn paragraphs(raw: &str) -> Vec<&str> {
+    let mut out = Vec::new();
+    let mut rest = raw;
+    while let Some(start) = rest.find("<p>") {
+        let after = &rest[start + 3..];
+        let Some(end) = after.find("</p>") else {
+            break;
+        };
+        out.push(&after[..end]);
+        rest = &after[end + 4..];
+    }
+    if out.is_empty() {
+        out.push(raw);
     }
     out
 }

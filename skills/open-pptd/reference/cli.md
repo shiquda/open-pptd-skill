@@ -30,7 +30,7 @@ cargo install --git https://github.com/shiquda/open-pptd-skill.git
    - **Target directory caveat**: `--root "${INSTALL_DIR}/.."` places the binary in `${INSTALL_DIR}/../bin/`. This resolves to `${INSTALL_DIR}` only when `INSTALL_DIR` is the default `~/.local/bin`. If a custom `--dir` is supplied (e.g. `/tmp/custom`), the cargo output will land in `/tmp/bin/pptd` rather than `/tmp/custom/pptd`.
    - **Tag caveat**: The cargo fallback command does not pass a `--tag` parameter, so it builds the current default branch (`main` HEAD) rather than a pinned release tag. For a pinned release, invoke cargo manually with `--tag`:
      ```bash
-     cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.0
+     cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.1
      ```
 ---
 ### `pptd check`

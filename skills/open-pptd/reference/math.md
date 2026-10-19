@@ -35,6 +35,9 @@ The compiler automatically distinguishes between **display formulas** and **inli
      - `<mc:Fallback>` — ordinary text runs rendering the same formula with Unicode symbols and baseline-shifted scripts (`x^{2}` → `x²`, `\frac{a+b}{c+d}` → `(a+b)/(c+d)`, `\sqrt{x^2+y^2}` → `√(x²+y²)`, `\sum_{i=1}^{n}` → `∑` with lowered/raised limits). Viewers that do not implement the `a14` extension — LibreOffice among them — take this branch.
    - This pairing exists because LibreOffice's PPTX importer drops a math zone that shares a paragraph with text runs; the fallback guarantees the formula is never silently lost.
    - Consequence: an inline formula is an editable equation in PowerPoint/WPS but plain (still correct) text in LibreOffice. If a formula must be an editable equation in every viewer, put it on its own line so it compiles as a display formula.
+3. **Display-only environments**:
+   - `\begin{align}`, `\begin{gather}` and `\begin{eqnarray}` are display environments in LaTeX and must own their paragraph. Using one inside a line of text fails the build with an explicit error instead of silently producing a broken inline equation.
+   - The `…ed` variants (`\begin{aligned}`, `\begin{gathered}`, `\begin{split}`) may be used in either position.
 
 ---
 
@@ -65,6 +68,28 @@ The compiler includes a built-in LaTeX-to-OMML converter supporting standard mat
 ### Matrices and Piecewise Cases
 - Matrix environments: `\begin{matrix}`, `\begin{pmatrix}`, `\begin{bmatrix}`, `\begin{vmatrix}` using `&` for column separation and `\\` for rows (compiled to `<m:m>`).
 - Piecewise cases: `\begin{cases} ... \end{cases}`.
+
+### Multi-line Equations
+- Aligned derivations: `\begin{aligned} ... \end{aligned}`, `\begin{split}`, `\begin{gather}`, `\begin{gathered}`, `\begin{align}`, `\begin{eqnarray}`. Rows are separated by `\\`; `&` marks the alignment point. They compile to an OMML equation array (`<m:eqArr>`) with one line per `<m:e>`, so PowerPoint and WPS keep a single editable multi-line equation:
+  ```latex
+  \begin{aligned} (a+b)^2 &= a^2 + 2ab + b^2 \\ &= a^2 + 2ab + b^2 \end{aligned}
+  ```
+- `align`, `align*`, `gather`, `gather*` and `eqnarray` are display environments: they must be the only content of their paragraph, exactly as in LaTeX. The `…ed` variants (`aligned`, `gathered`, `split`) may also appear inside running text.
+- The alignment point is written as an `&` run inside each line — the same encoding Word's linear format uses and Microsoft's `MML2OMML.XSL` produces. LibreOffice renders the equation array as a stacked column of lines.
+
+### Macro Definitions
+Short aliases can be defined at the top of a formula; they are expanded before parsing, so a macro never leaks onto the slide and never trips the unsupported-command diagnostics:
+
+```latex
+\newcommand{\R}{\mathbb{R}}\newcommand{\norm}[1]{\left|#1\right|} \norm{x} \in \R^n
+```
+
+- `\newcommand{\name}[n]{body}`, `\newcommand\name[n]{body}`, and the optional-default form `\newcommand{\name}[n][default]{body}` (`\name[…]` may then be omitted).
+- `\renewcommand` (the macro must already exist) and `\providecommand` (no-op when it does).
+- `\def\name{body}` and `\def\name#1#2{body}`. Delimited parameter texts (`\def\x#1,{…}`) are rejected with a clear error.
+- `#1`…`#9` are substituted with the arguments of the call; `##` yields a literal `#`.
+- A definition is scoped to one formula: a macro defined in one `<latex>` body is not visible in the next.
+- Recursive definitions (`\def\a{\a}`) fail with an expansion-limit error instead of hanging.
 
 ### Mathematical Symbols & Greek Letters
 - **Greek lowercase**: `\alpha`, `\beta`, `\gamma`, `\delta`, `\epsilon`, `\theta`, `\pi`, `\sigma`, `\tau`, `\omega`, etc.
@@ -100,6 +125,7 @@ In `open-pptd` v1.4.0+:
 ## 5. Reverse Compilation (`pptd convert`)
 
 When reverse-compiling an existing `.pptx` file via `pptd convert input.pptx output_dir/`:
-- Native `<a14:m>` equation structures (`<m:f>`, `<m:rad>`, `<m:sSup>`, `<m:nary>`, `<m:m>`, etc.) are automatically parsed and reconstructed into standard `<latex>...</latex>` PPTD rich text tags.
+- Native `<a14:m>` equation structures (`<m:f>`, `<m:rad>`, `<m:sSup>`, `<m:nary>`, `<m:m>`, `<m:eqArr>`, etc.) are automatically parsed and reconstructed into standard `<latex>...</latex>` PPTD rich text tags.
+- Equation arrays (`<m:eqArr>`) come back as `\begin{aligned} … \end{aligned}` with `&` alignment points preserved.
 - Equations round-trip between `.pptd` and `.pptx` losslessly.
 

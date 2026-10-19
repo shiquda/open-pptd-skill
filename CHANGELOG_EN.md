@@ -4,6 +4,20 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.4.1] - 2026-10-19
+
+### Added
+
+- **Multi-line aligned equations**: `\begin{align}`, `align*`, `aligned`, `gather`, `gathered`, `split` and `eqnarray` compile into a native OMML equation array (`<m:eqArr>`, one `<m:e>` per line, with the alignment point written as an `&` run — the same encoding Word's linear format uses and Microsoft's `MML2OMML.XSL` emits). `align`/`gather`/`eqnarray` are display environments and must own their paragraph; mixing one into a line of text is an explicit error
+- **Per-formula macros**: `\newcommand` (including `[n]` and `[n][default]`), `\renewcommand`, `\providecommand` and `\def` (including `#1#2` parameters) are expanded before parsing. Scope is one formula, recursive definitions hit an expansion-limit error, and `pptd check` expands first so user-defined macros are no longer reported as unsupported
+- `pptd convert` decompiles `<m:eqArr>` back into `\begin{aligned} … \end{aligned}`, alignment points preserved
+
+### Fixed
+
+- **Braces destroyed formula structure**: `{\frac{a}{b}} + c` used to collapse into the text `a/b+c`; the fraction structure now survives (`{x + \frac{a}{b}}` likewise)
+- **Big operators swallowed their neighbours**: `\sum_{i=1}^{n} A + \sum_{j=1}^{m} B` nested the second sum inside the first one's operand; a big operator now takes the single atom that follows it, as TeX does
+- The slide root now declares `mc:Ignorable="a14"`, so readers that do not know the `a14` math extension skip it per the OOXML rules instead of treating the part as corrupt
+
 ## [1.4.0] - 2026-10-19
 
 ### Added

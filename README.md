@@ -89,7 +89,7 @@ Open PPTD 坚持 **「PPTD 源码工程 + 原生可编辑 PPTX」** 双交付路
 
 - 📐 **工业级 DrawingML 矢量形状**：原生支持 `rect`, `roundRect`, `ellipse`, `triangle`, `diamond` 等形状，支持精确描边与阴影。
 - 🔗 **直线连接器与箭头系统**：支持相对矢量坐标 `points: "0,0 dx,dy"` 及双向箭头定义（`triangle`, `stealth` 等）。
-- 🔢 **原生 OOXML 数学公式 (`<a14:m>`)**：`<latex>…</latex>` 与行内 `\(…\)` 编译为真实可编辑的 Office Math 公式，支持真实分数线 (`\frac`)、根号 (`\sqrt`)、上下标、求和积分大运算符 (`\sum`, `\int`) 与矩阵；单段公式独占时编译为居中显示公式，混合段落内联公式额外携带 `mc:Fallback` 文本降级（PowerPoint/WPS 显示可编辑公式，不识别 `a14` 数学扩展的阅读器如 LibreOffice 显示等价的 Unicode 文本，绝不静默丢失）；不支持的 LaTeX 命令硬报错拦截，杜绝静默损坏。
+- 🔢 **原生 OOXML 数学公式 (`<a14:m>`)**：`<latex>…</latex>` 与行内 `\(…\)` 编译为真实可编辑的 Office Math 公式，支持真实分数线 (`\frac`)、根号 (`\sqrt`)、上下标、求和积分大运算符 (`\sum`, `\int`)、矩阵、多行对齐公式（`\begin{align}`/`aligned`/`gather`/`split` → 原生方程数组 `<m:eqArr>`）与公式内宏定义（`\newcommand`/`\def`，展开后再解析）；单段公式独占时编译为居中显示公式，混合段落内联公式额外携带 `mc:Fallback` 文本降级（PowerPoint/WPS 显示可编辑公式，不识别 `a14` 数学扩展的阅读器如 LibreOffice 显示等价的 Unicode 文本，绝不静默丢失）；不支持的 LaTeX 命令硬报错拦截，杜绝静默损坏。
 - 📊 **原生双向表格支持**：支持单元格合并（`rowSpan`/`colSpan`）、列宽比例定制、斑马纹与边框，支持反编译回 PPTD 代码。
 - 🗣️ **PowerPoint 演讲者备注**：页面级 `notes: "..."` 属性自动关联生成标准 OOXML `notesSlide` 关系链。
 - 🎨 **1422 款矢量图标内置**：内嵌 Font Awesome 6.7.2 Solid 图标库，支持 `fa-` 自动前缀容错与静态校验。

@@ -10,6 +10,10 @@
 use std::fmt::Write as _;
 use xmltree::Element as XmlEl;
 
+mod macros;
+
+use macros::expand_macros;
+
 /// Errors produced during LaTeX math compilation.
 #[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
 pub enum MathError {
@@ -20,6 +24,10 @@ pub enum MathError {
     /// The LaTeX formula syntax is malformed (unbalanced braces, unclosed delimiter, etc.).
     #[error("LaTeX math syntax error: {0}")]
     SyntaxError(String),
+
+    /// A macro definition is invalid or its expansion cannot be completed.
+    #[error("LaTeX macro error: {0}")]
+    MacroError(String),
 }
 
 /// Escape text content per XML 1.0 specifications for `<m:t>` nodes.
@@ -338,11 +346,18 @@ fn is_supported_command(cmd: &str) -> bool {
         )
 }
 
-/// Scan `src` for any unsupported LaTeX commands and return them as a list of
-/// strings including the leading backslash (e.g. `\foo`).
-pub fn unsupported_latex_commands(src: &str) -> Vec<String> {
-    let mut unsupported = Vec::new();
-    let chars: Vec<char> = src.chars().collect();
+/// Everything that would stop `pptd build` from compiling a LaTeX formula:
+/// unsupported commands and invalid macro definitions.
+///
+/// Macro definitions are expanded first, so a formula that defines its own
+/// aliases is reported clean. Each returned string is a user-facing message.
+pub fn latex_problems(src: &str) -> Vec<String> {
+    let expanded = match expand_macros(src) {
+        Ok(expanded) => expanded,
+        Err(err) => return vec![err.to_string()],
+    };
+    let mut problems = Vec::new();
+    let chars: Vec<char> = expanded.chars().collect();
     let mut i = 0;
     while i < chars.len() {
         if chars[i] == '%' {
@@ -358,32 +373,27 @@ pub fn unsupported_latex_commands(src: &str) -> Vec<String> {
                 break;
             }
             let start = i;
-            if chars[i].is_ascii_alphabetic() {
+            let command = if chars[i].is_ascii_alphabetic() {
                 while i < chars.len() && chars[i].is_ascii_alphabetic() {
                     i += 1;
                 }
-                let name: String = chars[start..i].iter().collect();
-                if !is_supported_command(&name) {
-                    let cmd = format!("\\{name}");
-                    if !unsupported.contains(&cmd) {
-                        unsupported.push(cmd);
-                    }
-                }
+                chars[start..i].iter().collect::<String>()
             } else {
                 let single: String = chars[start..=start].iter().collect();
                 i += 1;
-                if !is_supported_command(&single) {
-                    let cmd = format!("\\{single}");
-                    if !unsupported.contains(&cmd) {
-                        unsupported.push(cmd);
-                    }
+                single
+            };
+            if !is_supported_command(&command) {
+                let problem = format!("unsupported LaTeX command `\\{command}`");
+                if !problems.contains(&problem) {
+                    problems.push(problem);
                 }
             }
         } else {
             i += 1;
         }
     }
-    unsupported
+    problems
 }
 
 // ---------------------------------------------------------------------------
@@ -395,6 +405,10 @@ enum MathNode {
     Text(String),
     Symbol(String),
     UprightText(String),
+    /// A `{…}` group. It is kept as a node instead of being flattened into text
+    /// so that the structure inside survives: `{\frac{a}{b}}` must stay a
+    /// fraction, not collapse into the characters `a/b`.
+    Group(Vec<MathNode>),
     Frac {
         num: Vec<MathNode>,
         den: Vec<MathNode>,
@@ -430,6 +444,16 @@ enum MathNode {
     },
     Matrix {
         rows: Vec<Vec<Vec<MathNode>>>,
+    },
+    /// A multi-line equation (`align`, `aligned`, `gather`, `gathered`, `split`,
+    /// `eqnarray`): rows of cells, each cell boundary being an alignment point.
+    ///
+    /// `display_only` marks the environments that are only valid as display
+    /// math (`align`, `gather`, `eqnarray`), as opposed to the `…ed` variants
+    /// that may appear inside a line of text.
+    Aligned {
+        rows: Vec<Vec<Vec<MathNode>>>,
+        display_only: bool,
     },
     Accent {
         chr: String,
@@ -567,6 +591,20 @@ impl<'a> Parser<'a> {
         }
     }
 
+    /// Parse the operand of a big operator: a `{…}` group or a single atom.
+    fn parse_operand(&mut self) -> Result<Vec<MathNode>, MathError> {
+        self.skip_whitespace();
+        match self.peek() {
+            None | Some('}') | Some(']') | Some(')') | Some('&') => Ok(Vec::new()),
+            Some('{') => self.parse_arg(),
+            _ => {
+                let node = self.parse_primary()?;
+                let node = self.attach_scripts(node)?;
+                Ok(vec![node])
+            }
+        }
+    }
+
     fn parse_verbatim_text(&mut self) -> Result<String, MathError> {
         self.skip_whitespace();
         if self.peek() != Some('{') {
@@ -608,7 +646,7 @@ impl<'a> Parser<'a> {
             } else {
                 return Err(MathError::SyntaxError("unclosed '{'".to_string()));
             }
-            return Ok(MathNode::Text(render_nodes_text(&inner)));
+            return Ok(MathNode::Group(inner));
         }
 
         if c == '\\' {
@@ -659,8 +697,10 @@ impl<'a> Parser<'a> {
                     break;
                 }
             }
-            // Parse remainder of current scope as the operand body
-            let body = self.parse_list(&['}', ']', ')', '&'])?;
+            // TeX gives a big operator the single atom that follows it as its
+            // operand: `\sum_{i=1}^n A + \sum_{j=1}^m B` is the first sum of `A`
+            // plus the second sum, not one sum swallowing everything after it.
+            let body = self.parse_operand()?;
             return Ok(MathNode::Nary {
                 chr: chr.to_string(),
                 lim_loc: lim_loc.to_string(),
@@ -814,65 +854,13 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_environment(&mut self, env: &str) -> Result<MathNode, MathError> {
+        if let Some(display_only) = aligned_environment(env) {
+            let rows = self.parse_grid(env)?;
+            return Ok(MathNode::Aligned { rows, display_only });
+        }
         match env {
             "matrix" | "pmatrix" | "bmatrix" | "vmatrix" | "cases" => {
-                let mut rows = Vec::new();
-                let mut current_row = Vec::new();
-                let mut current_cell = Vec::new();
-
-                loop {
-                    self.skip_whitespace();
-                    if self.pos >= self.chars.len() {
-                        return Err(MathError::SyntaxError(format!("unclosed environment \\begin{{{env}}}")));
-                    }
-                    if self.peek() == Some('&') {
-                        self.next_char();
-                        current_row.push(std::mem::take(&mut current_cell));
-                        continue;
-                    }
-                    if self.peek() == Some('\\') {
-                        let start = self.pos;
-                        self.next_char();
-                        let cmd_start = self.pos;
-                        if self.pos < self.chars.len() && self.chars[self.pos].is_ascii_alphabetic() {
-                            while self.pos < self.chars.len() && self.chars[self.pos].is_ascii_alphabetic() {
-                                self.pos += 1;
-                            }
-                            let name: String = self.chars[cmd_start..self.pos].iter().collect();
-                            if name == "end" {
-                                let end_env = self.parse_verbatim_text()?;
-                                if end_env != env {
-                                    return Err(MathError::SyntaxError(format!(
-                                        "mismatched \\end{{{end_env}}} for \\begin{{{env}}}"
-                                    )));
-                                }
-                                current_row.push(current_cell);
-                                if !current_row.is_empty() {
-                                    rows.push(current_row);
-                                }
-                                break;
-                            }
-                            if name == "cr" {
-                                current_row.push(std::mem::take(&mut current_cell));
-                                rows.push(std::mem::take(&mut current_row));
-                                continue;
-                            }
-                            // Rewind and parse regular command
-                            self.pos = start;
-                        } else if self.pos < self.chars.len() && self.chars[self.pos] == '\\' {
-                            self.next_char();
-                            current_row.push(std::mem::take(&mut current_cell));
-                            rows.push(std::mem::take(&mut current_row));
-                            continue;
-                        } else {
-                            self.pos = start;
-                        }
-                    }
-
-                    let node = self.parse_primary()?;
-                    let node = self.attach_scripts(node)?;
-                    current_cell.push(node);
-                }
+                let rows = self.parse_grid(env)?;
 
                 let matrix_node = MathNode::Matrix { rows };
                 match env {
@@ -902,6 +890,81 @@ impl<'a> Parser<'a> {
             other => Err(MathError::UnsupportedCommand(format!("\\begin{{{other}}}"))),
         }
     }
+
+    /// Parse the body of a grid environment into rows of cells.
+    fn parse_grid(&mut self, env: &str) -> Result<Vec<Vec<Vec<MathNode>>>, MathError> {
+        let mut rows = Vec::new();
+        let mut current_row = Vec::new();
+        let mut current_cell = Vec::new();
+
+        loop {
+            self.skip_whitespace();
+            if self.pos >= self.chars.len() {
+                return Err(MathError::SyntaxError(format!(
+                    "unclosed environment \\begin{{{env}}}"
+                )));
+            }
+            if self.peek() == Some('&') {
+                self.next_char();
+                current_row.push(std::mem::take(&mut current_cell));
+                continue;
+            }
+            if self.peek() == Some('\\') {
+                let start = self.pos;
+                self.next_char();
+                let cmd_start = self.pos;
+                if self.pos < self.chars.len() && self.chars[self.pos].is_ascii_alphabetic() {
+                    while self.pos < self.chars.len() && self.chars[self.pos].is_ascii_alphabetic() {
+                        self.pos += 1;
+                    }
+                    let name: String = self.chars[cmd_start..self.pos].iter().collect();
+                    if name == "end" {
+                        let end_env = self.parse_verbatim_text()?;
+                        if end_env != env {
+                            return Err(MathError::SyntaxError(format!(
+                                "mismatched \\end{{{end_env}}} for \\begin{{{env}}}"
+                            )));
+                        }
+                        current_row.push(current_cell);
+                        if !current_row.is_empty() {
+                            rows.push(current_row);
+                        }
+                        break;
+                    }
+                    if name == "cr" {
+                        current_row.push(std::mem::take(&mut current_cell));
+                        rows.push(std::mem::take(&mut current_row));
+                        continue;
+                    }
+                    // Rewind and parse regular command
+                    self.pos = start;
+                } else if self.pos < self.chars.len() && self.chars[self.pos] == '\\' {
+                    self.next_char();
+                    current_row.push(std::mem::take(&mut current_cell));
+                    rows.push(std::mem::take(&mut current_row));
+                    continue;
+                } else {
+                    self.pos = start;
+                }
+            }
+
+            let node = self.parse_primary()?;
+            let node = self.attach_scripts(node)?;
+            current_cell.push(node);
+        }
+
+        Ok(rows)
+    }
+}
+
+/// Environments that compile to `<m:eqArr>`; the flag marks the ones that are
+/// only valid as display math (the `…ed` variants may be used inline).
+fn aligned_environment(env: &str) -> Option<bool> {
+    Some(match env {
+        "align" | "align*" | "gather" | "gather*" | "eqnarray" | "eqnarray*" => true,
+        "aligned" | "gathered" | "split" => false,
+        _ => return None,
+    })
 }
 
 fn render_nodes_text(nodes: &[MathNode]) -> String {
@@ -909,6 +972,7 @@ fn render_nodes_text(nodes: &[MathNode]) -> String {
     for node in nodes {
         match node {
             MathNode::Text(t) | MathNode::Symbol(t) | MathNode::UprightText(t) => s.push_str(t),
+            MathNode::Group(inner) => s.push_str(&render_nodes_text(inner)),
             MathNode::Frac { num, den } => {
                 s.push_str(&render_nodes_text(num));
                 s.push('/');
@@ -946,6 +1010,16 @@ fn render_nodes_text(nodes: &[MathNode]) -> String {
                 for r in rows {
                     for c in r {
                         s.push_str(&render_nodes_text(c));
+                    }
+                }
+            }
+            MathNode::Aligned { rows, .. } => {
+                for (r_idx, row) in rows.iter().enumerate() {
+                    if r_idx > 0 {
+                        s.push(' ');
+                    }
+                    for cell in row {
+                        s.push_str(&render_nodes_text(cell));
                     }
                 }
             }
@@ -1103,6 +1177,24 @@ fn emit_nodes(out: &mut String, nodes: &[MathNode]) {
                         }
                         out.push_str("</m:m>");
                     }
+                    MathNode::Group(inner) => emit_nodes(out, inner),
+                    MathNode::Aligned { rows, .. } => {
+                        // An equation array: one <m:e> per line, with the alignment
+                        // point written as an `&` run — the same encoding Word uses
+                        // in its linear format and Microsoft's MML2OMML.XSL emits.
+                        out.push_str("<m:eqArr><m:eqArrPr><m:baseJc m:val=\"center\"/></m:eqArrPr>");
+                        for row in rows {
+                            out.push_str("<m:e>");
+                            for (idx, cell) in row.iter().enumerate() {
+                                if idx > 0 {
+                                    out.push_str("<m:r><m:t>&amp;</m:t></m:r>");
+                                }
+                                emit_nodes(out, cell);
+                            }
+                            out.push_str("</m:e>");
+                        }
+                        out.push_str("</m:eqArr>");
+                    }
                     MathNode::Accent { chr, body } => {
                         out.push_str("<m:acc><m:accPr>");
                         let _ = write!(out, "<m:chr m:val=\"{}\"/>", xml_escape(chr));
@@ -1120,14 +1212,23 @@ fn emit_nodes(out: &mut String, nodes: &[MathNode]) {
 
 /// Convert a LaTeX math formula into an OOXML OMML `<a14:m>` XML fragment.
 ///
+/// Macro definitions (`\newcommand`, `\def`, …) are expanded first.
+///
 /// If `display` is `true`, emits display math:
 /// `<a14:m><m:oMathPara><m:oMathParaPr><m:jc m:val="centerGroup"/></m:oMathParaPr><m:oMath>…</m:oMath></m:oMathPara></a14:m>`.
 ///
 /// If `display` is `false`, emits inline math:
 /// `<a14:m><m:oMath>…</m:oMath></a14:m>`.
 pub fn latex_to_omml(src: &str, display: bool) -> Result<String, MathError> {
-    let mut parser = Parser::new(src);
+    let expanded = expand_macros(src)?;
+    let mut parser = Parser::new(&expanded);
     let nodes = parser.parse_list(&[])?;
+    if !display && has_display_only_environment(&nodes) {
+        return Err(MathError::SyntaxError(
+            "the align/gather/eqnarray environments need a paragraph of their own (display math)"
+                .to_string(),
+        ));
+    }
 
     let mut inner = String::new();
     emit_nodes(&mut inner, &nodes);
@@ -1147,6 +1248,31 @@ pub fn latex_to_omml(src: &str, display: bool) -> Result<String, MathError> {
     Ok(out)
 }
 
+/// Whether the formula is a display-only environment (`align`, `gather`, `eqnarray`).
+fn has_display_only_environment(nodes: &[MathNode]) -> bool {
+    nodes.iter().any(|node| match node {
+        MathNode::Aligned { display_only, .. } => *display_only,
+        MathNode::Group(inner) => has_display_only_environment(inner),
+        _ => false,
+    })
+}
+
+/// Whether the formula uses an environment that must own its paragraph
+/// (`align`, `gather`, `eqnarray`).
+///
+/// The validator uses this to mirror the display/inline decision the compiler
+/// makes, so `pptd check` reports the same problem `pptd build` would.
+pub fn requires_display_paragraph(src: &str) -> bool {
+    let Ok(expanded) = expand_macros(src) else {
+        return false;
+    };
+    let mut parser = Parser::new(&expanded);
+    match parser.parse_list(&[]) {
+        Ok(nodes) => has_display_only_environment(&nodes),
+        Err(_) => false,
+    }
+}
+
 /// A plain-text segment with optional baseline shift for fallback rendering.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MathSegment {
@@ -1159,10 +1285,8 @@ pub struct MathSegment {
 /// Used for `<mc:Fallback>` in mixed-content paragraphs where office viewers like
 /// LibreOffice do not parse `<a14:m>` inline math.
 pub fn latex_to_fallback_segments(src: &str) -> Result<Vec<MathSegment>, MathError> {
-    if let Some(cmd) = unsupported_latex_commands(src).first() {
-        return Err(MathError::UnsupportedCommand(cmd.clone()));
-    }
-    let mut parser = Parser::new(src);
+    let expanded = expand_macros(src)?;
+    let mut parser = Parser::new(&expanded);
     let nodes = parser.parse_list(&[])?;
     let mut raw = Vec::new();
     nodes_to_fallback(&nodes, None, &mut raw);
@@ -1177,6 +1301,7 @@ fn is_single_token(nodes: &[MathNode]) -> bool {
         MathNode::Text(s) => s.chars().count() == 1 || s.chars().all(|c| c.is_ascii_digit()),
         MathNode::Symbol(_) => true,
         MathNode::UprightText(s) => s.chars().count() == 1,
+        MathNode::Group(inner) => is_single_token(inner),
         _ => false,
     }
 }
@@ -1334,6 +1459,20 @@ fn nodes_to_fallback(
                     text: "]".into(),
                     baseline: current_baseline,
                 });
+            }
+            MathNode::Group(inner) => nodes_to_fallback(inner, current_baseline, out),
+            MathNode::Aligned { rows, .. } => {
+                for (r_idx, row) in rows.iter().enumerate() {
+                    if r_idx > 0 {
+                        out.push(MathSegment {
+                            text: "; ".into(),
+                            baseline: current_baseline,
+                        });
+                    }
+                    for cell in row {
+                        nodes_to_fallback(cell, current_baseline, out);
+                    }
+                }
             }
             MathNode::Accent { chr, body } => {
                 nodes_to_fallback(body, current_baseline, out);
@@ -1645,6 +1784,23 @@ fn decompile_element(out: &mut String, el: &XmlEl) {
             decompile_matrix_rows(out, el);
             out.push_str("\\end{matrix}");
         }
+        "eqArr" => {
+            // One <m:e> per line; alignment points are the `&` runs inside them.
+            out.push_str("\\begin{aligned}");
+            let rows: Vec<&XmlEl> = el
+                .children
+                .iter()
+                .filter_map(|n| n.as_element())
+                .filter(|c| c.name == "e")
+                .collect();
+            for (idx, row) in rows.iter().enumerate() {
+                if idx > 0 {
+                    out.push_str(" \\\\ ");
+                }
+                decompile_children(out, &row.children);
+            }
+            out.push_str("\\end{aligned}");
+        }
         "acc" => {
             let chr = first_child(el, "accPr")
                 .and_then(|p| first_child(p, "chr"))
@@ -1781,8 +1937,15 @@ mod tests {
             _ => panic!("expected UnsupportedCommand error"),
         }
 
-        let unsupp = unsupported_latex_commands(r"\frac{a}{b} + \foo{x} + \bar{y} + \baz");
-        assert_eq!(unsupp, vec![r"\foo".to_string(), r"\baz".to_string()]);
+        let problems = latex_problems(r"\frac{a}{b} + \foo{x} + \bar{y} + \baz");
+        assert_eq!(
+            problems,
+            vec![
+                "unsupported LaTeX command `\\foo`".to_string(),
+                "unsupported LaTeX command `\\baz`".to_string()
+            ]
+        );
+        assert!(latex_problems(r"\newcommand{\R}{\mathbb{R}} x \in \R").is_empty());
     }
 
     #[test]
@@ -1867,5 +2030,106 @@ mod tests {
         assert_eq!(flat, "∑i=1n i2");
         assert!(segs.iter().any(|s| s.text == "i=1" && s.baseline == Some(-25000)));
         assert!(segs.iter().any(|s| s.text == "n" && s.baseline == Some(30000)));
+    }
+
+    #[test]
+    fn test_group_preserves_structure() {
+        let omml = latex_to_omml(r"{\frac{a}{b}} + c", false).unwrap();
+        assert!(omml.contains("<m:f>"), "{omml}");
+        assert!(!omml.contains("<m:t>a/b"), "{omml}");
+
+        let nested = latex_to_omml(r"{x + \frac{a}{b}}", false).unwrap();
+        assert!(nested.contains("<m:f>"), "{nested}");
+        assert!(nested.contains("<m:t>x+</m:t>"), "{nested}");
+    }
+
+    #[test]
+    fn test_nary_takes_one_operand() {
+        let omml = latex_to_omml(r"\sum_{i=1}^{n} A + \sum_{j=1}^{m} B", true).unwrap();
+        let first_close = omml.find("</m:nary>").expect("first sum");
+        let second_open = omml[first_close..]
+            .find("<m:nary>")
+            .map(|i| i + first_close)
+            .expect("second sum");
+        assert!(second_open > first_close, "{omml}");
+        assert!(omml[..first_close].contains("<m:t>A</m:t>"), "{omml}");
+        assert!(!omml[..first_close].contains('B'), "{omml}");
+    }
+
+    #[test]
+    fn test_align_environment() {
+        let omml = latex_to_omml(r"\begin{align} a &= b \\ c &= d \end{align}", true).unwrap();
+        assert!(omml.contains("<m:oMathPara>"), "{omml}");
+        assert!(omml.contains("<m:eqArr>"), "{omml}");
+        assert!(omml.contains("<m:baseJc m:val=\"center\"/>"), "{omml}");
+        assert_eq!(omml.matches("<m:e>").count(), 2, "{omml}");
+        assert!(omml.contains("<m:t>&amp;</m:t>"), "alignment point: {omml}");
+
+        // `align` is a display environment and cannot be mixed into a line of text.
+        let err = latex_to_omml(r"\begin{align} a &= b \end{align}", false).unwrap_err();
+        assert!(err.to_string().contains("display"), "{err}");
+    }
+
+    #[test]
+    fn test_aligned_environment_is_inline_capable() {
+        let omml = latex_to_omml(r"\begin{aligned} a &= b \\ c &= d \end{aligned}", false).unwrap();
+        assert!(omml.contains("<m:eqArr>"), "{omml}");
+        assert!(!omml.contains("<m:oMathPara>"), "{omml}");
+    }
+
+    #[test]
+    fn test_gather_has_no_alignment_points() {
+        let omml = latex_to_omml(r"\begin{gather} a = b \\ c = d \end{gather}", true).unwrap();
+        assert_eq!(omml.matches("<m:e>").count(), 2, "{omml}");
+        assert!(!omml.contains("<m:t>&amp;</m:t>"), "{omml}");
+    }
+
+    #[test]
+    fn test_eqnarray_alignment_points() {
+        let omml = latex_to_omml(r"\begin{eqnarray} a &=& b \\ c &=& d \end{eqnarray}", true).unwrap();
+        assert_eq!(omml.matches("<m:t>&amp;</m:t>").count(), 4, "{omml}");
+    }
+
+    #[test]
+    fn test_macros_are_expanded_before_parsing() {
+        let omml = latex_to_omml(
+            r"\newcommand{\R}{\mathbb{R}}\def\half{\frac{1}{2}} \R^n + \half",
+            true,
+        )
+        .unwrap();
+        assert!(!omml.contains("newcommand"), "{omml}");
+        assert!(omml.contains("ℝ"), "{omml}");
+        assert!(omml.contains("<m:f>"), "{omml}");
+        assert!(latex_problems(r"\newcommand{\R}{\mathbb{R}} \R").is_empty());
+
+        let fallback = latex_to_fallback_segments(r"\newcommand{\half}[1]{\frac{#1}{2}} \half{x}")
+            .expect("macros expand in fallback text too");
+        let flat: String = fallback.iter().map(|s| s.text.as_str()).collect();
+        assert_eq!(flat, "x/2");
+    }
+
+    #[test]
+    fn test_eqarr_roundtrip() {
+        let latex = r"\begin{aligned} a &= b \\ c &= d \end{aligned}";
+        let omml = latex_to_omml(latex, false).unwrap();
+        let wrapped = format!(
+            "<root xmlns:a14=\"http://schemas.microsoft.com/office/drawing/2010/main\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">{omml}</root>"
+        );
+        let parsed = XmlEl::parse(wrapped.as_bytes()).unwrap();
+        let m_el = first_child(&parsed, "m").unwrap();
+        let omath = first_child(m_el, "oMath").unwrap();
+        let decompiled = omml_to_latex(omath);
+        assert!(decompiled.contains("\\begin{aligned}"), "{decompiled}");
+        assert!(decompiled.contains('&'), "{decompiled}");
+        let re_omml = latex_to_omml(&decompiled, false).unwrap();
+        assert_eq!(omml, re_omml, "roundtrip failed for: {latex}");
+    }
+
+    #[test]
+    fn test_aligned_fallback_text() {
+        let segs = latex_to_fallback_segments(r"\begin{aligned} a &= b \\ c &= d \end{aligned}")
+            .expect("aligned is valid inline");
+        let flat: String = segs.iter().map(|s| s.text.as_str()).collect();
+        assert_eq!(flat, "a=b; c=d");
     }
 }

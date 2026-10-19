@@ -16,8 +16,7 @@ python3 skills/open-pptd/scripts/install_binary.py
 pptd check <project_dir>/deck.pptd
 
 # 3. 极速编译为原生 PPTX
-pptd build <project_dir>/deck.pptd -o <output.pptx>
-
+pptd build <project_dir>/deck.pptd -o <output.pptx> [--force]
 # 4. 成品质量与合规性验收 (无泄漏标签、页数与备注检查)
 python3 skills/open-pptd/scripts/validate_pptx.py <output.pptx> --expected-pages <N> --check-notes
 ```
@@ -43,9 +42,8 @@ python3 skills/open-pptd/scripts/validate_pptx.py <output.pptx> --expected-pages
   - 超链接写法：使用纯文本 URL 或在页脚使用普通文本标注来源（如 `来源: IDC (2026)`）。
 - ❌ **严禁使用图表元素**：`elementType: chart`。
   - 替代方案：使用原生表格 `elementType: table`，或使用外部脚本渲染为图片后以 `elementType: image` 引入。
-- ❌ **严禁使用上标/下标 HTML 标签**：`<sup>`, `<sub>`。
-  - 替代方案：使用原生 LaTeX 公式 `\( x^2 \)`、`\( H_2O \)`。
-
+- ❌ **严禁使用上标/下标 HTML 标签**：`<sup>`, `<sub>`（编译器不支持此类 HTML 标签，`check` 会报错拦截）。
+  - 替代方案：使用原生 LaTeX 数学公式 `<latex>x^2</latex>`、`\( x^2 \)`、`\( H_2O \)`、`\( \sigma_i \)`。在 v1.4.0 中，LaTeX 公式会被编译为真实可编辑的 OOXML 原生数学公式，上标与下标享有原生基线偏移与缩放。
 ---
 
 ## 🛠️ 异常分支与恢复指引 (Failure Branches)
@@ -58,7 +56,7 @@ python3 skills/open-pptd/scripts/validate_pptx.py <output.pptx> --expected-pages
    - 检查 `$color` 引用是否已在 `theme.colors` 中声明。
    - 检查图片路径是否存在（统一放置于 `assets/` 目录）。
 3. **`pptd build` 退出码 2 (.sync.hash 覆盖保护)**：
-   - 说明目标 `.pptx` 在上次编译后被外部程序编辑过。若确认以 PPTD 源码为准，先 `rm <output.pptx>` 再重新 build。
+   - 说明目标 `.pptx` 在上次编译后被外部程序编辑过。若确认以 PPTD 源码为准覆盖外部修改，在命令中追加 `--force` 参数重新 build：`pptd build <project_dir>/deck.pptd -o <output.pptx> --force`；或在确认放弃外部修改后删除原文件再重新 build。
 4. **`validate_pptx.py` 报错**：
    - 若报 `Leaked HTML tags`，排查源码并移除 `<ul>`/`<li>`/`<a>` 标签。
    - 若页数不符，排查 `deck.pptd` 中的 `pages` 列表。

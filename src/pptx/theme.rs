@@ -9,7 +9,7 @@
 
 use std::collections::BTreeMap;
 
-use crate::pptd::{Theme, shared::Color, shared::FontFamily};
+use crate::pptd::{Theme, TextStyleConfig, shared::Color, shared::FontFamily};
 use crate::{Error, Result};
 
 use super::opc::ns;
@@ -96,13 +96,16 @@ pub fn resolve_color(theme: Option<&Theme>, color: &Color) -> Result<ResolvedCol
 
 /// Case-insensitive lookup of a color key inside `theme.colors`.
 fn lookup_color<'a>(theme: &'a Theme, key: &str) -> Option<&'a Color> {
-    theme.colors.get(key).or_else(|| {
-        theme
-            .colors
-            .iter()
-            .find(|(k, _)| k.eq_ignore_ascii_case(key))
-            .map(|(_, v)| v)
-    })
+    if let Some(color) = theme.colors.get(key) {
+        return Some(color);
+    }
+    let mut matching: Vec<(&String, &Color)> = theme
+        .colors
+        .iter()
+        .filter(|(k, _)| k.eq_ignore_ascii_case(key))
+        .collect();
+    matching.sort_by_key(|(k, _)| *k);
+    matching.first().map(|(_, v)| *v)
 }
 
 /// The resolved clrScheme slots, keyed by slot name (`dk1` ... `folHlink`).
@@ -362,10 +365,12 @@ pub fn safe_latin_typeface(name: &str) -> &str {
 /// text styles, or the spec default safe fonts.
 pub fn default_fonts(theme: Option<&Theme>) -> (String, String) {
     if let Some(font) = theme.and_then(|theme| {
-        theme
-            .text_styles
-            .values()
-            .find_map(|style| style.font_family.clone())
+        let mut sorted_styles: Vec<(&String, &TextStyleConfig)> =
+            theme.text_styles.iter().collect();
+        sorted_styles.sort_by_key(|(k, _)| *k);
+        sorted_styles
+            .into_iter()
+            .find_map(|(_, style)| style.font_family.clone())
     }) {
         return match font {
             FontFamily::Single(name) => (
@@ -448,4 +453,73 @@ fn emit_effect_style(x: &mut Xml, with_shadow: bool) {
     }
     x.end("a:effectLst");
     x.end("a:effectStyle");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::HashMap;
+
+    #[test]
+    fn default_fonts_is_deterministic_with_mixed_styles() {
+        let mut text_styles = HashMap::new();
+        text_styles.insert(
+            "title".to_string(),
+            TextStyleConfig {
+                font_family: Some(FontFamily::Single("思源宋体".to_string())),
+                ..Default::default()
+            },
+        );
+        text_styles.insert(
+            "body".to_string(),
+            TextStyleConfig {
+                font_family: Some(FontFamily::Single("思源黑体".to_string())),
+                ..Default::default()
+            },
+        );
+        let theme = Theme {
+            text_styles,
+            ..Default::default()
+        };
+
+        let baseline = default_fonts(Some(&theme));
+        for _ in 0..50 {
+            let next = default_fonts(Some(&theme));
+            assert_eq!(baseline, next, "default_fonts must return identical font pairs");
+        }
+    }
+
+    #[test]
+    fn theme_xml_is_byte_identical_across_invocations() {
+        let mut text_styles = HashMap::new();
+        text_styles.insert(
+            "title".to_string(),
+            TextStyleConfig {
+                font_family: Some(FontFamily::Single("思源宋体".to_string())),
+                ..Default::default()
+            },
+        );
+        text_styles.insert(
+            "body".to_string(),
+            TextStyleConfig {
+                font_family: Some(FontFamily::Single("思源黑体".to_string())),
+                ..Default::default()
+            },
+        );
+        let mut colors = HashMap::new();
+        colors.insert("primary".to_string(), Color("#123456".to_string()));
+        colors.insert("secondary".to_string(), Color("#654321".to_string()));
+        colors.insert("accent".to_string(), Color("#ABCDEF".to_string()));
+        let theme = Theme {
+            text_styles,
+            colors,
+            ..Default::default()
+        };
+
+        let baseline = theme_xml(Some(&theme));
+        for _ in 0..50 {
+            let next = theme_xml(Some(&theme));
+            assert_eq!(baseline, next, "theme_xml output must be 100% byte identical across runs");
+        }
+    }
 }

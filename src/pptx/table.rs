@@ -202,21 +202,7 @@ fn apply_inline(acc: &mut CellAcc, theme: Option<&Theme>, cell: &Cell) {
 /// anywhere: 1px solid black on all four sides.
 fn border_sides(spec: Option<&BorderSpec>) -> [Option<Border>; 4] {
     match spec {
-        None => {
-            let default = Border {
-                style: Some(LineStyle::Solid),
-                width: Some(1.0),
-                color: Some(Color("#000000".to_owned())),
-                gradient: None,
-            };
-            [
-                Some(default.clone()),
-                Some(default.clone()),
-                Some(default.clone()),
-                Some(default),
-            ]
-        }
-        Some(BorderSpec::Clear) => [None, None, None, None],
+        None | Some(BorderSpec::Clear) => [None, None, None, None],
         Some(BorderSpec::Uniform(b)) => [
             Some(b.clone()),
             Some(b.clone()),
@@ -230,23 +216,24 @@ fn border_sides(spec: Option<&BorderSpec>) -> [Option<Border>; 4] {
     }
 }
 
-/// One cell-side border: `<a:lnL/lnR/lnT/lnB>`. A cleared side emits
-/// `<a:noFill/>` so no theme line bleeds through.
+/// One cell-side border: `<a:lnL/lnR/lnT/lnB>`.
+/// When unspecified (`None`), the XML element is omitted so the neighbour's border survives.
+/// When explicitly set to none (e.g. width == 0), `<a:noFill/>` is emitted.
 fn cell_border_xml(
     xml: &mut Xml,
     theme: Option<&Theme>,
     tag: &str,
     border: Option<&Border>,
 ) -> Result<()> {
-    let border = match border {
-        Some(b) => b,
-        None => {
-            xml.start(tag, &[]);
-            xml.leaf("a:noFill", &[]);
-            xml.end(tag);
-            return Ok(());
-        }
+    let Some(border) = border else {
+        return Ok(());
     };
+    if border.width.is_some_and(|w| w == 0.0) {
+        xml.start(tag, &[]);
+        xml.leaf("a:noFill", &[]);
+        xml.end(tag);
+        return Ok(());
+    }
     let width = emu(border.width.unwrap_or(1.0)).to_string();
     xml.start(tag, &[("w", &width), ("cap", "flat")]);
     if let Some(grad) = &border.gradient {
@@ -456,10 +443,11 @@ fn cell_eff_style(acc: &CellAcc) -> EffTextStyle {
         italic: acc.italic,
         line_height: acc.line_height,
         line_height_px: acc.line_height_px,
+        letter_spacing: acc.letter_spacing,
         align,
         wrap: None,
         direction: None,
-        margin_top: None,
+        margin_top: acc.margin_top,
         margin_left: None,
         margin_right: None,
         margin_bottom: None,
@@ -496,13 +484,15 @@ fn emit_tc_pr(
             ("anchor", anchor),
         ],
     );
-    let sides = border_sides(acc.and_then(|a| a.border.as_ref()));
-    cell_border_xml(xml, theme, "a:lnL", sides[0].as_ref())?;
-    cell_border_xml(xml, theme, "a:lnR", sides[1].as_ref())?;
-    cell_border_xml(xml, theme, "a:lnT", sides[2].as_ref())?;
-    cell_border_xml(xml, theme, "a:lnB", sides[3].as_ref())?;
-    if let Some(fill) = acc.and_then(|a| a.fill.as_ref()) {
-        fill_xml(xml, theme, fill, None)?;
+    if let Some(acc) = acc {
+        let sides = border_sides(acc.border.as_ref());
+        cell_border_xml(xml, theme, "a:lnL", sides[0].as_ref())?;
+        cell_border_xml(xml, theme, "a:lnR", sides[1].as_ref())?;
+        cell_border_xml(xml, theme, "a:lnT", sides[2].as_ref())?;
+        cell_border_xml(xml, theme, "a:lnB", sides[3].as_ref())?;
+        if let Some(fill) = &acc.fill {
+            fill_xml(xml, theme, fill, None)?;
+        }
     }
     xml.end("a:tcPr");
     Ok(())
@@ -569,4 +559,85 @@ fn emit_origin_cell(
     emit_tc_pr(xml, theme, Some(acc), anchor)?;
     xml.end("a:tc");
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn unspecified_border_omits_xml_elements() {
+        let mut xml = Xml::new();
+        cell_border_xml(&mut xml, None, "a:lnT", None).unwrap();
+        let out = xml.into_string();
+        assert!(!out.contains("<a:lnT"), "unspecified border must not emit any XML element: `{out}`");
+    }
+
+    #[test]
+    fn explicit_zero_width_border_emits_nofill() {
+        let mut xml = Xml::new();
+        let zero = Border {
+            width: Some(0.0),
+            ..Default::default()
+        };
+        cell_border_xml(&mut xml, None, "a:lnT", Some(&zero)).unwrap();
+        let out = xml.into_string();
+        assert!(out.contains("<a:lnT") && out.contains("<a:noFill/>"), "width 0 must emit noFill: `{out}`");
+    }
+
+    #[test]
+    fn positive_width_border_emits_line() {
+        let mut xml = Xml::new();
+        let b = Border {
+            width: Some(1.5),
+            color: Some(Color("#FF0000".to_string())),
+            ..Default::default()
+        };
+        cell_border_xml(&mut xml, None, "a:lnB", Some(&b)).unwrap();
+        let out = xml.into_string();
+        assert!(out.contains("<a:lnB"), "must emit lnB: `{out}`");
+        assert!(out.contains("FF0000"), "must contain color: `{out}`");
+        assert!(!out.contains("noFill"), "must not contain noFill");
+    }
+
+    #[test]
+    fn header_bottom_only_and_body_clear_emit_correct_borders() {
+        // Header cell with [null, null, border, null]
+        let header_acc = CellAcc {
+            border: Some(BorderSpec::Clockwise([
+                None,
+                None,
+                Some(Border {
+                    width: Some(2.0),
+                    color: Some(Color("#112233".to_string())),
+                    ..Default::default()
+                }),
+                None,
+            ])),
+            ..Default::default()
+        };
+        let mut xml = Xml::new();
+        emit_tc_pr(&mut xml, None, Some(&header_acc), "ctr").unwrap();
+        let header_out = xml.into_string();
+        assert!(header_out.contains("<a:lnB"), "header must have lnB");
+        assert!(!header_out.contains("<a:lnT"), "header must omit lnT");
+        assert!(!header_out.contains("<a:lnL"), "header must omit lnL");
+        assert!(!header_out.contains("<a:lnR"), "header must omit lnR");
+        assert!(!header_out.contains("noFill"), "header must not contain noFill");
+
+        // Body cell with border: null (BorderSpec::Clear)
+        let body_acc = CellAcc {
+            border: Some(BorderSpec::Clear),
+            ..Default::default()
+        };
+        let mut xml_body = Xml::new();
+        emit_tc_pr(&mut xml_body, None, Some(&body_acc), "ctr").unwrap();
+        let body_out = xml_body.into_string();
+        assert!(!body_out.contains("<a:lnT"), "body cell must omit lnT so header lnB survives");
+        assert!(!body_out.contains("<a:lnB"), "body cell must omit lnB");
+        assert!(!body_out.contains("<a:lnL"), "body cell must omit lnL");
+        assert!(!body_out.contains("<a:lnR"), "body cell must omit lnR");
+        assert!(!body_out.contains("noFill"), "body cell must not contain noFill");
+    }
+
 }

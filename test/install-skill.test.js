@@ -164,7 +164,7 @@ test("help documents interactive install and -y for agents", () => {
   assert.match(result.stdout, /space select/);
   assert.match(result.stdout, /-y, --yes/);
   assert.match(result.stdout, /--all/);
-  assert.match(result.stdout, /npx open-pptd-skill@latest install -y/);
+  assert.match(result.stdout, /npx github:shiquda\/open-pptd-skill install -y/);
 });
 
 test("-h shows help", () => {

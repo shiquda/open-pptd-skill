@@ -1,9 +1,19 @@
 #!/usr/bin/env node
 
-import { cpSync, existsSync, mkdtempSync, mkdirSync, readFileSync, renameSync, rmSync } from "node:fs";
+import {
+  accessSync,
+  constants,
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+} from "node:fs";
 import { homedir } from "node:os";
 import { basename, dirname, join, resolve, sep } from "node:path";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { stdin as input, stdout as output } from "node:process";
 import { fileURLToPath } from "node:url";
 import { startEditorServer } from "../lib/editor-server.js";
@@ -47,10 +57,11 @@ Options:
     return;
   }
 
-  console.log(`Install ${SKILL_NAME} for your AI coding agent or start its local editor.
+  console.log(`Install ${SKILL_NAME} for your AI coding agent, build PPTD decks, or start its local editor.
 
 Usage:
   open-pptd-skill [install] [options]
+  open-pptd-skill build [options] <file>
   open-pptd-skill serve [options]
 
 Install options:
@@ -65,10 +76,11 @@ In an interactive terminal (no --target / --yes / --all), a checklist is shown:
   ↑/↓ move  space select  a all  enter confirm
 
 For agents / CI, prefer:
-  npx open-pptd-skill@latest install -y
+  npx github:shiquda/open-pptd-skill install -y
 
 Re-running install replaces an existing open-pptd installation.
 Run "open-pptd-skill serve --help" for server options.
+Run "open-pptd-skill build --help" for build options.
 `);
 }
 
@@ -79,7 +91,7 @@ function printVersion() {
 function parseArguments(arguments_) {
   const raw = [...arguments_];
   const args = [...arguments_];
-  const known = ["install", "serve", "build", "convert", "install-binary"];
+  const known = ["install", "serve", "build", "convert", "install-binary", "check", "dump"];
   const command = known.includes(args[0]) ? args.shift() : "install";
   const options = {
     command,
@@ -90,6 +102,10 @@ function parseArguments(arguments_) {
     open: false,
     port: 55173,
   };
+
+  if (command !== "install" && command !== "serve") {
+    return options;
+  }
   while (args.length > 0) {
     const argument = args.shift();
 
@@ -356,6 +372,58 @@ async function installSkill(options) {
   }
 }
 
+function findOnPath(binName) {
+  const pathEnv = process.env.PATH || "";
+  const delimiter = process.platform === "win32" ? ";" : ":";
+  const extensions = process.platform === "win32"
+    ? (process.env.PATHEXT || ".EXE;.CMD;.BAT;.COM").split(";").map((e) => e.toLowerCase())
+    : [""];
+  const dirs = pathEnv.split(delimiter);
+
+  for (const dir of dirs) {
+    if (!dir) continue;
+    for (const ext of extensions) {
+      const candidate = join(dir, process.platform === "win32" ? `${binName}${ext}` : binName);
+      try {
+        if (existsSync(candidate)) {
+          if (process.platform !== "win32") {
+            accessSync(candidate, constants.X_OK);
+          }
+          return candidate;
+        }
+      } catch {
+        // ignore
+      }
+    }
+  }
+  return null;
+}
+
+function resolvePptdBinary() {
+  if (process.env.PPTD_BIN) {
+    const custom = resolve(process.env.PPTD_BIN);
+    if (existsSync(custom)) {
+      return custom;
+    }
+    return null;
+  }
+
+  const home = homedir();
+  const localBin = join(home, ".local", "bin", process.platform === "win32" ? "pptd.exe" : "pptd");
+  if (existsSync(localBin)) {
+    try {
+      if (process.platform !== "win32") {
+        accessSync(localBin, constants.X_OK);
+      }
+      return localBin;
+    } catch {
+      // ignore
+    }
+  }
+
+  return findOnPath("pptd");
+}
+
 async function main() {
   assertNodeVersion();
   const options = parseArguments(process.argv.slice(2));
@@ -370,16 +438,38 @@ async function main() {
   if (options.command === "install-binary") {
     const script = join(packageRoot, "skills", SKILL_NAME, "scripts", "install_binary.py");
     const res = spawnSync("python3", [script, ...options.rawArgs], { stdio: "inherit" });
+    if (res.error) {
+      console.error(`Error: failed to run installer: ${res.error.message}`);
+      process.exit(1);
+    }
     process.exit(res.status ?? 0);
   }
-  if (options.command === "build") {
-    const script = join(packageRoot, "skills", SKILL_NAME, "scripts", "export_pptx.py");
-    const res = spawnSync("python3", [script, ...options.rawArgs], { stdio: "inherit" });
-    process.exit(res.status ?? 0);
+  if (["build", "check", "dump"].includes(options.command)) {
+    const binary = resolvePptdBinary();
+    if (!binary) {
+      console.error("Error: native 'pptd' binary not found.");
+      console.error("Please install it by running:");
+      console.error("  python3 skills/open-pptd/scripts/install_binary.py");
+      const installScript = join(packageRoot, "skills", SKILL_NAME, "scripts", "install_binary.py");
+      if (existsSync(installScript)) {
+        console.error(`  (or: python3 ${installScript})`);
+      }
+      process.exit(1);
+    }
+    const res = spawnSync(binary, [options.command, ...options.rawArgs], { stdio: "inherit" });
+    if (res.error) {
+      console.error(`Error: failed to execute '${binary}': ${res.error.message}`);
+      process.exit(1);
+    }
+    process.exit(res.status ?? (res.signal ? 1 : 0));
   }
   if (options.command === "convert") {
     const script = join(packageRoot, "skills", SKILL_NAME, "scripts", "convert_pptx.py");
     const res = spawnSync("python3", [script, ...options.rawArgs], { stdio: "inherit" });
+    if (res.error) {
+      console.error(`Error: failed to run converter: ${res.error.message}`);
+      process.exit(1);
+    }
     process.exit(res.status ?? 0);
   }
 

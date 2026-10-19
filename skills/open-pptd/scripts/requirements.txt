@@ -1,5 +1,6 @@
 # Optional python dependencies for slide validation, montage creation, and preview rendering
 Pillow>=10.0.0
+python-pptx>=1.0.0
 # For advanced PDF/image rasterization if LibreOffice is used:
 # pdf2image>=1.16.3
 # pymupdf>=1.23.0

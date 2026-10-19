@@ -182,3 +182,40 @@ fn reverse_preserves_speaker_notes() {
 
     let _ = fs::remove_dir_all(&work);
 }
+
+#[test]
+fn math_formulas_roundtrip_through_convert() {
+    let work = temp_dir("math");
+    let pptx_path = work.join("with_math.pptx");
+    let mut project = pptd::load_project(&fixture_dir().join("buildable.pptd")).unwrap();
+
+    if let Some(pptd::Element::Text(t)) = project.pages[0].elements.first_mut() {
+        t.content.text = "<p><latex>\\frac{a+b}{c+d}</latex></p><p><latex>\\sqrt{x^2+y^2}</latex></p><p><latex>\\sum_{i=1}^{n} i^2</latex></p>".to_string();
+    }
+
+    pptx::writer::PptxWriter::new(&project)
+        .build(&pptx_path)
+        .unwrap();
+
+    let converted = work.join("converted_math");
+    let report = pptx::import::convert_pptx_to_pptd(&pptx_path, &converted).unwrap();
+    assert_eq!(report.page_count, 1);
+
+    let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
+    let decompiled_text = match &decompiled.pages[0].elements[0] {
+        pptd::Element::Text(t) => &t.content.text,
+        _ => panic!("expected text element"),
+    };
+
+    assert!(decompiled_text.contains(r"\frac{a+b}{c+d}"), "got {decompiled_text}");
+    assert!(decompiled_text.contains(r"\sqrt{x^{2}+y^{2}}") || decompiled_text.contains(r"\sqrt{x^2+y^2}"), "got {decompiled_text}");
+    assert!(decompiled_text.contains(r"\sum_{i=1}^{n} i^{2}") || decompiled_text.contains(r"\sum_{i=1}^{n} i^2"), "got {decompiled_text}");
+
+    // Rebuild from the converted PPTD
+    let rebuild_pptx = work.join("rebuild_math.pptx");
+    pptx::writer::PptxWriter::new(&decompiled)
+        .build(&rebuild_pptx)
+        .expect("converted math project must rebuild");
+
+    let _ = fs::remove_dir_all(&work);
+}

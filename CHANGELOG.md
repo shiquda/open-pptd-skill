@@ -4,6 +4,35 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.4.0] - 2026-10-19
+
+### 新增
+
+- `<latex>…</latex>` 与行内 `\(…\)` 编译为**原生 OOXML 数学公式**（`<a14:m>` / OMML）：真实分数线（`\frac`）、根号（`\sqrt`、`\sqrt[n]{}`）、上下标、求和/积分/极限等大运算符、矩阵与 `\left…\right` 定界符；单段公式编译为居中显示公式，混合段落内的行内公式额外携带 `mc:Fallback` 文本降级，保证在不支持 `a14` 数学扩展的阅读器（如 LibreOffice）中也不会丢失
+- `pptd convert` 反向编译：原生公式还原为 `<latex>` 源码
+- `letterSpacing` 与 `textDirection` 真正写入 OOXML（`a:rPr@spc` 与 `a:bodyPr@vert`）
+- `pptd check` 新增诊断：形状图片填充、元素越界画布、动画声明警告、不支持的 LaTeX 命令、图标前缀与未知图标
+- `validate_pptx.py --render-images` 同时输出逐页 `slide-NN.png` 与总览 `contact-sheet.jpg`
+- README 新增「暂不支持与能力边界」章节
+
+### 修复
+
+- 安装器现在比较版本：PATH 上存在旧版 `pptd`（或历史 `slideforge`）时会自动升级到目标版本，不再需要 `--force`
+- `.sync.hash`：工程内输出记录为相对路径，同一路径只保留一条记录，工程外路径不再产生 `.//…` 拼接；「被外部修改」与「无同步点」提示区分开
+- 构建可复现：主题 major/minor 字体不再随哈希表遍历顺序变化
+- 表格边框：未显式设置的边不再写出 `<a:lnX><a:noFill/>`，避免盖掉相邻行的下边线
+- `validate_pptx.py --strict` 的状态行与退出码一致（PASS / WARNINGS / FAIL）；标题识别不再误取每页第一个文本框
+- `pptd build` 不再因警告拒绝构建（动画、越界等仅为警告），仅在存在错误时拒绝
+- Node CLI 的 `build` 正确转发到原生二进制；`package.json` 不再暴露 `pptd` bin，避免全局安装遮蔽原生编译器
+- 修正 `reference/cli.md` 中 404 的 cargo 安装地址与相对路径安装命令
+
+### 变更
+
+- 图标仅内置 Font Awesome Solid（`fas:`）字形；`far:`/`fab:` 前缀与未知图标名改为 `pptd check` 明确报错，不再静默忽略前缀
+- 仓库瘦身：`docs/` 83MB → 14MB、`example/` 42MB → 17MB（移除可重新生成的示例产物）；主题预览图随 skill 分发（`skills/open-pptd/theme_previews/`，约 2.5MB），修复安装后 theme.md 的预览链接失效
+- README 增加 `npx github:shiquda/open-pptd-skill install -y` 作为整仓克隆超时时的备用安装方式
+- 时序动画仍只解析不写入（`check` 会给出警告）
+
 ## [1.2.0] - 2026-08-06
 
 ### 新增

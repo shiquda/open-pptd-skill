@@ -1,34 +1,105 @@
-# Math & LaTeX Formulas in PPTD
+# Native Math & LaTeX Formulas in PPTD
 
-`open-pptd-skill` and `pptd` support inline LaTeX mathematics. Formulas are parsed into structured DrawingML text runs with authentic typographical formatting.
-
----
-
-## Syntax
-
-Inline formulas are delimited by `\( ... \)` inside paragraph text:
-
-```yaml
-- elementId: formula-box
-  elementType: text
-  bounds: [56, 300, 848, 40]
-  content:
-    text: "<p>安全前向不变集　\\(h(s_t) \\ge 0\\)　严格定义安全集合</p>"
-```
-
-### Complex Formula Example
-```yaml
-- elementId: policy-box
-  elementType: text
-  bounds: [572, 244, 332, 44]
-  content:
-    text: "<p>策略输出：\\(A_t \\sim \\pi_\\theta(A_t \\mid o_{\\le t}, \\ell, q_t)\\)</p>"
-```
+Starting in version 1.4.0, `open-pptd` compiles LaTeX formulas directly into native PowerPoint Office Math (OOXML OMML via `<a14:m>`) with authentic typographical layout (real horizontal fraction bars, scalable radical roots, and properly aligned large operators). Standalone formulas are editable equations in every viewer that understands OOXML math; inline formulas stay editable in PowerPoint/WPS and degrade to correctly typeset text where the viewer does not implement the `a14` math extension (see §2).
 
 ---
 
-## Typography Rules Applied by pptd
+## 1. Syntax
 
-1. **Variables**: Single-letter variables (like $s, t, A, \ell, q, h$) are automatically formatted in mathematical italics (`<a:rPr i="1">`).
-2. **Subscripts**: Subscript expressions (`_t`, `_{t+1}`, `_{\le t}`) automatically have their baseline lowered by 25% (`baseline="-25000"`) and font size scaled to 70%, preserving correct typographical proportions.
-3. **Symbols**: Standard TeX symbols like `\ge` ($\ge$), `\le` ($\le$), `\sim` ($\sim$), `\mid` ($\mid$), `\theta` ($\theta$), `\pi` ($\pi$) are converted to their standard Unicode mathematical counterparts with proper surrounding spacing.
+Formulas can be declared in PPTD rich text using either `<latex>...</latex>` tags or `\( ... \)` delimiters inside `<p>` paragraphs:
+
+```yaml
+- elementId: math-card
+  elementType: text
+  bounds: [60, 140, 840, 120]
+  content:
+    text: |
+      <p>Inline formula in running text: \( h(s_t) \ge 0 \) defines the forward invariant set.</p>
+      <p>\( \frac{a+b}{c+d} = \sqrt{x^2 + y^2} \)</p>
+```
+
+Both `<latex>\frac{1}{2}</latex>` and `\(\frac{1}{2}\)` are treated identically by the compiler.
+
+---
+
+## 2. Display vs. Inline Formatting Rules
+
+The compiler automatically distinguishes between **display formulas** and **inline formulas** based on paragraph structure:
+
+1. **Display Formulas (Standalone)**:
+   - When a formula is the **sole content** of a paragraph (e.g. `<p>\( \sum_{i=1}^{n} i^2 = \frac{n(n+1)(2n+1)}{6} \)</p>`), it compiles into an Office Math display paragraph (`<m:oMathPara>` with `<m:jc m:val="centerGroup"/>`).
+   - The equation is centered horizontally with dedicated vertical spacing.
+2. **Inline Formulas (Mixed Text)**:
+   - When a formula is mixed with surrounding text or other tags in the same paragraph (e.g. `<p>Given \( x \in \mathbb{R} \), we have ...</p>`), it is emitted as a markup-compatibility pair:
+     - `<mc:Choice Requires="a14">` — the native math zone (`<a14:m>` / `<m:oMath>`) placed alongside `<a:r>` text runs. PowerPoint and WPS take this branch and keep the formula editable.
+     - `<mc:Fallback>` — ordinary text runs rendering the same formula with Unicode symbols and baseline-shifted scripts (`x^{2}` → `x²`, `\frac{a+b}{c+d}` → `(a+b)/(c+d)`, `\sqrt{x^2+y^2}` → `√(x²+y²)`, `\sum_{i=1}^{n}` → `∑` with lowered/raised limits). Viewers that do not implement the `a14` extension — LibreOffice among them — take this branch.
+   - This pairing exists because LibreOffice's PPTX importer drops a math zone that shares a paragraph with text runs; the fallback guarantees the formula is never silently lost.
+   - Consequence: an inline formula is an editable equation in PowerPoint/WPS but plain (still correct) text in LibreOffice. If a formula must be an editable equation in every viewer, put it on its own line so it compiles as a display formula.
+
+---
+
+## 3. Supported LaTeX Subset
+
+The compiler includes a built-in LaTeX-to-OMML converter supporting standard mathematical typesetting:
+
+### Fractions and Radicals
+- Fractions: `\frac{a}{b}`, `\dfrac{a}{b}`, `\tfrac{a}{b}` (compiled to `<m:f>` with genuine horizontal fraction bar)
+- Square roots: `\sqrt{x}`, `\sqrt{x^2 + y^2}` (compiled to `<m:rad>`)
+- N-th roots: `\sqrt[n]{x}` (compiled to `<m:rad>` with explicit `<m:deg>`)
+
+### Subscripts and Superscripts
+- Subscripts: `x_i`, `x_{t+1}`, `o_{\le t}`
+- Superscripts: `x^2`, `A^T`, `e^{-\lambda t}`
+- Combined: `A_t^H`, `\sigma_{i,j}^2` (compiled to `<m:sSubSup>`)
+
+### Big Operators and Limits
+- Summation, product, and integrals: `\sum`, `\prod`, `\int`, `\oint`, `\lim` (compiled to `<m:nary>`)
+- Upper and lower limits attached via `_` and `^`:
+  ```latex
+  \sum_{i=1}^{n} x_i, \quad \int_{0}^{\infty} e^{-x} dx, \quad \lim_{x \to 0} \frac{\sin x}{x}
+  ```
+
+### Delimiters & Grouping
+- Scalable delimiters: `\left( ... \right)`, `\left[ ... \right]`, `\left\{ ... \right\}`, `\left| ... \right|`, `\left\langle ... \right\rangle`, `\left. ... \right|` (compiled to `<m:d>`)
+
+### Matrices and Piecewise Cases
+- Matrix environments: `\begin{matrix}`, `\begin{pmatrix}`, `\begin{bmatrix}`, `\begin{vmatrix}` using `&` for column separation and `\\` for rows (compiled to `<m:m>`).
+- Piecewise cases: `\begin{cases} ... \end{cases}`.
+
+### Mathematical Symbols & Greek Letters
+- **Greek lowercase**: `\alpha`, `\beta`, `\gamma`, `\delta`, `\epsilon`, `\theta`, `\pi`, `\sigma`, `\tau`, `\omega`, etc.
+- **Greek uppercase**: `\Gamma`, `\Delta`, `\Theta`, `\Lambda`, `\Xi`, `\Pi`, `\Sigma`, `\Phi`, `\Psi`, `\Omega`.
+- **Relations**: `\le`, `\ge`, `\neq`, `\approx`, `\equiv`, `\sim`, `\propto`, `\mid`, `\perp`, `\parallel`.
+- **Set operations**: `\in`, `\notin`, `\subset`, `\subseteq`, `\supset`, `\cup`, `\cap`, `\emptyset`.
+- **Logic & arrows**: `\forall`, `\exists`, `\neg`, `\wedge`, `\vee`, `\to`, `\leftarrow`, `\rightarrow`, `\Rightarrow`, `\Leftarrow`, `\mapsto`.
+- **Arithmetic & calculus**: `\times`, `\cdot`, `\pm`, `\mp`, `\div`, `\infty`, `\partial`, `\nabla`.
+
+### Font Styles & Functions
+- Blackboard bold: `\mathbb{R}`, `\mathbb{N}`, `\mathbb{Z}`, `\mathbb{C}`, `\mathbb{Q}`
+- Upright text / math operators: `\mathrm{...}`, `\text{...}`, `\operatorname{...}`
+- Standard functions: `\sin`, `\cos`, `\tan`, `\ln`, `\log`, `\exp`, `\min`, `\max`
+
+### Spacing, Accents & Escapes
+- Spacing: `\,`, `\;`, `\:`, `\quad`, `\qquad`
+- Escapes: `\{`, `\}`, `\_`, `\&`, `\%`, `\#`, `\$`
+- Accents: `\bar`, `\overline`, `\hat`, `\vec`, `\tilde`, `\dot`
+
+---
+
+## 4. Hard-Error Policy (No Silent Degradation)
+
+Prior compiler versions attempted to approximate unsupported LaTeX commands as plain text runs (e.g. converting `\frac{x+1}{y}` into text `x+1/y`).
+
+In `open-pptd` v1.4.0+:
+- **Strict Validation**: Every LaTeX command is validated against the supported vocabulary.
+- **Hard Error on Unsupported Commands**: If an unsupported command (e.g. `\tikz`, `\color`, `\foo`) or malformed syntax is encountered, `pptd build` fails immediately with an explicit error naming the command.
+- **No Leaked Raw LaTeX**: Raw backslash commands never leak onto the presentation slide.
+
+---
+
+## 5. Reverse Compilation (`pptd convert`)
+
+When reverse-compiling an existing `.pptx` file via `pptd convert input.pptx output_dir/`:
+- Native `<a14:m>` equation structures (`<m:f>`, `<m:rad>`, `<m:sSup>`, `<m:nary>`, `<m:m>`, etc.) are automatically parsed and reconstructed into standard `<latex>...</latex>` PPTD rich text tags.
+- Equations round-trip between `.pptd` and `.pptx` losslessly.
+

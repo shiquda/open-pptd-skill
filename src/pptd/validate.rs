@@ -2,10 +2,22 @@
 //!
 //! The loader guarantees the document parses and the version is `v2`; this
 //! module checks the *semantics* the spec requires: unique element ids,
-//! positive bounds, resolvable theme references, well-formed tables and
-//! coherent chart data. Findings are reported as [`Diagnostic`]s rather than
-//! fatal errors, so `slideforge check` can list every issue in one pass.
-
+//! positive bounds, canvas boundary containment, resolvable theme references,
+//! well-formed tables and coherent chart data.
+//!
+//! # Diagnostic Severities
+//!
+//! Findings are reported as [`Diagnostic`]s rather than fatal panics, so
+//! `pptd check` can list every issue in one pass:
+//! - **Errors** (no `warning:` prefix): fatal structural or semantic problems
+//!   that prevent building a valid PPTX, such as duplicate element IDs, image
+//!   fills on non-background elements, unsupported icon prefixes, or elements
+//!   placed entirely outside the slide canvas.
+//! - **Warnings** (prefixed with `warning:`): non-fatal issues where PPTX
+//!   generation can technically proceed but the output may be visually degraded
+//!   or feature-incomplete, such as potential text overflow, elements extending
+//!   partially outside the slide canvas, or declared animations (which the
+//!   compiler parses but does not yet emit as `p:timing`).
 use std::collections::HashSet;
 use std::path::Path;
 
@@ -22,6 +34,13 @@ pub struct Diagnostic {
     pub page: Option<usize>,
     /// Human-readable description.
     pub message: String,
+}
+
+impl Diagnostic {
+    /// True when this finding is a warning (non-fatal advisory) rather than an error.
+    pub fn is_warning(&self) -> bool {
+        self.message.starts_with("warning:")
+    }
 }
 
 impl std::fmt::Display for Diagnostic {
@@ -175,6 +194,15 @@ fn validate_page(project: &Project, page_idx: usize, page: &Page, out: &mut Vec<
                     "element `{element_id}` must have positive width and height, got {bounds:?}"
                 ),
             );
+        } else {
+            check_element_canvas_bounds(
+                element_id,
+                bounds,
+                element,
+                project.presentation.size,
+                page_idx,
+                out,
+            );
         }
 
         if let Some(opacity) = element.opacity() {
@@ -191,6 +219,16 @@ fn validate_page(project: &Project, page_idx: usize, page: &Page, out: &mut Vec<
     }
 
     if let Some(animations) = &page.animations {
+        if !animations.is_empty() {
+            diag(
+                out,
+                page_idx,
+                format!(
+                    "warning: page declares {} animation(s), but animations are not yet supported by the compiler (p:timing will not be emitted)",
+                    animations.len()
+                ),
+            );
+        }
         for animation in animations {
             if !ids.contains(animation.element_id.as_str()) {
                 diag(
@@ -254,6 +292,7 @@ fn validate_element(
                 &text.common.element_id,
             );
             check_rich_text_tags(text, page_idx, out);
+            check_latex_commands(text, page_idx, out);
             check_text_overflow(text, theme, page_idx, out);
         }
         Element::Shape(shape) => {
@@ -298,14 +337,12 @@ fn validate_element(
             );
         }
         Element::Icon(icon) => {
-            if crate::pptx::fa::lookup(&icon.icon_name).is_none() {
-                out.push(Diagnostic {
-                    page: Some(page_idx + 1),
-                    message: format!(
-                        "element `{}`: icon `{}` is not in the embedded Font Awesome dataset (1422 icons supported)",
-                        icon.common.element_id, icon.icon_name
-                    ),
-                });
+            if let Err(err) = crate::pptx::fa::lookup_glyph(&icon.icon_name) {
+                diag(
+                    out,
+                    page_idx,
+                    format!("element `{}`: {err}", icon.common.element_id),
+                );
             }
             check_fill(
                 project,
@@ -748,6 +785,15 @@ fn check_fill(
             }
         }
         Fill::Image { src, .. } => {
+            if element_id != "page background" {
+                diag(
+                    out,
+                    page_idx,
+                    format!(
+                        "element `{element_id}`: image fill is not supported on shapes (only page backgrounds support image fills)"
+                    ),
+                );
+            }
             check_image_file(&project.root_dir, src, page_idx, out, element_id);
         }
     }
@@ -866,6 +912,53 @@ fn check_rich_text_tags(text: &Text, page_idx: usize, out: &mut Vec<Diagnostic>)
             break;
         }
     }
+}
+
+/// Validate the LaTeX bodies embedded in rich text (`<latex>…</latex>` and
+/// `\(…\)`). The emitter cannot render commands outside its supported subset,
+/// and quietly printing the raw command on the slide is the failure mode this
+/// check exists to prevent, so every unsupported command is a hard error.
+fn check_latex_commands(text: &Text, page_idx: usize, out: &mut Vec<Diagnostic>) {
+    let raw = text.content.text.as_str();
+    for (delimiter, body) in latex_bodies(raw) {
+        for command in crate::pptx::math::unsupported_latex_commands(body) {
+            diag(
+                out,
+                page_idx,
+                format!(
+                    "text `{}` uses unsupported LaTeX command `{command}` inside `{delimiter}`",
+                    text.common.element_id
+                ),
+            );
+        }
+    }
+}
+
+/// Every LaTeX body in a rich-text string: `<latex>…</latex>` tags and
+/// `\(…\)` inline delimiters, paired with the delimiter that introduced them.
+fn latex_bodies(raw: &str) -> Vec<(&'static str, &str)> {
+    const TAG_OPEN: &str = "<latex>";
+    const TAG_CLOSE: &str = "</latex>";
+    let mut out = Vec::new();
+    let mut rest = raw;
+    while let Some(start) = rest.find(TAG_OPEN) {
+        let after = &rest[start + TAG_OPEN.len()..];
+        let Some(end) = after.find(TAG_CLOSE) else {
+            break;
+        };
+        out.push((TAG_OPEN, &after[..end]));
+        rest = &after[end + TAG_CLOSE.len()..];
+    }
+    let mut rest = raw;
+    while let Some(start) = rest.find("\\(") {
+        let after = &rest[start + 2..];
+        let Some(end) = after.find("\\)") else {
+            break;
+        };
+        out.push(("\\(", &after[..end]));
+        rest = &after[end + 2..];
+    }
+    out
 }
 
 fn strip_tags(html: &str) -> String {
@@ -1163,5 +1256,284 @@ fn check_page_raw_yaml(project: &Project, page_idx: usize, out: &mut Vec<Diagnos
                 }
             }
         }
+    }
+}
+
+fn check_element_canvas_bounds(
+    element_id: &str,
+    bounds: super::shared::Bounds,
+    element: &Element,
+    canvas_size: super::shared::Size,
+    page_idx: usize,
+    out: &mut Vec<Diagnostic>,
+) {
+    let cw = canvas_size.width;
+    let ch = canvas_size.height;
+    if !cw.is_finite() || !ch.is_finite() || cw <= 0.0 || ch <= 0.0 {
+        return;
+    }
+    let x = bounds.x;
+    let y = bounds.y;
+    let w = bounds.width;
+    let h = bounds.height;
+    if !x.is_finite() || !y.is_finite() || !w.is_finite() || !h.is_finite() {
+        return;
+    }
+
+    let extends_outside = x < 0.0 || y < 0.0 || (x + w) > cw || (y + h) > ch;
+    if !extends_outside {
+        return;
+    }
+
+    let entirely_outside = match element {
+        Element::Line(_) => {
+            (w > 0.0 && (x + w <= 0.0 || x >= cw))
+                || (w == 0.0 && (x < 0.0 || x > cw))
+                || (h > 0.0 && (y + h <= 0.0 || y >= ch))
+                || (h == 0.0 && (y < 0.0 || y > ch))
+        }
+        _ => (x + w <= 0.0) || (x >= cw) || (y + h <= 0.0) || (y >= ch),
+    };
+
+    if entirely_outside {
+        diag(
+            out,
+            page_idx,
+            format!(
+                "element `{element_id}` is entirely outside the slide canvas (bounds: [{x}, {y}, {w}, {h}], canvas: [{cw}, {ch}])"
+            ),
+        );
+    } else {
+        diag(
+            out,
+            page_idx,
+            format!(
+                "warning: element `{element_id}` extends outside the slide canvas (bounds: [{x}, {y}, {w}, {h}], canvas: [{cw}, {ch}])"
+            ),
+        );
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::path::PathBuf;
+
+    fn make_project(size: [f64; 2], page_yaml: &str) -> Project {
+        let pres_yaml = format!(
+            "version: v2\nsize: [{}, {}]\npages: [pages/1.page]\n",
+            size[0], size[1]
+        );
+        let presentation: super::super::Presentation = serde_yaml::from_str(&pres_yaml).unwrap();
+        let page: Page = serde_yaml::from_str(page_yaml).unwrap();
+        Project {
+            root_dir: PathBuf::from("."),
+            presentation,
+            pages: vec![page],
+            page_paths: vec![PathBuf::from("pages/1.page")],
+        }
+    }
+
+    #[test]
+    fn shape_image_fill_is_reported_as_error() {
+        let page_yaml = r#"
+elements:
+  - elementId: shape-with-img
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 50, 200, 100]
+    fill:
+      type: image
+      src: sample.png
+"#;
+        let proj = make_project([960.0, 540.0], page_yaml);
+        let diags = validate_project(&proj);
+        let img_fill_diag = diags
+            .iter()
+            .find(|d| d.message.contains("image fill is not supported on shapes"));
+        assert!(
+            img_fill_diag.is_some(),
+            "expected image fill error on shape, got: {diags:?}"
+        );
+        let diag = img_fill_diag.unwrap();
+        assert!(diag.message.contains("shape-with-img"));
+        assert!(!diag.is_warning(), "image fill on shape must be an error");
+    }
+
+    #[test]
+    fn page_background_image_fill_does_not_trigger_shape_error() {
+        let page_yaml = r#"
+background:
+  type: image
+  src: bg.png
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [50, 50, 200, 100]
+    content:
+      text: hello
+"#;
+        let proj = make_project([960.0, 540.0], page_yaml);
+        let diags = validate_project(&proj);
+        assert!(
+            !diags
+                .iter()
+                .any(|d| d.message.contains("image fill is not supported")),
+            "page background image fill must not be reported as unsupported: {diags:?}"
+        );
+    }
+
+    #[test]
+    fn element_canvas_bounds_error_when_entirely_outside() {
+        let page_yaml = r#"
+elements:
+  - elementId: way-off-right
+    elementType: text
+    bounds: [1000, 50, 100, 50]
+    content: {text: off}
+  - elementId: way-off-left
+    elementType: shape
+    shapeName: rect
+    bounds: [-200, 50, 100, 50]
+  - elementId: way-off-bottom
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 600, 100, 50]
+  - elementId: way-off-top
+    elementType: shape
+    shapeName: rect
+    bounds: [50, -100, 100, 50]
+"#;
+        let proj = make_project([960.0, 540.0], page_yaml);
+        let diags = validate_project(&proj);
+
+        for id in &["way-off-right", "way-off-left", "way-off-bottom", "way-off-top"] {
+            let d = diags
+                .iter()
+                .find(|d| d.message.contains(id) && d.message.contains("entirely outside"))
+                .unwrap_or_else(|| panic!("expected entirely outside error for {id}, got: {diags:?}"));
+            assert!(!d.is_warning(), "{id} must be an error, not a warning");
+        }
+    }
+
+    #[test]
+    fn element_canvas_bounds_warning_when_partially_outside() {
+        let page_yaml = r#"
+elements:
+  - elementId: bleed-right
+    elementType: text
+    bounds: [900, 50, 100, 50]
+    content: {text: bleed}
+  - elementId: bleed-left
+    elementType: shape
+    shapeName: rect
+    bounds: [-20, 50, 100, 50]
+  - elementId: clean-element
+    elementType: text
+    bounds: [50, 50, 100, 50]
+    content: {text: clean}
+"#;
+        let proj = make_project([960.0, 540.0], page_yaml);
+        let diags = validate_project(&proj);
+
+        let right_diag = diags
+            .iter()
+            .find(|d| d.message.contains("bleed-right"))
+            .expect("expected warning for bleed-right");
+        assert!(right_diag.is_warning());
+        assert!(right_diag.message.contains("extends outside the slide canvas"));
+
+        let left_diag = diags
+            .iter()
+            .find(|d| d.message.contains("bleed-left"))
+            .expect("expected warning for bleed-left");
+        assert!(left_diag.is_warning());
+        assert!(left_diag.message.contains("extends outside the slide canvas"));
+
+        assert!(
+            !diags.iter().any(|d| d.message.contains("clean-element")),
+            "clean element must not produce canvas bounds diagnostic"
+        );
+    }
+
+    #[test]
+    fn icon_prefix_validation_rejects_unsupported_prefixes() {
+        let page_yaml = r#"
+elements:
+  - elementId: valid-fas
+    elementType: icon
+    iconName: "fas:bolt"
+    bounds: [50, 50, 30, 30]
+  - elementId: valid-unprefixed
+    elementType: icon
+    iconName: "bolt"
+    bounds: [100, 50, 30, 30]
+  - elementId: bad-far
+    elementType: icon
+    iconName: "far:heart"
+    bounds: [150, 50, 30, 30]
+  - elementId: bad-fab
+    elementType: icon
+    iconName: "fab:github"
+    bounds: [200, 50, 30, 30]
+  - elementId: nonexistent-fas
+    elementType: icon
+    iconName: "fas:nonexistent_icon_xyz"
+    bounds: [250, 50, 30, 30]
+"#;
+        let proj = make_project([960.0, 540.0], page_yaml);
+        let diags = validate_project(&proj);
+
+        assert!(
+            !diags.iter().any(|d| d.message.contains("valid-fas")),
+            "valid fas icon should have no diagnostics: {diags:?}"
+        );
+        assert!(
+            !diags.iter().any(|d| d.message.contains("valid-unprefixed")),
+            "valid unprefixed icon should have no diagnostics: {diags:?}"
+        );
+
+        let far_diag = diags
+            .iter()
+            .find(|d| d.message.contains("bad-far"))
+            .expect("expected error for far:heart");
+        assert!(far_diag.message.contains("unsupported icon style prefix `far:` on `far:heart`"));
+        assert!(!far_diag.is_warning());
+
+        let fab_diag = diags
+            .iter()
+            .find(|d| d.message.contains("bad-fab"))
+            .expect("expected error for fab:github");
+        assert!(fab_diag.message.contains("unsupported icon style prefix `fab:` on `fab:github`"));
+        assert!(!fab_diag.is_warning());
+
+        let not_found_diag = diags
+            .iter()
+            .find(|d| d.message.contains("nonexistent-fas"))
+            .expect("expected error for nonexistent icon");
+        assert!(not_found_diag.message.contains("not in the embedded Font Awesome dataset"));
+        assert!(!not_found_diag.is_warning());
+    }
+
+    #[test]
+    fn declared_animations_emit_warning() {
+        let page_yaml = r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [50, 50, 100, 50]
+    content: {text: animated}
+animations:
+  - elementId: t1
+    effect: fade-in
+"#;
+        let proj = make_project([960.0, 540.0], page_yaml);
+        let diags = validate_project(&proj);
+        let anim_diag = diags
+            .iter()
+            .find(|d| d.message.contains("animations are not yet supported"))
+            .expect("expected animation warning");
+        assert!(anim_diag.is_warning());
+        assert!(anim_diag.message.contains("warning: page declares 1 animation(s)"));
     }
 }

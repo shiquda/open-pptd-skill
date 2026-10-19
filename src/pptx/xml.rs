@@ -70,6 +70,16 @@ impl Xml {
     pub fn text(&mut self, text: &str) {
         self.buf.push_str(&escape(text));
     }
+    /// Append a caller-supplied, already well-formed XML fragment verbatim.
+    ///
+    /// The caller is responsible for escaping text content. Kept narrow:
+    /// intended exclusively for pre-built XML fragments (such as native OMML
+    /// math zones produced by `latex_to_omml`); no other caller should use
+    /// it for user-controlled strings.
+    pub fn raw(&mut self, raw: &str) {
+        self.buf.push_str(raw);
+    }
+
 
     /// `name` containing the escaped `text` as its only content, with no
     /// line breaks or indentation: in DrawingML the `<a:t>` content is

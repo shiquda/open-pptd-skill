@@ -28,7 +28,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`consulting/apricot-white-brief/design.md`](reference/design_system/consulting/apricot-white-brief/design.md)
 - **点名**: `用 apricot-white-brief`
 
-![Apricot White Brief](docs/themes/consulting/apricot-white-brief.jpg)
+![Apricot White Brief](theme_previews/consulting/apricot-white-brief.jpg)
 
 #### `indigo-due-diligence` — Indigo Due Diligence
 
@@ -36,7 +36,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`consulting/indigo-due-diligence/design.md`](reference/design_system/consulting/indigo-due-diligence/design.md)
 - **点名**: `用 indigo-due-diligence`
 
-![Indigo Due Diligence](docs/themes/consulting/indigo-due-diligence.jpg)
+![Indigo Due Diligence](theme_previews/consulting/indigo-due-diligence.jpg)
 
 #### `marine-blue-research` — Marine Blue Research
 
@@ -44,7 +44,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`consulting/marine-blue-research/design.md`](reference/design_system/consulting/marine-blue-research/design.md)
 - **点名**: `用 marine-blue-research`
 
-![Marine Blue Research](docs/themes/consulting/marine-blue-research.jpg)
+![Marine Blue Research](theme_previews/consulting/marine-blue-research.jpg)
 
 #### `moss-green-transformation` — Moss Green Transformation
 
@@ -52,7 +52,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`consulting/moss-green-transformation/design.md`](reference/design_system/consulting/moss-green-transformation/design.md)
 - **点名**: `用 moss-green-transformation`
 
-![Moss Green Transformation](docs/themes/consulting/moss-green-transformation.jpg)
+![Moss Green Transformation](theme_previews/consulting/moss-green-transformation.jpg)
 
 #### `pine-green-strategy` — Pine Green Strategy
 
@@ -60,7 +60,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`consulting/pine-green-strategy/design.md`](reference/design_system/consulting/pine-green-strategy/design.md)
 - **点名**: `用 pine-green-strategy`
 
-![Pine Green Strategy](docs/themes/consulting/pine-green-strategy.jpg)
+![Pine Green Strategy](theme_previews/consulting/pine-green-strategy.jpg)
 
 #### `red-black-growth` — Red-Black Growth
 
@@ -68,7 +68,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`consulting/red-black-growth/design.md`](reference/design_system/consulting/red-black-growth/design.md)
 - **点名**: `用 red-black-growth`
 
-![Red-Black Growth](docs/themes/consulting/red-black-growth.jpg)
+![Red-Black Growth](theme_previews/consulting/red-black-growth.jpg)
 
 ---
 
@@ -82,15 +82,15 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`finance/black-gold-ledger/design.md`](reference/design_system/finance/black-gold-ledger/design.md)
 - **点名**: `用 black-gold-ledger`
 
-![Black Gold Ledger](docs/themes/finance/black-gold-ledger.jpg)
+![Black Gold Ledger](theme_previews/finance/black-gold-ledger.jpg)
 
 #### `ebony-ledger` — Ebony Ledger
 
-- **风格**: 乌木台账风，深色金融研究气质
+- **风格**: 乌木台账风，纯白底黑骨架沉稳机构年报气质（纯白底，禁止深色整页）
 - **文件**: [`finance/ebony-ledger/design.md`](reference/design_system/finance/ebony-ledger/design.md)
 - **点名**: `用 ebony-ledger`
 
-![Ebony Ledger](docs/themes/finance/ebony-ledger.jpg)
+![Ebony Ledger](theme_previews/finance/ebony-ledger.jpg)
 
 #### `honey-orange-memo` — Honey Orange Memo
 
@@ -98,7 +98,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`finance/honey-orange-memo/design.md`](reference/design_system/finance/honey-orange-memo/design.md)
 - **点名**: `用 honey-orange-memo`
 
-![Honey Orange Memo](docs/themes/finance/honey-orange-memo.jpg)
+![Honey Orange Memo](theme_previews/finance/honey-orange-memo.jpg)
 
 #### `lake-blue-memo` — Lake Blue Memo
 
@@ -106,7 +106,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`finance/lake-blue-memo/design.md`](reference/design_system/finance/lake-blue-memo/design.md)
 - **点名**: `用 lake-blue-memo`
 
-![Lake Blue Memo](docs/themes/finance/lake-blue-memo.jpg)
+![Lake Blue Memo](theme_previews/finance/lake-blue-memo.jpg)
 
 #### `prospect-annual` — Prospect Annual
 
@@ -114,7 +114,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`finance/prospect-annual/design.md`](reference/design_system/finance/prospect-annual/design.md)
 - **点名**: `用 prospect-annual`
 
-![Prospect Annual](docs/themes/finance/prospect-annual.jpg)
+![Prospect Annual](theme_previews/finance/prospect-annual.jpg)
 
 #### `rice-paper-annual` — Rice Paper Annual
 
@@ -122,7 +122,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`finance/rice-paper-annual/design.md`](reference/design_system/finance/rice-paper-annual/design.md)
 - **点名**: `用 rice-paper-annual`
 
-![Rice Paper Annual](docs/themes/finance/rice-paper-annual.jpg)
+![Rice Paper Annual](theme_previews/finance/rice-paper-annual.jpg)
 
 ---
 
@@ -136,7 +136,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`work/blue-flame-brand/design.md`](reference/design_system/work/blue-flame-brand/design.md)
 - **点名**: `用 blue-flame-brand`
 
-![Blue Flame Brand](docs/themes/work/blue-flame-brand.jpg)
+![Blue Flame Brand](theme_previews/work/blue-flame-brand.jpg)
 
 #### `electric-violet-business` — Electric Violet Business
 
@@ -144,7 +144,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`work/electric-violet-business/design.md`](reference/design_system/work/electric-violet-business/design.md)
 - **点名**: `用 electric-violet-business`
 
-![Electric Violet Business](docs/themes/work/electric-violet-business.jpg)
+![Electric Violet Business](theme_previews/work/electric-violet-business.jpg)
 
 #### `moon-white-imagery` — Moon-White Imagery
 
@@ -152,7 +152,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`work/moon-white-imagery/design.md`](reference/design_system/work/moon-white-imagery/design.md)
 - **点名**: `用 moon-white-imagery`
 
-![Moon-White Imagery](docs/themes/work/moon-white-imagery.jpg)
+![Moon-White Imagery](theme_previews/work/moon-white-imagery.jpg)
 
 #### `sky-blue-wayfinding` — Sky Blue Wayfinding
 
@@ -160,7 +160,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`work/sky-blue-wayfinding/design.md`](reference/design_system/work/sky-blue-wayfinding/design.md)
 - **点名**: `用 sky-blue-wayfinding`
 
-![Sky Blue Wayfinding](docs/themes/work/sky-blue-wayfinding.jpg)
+![Sky Blue Wayfinding](theme_previews/work/sky-blue-wayfinding.jpg)
 
 #### `warm-clay-works` — Warm Clay Works
 
@@ -168,7 +168,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`work/warm-clay-works/design.md`](reference/design_system/work/warm-clay-works/design.md)
 - **点名**: `用 warm-clay-works`
 
-![Warm Clay Works](docs/themes/work/warm-clay-works.jpg)
+![Warm Clay Works](theme_previews/work/warm-clay-works.jpg)
 
 #### `warm-jade-annual-report` — Warm Jade Annual Report
 
@@ -176,7 +176,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`work/warm-jade-annual-report/design.md`](reference/design_system/work/warm-jade-annual-report/design.md)
 - **点名**: `用 warm-jade-annual-report`
 
-![Warm Jade Annual Report](docs/themes/work/warm-jade-annual-report.jpg)
+![Warm Jade Annual Report](theme_previews/work/warm-jade-annual-report.jpg)
 
 ---
 
@@ -190,7 +190,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`promotion/aqua-charity-report/design.md`](reference/design_system/promotion/aqua-charity-report/design.md)
 - **点名**: `用 aqua-charity-report`
 
-![Aqua Charity Report](docs/themes/promotion/aqua-charity-report.jpg)
+![Aqua Charity Report](theme_previews/promotion/aqua-charity-report.jpg)
 
 #### `cream-collage` — Cream Collage
 
@@ -198,7 +198,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`promotion/cream-collage/design.md`](reference/design_system/promotion/cream-collage/design.md)
 - **点名**: `用 cream-collage`
 
-![Cream Collage](docs/themes/promotion/cream-collage.jpg)
+![Cream Collage](theme_previews/promotion/cream-collage.jpg)
 
 #### `pine-soot-pictorial` — Pine Soot Pictorial
 
@@ -206,7 +206,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`promotion/pine-soot-pictorial/design.md`](reference/design_system/promotion/pine-soot-pictorial/design.md)
 - **点名**: `用 pine-soot-pictorial`
 
-![Pine Soot Pictorial](docs/themes/promotion/pine-soot-pictorial.jpg)
+![Pine Soot Pictorial](theme_previews/promotion/pine-soot-pictorial.jpg)
 
 #### `silk-yellow-magazine` — Silk Yellow Magazine
 
@@ -214,7 +214,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`promotion/silk-yellow-magazine/design.md`](reference/design_system/promotion/silk-yellow-magazine/design.md)
 - **点名**: `用 silk-yellow-magazine`
 
-![Silk Yellow Magazine](docs/themes/promotion/silk-yellow-magazine.jpg)
+![Silk Yellow Magazine](theme_previews/promotion/silk-yellow-magazine.jpg)
 
 #### `silver-gray-luxury-magazine` — Silver-Gray Luxury Magazine
 
@@ -222,7 +222,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`promotion/silver-gray-luxury-magazine/design.md`](reference/design_system/promotion/silver-gray-luxury-magazine/design.md)
 - **点名**: `用 silver-gray-luxury-magazine`
 
-![Silver-Gray Luxury Magazine](docs/themes/promotion/silver-gray-luxury-magazine.jpg)
+![Silver-Gray Luxury Magazine](theme_previews/promotion/silver-gray-luxury-magazine.jpg)
 
 #### `travel-green-handbook` — Travel Green Handbook
 
@@ -230,7 +230,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`promotion/travel-green-handbook/design.md`](reference/design_system/promotion/travel-green-handbook/design.md)
 - **点名**: `用 travel-green-handbook`
 
-![Travel Green Handbook](docs/themes/promotion/travel-green-handbook.jpg)
+![Travel Green Handbook](theme_previews/promotion/travel-green-handbook.jpg)
 
 ---
 
@@ -244,7 +244,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`academic/blue-line-courseware/design.md`](reference/design_system/academic/blue-line-courseware/design.md)
 - **点名**: `用 blue-line-courseware`
 
-![Blue-Line Courseware](docs/themes/academic/blue-line-courseware.jpg)
+![Blue-Line Courseware](theme_previews/academic/blue-line-courseware.jpg)
 
 #### `deep-blue-atlas` — Deep Blue Atlas
 
@@ -252,7 +252,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`academic/deep-blue-atlas/design.md`](reference/design_system/academic/deep-blue-atlas/design.md)
 - **点名**: `用 deep-blue-atlas`
 
-![Deep Blue Atlas](docs/themes/academic/deep-blue-atlas.jpg)
+![Deep Blue Atlas](theme_previews/academic/deep-blue-atlas.jpg)
 
 #### `paper-white-courseware` — Paper White Courseware
 
@@ -260,7 +260,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`academic/paper-white-courseware/design.md`](reference/design_system/academic/paper-white-courseware/design.md)
 - **点名**: `用 paper-white-courseware`
 
-![Paper White Courseware](docs/themes/academic/paper-white-courseware.jpg)
+![Paper White Courseware](theme_previews/academic/paper-white-courseware.jpg)
 
 #### `pastel-derivation` — Pastel Derivation
 
@@ -268,7 +268,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`academic/pastel-derivation/design.md`](reference/design_system/academic/pastel-derivation/design.md)
 - **点名**: `用 pastel-derivation`
 
-![Pastel Derivation](docs/themes/academic/pastel-derivation.jpg)
+![Pastel Derivation](theme_previews/academic/pastel-derivation.jpg)
 
 #### `teal-green-academic-defense` — Teal-Green Academic Defense
 
@@ -276,7 +276,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`academic/teal-green-academic-defense/design.md`](reference/design_system/academic/teal-green-academic-defense/design.md)
 - **点名**: `用 teal-green-academic-defense`
 
-![Teal-Green Academic Defense](docs/themes/academic/teal-green-academic-defense.jpg)
+![Teal-Green Academic Defense](theme_previews/academic/teal-green-academic-defense.jpg)
 
 #### `wine-red-data` — Wine Red Data
 
@@ -284,107 +284,123 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 - **文件**: [`academic/wine-red-data/design.md`](reference/design_system/academic/wine-red-data/design.md)
 - **点名**: `用 wine-red-data`
 
-![Wine Red Data](docs/themes/academic/wine-red-data.jpg)
+![Wine Red Data](theme_previews/academic/wine-red-data.jpg)
 
 ---
 
-## 补充目录
+## 补充目录（仅配色参考 · Palette-Only）
+
+> **注意**：补充目录中的 14 个主题仅提供配色与视觉样张参考，**没有对应的 `design.md` 规范文件**。Agent 请勿将其视为完整设计规范系统；排版时遵循通用规范，仅提取其色彩与调性。
 
 与主目录互补的视觉风格样张，提供不同行业的情绪化与差异化表达；同样可按主题 ID 或风格描述点名生成。
 
 ### 策略 · Strategy
 
 #### `dusk-violet-consulting` — Dusk Violet Consulting
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 暮紫咨询思想领导力报告风
 - **点名**: `用 dusk-violet-consulting`
 
-![Dusk Violet Consulting](docs/themes/extra/dusk-violet-consulting.jpg)
+![Dusk Violet Consulting](theme_previews/extra/dusk-violet-consulting.jpg)
 
 #### `red-black-business` — Red Black Business
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 红黑管理咨询全案模板风
 - **点名**: `用 red-black-business`
 
-![Red Black Business](docs/themes/extra/red-black-business.jpg)
+![Red Black Business](theme_previews/extra/red-black-business.jpg)
 
 #### `map-strategy` — Cartographic Strategy
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 地图战略风，国际化/区域布局
 - **点名**: `用 map-strategy`
 
-![Cartographic Strategy](docs/themes/extra/map-strategy.jpg)
+![Cartographic Strategy](theme_previews/extra/map-strategy.jpg)
 
 ### 商务 · Business
 
 #### `xuan-paper-annual` — Xuan Paper Annual
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 宣纸年刊风，超重标题编辑研究刊
 - **点名**: `用 xuan-paper-annual`
 
-![Xuan Paper Annual](docs/themes/extra/xuan-paper-annual.jpg)
+![Xuan Paper Annual](theme_previews/extra/xuan-paper-annual.jpg)
 
 #### `lead-gray-quarterly` — Lead Gray Quarterly
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 铅灰季报风，财经报纸式数据监测
 - **点名**: `用 lead-gray-quarterly`
 
-![Lead Gray Quarterly](docs/themes/extra/lead-gray-quarterly.jpg)
+![Lead Gray Quarterly](theme_previews/extra/lead-gray-quarterly.jpg)
 
 #### `ink-green-market-trends` — Ink Green Market Trends
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 墨绿行情风，深色加密/市场季报
 - **点名**: `用 ink-green-market-trends`
 
-![Ink Green Market Trends](docs/themes/extra/ink-green-market-trends.jpg)
+![Ink Green Market Trends](theme_previews/extra/ink-green-market-trends.jpg)
 
 #### `orange-tech` — Orange Tech
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 橙色科技年报与商业洞察风
 - **点名**: `用 orange-tech`
 
-![Orange Tech](docs/themes/extra/orange-tech.jpg)
+![Orange Tech](theme_previews/extra/orange-tech.jpg)
 
 ### 工作 · Work
 
 #### `mist-blue-travelogue` — Mist Blue Travelogue
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 雾蓝游记风，旅行酒店行业研究
 - **点名**: `用 mist-blue-travelogue`
 
-![Mist Blue Travelogue](docs/themes/extra/mist-blue-travelogue.jpg)
+![Mist Blue Travelogue](theme_previews/extra/mist-blue-travelogue.jpg)
 
 #### `color-stripes-documentary` — Color Stripes Documentary
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 彩条纪实风，影响力/ESG 长叙事
 - **点名**: `用 color-stripes-documentary`
 
-![Color Stripes Documentary](docs/themes/extra/color-stripes-documentary.jpg)
+![Color Stripes Documentary](theme_previews/extra/color-stripes-documentary.jpg)
 
 #### `red-white-business` — Red White Business
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 红白商务风，雇主品牌与组织能力
 - **点名**: `用 red-white-business`
 
-![Red White Business](docs/themes/extra/red-white-business.jpg)
+![Red White Business](theme_previews/extra/red-white-business.jpg)
 
 ### 推广 · Promotion
 
 #### `gold-orange-type-journal` — Gold Orange Type Journal
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 金橙字体趋势刊风
 - **点名**: `用 gold-orange-type-journal`
 
-![Gold Orange Type Journal](docs/themes/extra/gold-orange-type-journal.jpg)
+![Gold Orange Type Journal](theme_previews/extra/gold-orange-type-journal.jpg)
 
 #### `fresh-brand` — Fresh Brand
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 清新品牌权益/影响力报告风
 - **点名**: `用 fresh-brand`
 
-![Fresh Brand](docs/themes/extra/fresh-brand.jpg)
+![Fresh Brand](theme_previews/extra/fresh-brand.jpg)
 
 ### 学术 · Academic
 
 #### `pink-purple-diagnosis` — Soft Cloud-Layer Diagnostic Narrative
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 粉紫云层诊断叙事风
 - **点名**: `用 pink-purple-diagnosis`
 
-![Soft Cloud-Layer Diagnostic Narrative](docs/themes/extra/pink-purple-diagnosis.jpg)
+![Soft Cloud-Layer Diagnostic Narrative](theme_previews/extra/pink-purple-diagnosis.jpg)
 
 #### `dark-themed-data` — Dark Themed Data
+- **规格**: 仅配色参考（无 design.md 规范）
 - **风格**: 深色数据主题，加密/市场研究仪表盘
 - **点名**: `用 dark-themed-data`
 
-![Dark Themed Data](docs/themes/extra/dark-themed-data.jpg)
+![Dark Themed Data](theme_previews/extra/dark-themed-data.jpg)
 
 ---
 
@@ -397,7 +413,7 @@ Agent 会读取对应 `design.md`（或补充目录下的同名 `.md`）作为�
 | 工作汇报 | `blue-flame-brand` · `electric-violet-business` · `moon-white-imagery` · `sky-blue-wayfinding` · `warm-clay-works` · `warm-jade-annual-report` |
 | 品牌推广 | `aqua-charity-report` · `cream-collage` · `pine-soot-pictorial` · `silk-yellow-magazine` · `silver-gray-luxury-magazine` · `travel-green-handbook` |
 | 学术教育 | `blue-line-courseware` · `deep-blue-atlas` · `paper-white-courseware` · `pastel-derivation` · `teal-green-academic-defense` · `wine-red-data` |
-| 补充 | `dusk-violet-consulting` · `red-black-business` · `map-strategy` · `xuan-paper-annual` · `lead-gray-quarterly` · `ink-green-market-trends` · `orange-tech` · `mist-blue-travelogue` · `color-stripes-documentary` · `red-white-business` · `gold-orange-type-journal` · `fresh-brand` · `pink-purple-diagnosis` · `dark-themed-data` |
+| 补充（仅配色参考） | `dusk-violet-consulting` · `red-black-business` · `map-strategy` · `xuan-paper-annual` · `lead-gray-quarterly` · `ink-green-market-trends` · `orange-tech` · `mist-blue-travelogue` · `color-stripes-documentary` · `red-white-business` · `gold-orange-type-journal` · `fresh-brand` · `pink-purple-diagnosis` · `dark-themed-data` |
 
 ## 统计
 

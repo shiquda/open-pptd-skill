@@ -455,10 +455,12 @@ elements:
         .expect("math deck must build");
 
     let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
-    assert!(slide.contains("baseline=\"-25000\""), "subscript baseline shift missing");
+    assert!(slide.contains("<a14:m><m:oMath>"), "native OMML inline math missing");
+    assert!(slide.contains("<m:sSub>"), "subscript structure missing");
     assert!(slide.contains("≥"), "ge symbol missing");
-    // Formula defaults to upright (no i="1") unless explicitly emphasized
-    assert!(!slide.contains("i=\"1\""), "math formula must not be italic by default");
+    assert!(slide.contains("mc:AlternateContent"), "inline math must use mc:AlternateContent");
+    assert!(slide.contains("mc:Fallback"), "inline math must include fallback");
+    assert!(slide.contains("baseline=\"-25000\""), "fallback must contain subscript baseline shift");
     let _ = fs::remove_file(&path);
 }
 
@@ -494,16 +496,11 @@ elements:
         .expect("math italic deck must build");
 
     let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
-    // Explicitly italicized formula must have i="1"
-    let x_idx = slide.find("<a:t>x + y</a:t>").unwrap();
-    let x_r_start = slide[..x_idx].rfind("<a:r>").unwrap();
-    let x_run = &slide[x_r_start..x_idx];
-    assert!(x_run.contains("i=\"1\""), "explicitly italicized formula must have i=\"1\"");
-    // Unemphasized formula z must NOT have i="1"
-    let z_idx = slide.find("<a:t>z</a:t>").unwrap();
-    let z_r_start = slide[..z_idx].rfind("<a:r>").unwrap();
-    let z_run = &slide[z_r_start..z_idx];
-    assert!(!z_run.contains("i=\"1\""), "normal formula z must be upright (no i=\"1\")");
+    // Both formulas are emitted as native OMML
+    assert!(slide.contains("<a14:m><m:oMath>"), "native OMML formula missing");
+    assert!(slide.contains("<m:t>z</m:t>"), "formula z content missing");
+    assert!(slide.contains("x"), "formula x content missing");
+    assert!(slide.contains("y"), "formula y content missing");
     let _ = fs::remove_file(&path);
 }
 

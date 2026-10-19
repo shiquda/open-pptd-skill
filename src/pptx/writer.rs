@@ -85,7 +85,7 @@ impl<'a> PptxWriter<'a> {
     /// checks, but calling the writer directly from tests/embeddings must
     /// not produce a package from an invalid deck.
     pub fn build(&self, output: &Path) -> Result<()> {
-        if let Some(issue) = validate_project(self.project).first() {
+        if let Some(issue) = validate_project(self.project).iter().find(|i| !i.is_warning()) {
             return Err(Error::Validation(issue.to_string()));
         }
 
@@ -413,6 +413,9 @@ impl<'a> PptxWriter<'a> {
                 ("xmlns:a", ns::DRAWINGML),
                 ("xmlns:r", ns::RELATIONSHIPS),
                 ("xmlns:pptd", ns::PPTD),
+                ("xmlns:a14", "http://schemas.microsoft.com/office/drawing/2010/main"),
+                ("xmlns:m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+                ("xmlns:mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
             ],
         );
         x.start("p:cSld", &[]);
@@ -664,6 +667,9 @@ fn notes_slide_xml(text: &str) -> Vec<u8> {
             ("xmlns:a", ns::DRAWINGML),
             ("xmlns:r", ns::RELATIONSHIPS),
             ("xmlns:p", ns::PRESENTATIONML),
+            ("xmlns:a14", "http://schemas.microsoft.com/office/drawing/2010/main"),
+            ("xmlns:m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+            ("xmlns:mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
         ],
     );
     x.start("p:cSld", &[]);

@@ -144,19 +144,26 @@ fn run_check(entry: &Path) -> i32 {
     };
 
     let issues = pptd::validate::validate_project(&project);
-    if issues.is_empty() {
+    let (warnings, errors): (Vec<_>, Vec<_>) = issues.iter().partition(|i| i.is_warning());
+    if !errors.is_empty() {
+        for issue in &issues {
+            eprintln!("- {issue}");
+        }
+        eprintln!("check failed: {} error(s)", errors.len());
+        2
+    } else if !warnings.is_empty() {
+        for warning in &warnings {
+            eprintln!("- {warning}");
+        }
+        println!("check passed with {} warning(s)", warnings.len());
+        0
+    } else {
         println!(
             "{}: {} page(s) validated — no issues",
             entry.display(),
             project.pages.len()
         );
         0
-    } else {
-        for issue in &issues {
-            eprintln!("- {issue}");
-        }
-        eprintln!("check failed: {} issue(s) found", issues.len());
-        2
     }
 }
 
@@ -212,10 +219,14 @@ fn run_build(entry: &Path, output: Option<&Path>, force: bool) -> i32 {
     };
 
     let issues = pptd::validate::validate_project(&project);
-    if !issues.is_empty() {
-        eprintln!("refusing to build: {} issue(s) found", issues.len());
-        for issue in &issues {
-            eprintln!("- {issue}");
+    let (warnings, errors): (Vec<_>, Vec<_>) = issues.iter().partition(|i| i.is_warning());
+    for warning in &warnings {
+        eprintln!("- {warning}");
+    }
+    if !errors.is_empty() {
+        eprintln!("refusing to build: {} error(s)", errors.len());
+        for error in &errors {
+            eprintln!("- {error}");
         }
         return 2;
     }

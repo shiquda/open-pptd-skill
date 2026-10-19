@@ -239,20 +239,26 @@ class PptxValidator:
             info.has_notes = True
             info.notes_text = self._extract_notes_text(z, notes_file)
 
-        # Count elements & scan text for leaked HTML tags
+        # Count elements & scan text for leaked HTML tags and candidate titles
+        text_candidates: list[dict[str, Any]] = []
         sp_tree = root.find(".//p:spTree", NAMESPACES)
         if sp_tree is not None:
             # Check shape bounds
             for sp in sp_tree.findall(".//p:sp", NAMESPACES):
                 info.shapes_count += 1
                 sp_name = ""
+                ph_type = ""
                 nv_sp_pr = sp.find("p:nvSpPr", NAMESPACES)
                 if nv_sp_pr is not None:
                     c_nv_pr = nv_sp_pr.find("p:cNvPr", NAMESPACES)
                     if c_nv_pr is not None:
                         sp_name = c_nv_pr.attrib.get("name", "")
+                    ph = nv_sp_pr.find(".//p:ph", NAMESPACES)
+                    if ph is not None:
+                        ph_type = ph.attrib.get("type", "")
 
                 # Check transform bounds
+                y_pos = 99999999
                 sp_pr = sp.find("p:spPr", NAMESPACES)
                 if sp_pr is not None:
                     xfrm = sp_pr.find("a:xfrm", NAMESPACES)
@@ -263,6 +269,7 @@ class PptxValidator:
                             try:
                                 x = int(off.attrib.get("x", 0))
                                 y = int(off.attrib.get("y", 0))
+                                y_pos = y
                                 cx = int(ext.attrib.get("cx", 0))
                                 cy = int(ext.attrib.get("cy", 0))
 
@@ -304,11 +311,37 @@ class PptxValidator:
                                 )
                             )
 
-                    # Extract slide title
-                    if not info.title and full_text_parts:
-                        joined = " ".join(full_text_parts).strip()
-                        if len(joined) > 0:
-                            info.title = joined[:40]
+                    joined_text = " ".join(t.strip() for t in full_text_parts if t.strip()).strip()
+                    if joined_text:
+                        fonts = []
+                        for r in tx_body.findall(".//a:r", NAMESPACES):
+                            rpr = r.find("a:rPr", NAMESPACES)
+                            if rpr is not None and "sz" in rpr.attrib:
+                                try:
+                                    fonts.append(int(rpr.attrib["sz"]))
+                                except ValueError:
+                                    pass
+                        for p in tx_body.findall(".//a:p", NAMESPACES):
+                            ppr = p.find("a:pPr", NAMESPACES)
+                            if ppr is not None:
+                                def_rpr = ppr.find("a:defRPr", NAMESPACES)
+                                if def_rpr is not None and "sz" in def_rpr.attrib:
+                                    try:
+                                        fonts.append(int(def_rpr.attrib["sz"]))
+                                    except ValueError:
+                                        pass
+                        max_sz = max(fonts) if fonts else 0
+
+                        text_candidates.append({
+                            "name": sp_name,
+                            "ph_type": ph_type,
+                            "text": joined_text,
+                            "max_sz": max_sz,
+                            "y_pos": y_pos,
+                        })
+
+            # Detect page title properly: prefer shape named for title, else largest-font text
+            info.title = self._detect_slide_title(text_candidates)
 
             # Count picture elements
             for _ in sp_tree.findall(".//p:pic", NAMESPACES):
@@ -321,6 +354,62 @@ class PptxValidator:
                     info.tables_count += 1
 
         return info
+
+    def _detect_slide_title(self, candidates: list[dict[str, Any]]) -> Optional[str]:
+        """Detect slide title properly: prefer shape named for title, else largest-font text.
+
+        Never report a body/metadata text box as title.
+        """
+        title_candidates = []
+        other_candidates = []
+
+        for c in candidates:
+            sp_name = c["name"]
+            ph_type = c["ph_type"]
+            name_lower = sp_name.lower().strip()
+
+            is_title_ph = ph_type in ("title", "ctrTitle")
+            is_title_name = bool(
+                re.search(
+                    r"(?:^|[-_\s])(?:header[-_]?title|cover[-_]?title|page[-_]?title|slide[-_]?title|title)(?:$|[-_\s\d])",
+                    name_lower,
+                )
+            ) or name_lower.endswith("title")
+
+            is_body_ph = ph_type in ("body", "subTitle", "dt", "ftr", "sldNum")
+            is_body_name = bool(
+                re.search(
+                    r"(?:^|[-_\s])(?:body|desc|description|content|notes?|footer|source|page[-_]?num|pagenum|meta)(?:$|[-_\s\d])",
+                    name_lower,
+                )
+            )
+
+            if is_title_ph or is_title_name:
+                title_candidates.append(c)
+            elif not (is_body_name or is_body_ph):
+                other_candidates.append(c)
+
+        if title_candidates:
+            # Sort: title placeholder first, then font size desc, then top-most y position
+            title_candidates.sort(
+                key=lambda x: (
+                    1 if x["ph_type"] in ("title", "ctrTitle") else 0,
+                    x["max_sz"],
+                    -x["y_pos"],
+                ),
+                reverse=True,
+            )
+            return title_candidates[0]["text"][:60]
+
+        if other_candidates:
+            # Sort by font size desc, then top-most y position
+            other_candidates.sort(key=lambda x: (x["max_sz"], -x["y_pos"]), reverse=True)
+            top = other_candidates[0]
+            # Never report body text box as title: must be >= 16pt (1600 hundredths of pt) or sole text
+            if top["max_sz"] >= 1600 or len(other_candidates) == 1:
+                return top["text"][:60]
+
+        return None
 
     def _find_notes_slide(self, z: zipfile.ZipFile, slide_file: str) -> Optional[str]:
         # slide_file is e.g. "ppt/slides/slide1.xml"
@@ -387,9 +476,27 @@ class PptxValidator:
                         prefix = str(output_dir / "slide")
                         cmd2 = [pdftoppm, "-png", "-r", "150", str(pdf_file), prefix]
                         subprocess.run(cmd2, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                        rendered = sorted(output_dir.glob("slide-*.png"))
-                        if rendered:
-                            return rendered
+
+                        raw_slides = sorted(
+                            output_dir.glob("slide-*.png"),
+                            key=lambda p: int(re.search(r"\d+", p.stem).group(0)) if re.search(r"\d+", p.stem) else 0,
+                        )
+                        # Normalize filenames to slide-01.png, slide-02.png (matching slide-NN.png contract)
+                        pad_width = max(2, len(str(len(raw_slides))))
+                        normalized: list[Path] = []
+                        for idx, p in enumerate(raw_slides, 1):
+                            target_name = output_dir / f"slide-{idx:0{pad_width}d}.png"
+                            if p != target_name:
+                                p.rename(target_name)
+                            normalized.append(target_name)
+
+                        if normalized:
+                            cs_path = output_dir / "contact-sheet.jpg"
+                            build_contact_sheet(normalized, cs_path)
+                            result = list(normalized)
+                            if cs_path.is_file():
+                                result.append(cs_path)
+                            return result
 
         # 2. Try macOS QuickLook
         if sys.platform == "darwin" and shutil.which("qlmanage"):
@@ -397,21 +504,77 @@ class PptxValidator:
                 cmd = ["qlmanage", "-p", str(self.path), "-o", tmp]
                 subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 tmp_path = Path(tmp)
-                for ql_img in tmp_path.glob("*.qlpreview/*.png"):
-                    dest = output_dir / ql_img.name
+                ql_images = sorted(tmp_path.glob("*.qlpreview/*.png"))
+                pad_width = max(2, len(str(len(ql_images))))
+                for idx, ql_img in enumerate(ql_images, 1):
+                    dest = output_dir / f"slide-{idx:0{pad_width}d}.png"
                     shutil.copy2(ql_img, dest)
                     rendered.append(dest)
                 if rendered:
-                    return sorted(rendered)
+                    cs_path = output_dir / "contact-sheet.jpg"
+                    build_contact_sheet(rendered, cs_path)
+                    result = list(rendered)
+                    if cs_path.is_file():
+                        result.append(cs_path)
+                    return result
 
         return rendered
+
+
+def build_contact_sheet(image_paths: list[Path], output_path: Path, cols: int = 5) -> Optional[Path]:
+    """Generate a multi-page overview contact sheet grid using Pillow."""
+    if not image_paths:
+        return None
+    try:
+        from PIL import Image
+    except ImportError:
+        print("[open-pptd-skill] PIL/Pillow not installed; skipping overview contact sheet generation.", file=sys.stderr)
+        return None
+
+    try:
+        first_im = Image.open(image_paths[0])
+        w, h = first_im.size
+        thumb_w = 400
+        thumb_h = max(1, int(thumb_w * h / w))
+        pad = 20
+
+        n = len(image_paths)
+        actual_cols = min(cols, n)
+        rows = (n + actual_cols - 1) // actual_cols
+
+        total_w = actual_cols * thumb_w + (actual_cols + 1) * pad
+        total_h = rows * thumb_h + (rows + 1) * pad
+
+        grid = Image.new("RGB", (total_w, total_h), "#EFECE1")
+
+        for idx, img_p in enumerate(image_paths):
+            im = Image.open(img_p).convert("RGB")
+            im_resized = im.resize((thumb_w, thumb_h), Image.Resampling.LANCZOS)
+            r = idx // actual_cols
+            c = idx % actual_cols
+            x = pad + c * (thumb_w + pad)
+            y = pad + r * (thumb_h + pad)
+            grid.paste(im_resized, (x, y))
+
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        grid.save(output_path, "JPEG", quality=90)
+        print(f"[open-pptd-skill] Generated contact sheet: {output_path}")
+        return output_path
+    except Exception as e:
+        print(f"[open-pptd-skill] Failed to generate contact sheet: {e}", file=sys.stderr)
+        return None
 
 
 def print_report(report: ValidationReport, verbose: bool = False) -> None:
     print("\n" + "=" * 65)
     print(f"PPTX VALIDATION REPORT: {Path(report.file_path).name}")
     print("=" * 65)
-    status_str = "PASS" if report.error_count == 0 else "FAIL"
+    if report.error_count > 0:
+        status_str = "FAIL"
+    elif report.warning_count > 0:
+        status_str = "WARNINGS"
+    else:
+        status_str = "PASS"
     print(f"Status:       [{status_str}]")
     print(f"Slides:       {report.slide_count}")
     print(f"Errors:       {report.error_count}")
@@ -448,12 +611,21 @@ def print_report(report: ValidationReport, verbose: bool = False) -> None:
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
-    parser = argparse.ArgumentParser(description="Validate a compiled PPTX presentation file")
+    parser = argparse.ArgumentParser(
+        description="Validate a compiled PPTX presentation file",
+        epilog="Exit codes: 0 = PASS (success), 1 = FAIL (errors detected), 2 = WARNINGS (warnings detected in --strict mode)",
+    )
     parser.add_argument("pptx", type=Path, help="Path to input .pptx file")
     parser.add_argument("--expected-pages", type=int, default=None, help="Fail if page count does not match")
     parser.add_argument("--check-notes", action="store_true", help="Warn if any slide lacks speaker notes")
-    parser.add_argument("--strict", action="store_true", help="Treat warnings as errors (exit code != 0)")
-    parser.add_argument("--render-images", type=Path, nargs="?", const=Path("./preview_slides"), help="Directory to export slide preview images")
+    parser.add_argument("--strict", action="store_true", help="Treat warnings as errors (exit code 2 instead of 0)")
+    parser.add_argument(
+        "--render-images",
+        type=Path,
+        nargs="?",
+        const=Path("./preview_slides"),
+        help="Directory to export slide preview images and contact sheet",
+    )
     parser.add_argument("--json", action="store_true", help="Output machine-readable JSON")
     parser.add_argument("-v", "--verbose", action="store_true", help="Print verbose slide notes and details")
     args = parser.parse_args(argv)
@@ -474,6 +646,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             payload = {
                 "filePath": report.file_path,
                 "isValid": report.is_valid,
+                "status": "FAIL" if report.error_count > 0 else ("WARNINGS" if report.warning_count > 0 else "PASS"),
                 "slideCount": report.slide_count,
                 "errorCount": report.error_count,
                 "warningCount": report.warning_count,

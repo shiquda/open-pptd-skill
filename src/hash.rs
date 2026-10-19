@@ -47,10 +47,25 @@ fn sidecar_path(work_dir: &Path, name: &str) -> PathBuf {
     work_dir.join(name)
 }
 
-/// Canonical form of `path`, falling back to the literal path when it does
-/// not resolve (e.g. the file was moved or deleted after being recorded).
-fn canonical(path: &Path) -> PathBuf {
-    path.canonicalize().unwrap_or_else(|_| path.to_path_buf())
+/// Canonical form of `path`, falling back to resolving relative to parent
+/// when the target file does not yet exist on disk (e.g. before `build`).
+pub fn canonical(path: &Path) -> PathBuf {
+    let p = if path.as_os_str().is_empty() {
+        Path::new(".")
+    } else {
+        path
+    };
+    if let Ok(c) = p.canonicalize() {
+        return c;
+    }
+    // If the path does not exist, canonicalize its parent and join the file name.
+    if let Some(parent) = p.parent() {
+        let parent_canon = canonical(parent);
+        if let Some(file_name) = p.file_name() {
+            return parent_canon.join(file_name);
+        }
+    }
+    p.to_path_buf()
 }
 
 /// True for a 64-character lowercase hex string.
@@ -95,6 +110,7 @@ impl Records {
                 }
             }
         }
+        records.entries.retain(|path, _| path.exists());
         records
     }
 
@@ -122,12 +138,20 @@ impl Records {
     pub fn save(&self, work_dir: &Path) -> Result<()> {
         let mut text = String::new();
         let canon_work_dir = canonical(work_dir);
-        for (path, hash) in &self.entries {
+        let mut entries = self.entries.clone();
+        entries.retain(|path, _| path.exists());
+        for (path, hash) in &entries {
             text.push_str(hash);
             text.push('\n');
-            let stored = match path.strip_prefix(&canon_work_dir) {
-                Ok(rel) => format!("./{}", rel.display()),
-                Err(_) => path.to_string_lossy().to_string(),
+            let stored = if !canon_work_dir.as_os_str().is_empty() {
+                match path.strip_prefix(&canon_work_dir) {
+                    Ok(rel) if rel.is_relative() && !rel.to_string_lossy().starts_with('/') => {
+                        format!("./{}", rel.display())
+                    }
+                    _ => path.to_string_lossy().to_string(),
+                }
+            } else {
+                path.to_string_lossy().to_string()
             };
             text.push_str(&stored);
             text.push('\n');
@@ -151,6 +175,7 @@ fn parse_pairs(path: &Path, work_dir: &Path) -> Option<BTreeMap<PathBuf, String>
     let text = fs::read_to_string(path).ok()?;
     let mut lines = text.lines().map(str::trim).filter(|l| !l.is_empty());
     let mut entries = BTreeMap::new();
+    let canon_work_dir = canonical(work_dir);
     while let Some(hash) = lines.next() {
         if !is_hash(hash) {
             break;
@@ -158,11 +183,28 @@ fn parse_pairs(path: &Path, work_dir: &Path) -> Option<BTreeMap<PathBuf, String>
         let Some(path_str) = lines.next() else {
             break;
         };
-        let p = Path::new(path_str);
-        let resolved = if p.is_relative() {
-            canonical(&work_dir.join(p))
+        // Normalize path_str: strip malformed relative prefixes like ".//" from prior bugs.
+        let (is_rel, norm_p) = if let Some(stripped) = path_str.strip_prefix(".//") {
+            if stripped.starts_with('/') {
+                (false, PathBuf::from(stripped))
+            } else {
+                (true, PathBuf::from(stripped))
+            }
+        } else if let Some(stripped) = path_str.strip_prefix("./") {
+            if stripped.starts_with('/') {
+                (false, PathBuf::from(stripped))
+            } else {
+                (true, PathBuf::from(stripped))
+            }
         } else {
-            canonical(p)
+            let p = Path::new(path_str);
+            (p.is_relative(), p.to_path_buf())
+        };
+
+        let resolved = if is_rel {
+            canonical(&canon_work_dir.join(norm_p))
+        } else {
+            canonical(&norm_p)
         };
         entries.insert(resolved, hash.to_string());
     }
@@ -312,5 +354,94 @@ mod tests {
 
         let _ = fs::remove_dir_all(&dir);
         let _ = fs::remove_dir_all(&dir2);
+    }
+
+    #[test]
+    fn path_normalization_and_deduplication() {
+        let dir = std::env::temp_dir().join(format!("sf-hash-norm-{}", std::process::id()));
+        let _ = fs::remove_dir_all(&dir);
+        fs::create_dir_all(&dir).unwrap();
+
+        // Inside project: relative output => stored as ./out.pptx
+        let out = dir.join("out.pptx");
+        fs::write(&out, b"inside").unwrap();
+        let h_out = sha256_of(&out).unwrap();
+
+        // Outside project: absolute file in temp_dir
+        let ext = std::env::temp_dir().join(format!("sf-hash-ext-{}.pptx", std::process::id()));
+        fs::write(&ext, b"external").unwrap();
+        let h_ext = sha256_of(&ext).unwrap();
+
+        let mut records = Records::load(&dir);
+        records.set(&out, &h_out);
+        records.set(&ext, &h_ext);
+        // Setting the same external file twice updates in place
+        records.set(&ext, &h_ext);
+        records.save(&dir).unwrap();
+
+        let sidecar_content = fs::read_to_string(dir.join(".sync.hash")).unwrap();
+        assert!(sidecar_content.contains("./out.pptx"), "must store ./out.pptx");
+        assert!(!sidecar_content.contains(".//"), "must not contain .//");
+
+        // External path must appear exactly once in the sidecar
+        let ext_canon = canonical(&ext).to_string_lossy().to_string();
+        let ext_count = sidecar_content.lines().filter(|l| l.contains(&ext_canon)).count();
+        assert_eq!(ext_count, 1, "external path must appear exactly once");
+
+        // Moving the project directory preserves relative sync points
+        let dir_moved = std::env::temp_dir().join(format!("sf-hash-moved-{}", std::process::id()));
+        let _ = fs::remove_dir_all(&dir_moved);
+        fs::rename(&dir, &dir_moved).unwrap();
+
+        let out_moved = dir_moved.join("out.pptx");
+        assert_eq!(
+            classify_output(&out_moved, &dir_moved).unwrap(),
+            OutputGuard::InSync,
+            "relative output must remain InSync after project directory rename"
+        );
+
+        // Modifying the file triggers Stale
+        fs::write(&out_moved, b"modified").unwrap();
+        assert_eq!(
+            classify_output(&out_moved, &dir_moved).unwrap(),
+            OutputGuard::Stale,
+            "modified file must be Stale"
+        );
+
+        let _ = fs::remove_dir_all(&dir_moved);
+        let _ = fs::remove_file(&ext);
+    }
+
+    #[test]
+    fn malformed_dot_slash_slash_is_recovered_and_stale_pruned() {
+        let dir = std::env::temp_dir().join(format!("sf-hash-malform-{}", std::process::id()));
+        let _ = fs::remove_dir_all(&dir);
+        fs::create_dir_all(&dir).unwrap();
+
+        let real_ext = std::env::temp_dir().join(format!("sf-hash-real-{}.pptx", std::process::id()));
+        fs::write(&real_ext, b"content").unwrap();
+        let h_real = sha256_of(&real_ext).unwrap();
+
+        // Simulate a sidecar created by the bug: .//<abs_path>
+        let malformed_content = format!(
+            "{h_real}\n.//{}\n0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\n/nonexistent/stale.pptx\n",
+            real_ext.display()
+        );
+        fs::write(dir.join(".sync.hash"), malformed_content).unwrap();
+
+        let records = Records::load(&dir);
+        // Stale non-existent path was pruned on load
+        assert_eq!(records.entries.len(), 1);
+        assert_eq!(records.get(&real_ext), Some(&h_real));
+        assert_eq!(classify_output(&real_ext, &dir).unwrap(), OutputGuard::InSync);
+
+        // Resaving cleans up the format completely
+        records.save(&dir).unwrap();
+        let saved = fs::read_to_string(dir.join(".sync.hash")).unwrap();
+        assert!(!saved.contains(".//"));
+        assert!(!saved.contains("/nonexistent/stale.pptx"));
+
+        let _ = fs::remove_dir_all(&dir);
+        let _ = fs::remove_file(&real_ext);
     }
 }

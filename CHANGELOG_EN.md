@@ -4,6 +4,35 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.4.0] - 2026-10-19
+
+### Added
+
+- `<latex>…</latex>` and inline `\(…\)` compile to **native OOXML math** (`<a14:m>` / OMML): genuine fraction bars (`\frac`), radical roots (`\sqrt`, `\sqrt[n]{}`), scripts, big operators (`\sum`, `\int`, `\lim`), matrices and `\left…\right` delimiters. A standalone formula becomes a centered display equation; an inline formula additionally carries an `mc:Fallback` text rendering so viewers without the `a14` math extension (LibreOffice among them) still show the formula instead of losing it
+- `pptd convert` decompiles native math back into `<latex>` source
+- `letterSpacing` and `textDirection` are now actually emitted (`a:rPr@spc`, `a:bodyPr@vert`)
+- New `pptd check` diagnostics: shape image fill, element outside the canvas, declared animations, unsupported LaTeX commands, icon prefixes and unknown icons
+- `validate_pptx.py --render-images` writes per-page `slide-NN.png` plus an overview `contact-sheet.jpg`
+- New "Current Boundaries" section in the README
+
+### Fixed
+
+- The installer now compares versions: an older `pptd` (or legacy `slideforge`) on `PATH` is upgraded to the target version instead of being reported as ready; `--force` is no longer required
+- `.sync.hash`: in-project outputs are recorded relative, one entry per output path, no `.//…` path mangling for out-of-project outputs, and "changed by an external edit" is distinguished from "no sync point recorded"
+- Reproducible builds: theme major/minor fonts no longer depend on hash-map iteration order
+- Table borders: an unspecified edge is no longer written as `<a:lnX><a:noFill/>`, which used to erase the neighbouring row's bottom border
+- `validate_pptx.py --strict` status line now matches its exit code (PASS / WARNINGS / FAIL); title detection no longer reports the first text box on a slide
+- `pptd build` no longer refuses to build because of warnings (animations, out-of-canvas elements); only errors block a build
+- Node CLI `build` correctly forwards to the native binary; `package.json` no longer exposes a `pptd` bin that could shadow the native compiler
+- Fixed the 404 cargo install URL and the relative install command in `reference/cli.md`
+
+### Changed
+
+- Icons ship as Font Awesome Solid (`fas:`) only; `far:`/`fab:` prefixes and unknown icon names now fail `pptd check` explicitly instead of silently ignoring the prefix
+- Repository slimmed: `docs/` 83MB → 14MB, `example/` 42MB → 17MB (regenerable example outputs removed); theme previews now ship with the skill (`skills/open-pptd/theme_previews/`, ~2.5MB), fixing the broken preview links in an installed `theme.md`
+- README now recommends `npx github:shiquda/open-pptd-skill install -y` when a full clone times out
+- Timeline animations are still parsed but not emitted (`check` warns)
+
 ## [1.2.0] - 2026-08-06
 
 ### Added

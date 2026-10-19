@@ -334,3 +334,29 @@ elements:
         "expected text overflow warning, got {issues:?}"
     );
 }
+
+#[test]
+fn unsupported_latex_command_is_reported() {
+    let page = r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [0, 0, 400, 80]
+    content:
+      text: 'energy <latex>\frac{E}{\foo}</latex> and \(\bar{x}\)'
+"#;
+    let entry = tmp_deck("latex-unsupported", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    let latex_issue = issues
+        .iter()
+        .find(|d| d.message.contains("unsupported LaTeX command"));
+    let diag = latex_issue.unwrap_or_else(|| panic!("expected LaTeX error, got {issues:?}"));
+    assert!(diag.message.contains("`\\foo`"), "got {}", diag.message);
+    assert!(diag.message.contains("t1"), "got {}", diag.message);
+    assert!(!diag.is_warning(), "unsupported LaTeX must be an error");
+    assert!(
+        !issues.iter().any(|d| d.message.contains("`\\bar`")),
+        "supported commands must stay clean: {issues:?}"
+    );
+}

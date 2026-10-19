@@ -23,8 +23,10 @@ It completely eliminates brittle dependencies on web sessions, headless browsers
 
 ```text
 Please install and set up the open-pptd presentation skill for me:
-1. Run the skill installation command:
+1. Run the skill installation command (if git clone is slow or times out, use the fallback command):
    npx skills add https://github.com/shiquda/open-pptd-skill -g -y
+   # Fallback command (skips full git history clone):
+   # npx github:shiquda/open-pptd-skill install -y
 2. Run the skill installer script to ensure the native `pptd` compiler is ready (use the absolute path or cd to skill dir):
    python3 ~/.agents/skills/open-pptd/scripts/install_binary.py
 3. Verify compiler: run `pptd --version` in terminal; if command not found, run `export PATH="$HOME/.local/bin:$PATH"`;
@@ -32,9 +34,8 @@ Please install and set up the open-pptd presentation skill for me:
 ```
 
 > **Installation Command Notes**:
-> - **Standard Ecosystem Command (Recommended)**: Use standard skill managers via `npx skills add https://github.com/shiquda/open-pptd-skill -g -y` (or `npx skills add shiquda/open-pptd-skill -g -y`).
-> - **Direct npm/npx Compatibility**: You can also use `npx github:shiquda/open-pptd-skill install -y`.
-
+> - **Standard Ecosystem Command**: Use standard skill managers via `npx skills add https://github.com/shiquda/open-pptd-skill -g -y` (or `npx skills add shiquda/open-pptd-skill -g -y`). That command performs a full clone: the complete git history is ~110MB (the current working tree is ~31MB). If the clone times out under constrained networks, use the fallback command below.
+> - **Direct npm/npx Compatibility (Recommended Fallback)**: Use `npx github:shiquda/open-pptd-skill install -y` to install directly and avoid full git clone timeouts.
 ---
 
 ## 💬 Generating Presentations with AI (Daily Usage)
@@ -79,7 +80,7 @@ Common AI presentation generators suffer from major tradeoffs: programmatic OOXM
 | **Agent Authoring** | **Declarative YAML**, clean AST | Verbose coordinates & brittle APIs | Prompt-dependent, unpredictable | Complex HTML/CSS constraints |
 | **PowerPoint Editing** | **100% Vector Lossless**, editable text & shapes | Editable, but brittle layout | Bitmap image; text cannot be edited | Not a native PPTX file |
 | **Build Speed & Deps** | **<0.05s** (Native Rust, 100% offline) | 1 ~ 5s (Node.js runtime) | 10 ~ 30s (Model queue) | Requires browser runtime |
-| **Math Typography** | **Academic LaTeX math rendering** (slanted vars, scripts) | Unsupported or requires plugins | Relies on raster text | MathJax / KaTeX rendering |
+| **Math Typography** | **Native OOXML Math** (`<latex>` / `\(…\)` into editable equations with real fraction bars, radicals & operators; hard error on unsupported syntax) | Unsupported or requires plugins | Relies on raster text | MathJax / KaTeX rendering |
 | **Security & Privacy** | **Zero network calls**, sandbox-safe | Local runtime | Sends slide content to cloud LLM | Usually requires web renderer |
 
 ---
@@ -88,13 +89,28 @@ Common AI presentation generators suffer from major tradeoffs: programmatic OOXM
 
 - 📐 **DrawingML Vector Geometries**: Native support for `rect`, `roundRect`, `ellipse`, `triangle`, and `diamond` with stroke, fill, and drop shadows.
 - 🔗 **Connector & Arrow Lines**: Relative vector coordinates `points: "0,0 dx,dy"` with start/end arrowheads (`triangle`, `stealth`, etc.).
-- 🔢 **Academic LaTeX Math Rendering**: In-line math equations like `\( h(s_t) \ge 0 \)` automatically tokenize into italicized Latin variables, scaled super/subscripts, and proper operators.
+- 🔢 **Native OOXML Math (`<a14:m>`)**: `<latex>…</latex>` and `\(…\)` compile to real editable Office Math equations with genuine fraction bars (`\frac`), radical roots (`\sqrt`), scripts (`^`/`_`), big operators (`\sum`, `\int`), and matrices. Standalone formulas render in display mode (centered); inline formulas also carry an `mc:Fallback` text rendering, so PowerPoint/WPS show an editable equation while readers without the `a14` math extension (LibreOffice among them) show the equivalent Unicode text instead of losing the formula. Unsupported LaTeX commands fail the build with a hard error rather than silently degrading.
 - 📊 **Native Bi-directional Tables**: Full support for cell merging (`rowSpan`/`colSpan`), column width ratios, zebra striping, and round-tripping.
 - 🗣️ **PowerPoint Speaker Notes**: Page-level `notes: "..."` attributes seamlessly generate standard OOXML `notesSlide` relationships.
 - 🎨 **1422 Built-in Vector Icons**: Font Awesome 6.7.2 Solid vector dataset with automatic `fa-` prefix normalization and validation.
 - 🔒 **`.sync.hash` Overwrite Protection**: The compiler tracks content hashes to prevent accidental overwrites between manual edits and automated builds.
 - 🔤 **Cross-Platform Safe Fonts**: Intelligent Chinese and Latin font mapping prevents cursive/casual script fallbacks on Linux and Windows.
 
+
+---
+
+## ⚠️ Current Boundaries & Unsupported Features
+
+To guarantee deterministic builds and avoid silent degradations, the following features are not currently supported in the compiler and are strictly intercepted during `pptd check` or `pptd build`:
+- 📊 **Charts (`elementType: chart`)**: Native chart elements are not yet supported. Both `pptd check` and `build` reject them with an explicit error. Workaround: use native tables (`elementType: table`) or export charts to images via script and embed them as `elementType: image`.
+- 🎬 **Animations (`animations`)**: Animation syntax is parsed and validated in AST, but the compiler does not yet emit OOXML `p:timing` blocks (🟡 parsed but not emitted). Decks render as clean, complete static slides.
+- 🌐 **HTML Document & Extended Tags**:
+  - HTML list tags (`<ul>`, `<ol>`, `<li>`) are not supported; write normal paragraphs with bullet prefixes (e.g. `1. first` or `• first`).
+  - HTML hyperlinks (`<a>`) are not supported; write URLs as plain text or annotate sources in slide footers/notes.
+  - HTML superscript/subscript tags (`<sup>`, `<sub>`) are not supported; use native LaTeX math (`<latex>x^2</latex>`, `\( H_2O \)`).
+  - HTML headings and structural containers (`<h1>`~`<h6>`, `<table>`, `<div>`, `<img>`) are not supported inside rich text; use top-level PPTD elements instead.
+- 🖼️ **Shape Image Fills**: Shapes only support solid (`type: solid`) and gradient (`type: gradient`) fills; image fills on shapes (`fill: {type: image}`) are rejected (`a:blipFill` is only supported on slide backgrounds). Use separate `image` elements for photos.
+- 📐 **Out-of-Canvas Elements**: Element coordinates must reside within slide bounds; out-of-canvas boxes are caught by `pptd check` (error for entirely out-of-bounds, warning for partially out-of-bounds).
 ---
 
 ## 📁 PPTD Directory Structure

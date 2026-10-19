@@ -569,6 +569,7 @@ pub fn render_layout_placeholder(
         italic: def.italic.or_else(|| base.and_then(|b| b.italic)),
         line_height: base.and_then(|b| b.line_height),
         line_height_px: None,
+        letter_spacing: None,
         align: def.align,
         wrap: None,
         direction: None,
@@ -608,6 +609,7 @@ pub struct EffTextStyle {
     pub italic: Option<bool>,
     pub line_height: Option<f64>,
     pub line_height_px: Option<f64>,
+    pub letter_spacing: Option<f64>,
     pub align: Option<Alignment>,
     pub wrap: Option<bool>,
     pub direction: Option<TextDirection>,
@@ -651,6 +653,9 @@ pub fn effective_text_style(theme: Option<&Theme>, content: &TextContent) -> Eff
         line_height_px: content
             .line_height_px
             .or_else(|| base.and_then(|b| b.line_height_px)),
+        letter_spacing: content
+            .letter_spacing
+            .or_else(|| base.and_then(|b| b.letter_spacing)),
         align: content.align,
         wrap: content.wrap,
         direction: content.text_direction,
@@ -892,6 +897,11 @@ fn render_text(
         anchor.to_string(),
     ];
     let mut bpr_k: Vec<&str> = vec!["lIns", "rIns", "tIns", "bIns", "wrap", "rtlCol", "anchor"];
+    // textDirection: vertical emits vert on a:bodyPr (prefer eaVert per requirement 6)
+    if style.direction == Some(TextDirection::Vertical) {
+        bpr_k.push("vert");
+        bpr_v.push("eaVert".to_string());
+    }
     if let Some(extras) = &style.body_pr_extras {
         for (k, v) in extras {
             bpr_k.push(k.as_str());
@@ -1034,7 +1044,7 @@ fn parse_rich(text: &str) -> Vec<RichPara> {
             line_height: None,
             line_height_px: None,
             margin_top_px: None,
-            runs: parse_runs(line),
+            items: parse_runs(line),
         }
     }
 
@@ -1088,7 +1098,7 @@ fn parse_rich(text: &str) -> Vec<RichPara> {
             line_height,
             line_height_px,
             margin_top_px,
-            runs: parse_runs(&text[gt + 1..close]),
+            items: parse_runs(&text[gt + 1..close]),
         });
         let after = close + 4;
         if after > text.len() {
@@ -1104,12 +1114,13 @@ fn parse_rich(text: &str) -> Vec<RichPara> {
 
 /// Split one `<p>` body into styled runs (`<span style>` / `<strong>` /
 /// `<em>`); plain text chunks become unstyled runs.
-fn parse_runs(inner: &str) -> Vec<RichRun> {
+fn parse_runs(inner: &str) -> Vec<ParaItem> {
     #[derive(Default, Clone)]
     struct Flags {
         size: Option<f64>,
         color: Option<String>,
         family: Option<String>,
+        letter_spacing: Option<f64>,
         bold: Option<bool>,
         italic: Option<bool>,
         underline: Option<bool>,
@@ -1117,25 +1128,68 @@ fn parse_runs(inner: &str) -> Vec<RichRun> {
         styled: bool,
     }
 
-    fn flush(out: &mut Vec<RichRun>, buf: &mut String, f: &Flags) {
+    fn flush_text(out: &mut Vec<ParaItem>, buf: &mut String, f: &Flags) {
         if buf.is_empty() {
             return;
         }
-        out.push(RichRun {
-            text: unescape_xml(&std::mem::take(buf)),
-            size: f.size,
-            color: f.color.clone(),
-            family: f.family.clone(),
-            bold: f.bold,
-            italic: f.italic,
-            underline: f.underline,
-            strike: f.strike,
-            styled: f.styled,
-            baseline: None,
-        });
+        let raw = unescape_xml(&std::mem::take(buf));
+        let mut rest = raw.as_str();
+        while let Some(start) = rest.find("\\(") {
+            if start > 0 {
+                out.push(ParaItem::Run(RichRun {
+                    text: rest[..start].to_owned(),
+                    size: f.size,
+                    color: f.color.clone(),
+                    family: f.family.clone(),
+                    letter_spacing: f.letter_spacing,
+                    bold: f.bold,
+                    italic: f.italic,
+                    underline: f.underline,
+                    strike: f.strike,
+                    styled: f.styled,
+                    baseline: None,
+                }));
+            }
+            let after = &rest[start + 2..];
+            if let Some(end) = after.find("\\)") {
+                out.push(ParaItem::Math(after[..end].to_owned()));
+                rest = &after[end + 2..];
+            } else {
+                out.push(ParaItem::Run(RichRun {
+                    text: rest[start..].to_owned(),
+                    size: f.size,
+                    color: f.color.clone(),
+                    family: f.family.clone(),
+                    letter_spacing: f.letter_spacing,
+                    bold: f.bold,
+                    italic: f.italic,
+                    underline: f.underline,
+                    strike: f.strike,
+                    styled: f.styled,
+                    baseline: None,
+                }));
+                rest = "";
+                break;
+            }
+        }
+        if !rest.is_empty() {
+            out.push(ParaItem::Run(RichRun {
+                text: rest.to_owned(),
+                size: f.size,
+                color: f.color.clone(),
+                family: f.family.clone(),
+                letter_spacing: f.letter_spacing,
+                bold: f.bold,
+                italic: f.italic,
+                underline: f.underline,
+                strike: f.strike,
+                styled: f.styled,
+                baseline: None,
+            }));
+        }
     }
 
-    let mut out: Vec<RichRun> = Vec::new();
+    let mut out: Vec<ParaItem> = Vec::new();
     let mut buf = String::new();
     let mut flags = Flags::default();
     let mut rest = inner;
@@ -1152,11 +1206,12 @@ fn parse_runs(inner: &str) -> Vec<RichRun> {
                 .strip_prefix("span style=\"")
                 .and_then(|s| s.strip_suffix('\"'))
             {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 let pairs = css_pairs(style);
                 flags.size = css_value(&pairs, "font-size").and_then(css_px);
                 flags.color = css_value(&pairs, "color").map(str::to_string);
                 flags.family = css_value(&pairs, "font-family").map(str::to_string);
+                flags.letter_spacing = css_value(&pairs, "letter-spacing").and_then(css_px);
                 flags.bold = css_value(&pairs, "font-weight")
                     .map(|w| matches!(w, "bold" | "bolder" | "600" | "700" | "800" | "900"));
                 flags.italic = css_value(&pairs, "font-style").map(|s| s != "normal");
@@ -1171,56 +1226,65 @@ fn parse_runs(inner: &str) -> Vec<RichRun> {
                 flags.styled = flags.size.is_some()
                     || flags.color.is_some()
                     || flags.family.is_some()
+                    || flags.letter_spacing.is_some()
                     || flags.bold.is_some()
                     || flags.italic.is_some()
                     || flags.underline.is_some()
                     || flags.strike.is_some();
             } else if name == "/span" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags = Flags::default();
             } else if name == "strong" || name == "b" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags.bold = Some(true);
                 flags.styled = true;
             } else if name == "/strong" || name == "/b" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags.bold = None;
             } else if name == "em" || name == "i" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags.italic = Some(true);
                 flags.styled = true;
             } else if name == "/em" || name == "/i" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags.italic = None;
             } else if name == "u" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags.underline = Some(true);
                 flags.styled = true;
             } else if name == "/u" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags.underline = None;
             } else if name == "s" || name == "strike" || name == "del" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags.strike = Some(true);
                 flags.styled = true;
             } else if name == "/s" || name == "/strike" || name == "/del" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags.strike = None;
             } else if name == "code" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags.family = Some("Consolas".to_string());
                 flags.styled = true;
             } else if name == "/code" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags.family = None;
             } else if name == "latex" {
-                flush(&mut out, &mut buf, &flags);
-                buf.push_str("\\(");
+                flush_text(&mut out, &mut buf, &flags);
+                let latex_start = lt + end + 1;
+                if let Some(latex_end_rel) = rest[latex_start..].find("</latex>") {
+                    let latex_content = &rest[latex_start..latex_start + latex_end_rel];
+                    out.push(ParaItem::Math(unescape_xml(latex_content)));
+                    rest = &rest[latex_start + latex_end_rel + 8..];
+                    continue;
+                } else {
+                    out.push(ParaItem::Math(unescape_xml(&rest[latex_start..])));
+                    break;
+                }
             } else if name == "/latex" {
-                buf.push_str("\\)");
-                flush(&mut out, &mut buf, &flags);
+                // Ignore standalone closing tag
             } else if name == "span" {
-                flush(&mut out, &mut buf, &flags);
+                flush_text(&mut out, &mut buf, &flags);
                 flags = Flags::default();
             } else if name == "br/" || name == "br" {
                 buf.push('\n');
@@ -1234,82 +1298,36 @@ fn parse_runs(inner: &str) -> Vec<RichRun> {
             break;
         }
     }
-    flush(&mut out, &mut buf, &flags);
+    flush_text(&mut out, &mut buf, &flags);
 
     // Merge adjacent runs with identical style (span noise reduction).
-    let mut merged: Vec<RichRun> = Vec::new();
-    for run in out {
-        if let Some(last) = merged.last_mut() {
-            let same = last.size == run.size
-                && last.color == run.color
-                && last.family == run.family
-                && last.bold == run.bold
-                && last.italic == run.italic
-                && last.underline == run.underline
-                && last.strike == run.strike;
-            if same && !run.styled {
-                last.text.push_str(&run.text);
-                continue;
+    let mut merged: Vec<ParaItem> = Vec::new();
+    for item in out {
+        match item {
+            ParaItem::Run(run) => {
+                if let Some(ParaItem::Run(last)) = merged.last_mut() {
+                    let same = last.size == run.size
+                        && last.color == run.color
+                        && last.family == run.family
+                        && last.letter_spacing == run.letter_spacing
+                        && last.bold == run.bold
+                        && last.italic == run.italic
+                        && last.underline == run.underline
+                        && last.strike == run.strike;
+                    if same && !run.styled {
+                        last.text.push_str(&run.text);
+                        continue;
+                    }
+                }
+                merged.push(ParaItem::Run(run));
+            }
+            ParaItem::Math(m) => {
+                merged.push(ParaItem::Math(m));
             }
         }
-        merged.push(run);
     }
     merged
 }
-
-/// Expand inline `\(...\)` LaTeX formulas in rich runs into styled text runs
-/// (Unicode symbols + baseline-shifted scripts) via [`super::math`]. Runs
-/// without a formula pass through unchanged.
-///
-/// Formulas default to the slide's normal font family and upright (non-italic)
-/// text unless explicitly styled for emphasis.
-fn expand_math_runs(runs: &[RichRun]) -> Vec<RichRun> {
-    let mut out: Vec<RichRun> = Vec::new();
-    for run in runs {
-        if !run.text.contains("\\(") {
-            out.push(run.clone());
-            continue;
-        }
-        let mut rest = run.text.as_str();
-        loop {
-            let Some(start) = rest.find("\\(") else {
-                if !rest.is_empty() {
-                    let mut r = run.clone();
-                    r.text = rest.to_owned();
-                    out.push(r);
-                }
-                break;
-            };
-            if start > 0 {
-                let mut r = run.clone();
-                r.text = rest[..start].to_owned();
-                out.push(r);
-            }
-            let after = &rest[start + 2..];
-            let Some(end) = after.find("\\)") else {
-                // Unterminated formula: keep the remainder verbatim.
-                let mut r = run.clone();
-                r.text = rest[start..].to_owned();
-                out.push(r);
-                break;
-            };
-            for seg in super::math::latex_to_segments(&after[..end]) {
-                let mut r = run.clone();
-                r.text = seg.text;
-                r.baseline = seg.baseline;
-                r.styled = true;
-                // Formulas default to upright (non-italic) unless explicitly styled italic
-                r.italic = run.italic.or(Some(false));
-                // Formulas inherit the slide's normal font family
-                r.family = run.family.clone();
-                out.push(r);
-            }
-            rest = &after[end + 2..];
-        }
-    }
-    out
-}
-
 /// Render a rich-text body (inside an open `p:txBody`): per-paragraph `pPr`
 /// + styled runs.
 pub(crate) fn render_rich_body(
@@ -1337,6 +1355,10 @@ pub(crate) fn render_rich_body(
         anchor.to_string(),
     ];
     let mut bpr_k: Vec<&str> = vec!["lIns", "rIns", "tIns", "bIns", "wrap", "rtlCol", "anchor"];
+    if style.direction == Some(TextDirection::Vertical) {
+        bpr_k.push("vert");
+        bpr_v.push("eaVert".to_string());
+    }
     if let Some(extras) = &style.body_pr_extras {
         for (k, v) in extras {
             bpr_k.push(k.as_str());
@@ -1389,8 +1411,7 @@ pub(crate) fn render_rich_body(
         // A spacer that DOES carry an explicit line-height keeps it, so
         // round-tripped template spacing (lnSpc 10%–60% rules between
         // sections) doesn't inflate to full line height and push content
-        // out of its box.
-        if !para.runs.is_empty() || para.line_height.is_some() || para.line_height_px.is_some() {
+        if !para.items.is_empty() || para.line_height.is_some() || para.line_height_px.is_some() {
             if let Some(pct) = line_height_pct {
                 xml.start("a:lnSpc", &[]);
                 xml.leaf("a:spcPct", &[("val", &pct)]);
@@ -1410,18 +1431,78 @@ pub(crate) fn render_rich_body(
         emit_bullet(xml, style);
         xml.end("a:pPr");
 
-        let math_runs = expand_math_runs(&para.runs);
-        for run in &math_runs {
-            emit_run_styled(xml, theme, style, Some(run), &run.text);
-        }
-        // A paragraph with no runs is an empty spacer line; emitting an
-        // endParaRPr would also pin its paragraph-mark size, changing the
-        // spacer height versus the source (which has no endParaRPr either).
-        if !math_runs.is_empty() {
-            let sz = math_runs
+        let math_count = para
+            .items
+            .iter()
+            .filter(|i| matches!(i, ParaItem::Math(_)))
+            .count();
+        let has_non_empty_runs = para.items.iter().any(|i| match i {
+            ParaItem::Run(r) => !r.text.trim().is_empty(),
+            _ => false,
+        });
+        let is_display = math_count == 1 && !has_non_empty_runs;
+
+        if is_display {
+            if let Some(ParaItem::Math(latex)) = para
+                .items
                 .iter()
-                .find(|r| r.size.is_some())
-                .and_then(|r| r.size)
+                .find(|i| matches!(i, ParaItem::Math(_)))
+            {
+                let omml = super::math::latex_to_omml(latex, true)
+                    .map_err(|e| crate::error::Error::Invalid(e.to_string()))?;
+                xml.raw(&omml);
+            }
+        } else {
+            for item in &para.items {
+                match item {
+                    ParaItem::Run(run) => {
+                        emit_run_styled(xml, theme, style, Some(run), &run.text);
+                    }
+                    ParaItem::Math(latex) => {
+                        let omml = super::math::latex_to_omml(latex, false)
+                            .map_err(|e| crate::error::Error::Invalid(e.to_string()))?;
+                        let fallback_segs = super::math::latex_to_fallback_segments(latex)
+                            .map_err(|e| crate::error::Error::Invalid(e.to_string()))?;
+
+                        xml.start(
+                            "mc:AlternateContent",
+                            &[("xmlns:mc", "http://schemas.openxmlformats.org/markup-compatibility/2006")],
+                        );
+                        xml.start("mc:Choice", &[("Requires", "a14")]);
+                        xml.raw(&omml);
+                        xml.end("mc:Choice");
+                        xml.start("mc:Fallback", &[]);
+                        for seg in fallback_segs {
+                            let r = RichRun {
+                                text: seg.text.clone(),
+                                styled: true,
+                                family: None,
+                                size: None,
+                                color: None,
+                                bold: None,
+                                italic: None,
+                                underline: None,
+                                strike: None,
+                                baseline: seg.baseline,
+                                letter_spacing: None,
+                            };
+                            emit_run_styled(xml, theme, style, Some(&r), &r.text);
+                        }
+                        xml.end("mc:Fallback");
+                        xml.end("mc:AlternateContent");
+                    }
+                }
+            }
+        }
+
+        if !para.items.is_empty() {
+            let sz = para
+                .items
+                .iter()
+                .find_map(|i| match i {
+                    ParaItem::Run(r) => r.size,
+                    _ => None,
+                })
                 .or(style.font_size)
                 .unwrap_or(18.0);
             let sz = ((sz * 100.0).round() as u64).to_string();
@@ -1439,6 +1520,12 @@ fn emit_run(xml: &mut Xml, theme: Option<&Theme>, style: &EffTextStyle, text: &s
     emit_run_styled(xml, theme, style, None, text);
 }
 
+#[derive(Clone)]
+enum ParaItem {
+    Run(RichRun),
+    Math(String),
+}
+
 /// Effective per-run override parsed from PPTD rich text.
 #[derive(Clone)]
 struct RichRun {
@@ -1446,6 +1533,7 @@ struct RichRun {
     size: Option<f64>,
     color: Option<String>,
     family: Option<String>,
+    letter_spacing: Option<f64>,
     /// `None` inherits the box/paragraph style; `Some` is an explicit reset.
     bold: Option<bool>,
     italic: Option<bool>,
@@ -1456,15 +1544,27 @@ struct RichRun {
     baseline: Option<i32>,
 }
 
-/// One rich-text paragraph: per-paragraph overrides + runs.
+/// One rich-text paragraph: per-paragraph overrides + items.
 struct RichPara {
     align: Option<&'static str>,
     line_height: Option<f64>,
     line_height_px: Option<f64>,
     margin_top_px: Option<f64>,
-    runs: Vec<RichRun>,
+    items: Vec<ParaItem>,
 }
 
+#[cfg(test)]
+impl RichPara {
+    fn runs(&self) -> Vec<&RichRun> {
+        self.items
+            .iter()
+            .filter_map(|i| match i {
+                ParaItem::Run(r) => Some(r),
+                _ => None,
+            })
+            .collect()
+    }
+}
 /// `emit_run` with a per-run rich-text override; unspecified run fields fall
 /// back to the box-level `EffTextStyle`.
 fn emit_run_styled(
@@ -1518,6 +1618,11 @@ fn emit_run_styled(
     let baseline_attr = baseline.map(|b| b.to_string());
     if let Some(bl) = &baseline_attr {
         attrs.push(("baseline", bl));
+    }
+    let letter_spacing = run.and_then(|r| r.letter_spacing).or(style.letter_spacing);
+    let spc_attr = letter_spacing.map(|ls| (ls * 75.0).round().to_string());
+    if let Some(spc) = &spc_attr {
+        attrs.push(("spc", spc));
     }
 
     xml.start("a:r", &[]);
@@ -2327,7 +2432,7 @@ mod tests {
         let text = "<p>Normal <u>underlined</u> and <s>struck</s> and <strong>bold</strong></p>";
         let paras = parse_rich(text);
         assert_eq!(paras.len(), 1);
-        let runs = &paras[0].runs;
+        let runs = paras[0].runs();
         assert!(
             runs.iter()
                 .any(|r| r.text == "underlined" && r.underline == Some(true))
@@ -2348,7 +2453,7 @@ mod tests {
         let paras = parse_rich(text);
         assert_eq!(paras.len(), 1);
         // Must not panic on slice index and must retain text
-        let combined: String = paras[0].runs.iter().map(|r| r.text.as_str()).collect();
+        let combined: String = paras[0].runs().iter().map(|r| r.text.as_str()).collect();
         assert!(combined.contains("Prefix"));
         assert!(combined.contains("suffix"));
     }
@@ -2369,5 +2474,64 @@ mod tests {
         let out = xml.into_string();
         assert!(out.contains("u=\"sng\""), "{out}");
         assert!(out.contains("strike=\"sngStrike\""), "{out}");
+    }
+
+    #[test]
+    fn render_rich_body_emits_letter_spacing_and_vertical_direction() {
+        let style = EffTextStyle {
+            letter_spacing: Some(2.0),
+            direction: Some(TextDirection::Vertical),
+            ..Default::default()
+        };
+        let mut xml = Xml::new();
+        render_rich_body(
+            &mut xml,
+            None,
+            &style,
+            "<p>Vertical Text</p>",
+            "tl",
+            false,
+        )
+        .unwrap();
+        let out = xml.into_string();
+        // vert="eaVert" on a:bodyPr
+        assert!(out.contains("vert=\"eaVert\""), "{out}");
+        // spc="150" (2.0 * 75) on a:rPr
+        assert!(out.contains("spc=\"150\""), "{out}");
+    }
+
+    #[test]
+    fn render_rich_body_emits_native_omml_display_and_inline() {
+        let style = EffTextStyle::default();
+        let mut xml = Xml::new();
+        // Display formula (whole paragraph)
+        render_rich_body(
+            &mut xml,
+            None,
+            &style,
+            "<p><latex>\\frac{a+b}{c+d}</latex></p>",
+            "tl",
+            false,
+        )
+        .unwrap();
+        let out = xml.into_string();
+        assert!(out.contains("<a14:m><m:oMathPara>"), "{out}");
+        assert!(out.contains("<m:f>"), "{out}");
+
+        let mut xml_inline = Xml::new();
+        // Inline formula
+        render_rich_body(
+            &mut xml_inline,
+            None,
+            &style,
+            "<p>Formula: <latex>\\sqrt{x}</latex> inline</p>",
+            "tl",
+            false,
+        )
+        .unwrap();
+        let out_inline = xml_inline.into_string();
+        assert!(out_inline.contains("<a14:m><m:oMath>"), "{out_inline}");
+        assert!(!out_inline.contains("<m:oMathPara>"), "{out_inline}");
+        assert!(out_inline.contains("<m:rad>"), "{out_inline}");
     }
 }

@@ -84,7 +84,9 @@ For property values that conflict, the first source with a value is found by sea
 | border | `{style: solid, width: 1, color: "#000000"}` |
 | align | `["center", "middle"]` |
 
-#### 3. Chart Styles
+#### 3. Chart Styles (Unsupported)
+
+> ⚠️ **Compiler Notice**: Native chart elements (`elementType: chart`) are **not supported** in the current compiler version. The style priority rules below are preserved for future specification design.
 
 Charts involve multiple kinds of styles (series body colors, fonts, data labels, axis/legend visibility, etc.), each with its own independent priority chain, explained below.
 
@@ -143,7 +145,7 @@ A PPTD project consists of a main entry file and individual page files:
 ```
 project/
   slides_name.pptd     # main entry (size/theme/title + page reference list)
-  assets/              # media resources such as images and videos (canonical; media/ also supported)
+  assets/              # local image and media resources (canonical directory)
   pages/               # page file directory
     1_cover.page       # one .page file per page
     2_intro.page
@@ -152,7 +154,7 @@ project/
 1. **Fully self-contained**: all referenced files must be located inside the folder containing the `.pptd` file; **referencing files outside the directory is not allowed**
 2. **Only relative paths are supported** (relative to the directory containing the `.pptd` file):
    - The `pages` list in `.pptd`: `pages/1_cover.page`
-   - Image paths in `.page`: `assets/image1.jpg` (or `media/image1.jpg`)
+   - Image paths in `.page`: `assets/image1.jpg`
 3. **Media supports URLs**: `Image.src`, and the [ImageFill](#fill).src of `background` / `fill`, may be `https://...` (only jpg/jpeg/png/gif supported)
 
 **Main entry is required:** everything must be loaded through the `.pptd` main entry file; a `.page` cannot be passed alone to the `convert`/`check` commands
@@ -511,11 +513,11 @@ Common properties of all elements.
 ```ts
 interface ElementBase {
   elementId: string;                                                      // constraint: unique within the same page; unique element ID
-  elementType: "text" | "shape" | "line" | "image" | "icon" | "table" | "chart";  // element type
+  elementType: "text" | "shape" | "line" | "image" | "icon" | "table";  // element type (note: "chart" is unsupported)
   bounds: [number, number, number, number];                               // element size and position, [x, y, width, height]
 }
 
-type Element = Text | Shape | Line | Image | Icon | Table | Chart;
+type Element = Text | Shape | Line | Image | Icon | Table;
 ```
 
 ---
@@ -905,13 +907,15 @@ interface Icon extends ElementBase {
 }
 ```
 
-**iconName format:** `style:name`, using the Font Awesome 7.x free icon library.
+**iconName format:** `style:name`, using the Font Awesome 7.x free **solid** icon set that ships with the compiler.
 
-| Prefix | Style | Example |
+| Prefix | Status | Example |
 |------|------|------|
-| `fas` | Solid (most common) | `fas:house` |
-| `far` | Regular | `far:heart` |
-| `fab` | Brands | `fab:github` |
+| `fas` | ✅ Supported (the only bundled style) | `fas:house` |
+| `far` | ❌ Not bundled — `pptd check` reports an error | `far:heart` |
+| `fab` | ❌ Not bundled — `pptd check` reports an error | `fab:github` |
+
+Only the solid (`fas`) glyph set is embedded in the compiler. A `far:`/`fab:` prefix, or an icon name that is not in the embedded set, fails `pptd check` with an explicit error instead of silently rendering a different glyph.
 
 Icon search: https://fontawesome.com/search?ic=free-collection
 
@@ -1022,9 +1026,19 @@ interface Cell {
 
 ---
 
-### Chart (charts)
-> ⚠️ **编译器状态提示 (Compiler Notice)**：原生 PPTX 图表部件（`elementType: chart`）目前在 `pptd` 中处于开发阶段，当前版本**尚未支持编译**。`pptd check` 和 `build` 会主动拦截图表并报错。如需展现数据，推荐使用原生表格（`elementType: table`）或使用外部脚本将图表导出为图片后引入（`elementType: image`）。
+### Chart (charts) — ❌ Unsupported / Not Yet Implemented
 
+> ❌ **编译器状态提示 (Compiler Notice: Unsupported)**：
+> 原生 PPTX 图表部件（`elementType: chart`）目前在 `pptd` 编译器中**完全不受支持**，`AGENTS.md` 明确严禁使用。
+> - `pptd check` 会主动拦截图表元素并报错退出。
+> - `pptd build` 会抛出 `Error::Unsupported("element type 'chart'")` 并拒绝编译。
+> - **严禁在 PPTD 工程中使用 `elementType: chart`**。
+>
+> **替代方案**：
+> 1. **结构化数据呈现**：优先使用原生表格 (`elementType: table`) 呈现，表格享有完整的 DrawingML 样式、单元格合并 (`rowSpan`/`colSpan`) 与边框对齐支持。
+> 2. **数据可视化图表**：使用外部脚本（如 Python `matplotlib` / `seaborn`）将图表渲染导出为高分辨率图片，放置于 `assets/` 目录，通过 `elementType: image` 引入幻灯片。
+>
+> *(注意：以下规范仅供未来开发参考，当前编译器完全不予编译)*
 
 PPTD v2's chart element follows the ECharts philosophy: **the chart top level carries no `type` field**; each `series[i].type` determines its own form. 13 series types are supported in total, laid out flat by type name, all equal in status:
 
@@ -1906,6 +1920,9 @@ bar / line / area / scatter / bubble may coexist with each other freely; candles
 ---
 
 ## 6. Animations
+
+> 🟡 **编译器状态提示 (Compiler Notice: Parsed but not emitted)**：
+> 编译器支持 `animations` 语法解析与静态校验，但当前版本生成的 OOXML 暂缓写入 `p:timing` 时序动画（10 页文稿中 `p:timing` 均为 0）。文稿目前以纯静态排版完整呈现。
 
 The optional `animations` array can be used to orchestrate animations for elements on the current page. `animations` is a page-level field and references elements in the page's `elements` array through `elementId`. Array order determines the sequence relationships among animations, while `trigger` determines when each animation starts.
 

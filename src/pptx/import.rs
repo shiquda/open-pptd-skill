@@ -3519,6 +3519,41 @@ fn text_content(
                         .unwrap_or_default();
                     runs.push((None, t));
                 }
+                "m" | "oMath" | "oMathPara" => {
+                    let omath = if child.name == "oMath" {
+                        Some(child)
+                    } else if child.name == "oMathPara" {
+                        first(child, "oMath")
+                    } else {
+                        first(child, "oMath")
+                            .or_else(|| first(child, "oMathPara").and_then(|omp| first(omp, "oMath")))
+                    };
+                    if let Some(om) = omath {
+                        let latex = crate::pptx::math::omml_to_latex(om);
+                        runs.push((None, format!("<latex>{latex}</latex>")));
+                    }
+                }
+                "AlternateContent" => {
+                    if let Some(choice) = first(child, "Choice") {
+                        let m_el = first(choice, "m")
+                            .or_else(|| first(choice, "oMath"))
+                            .or_else(|| first(choice, "oMathPara"));
+                        if let Some(m_node) = m_el {
+                            let omath = if m_node.name == "oMath" {
+                                Some(m_node)
+                            } else if m_node.name == "oMathPara" {
+                                first(m_node, "oMath")
+                            } else {
+                                first(m_node, "oMath")
+                                    .or_else(|| first(m_node, "oMathPara").and_then(|omp| first(omp, "oMath")))
+                            };
+                            if let Some(om) = omath {
+                                let latex = crate::pptx::math::omml_to_latex(om);
+                                runs.push((None, format!("<latex>{latex}</latex>")));
+                            }
+                        }
+                    }
+                }
                 _ => {}
             }
         }
@@ -3607,6 +3642,10 @@ fn text_content(
             markup.push_str(&format!("<p{style_attr}>"));
             for (st, t) in &l.runs {
                 if t.is_empty() {
+                    continue;
+                }
+                if t.starts_with("<latex>") && t.ends_with("</latex>") {
+                    markup.push_str(t);
                     continue;
                 }
                 // Runs that match the box-level style (first paragraph's)

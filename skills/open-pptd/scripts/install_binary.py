@@ -13,6 +13,7 @@ import hashlib
 import io
 import os
 import platform
+import re
 import shutil
 import stat
 import subprocess
@@ -26,7 +27,7 @@ from typing import Optional, Tuple
 
 REPO = "shiquda/open-pptd-skill"
 REPO_CANDIDATES = ["shiquda/open-pptd-skill"]
-VERSION = "1.3.5"
+VERSION = "1.4.0"
 
 
 def detect_target(version: str = VERSION) -> Optional[Tuple[str, list[str]]]:
@@ -66,18 +67,82 @@ def detect_target(version: str = VERSION) -> Optional[Tuple[str, list[str]]]:
     return None
 
 
-def find_pptd() -> Optional[Path]:
-    """Find existing pptd executable in PATH or standard user directories."""
-    for bin_name in ["pptd", "open-pptd", "slideforge"]:
+def parse_version(v_str: str) -> Optional[tuple[int, ...]]:
+    """Extract semantic version digits from version output string (e.g. 'pptd 1.3.5' -> (1, 3, 5))."""
+    if not v_str:
+        return None
+    m = re.search(r"(\d+(?:\.\d+)+)", v_str)
+    if not m:
+        return None
+    try:
+        return tuple(int(part) for part in m.group(1).split("."))
+    except ValueError:
+        return None
+
+
+def compare_versions(v1: str, v2: str) -> Optional[int]:
+    """Compare two version strings.
+
+    Returns:
+        1 if v1 > v2
+        0 if v1 == v2
+        -1 if v1 < v2
+        None if either version is unparseable
+    """
+    t1 = parse_version(v1)
+    t2 = parse_version(v2)
+    if t1 is None or t2 is None:
+        return None
+
+    max_len = max(len(t1), len(t2))
+    t1_padded = t1 + (0,) * (max_len - len(t1))
+    t2_padded = t2 + (0,) * (max_len - len(t2))
+
+    if t1_padded > t2_padded:
+        return 1
+    elif t1_padded < t2_padded:
+        return -1
+    else:
+        return 0
+
+
+def is_version_outdated(current: str, target: str) -> bool:
+    """Return True if current version is older than target, or unparseable."""
+    cmp = compare_versions(current, target)
+    if cmp is None:
+        return True
+    return cmp < 0
+
+
+def probe_binary_version(bin_path: Path) -> Optional[str]:
+    """Run `<bin_path> --version` and return its stripped stdout, or None on error."""
+    try:
+        proc = subprocess.run(
+            [str(bin_path), "--version"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if proc.returncode == 0:
+            return proc.stdout.strip()
+    except Exception:
+        pass
+    return None
+
+
+def find_pptd(min_version: Optional[str] = None) -> Optional[Path]:
+    """Find existing pptd executable in PATH or standard user directories that meets min_version."""
+    names = ["pptd", "open-pptd", "slideforge"]
+    candidates = []
+
+    for bin_name in names:
         found = shutil.which(bin_name)
         if found:
             p = Path(found).resolve()
-            if p.is_file() and os.access(p, os.X_OK):
-                return p
+            if p not in candidates:
+                candidates.append(p)
 
     home = Path.home()
-    names = ["pptd", "open-pptd", "slideforge"]
-    candidates = []
     for name in names:
         candidates.extend([
             home / ".local" / "bin" / name,
@@ -99,13 +164,17 @@ def find_pptd() -> Optional[Path]:
 
     for c in candidates:
         if c.is_file() and (platform.system().lower() == "windows" or os.access(c, os.X_OK)):
-            return c.resolve()
+            p = c.resolve()
+            if min_version:
+                v_out = probe_binary_version(p)
+                if not v_out or is_version_outdated(v_out, min_version):
+                    continue
+            return p
 
     return None
 
 
 find_slideforge = find_pptd
-
 
 def fetch_checksums(version: str) -> dict[str, str]:
     """Fetch SHA256SUMS.txt from candidate GitHub releases if available."""
@@ -272,10 +341,19 @@ def print_manual_install_instructions(dest_dir: Path) -> None:
 
 
 def ensure_pptd(force_reinstall: bool = False, install_dir: Optional[Path] = None, version: str = VERSION) -> Path:
+    bin_name = "pptd.exe" if platform.system().lower() == "windows" else "pptd"
+
     if not force_reinstall:
-        existing = find_pptd()
-        if existing:
-            return existing
+        if install_dir is not None:
+            target_bin = install_dir / bin_name
+            if target_bin.is_file() and (platform.system().lower() == "windows" or os.access(target_bin, os.X_OK)):
+                v_out = probe_binary_version(target_bin)
+                if v_out and not is_version_outdated(v_out, version):
+                    return target_bin.resolve()
+        else:
+            existing = find_pptd(min_version=version)
+            if existing:
+                return existing
 
     if install_dir is None:
         install_dir = Path.home() / ".local" / "bin"
@@ -283,14 +361,22 @@ def ensure_pptd(force_reinstall: bool = False, install_dir: Optional[Path] = Non
     errors = []
     # 1. Try download prebuilt release
     try:
-        return install_from_release(install_dir, version=version)
+        installed = install_from_release(install_dir, version=version)
+        v_out = probe_binary_version(installed)
+        if not v_out or is_version_outdated(v_out, version):
+            raise RuntimeError(f"Installed binary reported '{v_out}', expected version {version}")
+        return installed
     except Exception as e:
         errors.append(f"Release download: {e}")
         print(f"[open-pptd] Precompiled binary download failed: {e}", file=sys.stderr)
 
     # 2. Try cargo fallback
     try:
-        return install_from_cargo(install_dir)
+        installed = install_from_cargo(install_dir)
+        v_out = probe_binary_version(installed)
+        if not v_out or is_version_outdated(v_out, version):
+            raise RuntimeError(f"Cargo compiled binary reported '{v_out}', expected version {version}")
+        return installed
     except Exception as e:
         errors.append(f"Cargo build: {e}")
         print(f"[open-pptd] Cargo build fallback failed: {e}", file=sys.stderr)
@@ -328,14 +414,27 @@ def main() -> int:
 
     try:
         bin_path = ensure_pptd(force_reinstall=args.force, install_dir=args.dir, version=args.version)
-        proc = subprocess.run([str(bin_path), "--version"], capture_output=True, text=True, check=True)
-        version_str = proc.stdout.strip()
+        version_str = probe_binary_version(bin_path) or "unknown"
+        if is_version_outdated(version_str, args.version):
+            print(
+                f"[open-pptd] Error: Resolved binary at {bin_path} reports '{version_str}', which is older than target version {args.version}",
+                file=sys.stderr,
+            )
+            return 1
+
         print(f"[open-pptd] Success! {version_str} is ready at: {bin_path}")
 
         path_env = os.environ.get("PATH", "")
         path_dirs = [Path(p).resolve() for p in path_env.split(os.pathsep) if p.strip()]
         bin_dir = bin_path.parent.resolve()
-        if bin_dir not in path_dirs:
+        which_pptd = shutil.which("pptd")
+        if which_pptd and Path(which_pptd).resolve() != bin_path.resolve():
+            print("\n" + "!" * 68)
+            print(f"[open-pptd] NOTICE: '{bin_path}' is shadowed by '{which_pptd}' in your PATH.")
+            print(f"[open-pptd] To ensure 'pptd' resolves to the newly installed binary, run:")
+            print(f"    export PATH=\"{bin_dir}:$PATH\"")
+            print("!" * 68 + "\n")
+        elif bin_dir not in path_dirs:
             print("\n" + "!" * 68)
             print(f"[open-pptd] NOTICE: '{bin_dir}' is not in your current PATH environment.")
             print(f"[open-pptd] To invoke 'pptd' directly from anywhere, run:")

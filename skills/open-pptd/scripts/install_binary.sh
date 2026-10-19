@@ -4,42 +4,118 @@ set -euo pipefail
 # pptd standalone installer for open-pptd
 REPOS=("shiquda/open-pptd-skill")
 REPO="${REPOS[0]}"
-VERSION="1.3.5"
+VERSION="1.4.0"
 INSTALL_DIR="${HOME}/.local/bin"
+INSTALL_DIR_SPECIFIED=0
 FORCE=0
 
-for arg in "$@"; do
-  case "$arg" in
+while [ $# -gt 0 ]; do
+  case "$1" in
     --force|-f)
       FORCE=1
+      shift
       ;;
     --dir=*)
-      INSTALL_DIR="${arg#*=}"
+      INSTALL_DIR="${1#*=}"
+      INSTALL_DIR_SPECIFIED=1
+      shift
+      ;;
+    --dir)
+      INSTALL_DIR="$2"
+      INSTALL_DIR_SPECIFIED=1
+      shift 2
       ;;
     --version=*)
-      VERSION="${arg#*=}"
+      VERSION="${1#*=}"
+      shift
+      ;;
+    --version)
+      VERSION="$2"
+      shift 2
       ;;
     --help|-h)
-      echo "Usage: $0 [--force] [--dir=/path/to/bin]"
+      echo "Usage: $0 [--force] [--dir <path>] [--version <version>]"
       exit 0
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      exit 1
       ;;
   esac
 done
 
-# If already installed and not forced, verify version and return
-if [ "$FORCE" -eq 0 ] && command -v pptd >/dev/null 2>&1; then
-  CURRENT_BIN="$(command -v pptd)"
-  echo "[open-pptd] pptd is already installed at: ${CURRENT_BIN}"
-  "${CURRENT_BIN}" --version
-  exit 0
-fi
+# Returns 0 (true) if $1 >= $2, 1 otherwise
+version_ge() {
+  local v1="$1"
+  local v2="$2"
+  if [ -z "$v1" ] || [ -z "$v2" ]; then
+    return 1
+  fi
+  if [ "$v1" = "$v2" ]; then
+    return 0
+  fi
+  local IFS=.
+  local i
+  local -a a1=($v1)
+  local -a a2=($v2)
+  local len=${#a1[@]}
+  if [ ${#a2[@]} -gt $len ]; then
+    len=${#a2[@]}
+  fi
+  for ((i=0; i<len; i++)); do
+    local n1="${a1[i]:-0}"
+    local n2="${a2[i]:-0}"
+    n1="${n1%%[^0-9]*}"
+    n2="${n2%%[^0-9]*}"
+    n1="${n1:-0}"
+    n2="${n2:-0}"
+    if [ "$n1" -gt "$n2" ]; then
+      return 0
+    elif [ "$n1" -lt "$n2" ]; then
+      return 1
+    fi
+  done
+  return 0
+}
 
-if [ "$FORCE" -eq 0 ] && [ -x "${INSTALL_DIR}/pptd" ]; then
-  echo "[open-pptd] pptd found at: ${INSTALL_DIR}/pptd"
-  "${INSTALL_DIR}/pptd" --version
-  exit 0
-fi
+probe_version() {
+  local bin="$1"
+  if [ -x "$bin" ]; then
+    "$bin" --version 2>/dev/null | grep -oE '[0-9]+(\.[0-9]+)+' | head -n 1 || true
+  fi
+}
 
+# If already installed and not forced, verify version
+if [ "$FORCE" -eq 0 ]; then
+  if [ "$INSTALL_DIR_SPECIFIED" -eq 1 ]; then
+    if [ -x "${INSTALL_DIR}/pptd" ]; then
+      CUR_VER="$(probe_version "${INSTALL_DIR}/pptd")"
+      if [ -n "$CUR_VER" ] && version_ge "$CUR_VER" "$VERSION"; then
+        echo "[open-pptd] Success! pptd $CUR_VER is already installed at: ${INSTALL_DIR}/pptd"
+        "${INSTALL_DIR}/pptd" --version
+        exit 0
+      fi
+    fi
+  else
+    if [ -x "${INSTALL_DIR}/pptd" ]; then
+      CUR_VER="$(probe_version "${INSTALL_DIR}/pptd")"
+      if [ -n "$CUR_VER" ] && version_ge "$CUR_VER" "$VERSION"; then
+        echo "[open-pptd] Success! pptd $CUR_VER is already installed at: ${INSTALL_DIR}/pptd"
+        "${INSTALL_DIR}/pptd" --version
+        exit 0
+      fi
+    fi
+    if command -v pptd >/dev/null 2>&1; then
+      PATH_BIN="$(command -v pptd)"
+      CUR_VER="$(probe_version "${PATH_BIN}")"
+      if [ -n "$CUR_VER" ] && version_ge "$CUR_VER" "$VERSION"; then
+        echo "[open-pptd] Success! pptd $CUR_VER is already installed at: ${PATH_BIN}"
+        "${PATH_BIN}" --version
+        exit 0
+      fi
+    fi
+  fi
+fi
 mkdir -p "${INSTALL_DIR}"
 
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
@@ -125,9 +201,24 @@ if [ "$DOWNLOAD_SUCCESS" -eq 1 ]; then
     if [ ! -e "${INSTALL_DIR}/slideforge" ]; then
       ln -sf "pptd" "${INSTALL_DIR}/slideforge" 2>/dev/null || cp "${INSTALL_DIR}/pptd" "${INSTALL_DIR}/slideforge"
     fi
-    echo "[open-pptd] Successfully installed pptd to ${INSTALL_DIR}/pptd"
+    INSTALLED_VER="$(probe_version "${INSTALL_DIR}/pptd")"
+    if [ -z "$INSTALLED_VER" ] || ! version_ge "$INSTALLED_VER" "$VERSION"; then
+      echo "[open-pptd] Error: Installed binary at ${INSTALL_DIR}/pptd reported '${INSTALLED_VER:-unknown}', expected >= ${VERSION}" >&2
+      exit 1
+    fi
+    echo "[open-pptd] Success! pptd ${INSTALLED_VER} is ready at: ${INSTALL_DIR}/pptd"
     "${INSTALL_DIR}/pptd" --version
-    if [[ ":$PATH:" != *":${INSTALL_DIR}:"* ]]; then
+
+    WHICH_PPTD="$(command -v pptd 2>/dev/null || true)"
+    if [ -n "${WHICH_PPTD}" ] && [ "$(cd "$(dirname "${WHICH_PPTD}")" && pwd)/$(basename "${WHICH_PPTD}")" != "$(cd "${INSTALL_DIR}" && pwd)/pptd" ]; then
+      echo ""
+      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      echo "[open-pptd] NOTICE: '${INSTALL_DIR}/pptd' is shadowed by '${WHICH_PPTD}' in your PATH."
+      echo "[open-pptd] To ensure 'pptd' resolves to the newly installed binary, run:"
+      echo "    export PATH=\"${INSTALL_DIR}:\$PATH\""
+      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      echo ""
+    elif [[ ":$PATH:" != *":${INSTALL_DIR}:"* ]]; then
       echo ""
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       echo "[open-pptd] NOTICE: ${INSTALL_DIR} is not in your current PATH."
@@ -144,11 +235,17 @@ fi
 echo "[open-pptd] Falling back to building pptd via cargo..." >&2
 if command -v cargo >/dev/null 2>&1; then
   if cargo install --git "https://github.com/${REPO}.git" --root "${INSTALL_DIR}/.." --force; then
-    echo "[open-pptd] Cargo build succeeded!"
+    INSTALLED_VER="$(probe_version "${INSTALL_DIR}/pptd")"
+    if [ -z "$INSTALLED_VER" ] || ! version_ge "$INSTALLED_VER" "$VERSION"; then
+      echo "[open-pptd] Error: Cargo compiled binary reported '${INSTALLED_VER:-unknown}', expected >= ${VERSION}" >&2
+      exit 1
+    fi
+    echo "[open-pptd] Success! Cargo build succeeded: pptd ${INSTALLED_VER} is ready at: ${INSTALL_DIR}/pptd"
     "${INSTALL_DIR}/pptd" --version
     exit 0
   fi
 fi
+
 
 # Fallback guide
 echo "======================================================================" >&2

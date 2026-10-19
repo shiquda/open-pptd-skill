@@ -28,7 +28,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`consulting/apricot-white-brief/design.md`](skills/open-pptd/reference/design_system/consulting/apricot-white-brief/design.md)
 - **Invoke**: `use apricot-white-brief`
 
-![Apricot White Brief](docs/themes/consulting/apricot-white-brief.jpg)
+![Apricot White Brief](skills/open-pptd/theme_previews/consulting/apricot-white-brief.jpg)
 
 #### `indigo-due-diligence` — Indigo Due Diligence
 
@@ -36,7 +36,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`consulting/indigo-due-diligence/design.md`](skills/open-pptd/reference/design_system/consulting/indigo-due-diligence/design.md)
 - **Invoke**: `use indigo-due-diligence`
 
-![Indigo Due Diligence](docs/themes/consulting/indigo-due-diligence.jpg)
+![Indigo Due Diligence](skills/open-pptd/theme_previews/consulting/indigo-due-diligence.jpg)
 
 #### `marine-blue-research` — Marine Blue Research
 
@@ -44,7 +44,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`consulting/marine-blue-research/design.md`](skills/open-pptd/reference/design_system/consulting/marine-blue-research/design.md)
 - **Invoke**: `use marine-blue-research`
 
-![Marine Blue Research](docs/themes/consulting/marine-blue-research.jpg)
+![Marine Blue Research](skills/open-pptd/theme_previews/consulting/marine-blue-research.jpg)
 
 #### `moss-green-transformation` — Moss Green Transformation
 
@@ -52,7 +52,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`consulting/moss-green-transformation/design.md`](skills/open-pptd/reference/design_system/consulting/moss-green-transformation/design.md)
 - **Invoke**: `use moss-green-transformation`
 
-![Moss Green Transformation](docs/themes/consulting/moss-green-transformation.jpg)
+![Moss Green Transformation](skills/open-pptd/theme_previews/consulting/moss-green-transformation.jpg)
 
 #### `pine-green-strategy` — Pine Green Strategy
 
@@ -60,7 +60,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`consulting/pine-green-strategy/design.md`](skills/open-pptd/reference/design_system/consulting/pine-green-strategy/design.md)
 - **Invoke**: `use pine-green-strategy`
 
-![Pine Green Strategy](docs/themes/consulting/pine-green-strategy.jpg)
+![Pine Green Strategy](skills/open-pptd/theme_previews/consulting/pine-green-strategy.jpg)
 
 #### `red-black-growth` — Red-Black Growth
 
@@ -68,7 +68,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`consulting/red-black-growth/design.md`](skills/open-pptd/reference/design_system/consulting/red-black-growth/design.md)
 - **Invoke**: `use red-black-growth`
 
-![Red-Black Growth](docs/themes/consulting/red-black-growth.jpg)
+![Red-Black Growth](skills/open-pptd/theme_previews/consulting/red-black-growth.jpg)
 
 ---
 
@@ -82,15 +82,15 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`finance/black-gold-ledger/design.md`](skills/open-pptd/reference/design_system/finance/black-gold-ledger/design.md)
 - **Invoke**: `use black-gold-ledger`
 
-![Black Gold Ledger](docs/themes/finance/black-gold-ledger.jpg)
+![Black Gold Ledger](skills/open-pptd/theme_previews/finance/black-gold-ledger.jpg)
 
 #### `ebony-ledger` — Ebony Ledger
 
-- **Look**: Ebony ledger; dark financial-research tone
+- **Look**: Ebony ledger; calm institutional-annual tone on pure white ground with black structure (pure white ground; dark full-bleed pages prohibited)
 - **File**: [`finance/ebony-ledger/design.md`](skills/open-pptd/reference/design_system/finance/ebony-ledger/design.md)
 - **Invoke**: `use ebony-ledger`
 
-![Ebony Ledger](docs/themes/finance/ebony-ledger.jpg)
+![Ebony Ledger](skills/open-pptd/theme_previews/finance/ebony-ledger.jpg)
 
 #### `honey-orange-memo` — Honey Orange Memo
 
@@ -98,7 +98,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`finance/honey-orange-memo/design.md`](skills/open-pptd/reference/design_system/finance/honey-orange-memo/design.md)
 - **Invoke**: `use honey-orange-memo`
 
-![Honey Orange Memo](docs/themes/finance/honey-orange-memo.jpg)
+![Honey Orange Memo](skills/open-pptd/theme_previews/finance/honey-orange-memo.jpg)
 
 #### `lake-blue-memo` — Lake Blue Memo
 
@@ -106,7 +106,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`finance/lake-blue-memo/design.md`](skills/open-pptd/reference/design_system/finance/lake-blue-memo/design.md)
 - **Invoke**: `use lake-blue-memo`
 
-![Lake Blue Memo](docs/themes/finance/lake-blue-memo.jpg)
+![Lake Blue Memo](skills/open-pptd/theme_previews/finance/lake-blue-memo.jpg)
 
 #### `prospect-annual` — Prospect Annual
 
@@ -114,7 +114,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`finance/prospect-annual/design.md`](skills/open-pptd/reference/design_system/finance/prospect-annual/design.md)
 - **Invoke**: `use prospect-annual`
 
-![Prospect Annual](docs/themes/finance/prospect-annual.jpg)
+![Prospect Annual](skills/open-pptd/theme_previews/finance/prospect-annual.jpg)
 
 #### `rice-paper-annual` — Rice Paper Annual
 
@@ -122,7 +122,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`finance/rice-paper-annual/design.md`](skills/open-pptd/reference/design_system/finance/rice-paper-annual/design.md)
 - **Invoke**: `use rice-paper-annual`
 
-![Rice Paper Annual](docs/themes/finance/rice-paper-annual.jpg)
+![Rice Paper Annual](skills/open-pptd/theme_previews/finance/rice-paper-annual.jpg)
 
 ---
 
@@ -136,7 +136,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`work/blue-flame-brand/design.md`](skills/open-pptd/reference/design_system/work/blue-flame-brand/design.md)
 - **Invoke**: `use blue-flame-brand`
 
-![Blue Flame Brand](docs/themes/work/blue-flame-brand.jpg)
+![Blue Flame Brand](skills/open-pptd/theme_previews/work/blue-flame-brand.jpg)
 
 #### `electric-violet-business` — Electric Violet Business
 
@@ -144,7 +144,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`work/electric-violet-business/design.md`](skills/open-pptd/reference/design_system/work/electric-violet-business/design.md)
 - **Invoke**: `use electric-violet-business`
 
-![Electric Violet Business](docs/themes/work/electric-violet-business.jpg)
+![Electric Violet Business](skills/open-pptd/theme_previews/work/electric-violet-business.jpg)
 
 #### `moon-white-imagery` — Moon-White Imagery
 
@@ -152,7 +152,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`work/moon-white-imagery/design.md`](skills/open-pptd/reference/design_system/work/moon-white-imagery/design.md)
 - **Invoke**: `use moon-white-imagery`
 
-![Moon-White Imagery](docs/themes/work/moon-white-imagery.jpg)
+![Moon-White Imagery](skills/open-pptd/theme_previews/work/moon-white-imagery.jpg)
 
 #### `sky-blue-wayfinding` — Sky Blue Wayfinding
 
@@ -160,7 +160,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`work/sky-blue-wayfinding/design.md`](skills/open-pptd/reference/design_system/work/sky-blue-wayfinding/design.md)
 - **Invoke**: `use sky-blue-wayfinding`
 
-![Sky Blue Wayfinding](docs/themes/work/sky-blue-wayfinding.jpg)
+![Sky Blue Wayfinding](skills/open-pptd/theme_previews/work/sky-blue-wayfinding.jpg)
 
 #### `warm-clay-works` — Warm Clay Works
 
@@ -168,7 +168,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`work/warm-clay-works/design.md`](skills/open-pptd/reference/design_system/work/warm-clay-works/design.md)
 - **Invoke**: `use warm-clay-works`
 
-![Warm Clay Works](docs/themes/work/warm-clay-works.jpg)
+![Warm Clay Works](skills/open-pptd/theme_previews/work/warm-clay-works.jpg)
 
 #### `warm-jade-annual-report` — Warm Jade Annual Report
 
@@ -176,7 +176,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`work/warm-jade-annual-report/design.md`](skills/open-pptd/reference/design_system/work/warm-jade-annual-report/design.md)
 - **Invoke**: `use warm-jade-annual-report`
 
-![Warm Jade Annual Report](docs/themes/work/warm-jade-annual-report.jpg)
+![Warm Jade Annual Report](skills/open-pptd/theme_previews/work/warm-jade-annual-report.jpg)
 
 ---
 
@@ -190,7 +190,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`promotion/aqua-charity-report/design.md`](skills/open-pptd/reference/design_system/promotion/aqua-charity-report/design.md)
 - **Invoke**: `use aqua-charity-report`
 
-![Aqua Charity Report](docs/themes/promotion/aqua-charity-report.jpg)
+![Aqua Charity Report](skills/open-pptd/theme_previews/promotion/aqua-charity-report.jpg)
 
 #### `cream-collage` — Cream Collage
 
@@ -198,7 +198,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`promotion/cream-collage/design.md`](skills/open-pptd/reference/design_system/promotion/cream-collage/design.md)
 - **Invoke**: `use cream-collage`
 
-![Cream Collage](docs/themes/promotion/cream-collage.jpg)
+![Cream Collage](skills/open-pptd/theme_previews/promotion/cream-collage.jpg)
 
 #### `pine-soot-pictorial` — Pine Soot Pictorial
 
@@ -206,7 +206,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`promotion/pine-soot-pictorial/design.md`](skills/open-pptd/reference/design_system/promotion/pine-soot-pictorial/design.md)
 - **Invoke**: `use pine-soot-pictorial`
 
-![Pine Soot Pictorial](docs/themes/promotion/pine-soot-pictorial.jpg)
+![Pine Soot Pictorial](skills/open-pptd/theme_previews/promotion/pine-soot-pictorial.jpg)
 
 #### `silk-yellow-magazine` — Silk Yellow Magazine
 
@@ -214,7 +214,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`promotion/silk-yellow-magazine/design.md`](skills/open-pptd/reference/design_system/promotion/silk-yellow-magazine/design.md)
 - **Invoke**: `use silk-yellow-magazine`
 
-![Silk Yellow Magazine](docs/themes/promotion/silk-yellow-magazine.jpg)
+![Silk Yellow Magazine](skills/open-pptd/theme_previews/promotion/silk-yellow-magazine.jpg)
 
 #### `silver-gray-luxury-magazine` — Silver-Gray Luxury Magazine
 
@@ -222,7 +222,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`promotion/silver-gray-luxury-magazine/design.md`](skills/open-pptd/reference/design_system/promotion/silver-gray-luxury-magazine/design.md)
 - **Invoke**: `use silver-gray-luxury-magazine`
 
-![Silver-Gray Luxury Magazine](docs/themes/promotion/silver-gray-luxury-magazine.jpg)
+![Silver-Gray Luxury Magazine](skills/open-pptd/theme_previews/promotion/silver-gray-luxury-magazine.jpg)
 
 #### `travel-green-handbook` — Travel Green Handbook
 
@@ -230,7 +230,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`promotion/travel-green-handbook/design.md`](skills/open-pptd/reference/design_system/promotion/travel-green-handbook/design.md)
 - **Invoke**: `use travel-green-handbook`
 
-![Travel Green Handbook](docs/themes/promotion/travel-green-handbook.jpg)
+![Travel Green Handbook](skills/open-pptd/theme_previews/promotion/travel-green-handbook.jpg)
 
 ---
 
@@ -244,7 +244,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`academic/blue-line-courseware/design.md`](skills/open-pptd/reference/design_system/academic/blue-line-courseware/design.md)
 - **Invoke**: `use blue-line-courseware`
 
-![Blue-Line Courseware](docs/themes/academic/blue-line-courseware.jpg)
+![Blue-Line Courseware](skills/open-pptd/theme_previews/academic/blue-line-courseware.jpg)
 
 #### `deep-blue-atlas` — Deep Blue Atlas
 
@@ -252,7 +252,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`academic/deep-blue-atlas/design.md`](skills/open-pptd/reference/design_system/academic/deep-blue-atlas/design.md)
 - **Invoke**: `use deep-blue-atlas`
 
-![Deep Blue Atlas](docs/themes/academic/deep-blue-atlas.jpg)
+![Deep Blue Atlas](skills/open-pptd/theme_previews/academic/deep-blue-atlas.jpg)
 
 #### `paper-white-courseware` — Paper White Courseware
 
@@ -260,7 +260,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`academic/paper-white-courseware/design.md`](skills/open-pptd/reference/design_system/academic/paper-white-courseware/design.md)
 - **Invoke**: `use paper-white-courseware`
 
-![Paper White Courseware](docs/themes/academic/paper-white-courseware.jpg)
+![Paper White Courseware](skills/open-pptd/theme_previews/academic/paper-white-courseware.jpg)
 
 #### `pastel-derivation` — Pastel Derivation
 
@@ -268,7 +268,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`academic/pastel-derivation/design.md`](skills/open-pptd/reference/design_system/academic/pastel-derivation/design.md)
 - **Invoke**: `use pastel-derivation`
 
-![Pastel Derivation](docs/themes/academic/pastel-derivation.jpg)
+![Pastel Derivation](skills/open-pptd/theme_previews/academic/pastel-derivation.jpg)
 
 #### `teal-green-academic-defense` — Teal-Green Academic Defense
 
@@ -276,7 +276,7 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`academic/teal-green-academic-defense/design.md`](skills/open-pptd/reference/design_system/academic/teal-green-academic-defense/design.md)
 - **Invoke**: `use teal-green-academic-defense`
 
-![Teal-Green Academic Defense](docs/themes/academic/teal-green-academic-defense.jpg)
+![Teal-Green Academic Defense](skills/open-pptd/theme_previews/academic/teal-green-academic-defense.jpg)
 
 #### `wine-red-data` — Wine Red Data
 
@@ -284,107 +284,123 @@ The agent loads the matching `design.md` (or the numbered catalog `.md`) as the 
 - **File**: [`academic/wine-red-data/design.md`](skills/open-pptd/reference/design_system/academic/wine-red-data/design.md)
 - **Invoke**: `use wine-red-data`
 
-![Wine Red Data](docs/themes/academic/wine-red-data.jpg)
+![Wine Red Data](skills/open-pptd/theme_previews/academic/wine-red-data.jpg)
 
 ---
 
-## Extra catalog
+## Extra catalog (Palette-Only)
+
+> **Note**: The following 14 extra themes provide palette and visual sample references only; they **do not have dedicated `design.md` specification files**. Agents must not treat them as fully specified design systems; adhere to general layout rules and apply the sample palette and tone.
 
 Visual style references that complement the primary catalog, offering emotional and differentiated expressions across various industries; can also be invoked by theme ID or style description.
 
 ### Strategy
 
 #### `dusk-violet-consulting` — Dusk Violet Consulting
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Dusk-violet consulting thought-leadership report
 - **Invoke**: `use dusk-violet-consulting`
 
-![Dusk Violet Consulting](docs/themes/extra/dusk-violet-consulting.jpg)
+![Dusk Violet Consulting](skills/open-pptd/theme_previews/extra/dusk-violet-consulting.jpg)
 
 #### `red-black-business` — Red Black Business
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Red-black management-consulting full-package template
 - **Invoke**: `use red-black-business`
 
-![Red Black Business](docs/themes/extra/red-black-business.jpg)
+![Red Black Business](skills/open-pptd/theme_previews/extra/red-black-business.jpg)
 
 #### `map-strategy` — Cartographic Strategy
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Map strategy; internationalization / regional footprint
 - **Invoke**: `use map-strategy`
 
-![Cartographic Strategy](docs/themes/extra/map-strategy.jpg)
+![Cartographic Strategy](skills/open-pptd/theme_previews/extra/map-strategy.jpg)
 
 ### Business
 
 #### `xuan-paper-annual` — Xuan Paper Annual
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Xuan-paper annual; ultra-heavy headlines, editorial research journal
 - **Invoke**: `use xuan-paper-annual`
 
-![Xuan Paper Annual](docs/themes/extra/xuan-paper-annual.jpg)
+![Xuan Paper Annual](skills/open-pptd/theme_previews/extra/xuan-paper-annual.jpg)
 
 #### `lead-gray-quarterly` — Lead Gray Quarterly
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Lead-gray quarterly; financial-newspaper data monitor
 - **Invoke**: `use lead-gray-quarterly`
 
-![Lead Gray Quarterly](docs/themes/extra/lead-gray-quarterly.jpg)
+![Lead Gray Quarterly](skills/open-pptd/theme_previews/extra/lead-gray-quarterly.jpg)
 
 #### `ink-green-market-trends` — Ink Green Market Trends
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Ink-green market trends; dark crypto / market quarterly
 - **Invoke**: `use ink-green-market-trends`
 
-![Ink Green Market Trends](docs/themes/extra/ink-green-market-trends.jpg)
+![Ink Green Market Trends](skills/open-pptd/theme_previews/extra/ink-green-market-trends.jpg)
 
 #### `orange-tech` — Orange Tech
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Orange tech annual report and business-insight deck
 - **Invoke**: `use orange-tech`
 
-![Orange Tech](docs/themes/extra/orange-tech.jpg)
+![Orange Tech](skills/open-pptd/theme_previews/extra/orange-tech.jpg)
 
 ### Work
 
 #### `mist-blue-travelogue` — Mist Blue Travelogue
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Mist-blue travelogue; travel / hospitality industry research
 - **Invoke**: `use mist-blue-travelogue`
 
-![Mist Blue Travelogue](docs/themes/extra/mist-blue-travelogue.jpg)
+![Mist Blue Travelogue](skills/open-pptd/theme_previews/extra/mist-blue-travelogue.jpg)
 
 #### `color-stripes-documentary` — Color Stripes Documentary
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Color-stripes documentary; impact / ESG long-form narrative
 - **Invoke**: `use color-stripes-documentary`
 
-![Color Stripes Documentary](docs/themes/extra/color-stripes-documentary.jpg)
+![Color Stripes Documentary](skills/open-pptd/theme_previews/extra/color-stripes-documentary.jpg)
 
 #### `red-white-business` — Red White Business
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Red-white business; employer brand and org capability
 - **Invoke**: `use red-white-business`
 
-![Red White Business](docs/themes/extra/red-white-business.jpg)
+![Red White Business](skills/open-pptd/theme_previews/extra/red-white-business.jpg)
 
 ### Promotion
 
 #### `gold-orange-type-journal` — Gold Orange Type Journal
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Gold-orange type-trends journal
 - **Invoke**: `use gold-orange-type-journal`
 
-![Gold Orange Type Journal](docs/themes/extra/gold-orange-type-journal.jpg)
+![Gold Orange Type Journal](skills/open-pptd/theme_previews/extra/gold-orange-type-journal.jpg)
 
 #### `fresh-brand` — Fresh Brand
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Fresh brand equity / impact report
 - **Invoke**: `use fresh-brand`
 
-![Fresh Brand](docs/themes/extra/fresh-brand.jpg)
+![Fresh Brand](skills/open-pptd/theme_previews/extra/fresh-brand.jpg)
 
 ### Academic
 
 #### `pink-purple-diagnosis` — Soft Cloud-Layer Diagnostic Narrative
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Pink-purple cloud-layer diagnostic narrative
 - **Invoke**: `use pink-purple-diagnosis`
 
-![Soft Cloud-Layer Diagnostic Narrative](docs/themes/extra/pink-purple-diagnosis.jpg)
+![Soft Cloud-Layer Diagnostic Narrative](skills/open-pptd/theme_previews/extra/pink-purple-diagnosis.jpg)
 
 #### `dark-themed-data` — Dark Themed Data
+- **Spec**: Palette-only (no design.md spec)
 - **Look**: Dark-themed data dashboard for crypto / market research
 - **Invoke**: `use dark-themed-data`
 
-![Dark Themed Data](docs/themes/extra/dark-themed-data.jpg)
+![Dark Themed Data](skills/open-pptd/theme_previews/extra/dark-themed-data.jpg)
 
 ---
 
@@ -397,7 +413,7 @@ Visual style references that complement the primary catalog, offering emotional 
 | Work Report | `blue-flame-brand` · `electric-violet-business` · `moon-white-imagery` · `sky-blue-wayfinding` · `warm-clay-works` · `warm-jade-annual-report` |
 | Promotion / Brand | `aqua-charity-report` · `cream-collage` · `pine-soot-pictorial` · `silk-yellow-magazine` · `silver-gray-luxury-magazine` · `travel-green-handbook` |
 | Academic | `blue-line-courseware` · `deep-blue-atlas` · `paper-white-courseware` · `pastel-derivation` · `teal-green-academic-defense` · `wine-red-data` |
-| Extra | `dusk-violet-consulting` · `red-black-business` · `map-strategy` · `xuan-paper-annual` · `lead-gray-quarterly` · `ink-green-market-trends` · `orange-tech` · `mist-blue-travelogue` · `color-stripes-documentary` · `red-white-business` · `gold-orange-type-journal` · `fresh-brand` · `pink-purple-diagnosis` · `dark-themed-data` |
+| Extra (Palette-Only) | `dusk-violet-consulting` · `red-black-business` · `map-strategy` · `xuan-paper-annual` · `lead-gray-quarterly` · `ink-green-market-trends` · `orange-tech` · `mist-blue-travelogue` · `color-stripes-documentary` · `red-white-business` · `gold-orange-type-journal` · `fresh-brand` · `pink-purple-diagnosis` · `dark-themed-data` |
 
 ## Counts
 

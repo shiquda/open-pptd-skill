@@ -23,8 +23,10 @@
 
 ```text
 请帮我安装并配置 open-pptd 幻灯片制作技能：
-1. 运行命令安装 Skill：
+1. 运行命令安装 Skill（若网络克隆慢或超时，推荐使用备用兼容命令）：
    npx skills add https://github.com/shiquda/open-pptd-skill -g -y
+   # 备用兼容命令（跳过全量 Git 历史克隆）：
+   # npx github:shiquda/open-pptd-skill install -y
 2. 运行技能内置的安装脚本以就绪本地原生 `pptd` 编译器（可直接使用绝对路径或先 cd 到技能目录）：
    python3 ~/.agents/skills/open-pptd/scripts/install_binary.py
 3. 验证编译器：终端执行 `pptd --version`；若提示 command not found，请执行 `export PATH="$HOME/.local/bin:$PATH"`；
@@ -32,9 +34,8 @@
 ```
 
 > **安装命令说明**：
-> - **标准生态命令（推荐）**：使用通用技能包管理器 `npx skills add https://github.com/shiquda/open-pptd-skill -g -y`（或 `npx skills add shiquda/open-pptd-skill -g -y`）。
-> - **npm/npx 兼容命令**：亦可通过 `npx github:shiquda/open-pptd-skill install -y` 直接分发。
-
+> - **标准生态命令**：使用技能包管理器 `npx skills add https://github.com/shiquda/open-pptd-skill -g -y`（或 `npx skills add shiquda/open-pptd-skill -g -y`）。该命令会做整仓克隆：完整 Git 历史约 110MB（当前工作树约 31MB），若在受限网络下克隆超时，请改用下方备用命令。
+> - **npm/npx 兼容命令（推荐备用）**：使用 `npx github:shiquda/open-pptd-skill install -y` 直接分发安装，避免全量 Git Clone 超时。
 ---
 
 ## 💬 让 Agent 制作 PPT（日常使用）
@@ -79,7 +80,7 @@ Open PPTD 坚持 **「PPTD 源码工程 + 原生可编辑 PPTX」** 双交付路
 | **Agent 编写体验** | **YAML 声明式描述**，语义清晰 | 坐标与细节繁杂，极易翻车 | 依赖提示词与文生图模型 | HTML/CSS 标签约束重 |
 | **PowerPoint 二次编辑** | **100% 矢量无损**，文字图形可改 | 结构脆弱，二次调整易错位 | 整页图片，无法改字 | 并非真实 PPTX 文件 |
 | **构建性能与依赖** | **<0.05 秒**（Rust 原生离线执行） | 1 ~ 5 秒（Node 运行时） | 10 ~ 30 秒（出图排队） | 需浏览器环境播放 |
-| **数学公式与排版** | **原生 LaTeX 数学排版**（变量斜体/字号缩放） | 不支持或需外部插件 | 依赖图片生成 | MathJax / KaTeX 渲染 |
+| **数学公式与排版** | **原生 OOXML 数学公式**（`<latex>` / `\(…\)` 转真实可编辑分数线/根号/大运算符，非法命令硬拦截） | 不支持或需外部插件 | 依赖图片生成 | MathJax / KaTeX 渲染 |
 | **安全与隐私** | **零网络调用**，内网离线沙箱安全 | 本地执行 | 需将文本上传云端大模型出图 | 通常依赖 Web 渲染 |
 
 ---
@@ -88,13 +89,28 @@ Open PPTD 坚持 **「PPTD 源码工程 + 原生可编辑 PPTX」** 双交付路
 
 - 📐 **工业级 DrawingML 矢量形状**：原生支持 `rect`, `roundRect`, `ellipse`, `triangle`, `diamond` 等形状，支持精确描边与阴影。
 - 🔗 **直线连接器与箭头系统**：支持相对矢量坐标 `points: "0,0 dx,dy"` 及双向箭头定义（`triangle`, `stealth` 等）。
-- 🔢 **学术级 LaTeX 数学公式**：行内公式 `\( h(s_t) \ge 0 \)` 原生转义，变量自动西文斜体，上下标自动基线偏移与字号缩放。
+- 🔢 **原生 OOXML 数学公式 (`<a14:m>`)**：`<latex>…</latex>` 与行内 `\(…\)` 编译为真实可编辑的 Office Math 公式，支持真实分数线 (`\frac`)、根号 (`\sqrt`)、上下标、求和积分大运算符 (`\sum`, `\int`) 与矩阵；单段公式独占时编译为居中显示公式，混合段落内联公式额外携带 `mc:Fallback` 文本降级（PowerPoint/WPS 显示可编辑公式，不识别 `a14` 数学扩展的阅读器如 LibreOffice 显示等价的 Unicode 文本，绝不静默丢失）；不支持的 LaTeX 命令硬报错拦截，杜绝静默损坏。
 - 📊 **原生双向表格支持**：支持单元格合并（`rowSpan`/`colSpan`）、列宽比例定制、斑马纹与边框，支持反编译回 PPTD 代码。
 - 🗣️ **PowerPoint 演讲者备注**：页面级 `notes: "..."` 属性自动关联生成标准 OOXML `notesSlide` 关系链。
 - 🎨 **1422 款矢量图标内置**：内嵌 Font Awesome 6.7.2 Solid 图标库，支持 `fa-` 自动前缀容错与静态校验。
 - 🔒 **`.sync.hash` 双向同步防覆写**：编译器维护校验哈希，防止外部编辑与代码构建相互意外覆盖。
 - 🔤 **跨平台安全字体回退**：中文字体智能安全映射至预装字体（如思源宋体安全映射 `SimSun` + `Georgia`），杜绝草书翩翩体降级。
 
+
+---
+
+## ⚠️ 暂不支持与能力边界 (Current Boundaries)
+
+为了确保幻灯片编译的 100% 确定性与诚实交付，以下特性当前版本暂不支持，使用时会被静态校验或编译器拦截，请遵循对应替代方案：
+- 📊 **图表 (`elementType: chart`)**：目前在编译器中尚未支持，`pptd check` 与 `build` 会主动拦截报错。请使用原生表格 (`elementType: table`) 呈现结构化数据，或使用外部脚本将图表导出为图片后通过 `elementType: image` 引入。
+- 🎬 **时序动画 (`animations`)**：语法解析已支持（`animations` 数组），但当前版本生成的 OOXML 暂缓写入 `p:timing` 时序动画（🟡 仅解析不写入），文稿以完整排版的纯静态页面呈现。
+- 🌐 **HTML 扩展与文档级标签**：
+  - 不支持 HTML 列表标签（`<ul>`, `<ol>`, `<li>`）：富文本仅支持常规段落，列表请使用常规段落配合标号或符号（如 `1. 第一点` 或 `• 第一点`）。
+  - 不支持 HTML 超链接标签（`<a>`）：请直接书写 URL 或在备注/页脚以文本形式标注。
+  - 不支持 HTML 上标/下标标签（`<sup>`, `<sub>`）：上标与下标请使用原生 LaTeX 数学公式（如 `<latex>x^2</latex>`、`\( H_2O \)`、`\( \sigma_i \)`）。
+  - 不支持 HTML 标题、表格与排版标签（`<h1>`~`<h6>`, `<table>`, `<div>`, `<img>` 等）：页面结构必须使用 PPTD 顶层声明的元素（如 `table`, `image`, `shape`, `line`）。
+- 🖼️ **形状图片填充**：形状目前仅支持纯色 (`type: solid`) 与渐变色 (`type: gradient`) 填充；形状的图片填充 (`fill: {type: image}`) 不受支持（`a:blipFill` 目前仅支持页面背景）。若需展示图片，请使用独立的 `image` 元素。
+- 📐 **画布越界元素**：元素的布局尺寸应位于幻灯片画布范围之内；超出画布的元素会在 `pptd check` 阶段被捕获（完全出界报 Error，部分出界报 Warning）。
 ---
 
 ## 📁 PPTD 项目结构标准

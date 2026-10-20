@@ -10,6 +10,7 @@
 //! * [`render`] — element → drawingml rendering inside slides;
 //! * [`writer`] — package assembly and ZIP output.
 
+pub mod chart;
 pub mod fa;
 pub mod import;
 pub mod math;

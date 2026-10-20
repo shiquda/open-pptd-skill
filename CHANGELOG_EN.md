@@ -8,6 +8,7 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Native chart round-trip (`elementType: chart`)**: `pptd convert` copies `ppt/charts/chartN.xml`, its `_rels` and any embedded `ppt/embeddings/*.xlsx` byte-for-byte into the project `media/` directory and emits a chart element carrying `chartPart` / `workbookPart` / `chartKind`. `pptd build` re-emits `p:graphicFrame` + `<c:chart r:id>`, the slide rels, the chart rels and the `[Content_Types].xml` overrides without rewriting the chart XML. `pptd check` verifies the part exists, stays inside the project and has positive bounds; the declarative `data`/`series` DSL is still rejected explicitly
 - **Rich-text hyperlinks**: `<a href="https://…">text</a>` compiles to a run-level `<a:hlinkClick>` plus an external relationship in `slideN.xml.rels` (`TargetMode="External"`, URLs deduplicated). `pptd convert` restores the same inline markup, and the element-level `link` field round-trips as well
 - **Font names pass through by default**: `pptd build` writes the PPTD typeface verbatim; the Kimi web-font → system-font safety map is now the explicit `safeFonts: true` switch (off for `pptd convert` output, so rebuilt decks keep their source typography)
 

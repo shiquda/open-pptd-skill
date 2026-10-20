@@ -1,8 +1,8 @@
 //! Element → drawingml rendering inside a slide's `cSld/spTree`.
 //!
 //! Supported: `text`, `shape`, `line`, `icon` (Font Awesome glyphs as custom
-//! geometry), `image` (blip media parts) and `table` (native `<a:tbl>`).
-//! Unsupported (`chart`) fails with an explicit [`Error::Unsupported`]. Shape
+//! geometry), `image` (blip media parts), `table` (native `<a:tbl>`) and
+//! `chart` (native chart parts, emitted as `p:graphicFrame`). Shape
 //! drop shadows (`a:effectLst > a:outerShdw`, incl. `sx`/`sy` scale + `algn`)
 //! `<p:grpSp>` group reconstruction (SlideForge group extension) are
 //! supported.
@@ -31,6 +31,9 @@ pub struct RenderCtx<'a> {
     pub media: Vec<String>,
     /// Media source → pixel dimensions (for `contain`/`cover` cropping).
     pub image_sizes: Vec<(String, ImageSize)>,
+    /// Chart sources used by the current slide, in usage order. Chart
+    /// relationships follow the media ones (`rId2` onwards).
+    pub charts: Vec<String>,
     /// True when rendering a `slideLayout` (not a slide): layout placeholders
     /// emit `<p:ph type=…>` + their `lstStyle`/prompt so slide placeholders
     /// inherit them; slide placeholders stay plain shapes (`txBox="1"`).
@@ -51,6 +54,7 @@ impl<'a> RenderCtx<'a> {
             shape_id: 1,
             media: Vec::new(),
             image_sizes: Vec::new(),
+            charts: Vec::new(),
             in_layout: false,
             hyperlinks: Vec::new(),
             safe_fonts: false,
@@ -58,7 +62,7 @@ impl<'a> RenderCtx<'a> {
     }
 
     /// Relationship id for an external hyperlink, registering the target on
-    /// first use. Ids start after the part's media relationships.
+    /// first use. Ids start after the part's media and chart relationships.
     pub fn hyperlink_rid(&mut self, url: &str) -> String {
         let pos = match self.hyperlinks.iter().position(|u| u == url) {
             Some(pos) => pos,
@@ -67,7 +71,15 @@ impl<'a> RenderCtx<'a> {
                 self.hyperlinks.len() - 1
             }
         };
-        format!("rId{}", self.media.len() + 2 + pos)
+        format!("rId{}", self.media.len() + self.charts.len() + 2 + pos)
+    }
+
+    /// Relationship id for a chart source: after the media relationships.
+    pub fn chart_rid(&self, src: &str) -> Option<String> {
+        self.charts
+            .iter()
+            .position(|s| s == src)
+            .map(|p| format!("rId{}", self.media.len() + 2 + p))
     }
 
     pub(crate) fn next_id(&mut self) -> usize {
@@ -105,15 +117,9 @@ pub fn render_element(
         Element::Icon(icon) => render_icon(xml, ctx, icon),
         Element::Image(image) => render_image(xml, ctx, image),
         Element::Table(table) => super::table::render_table(xml, ctx, table),
+        Element::Chart(chart) => super::chart::render_chart(xml, ctx, chart),
         Element::Video(m) => render_media(xml, ctx, m, "video"),
         Element::Audio(m) => render_media(xml, ctx, m, "audio"),
-        other => Err(Error::Unsupported(format!(
-            "element `{}` of type `{}` on page {} is not supported yet \
-             (supported so far: text, shape, line, icon, image, table, video, audio)",
-            other.element_id(),
-            other.type_name(),
-            page_index + 1
-        ))),
     }
 }
 
@@ -316,6 +322,18 @@ pub(crate) fn cnv_pr(
 /// `a:xfrm` from bounds / rotation / flip. `rot` / `flipH` / `flipV` are
 /// attributes of the transform (CT_Transform2D), never child elements.
 fn xfrm(xml: &mut Xml, bounds: Bounds, rotation: Option<f64>, flip: Option<(bool, bool)>) {
+    xfrm_element(xml, "a:xfrm", bounds, rotation, flip);
+}
+
+/// Same transform, but under a caller-chosen element name: `p:graphicFrame`
+/// carries `p:xfrm` with the identical child layout.
+pub(crate) fn xfrm_element(
+    xml: &mut Xml,
+    name: &str,
+    bounds: Bounds,
+    rotation: Option<f64>,
+    flip: Option<(bool, bool)>,
+) {
     let x = emu(bounds.x).to_string();
     let y = emu(bounds.y).to_string();
     let cx = emu(bounds.width).to_string();
@@ -335,10 +353,10 @@ fn xfrm(xml: &mut Xml, bounds: Bounds, rotation: Option<f64>, flip: Option<(bool
     if flip_v {
         attrs.push(("flipV", "1"));
     }
-    xml.start("a:xfrm", &attrs);
+    xml.start(name, &attrs);
     xml.leaf("a:off", &[("x", &x), ("y", &y)]);
     xml.leaf("a:ext", &[("cx", &cx), ("cy", &cy)]);
-    xml.end("a:xfrm");
+    xml.end(name);
 }
 
 /// `srgbClr` optionally carrying an alpha override.

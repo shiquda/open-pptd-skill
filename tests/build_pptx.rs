@@ -176,9 +176,9 @@ fn rich_text_renders_instead_of_failing() {
 }
 
 #[test]
-fn unsupported_element_kinds_are_reported() {
-    // A deck with a chart (plain text elsewhere) exercises the element-kind
-    // guard rather than the rich-text guard.
+fn declarative_chart_data_is_reported() {
+    // The PPTD chart DSL (data + series) cannot be compiled into chart parts
+    // yet; it must fail loudly, naming the element and the page.
     let deck = "version: v2\nsize: [960, 540]\npages:\n  - pages/p.page\n";
     let page = r#"
 elements:
@@ -209,7 +209,7 @@ elements:
 
     let message = PptxWriter::new(&project)
         .build(&path)
-        .expect_err("chart must fail the build")
+        .expect_err("declarative chart must fail the build")
         .to_string();
     assert!(message.contains("not supported"), "got: {message}");
     assert!(message.contains("`c`"), "should name the chart element");

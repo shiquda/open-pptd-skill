@@ -53,6 +53,11 @@ pub mod rel_kind {
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink";
     pub const EXTENDED_PROPERTIES: &str =
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties";
+    pub const CHART: &str =
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart";
+    /// Chart → embedded workbook (`<c:externalData>`).
+    pub const PACKAGE: &str =
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
 }
 /// One relationship inside a `.rels` file.
 #[derive(Debug, Clone, PartialEq, Eq)]

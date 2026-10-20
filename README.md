@@ -102,7 +102,7 @@ Open PPTD 坚持 **「PPTD 源码工程 + 原生可编辑 PPTX」** 双交付路
 ## ⚠️ 暂不支持与能力边界 (Current Boundaries)
 
 为了确保幻灯片编译的 100% 确定性与诚实交付，以下特性当前版本暂不支持，使用时会被静态校验或编译器拦截，请遵循对应替代方案：
-- 📊 **图表 (`elementType: chart`)**：目前在编译器中尚未支持，`pptd check` 与 `build` 会主动拦截报错。请使用原生表格 (`elementType: table`) 呈现结构化数据，或使用外部脚本将图表导出为图片后通过 `elementType: image` 引入。
+- 📊 **原生图表透传，声明式图表语法未实现**：`pptd convert` 产出的原生图表（`chartPart` + 可选 `workbookPart`）会被完整回写，图表 XML 与内嵌工作簿按原字节保留；手写的声明式 `data`/`series` 图表语法仍会被 `check`/`build` 拦截。新建图表请使用原生表格 (`elementType: table`)，或用外部脚本导出图片后通过 `elementType: image` 引入。
 - 🎬 **时序动画 (`animations`)**：语法解析已支持（`animations` 数组），但当前版本生成的 OOXML 暂缓写入 `p:timing` 时序动画（🟡 仅解析不写入），文稿以完整排版的纯静态页面呈现。
 - 🌐 **HTML 扩展与文档级标签**：
   - 不支持 HTML 列表标签（`<ul>`, `<ol>`, `<li>`）：富文本仅支持常规段落，列表请使用常规段落配合标号或符号（如 `1. 第一点` 或 `• 第一点`）。

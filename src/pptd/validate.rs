@@ -3,7 +3,7 @@
 //! The loader guarantees the document parses and the version is `v2`; this
 //! module checks the *semantics* the spec requires: unique element ids,
 //! positive bounds, canvas boundary containment, resolvable theme references,
-//! well-formed tables and coherent chart data.
+//! well-formed tables, coherent chart data and existent chart parts.
 //!
 //! # Diagnostic Severities
 //!
@@ -435,17 +435,7 @@ fn validate_element(
                 );
             }
         }
-        Element::Chart(chart) => {
-            validate_chart(page_idx, chart, out);
-            diag(
-                out,
-                page_idx,
-                format!(
-                    "chart `{}` is not supported by pptd compiler yet (native PPTX charts are under development)",
-                    chart.common.element_id
-                ),
-            );
-        }
+        Element::Chart(chart) => validate_chart(project, page_idx, chart, out),
     }
 }
 
@@ -563,8 +553,62 @@ fn check_ratios(
     }
 }
 
-fn validate_chart(page_idx: usize, chart: &Chart, out: &mut Vec<Diagnostic>) {
+fn validate_chart(project: &Project, page_idx: usize, chart: &Chart, out: &mut Vec<Diagnostic>) {
     let element_id = &chart.common.element_id;
+    let has_declarative = chart.data.is_some() || !chart.series.is_empty();
+
+    // Passthrough form (`pptd convert` output): the chart XML is the source
+    // of truth; only its referenced parts are checked.
+    if let Some(part) = &chart.chart_part {
+        if has_declarative {
+            diag(
+                out,
+                page_idx,
+                format!(
+                    "chart `{element_id}` must not mix `chartPart` with declarative `data`/`series`"
+                ),
+            );
+        }
+        check_project_file(
+            &project.root_dir,
+            part,
+            "chart part",
+            page_idx,
+            out,
+            element_id,
+        );
+        if let Some(workbook) = &chart.workbook_part {
+            check_project_file(
+                &project.root_dir,
+                workbook,
+                "chart workbook",
+                page_idx,
+                out,
+                element_id,
+            );
+        }
+        if chart.chart_kind.as_deref().is_some_and(|kind| kind.trim().is_empty()) {
+            diag(
+                out,
+                page_idx,
+                format!("chart `{element_id}` has an empty `chartKind`"),
+            );
+        }
+        return;
+    }
+
+    // Declarative form: kept for the PPTD chart DSL, but the compiler does
+    // not synthesize chart parts yet — reject instead of silently dropping it.
+    let Some(data) = &chart.data else {
+        diag(
+            out,
+            page_idx,
+            format!(
+                "chart `{element_id}` must set `chartPart` (a native chart part, as produced by `pptd convert`) or declarative `data`"
+            ),
+        );
+        return;
+    };
 
     if chart.series.is_empty() {
         diag(
@@ -574,7 +618,7 @@ fn validate_chart(page_idx: usize, chart: &Chart, out: &mut Vec<Diagnostic>) {
         );
     }
 
-    let cols = &chart.data.cols;
+    let cols = &data.cols;
     let mut seen: HashSet<&str> = HashSet::new();
     for col in cols {
         if col.is_empty() {
@@ -593,7 +637,7 @@ fn validate_chart(page_idx: usize, chart: &Chart, out: &mut Vec<Diagnostic>) {
         }
     }
 
-    for (row_idx, row) in chart.data.rows.iter().enumerate() {
+    for (row_idx, row) in data.rows.iter().enumerate() {
         if row.len() != cols.len() {
             diag(
                 out,
@@ -623,6 +667,52 @@ fn validate_chart(page_idx: usize, chart: &Chart, out: &mut Vec<Diagnostic>) {
         // TODO: check stacking-mode consistency, numeric channels, theme
         // color references in series fills, and the per-type series
         // constraints from the spec.
+    }
+
+    diag(
+        out,
+        page_idx,
+        format!(
+            "chart `{element_id}` is not supported in declarative form by the pptd compiler yet (use `chartPart`, as produced by `pptd convert`)"
+        ),
+    );
+}
+
+/// A chart asset reference must stay inside the project and resolve to a file.
+fn check_project_file(
+    root_dir: &Path,
+    rel: &str,
+    what: &str,
+    page_idx: usize,
+    out: &mut Vec<Diagnostic>,
+    element_id: &str,
+) {
+    let path = Path::new(rel);
+    let escapes = path.is_absolute()
+        || path.components().any(|c| {
+            matches!(
+                c,
+                std::path::Component::ParentDir
+                    | std::path::Component::RootDir
+                    | std::path::Component::Prefix(_)
+            )
+        });
+    if escapes {
+        diag(
+            out,
+            page_idx,
+            format!(
+                "{what} `{element_id}` references `{rel}`, which must be a project-relative path"
+            ),
+        );
+        return;
+    }
+    if !root_dir.join(path).is_file() {
+        diag(
+            out,
+            page_idx,
+            format!("{what} `{element_id}` references missing file `{rel}` (file not found in project)"),
+        );
     }
 }
 
@@ -1292,6 +1382,9 @@ fn check_page_raw_yaml(project: &Project, page_idx: usize, out: &mut Vec<Diagnos
                     ],
                     "video" | "audio" => &["src", "poster", "autoplay", "loop"],
                     "chart" => &[
+                        "chartPart",
+                        "workbookPart",
+                        "chartKind",
                         "data",
                         "series",
                         "seriesDefaults",
@@ -1300,6 +1393,7 @@ fn check_page_raw_yaml(project: &Project, page_idx: usize, out: &mut Vec<Diagnos
                         "dataLabels",
                         "xAxis",
                         "yAxis",
+                        "spokeAxis",
                         "barWidth",
                         "barGap",
                         "categoryGap",

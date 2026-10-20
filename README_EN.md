@@ -102,7 +102,7 @@ Common AI presentation generators suffer from major tradeoffs: programmatic OOXM
 ## ⚠️ Current Boundaries & Unsupported Features
 
 To guarantee deterministic builds and avoid silent degradations, the following features are not currently supported in the compiler and are strictly intercepted during `pptd check` or `pptd build`:
-- 📊 **Charts (`elementType: chart`)**: Native chart elements are not yet supported. Both `pptd check` and `build` reject them with an explicit error. Workaround: use native tables (`elementType: table`) or export charts to images via script and embed them as `elementType: image`.
+- 📊 **Native charts pass through; the declarative DSL is not implemented**: native chart elements produced by `pptd convert` (`chartPart` plus an optional `workbookPart`) are emitted back verbatim, including the chart XML and embedded workbook bytes. The hand-written declarative `data`/`series` chart syntax is still rejected by `check`/`build`. To author a new chart, use native tables (`elementType: table`) or export an image via script (`elementType: image`).
 - 🎬 **Animations (`animations`)**: Animation syntax is parsed and validated in AST, but the compiler does not yet emit OOXML `p:timing` blocks (🟡 parsed but not emitted). Decks render as clean, complete static slides.
 - 🌐 **HTML Document & Extended Tags**:
   - HTML list tags (`<ul>`, `<ol>`, `<li>`) are not supported; write normal paragraphs with bullet prefixes (e.g. `1. first` or `• first`).

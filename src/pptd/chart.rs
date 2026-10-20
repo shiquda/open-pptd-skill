@@ -44,9 +44,26 @@ pub enum ColorOrGradient {
 pub struct Chart {
     #[serde(flatten)]
     pub common: ElementCommon,
-    /// Tabular data shared by all series.
-    pub data: ChartData,
-    /// At least one series.
+    /// Native chart definition part, relative to the project root (usually
+    /// `media/chart1.xml`). Set by `pptd convert`: the chart XML is carried
+    /// verbatim and emitted back as `ppt/charts/chartN.xml`. Mutually
+    /// exclusive with the declarative `data`/`series` form.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub chart_part: Option<String>,
+    /// Embedded workbook (`ppt/embeddings/*.xlsx`) the chart's
+    /// `<c:externalData>` points at, relative to the project root. Optional:
+    /// charts without an embedded workbook round-trip without one.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub workbook_part: Option<String>,
+    /// Informational plot-family hint read from the chart part (`bar`,
+    /// `line`, `pie`, …). Never used to render: the chart XML is authoritative.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub chart_kind: Option<String>,
+    /// Tabular data shared by all series (declarative form; not rendered yet).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub data: Option<ChartData>,
+    /// Declarative series (requires `data`; not rendered yet).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub series: Vec<ChartSeries>,
     /// Per-type defaults merged into every series of that type.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -87,6 +104,40 @@ pub struct Chart {
     pub border: Option<Border>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub shadow: Option<Shadow>,
+}
+
+impl Chart {
+    /// A chart carried as native OOXML parts (`pptd convert` output): the
+    /// chart definition part is the source of truth.
+    pub fn passthrough(
+        common: ElementCommon,
+        chart_part: String,
+        workbook_part: Option<String>,
+        chart_kind: Option<String>,
+    ) -> Self {
+        Self {
+            common,
+            chart_part: Some(chart_part),
+            workbook_part,
+            chart_kind,
+            data: None,
+            series: Vec::new(),
+            series_defaults: None,
+            title: None,
+            legend: None,
+            data_labels: None,
+            x_axis: None,
+            y_axis: None,
+            spoke_axis: None,
+            bar_width: None,
+            bar_gap: None,
+            category_gap: None,
+            font_family: None,
+            fill: None,
+            border: None,
+            shadow: None,
+        }
+    }
 }
 
 /// Tabular chart data (`cols` + `rows`).

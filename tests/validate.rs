@@ -102,9 +102,54 @@ fn demo_fixture_reports_unsupported_chart() {
     assert_eq!(
         issues.len(),
         1,
-        "demo fixture contains 1 unsupported chart: {issues:?}"
+        "demo fixture contains 1 chart in declarative form: {issues:?}"
     );
-    assert!(issues[0].message.contains("chart `trend` is not supported"));
+    assert!(
+        issues[0]
+            .message
+            .contains("chart `trend` is not supported in declarative form"),
+        "{issues:?}"
+    );
+}
+
+#[test]
+fn missing_chart_part_is_reported() {
+    let page = r#"
+elements:
+  - elementId: c
+    elementType: chart
+    bounds: [0, 0, 400, 300]
+    chartPart: media/missing.xml
+"#;
+    let entry = tmp_deck("chart-missing", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        issues
+            .iter()
+            .any(|d| d.message.contains("missing file `media/missing.xml`")),
+        "expected a missing-part finding, got {issues:?}"
+    );
+}
+
+#[test]
+fn chart_part_outside_the_project_is_rejected() {
+    let page = r#"
+elements:
+  - elementId: c
+    elementType: chart
+    bounds: [0, 0, 400, 300]
+    chartPart: ../outside/chart1.xml
+"#;
+    let entry = tmp_deck("chart-escape", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        issues
+            .iter()
+            .any(|d| d.message.contains("must be a project-relative path")),
+        "expected a containment finding, got {issues:?}"
+    );
 }
 
 #[test]

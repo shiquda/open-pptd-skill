@@ -22,10 +22,13 @@
 //! - shape drop shadows (`a:effectLst > a:outerShdw` / `a:innerShdw`,
 //!   incl. the `scale` and `inner` SlideForge extensions);
 //! - media parts (`png`/`jpg`/`jpeg`) with `contain`/`cover` `a:srcRect`
-//!   cropping computed from sniffed image dimensions.
+//!   cropping computed from sniffed image dimensions;
+//! - native chart parts (`chartPart` + `workbookPart`): the chart XML is
+//!   emitted verbatim as `ppt/charts/chartN.xml`, with its workbook, chart
+//!   `.rels`, slide relationship and content-type overrides.
 //!
-//! Not yet: `table`, `chart` elements (build fails with an explicit
-//! [`Error::Unsupported`]); rich text tags beyond `p`/`span`/`strong`/`em`/
+//! Not yet: the declarative chart DSL (`data`/`series`; build fails with an
+//! explicit [`Error::Unsupported`]); rich text tags beyond `p`/`span`/`strong`/`em`/
 //! `u`/`s`/`code`/`a` (`<sup>`/`<sub>`/`<ul>`/`<ol>`/`<li>`); image fills on
 //! shapes (`fill_xml` rejects `Fill::Image` — only backgrounds support
 //! `a:blipFill`); `notes` (notesSlide) and `animations` (`p:timing`) are
@@ -125,6 +128,7 @@ impl<'a> PptxWriter<'a> {
 
         let mut entries: Vec<PackageEntry> = Vec::with_capacity(12 + page_count * 2);
         let mut media = MediaRegistry::new(&self.project.root_dir);
+        let mut charts = super::chart::ChartRegistry::new(&self.project.root_dir);
 
         // docProps
         entries.push(core_properties_xml(presentation));
@@ -200,9 +204,11 @@ impl<'a> PptxWriter<'a> {
             for (i, (_key, def)) in layouts_owned.iter().enumerate() {
                 let ln = i + 1;
                 let lmedia = collect_media_from(def.background.as_ref(), &def.elements);
+                let lcharts = collect_charts_from(&def.elements);
                 let mut ctx = render::RenderCtx::new(presentation.theme.as_ref());
                 ctx.safe_fonts = presentation.safe_fonts;
                 ctx.media = lmedia.clone();
+                ctx.charts = lcharts.iter().map(|c| c.src.clone()).collect();
                 for src in &lmedia {
                     let part_index = media.index_of(src)?;
                     ctx.image_sizes
@@ -227,7 +233,20 @@ impl<'a> PptxWriter<'a> {
                         rel_target(&path),
                     ));
                 }
-                push_hyperlink_rels(&mut rels, &ctx.hyperlinks, lmedia.len());
+                for (pos, chart) in lcharts.iter().enumerate() {
+                    let idx = charts.register(&chart.src, chart.workbook.as_deref())?;
+                    let path = charts.part(idx).package_path.clone();
+                    rels.push(Rel::new(
+                        &format!("rId{}", lmedia.len() + 2 + pos),
+                        rel_kind::CHART,
+                        rel_target(&path),
+                    ));
+                }
+                push_hyperlink_rels(
+                    &mut rels,
+                    &ctx.hyperlinks,
+                    lmedia.len() + lcharts.len(),
+                );
                 entries.push(PackageEntry::opaque(
                     format!("ppt/slideLayouts/_rels/slideLayout{ln}.xml.rels"),
                     rels_xml(&rels),
@@ -256,9 +275,11 @@ impl<'a> PptxWriter<'a> {
             // P3: slide media = own background image + own element images
             // (layout decorations live on the slideLayout part now).
             let used = collect_media_from(page.background.as_ref(), &page.elements);
+            let used_charts = collect_charts_from(&page.elements);
             let mut ctx = render::RenderCtx::new(presentation.theme.as_ref());
             ctx.safe_fonts = presentation.safe_fonts;
             ctx.media = used.clone();
+            ctx.charts = used_charts.iter().map(|c| c.src.clone()).collect();
             for src in &used {
                 let part_index = media.index_of(src)?;
                 ctx.image_sizes
@@ -296,7 +317,20 @@ impl<'a> PptxWriter<'a> {
                     rel_target(&part.package_path),
                 ));
             }
-            push_hyperlink_rels(&mut rels, &ctx.hyperlinks, used.len());
+            for (pos, chart) in used_charts.iter().enumerate() {
+                let idx = charts.register(&chart.src, chart.workbook.as_deref())?;
+                let path = charts.part(idx).package_path.clone();
+                rels.push(Rel::new(
+                    &format!("rId{}", used.len() + 2 + pos),
+                    rel_kind::CHART,
+                    rel_target(&path),
+                ));
+            }
+            push_hyperlink_rels(
+                &mut rels,
+                &ctx.hyperlinks,
+                used.len() + used_charts.len(),
+            );
 
             let has_notes = page.notes.as_deref().is_some_and(|n| !n.trim().is_empty());
             if has_notes {
@@ -339,6 +373,40 @@ impl<'a> PptxWriter<'a> {
         let media_extensions = media.extensions();
         for part in media.into_parts() {
             entries.push(PackageEntry::opaque(part.package_path, part.data));
+        }
+
+        // chart parts: the chart XML verbatim, its embedded workbook, and the
+        // chart's own `.rels` (whose r:id must match `<c:externalData>`).
+        for part in charts.into_parts() {
+            let file = part
+                .package_path
+                .rsplit('/')
+                .next()
+                .unwrap_or("chart1.xml")
+                .to_string();
+            entries.push(PackageEntry::typed(
+                part.package_path.clone(),
+                ContentType::Chart,
+                part.data,
+            ));
+            if let Some(workbook) = part.workbook {
+                let rid = part
+                    .external_rid
+                    .expect("workbook implies an externalData r:id");
+                entries.push(PackageEntry::opaque(
+                    format!("ppt/charts/_rels/{file}.rels"),
+                    rels_xml(&[Rel::new(
+                        &rid,
+                        rel_kind::PACKAGE,
+                        rel_target(&workbook.package_path),
+                    )]),
+                ));
+                entries.push(PackageEntry::typed(
+                    workbook.package_path,
+                    ContentType::Xlsx,
+                    workbook.data,
+                ));
+            }
         }
         let notes_count = pages
             .iter()
@@ -961,6 +1029,36 @@ fn collect_media_from(
             }
             _ => {}
         }
+    }
+    out
+}
+
+/// A chart element's parts, deduplicated by chart definition path.
+#[derive(Clone)]
+struct ChartUse {
+    src: String,
+    workbook: Option<String>,
+}
+
+/// Chart definition paths (plus their workbooks) referenced by `elements`,
+/// in first-use order. One relationship per unique chart part.
+fn collect_charts_from(elements: &[Element]) -> Vec<ChartUse> {
+    let mut out: Vec<ChartUse> = Vec::new();
+    for element in elements {
+        let Element::Chart(chart) = element else {
+            continue;
+        };
+        let Some(src) = chart.chart_part.as_deref() else {
+            continue;
+        };
+        if let Some(existing) = out.iter().find(|c| c.src == src) {
+            debug_assert_eq!(existing.workbook, chart.workbook_part);
+            continue;
+        }
+        out.push(ChartUse {
+            src: src.to_owned(),
+            workbook: chart.workbook_part.clone(),
+        });
     }
     out
 }

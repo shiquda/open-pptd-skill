@@ -87,7 +87,7 @@ For property values that conflict, the first source with a value is found by sea
 
 #### 3. Chart Styles (Unsupported)
 
-> ⚠️ **Compiler Notice**: Native chart elements (`elementType: chart`) are **not supported** in the current compiler version. The style priority rules below are preserved for future specification design.
+> ⚠️ **Compiler Notice**: Native chart parts (`chartPart` + optional `workbookPart`, as produced by `pptd convert`) are fully supported and round-trip verbatim. The declarative chart **DSL** below (`data` + `series`) is **not implemented** by the compiler yet and is rejected by `check`/`build`. The style priority rules below are preserved for future specification design.
 
 Charts involve multiple kinds of styles (series body colors, fonts, data labels, axis/legend visibility, etc.), each with its own independent priority chain, explained below.
 
@@ -1042,19 +1042,30 @@ interface Cell {
 
 ---
 
-### Chart (charts) — ❌ Unsupported / Not Yet Implemented
+### Chart (charts) — ✅ Native parts / ❌ Declarative DSL
 
-> ❌ **编译器状态提示 (Compiler Notice: Unsupported)**：
-> 原生 PPTX 图表部件（`elementType: chart`）目前在 `pptd` 编译器中**完全不受支持**，`AGENTS.md` 明确严禁使用。
-> - `pptd check` 会主动拦截图表元素并报错退出。
-> - `pptd build` 会抛出 `Error::Unsupported("element type 'chart'")` 并拒绝编译。
-> - **严禁在 PPTD 工程中使用 `elementType: chart`**。
->
-> **替代方案**：
-> 1. **结构化数据呈现**：优先使用原生表格 (`elementType: table`) 呈现，表格享有完整的 DrawingML 样式、单元格合并 (`rowSpan`/`colSpan`) 与边框对齐支持。
-> 2. **数据可视化图表**：使用外部脚本（如 Python `matplotlib` / `seaborn`）将图表渲染导出为高分辨率图片，放置于 `assets/` 目录，通过 `elementType: image` 引入幻灯片。
->
-> *(注意：以下规范仅供未来开发参考，当前编译器完全不予编译)*
+> **编译器状态**：
+> - `pptd convert` 产出的**原生图表部件**（`chartPart`，可选 `workbookPart`）完整支持：图表 XML 与内嵌工作簿按原字节回写，并自动生成 `p:graphicFrame` + `<c:chart r:id>`、slide rels、chart rels 与 `[Content_Types].xml` override。
+> - 下文的手写**声明式图表语法**（`data` + `series`）尚未实现，`pptd check` 与 `build` 会明确报错。
+> - 新建图表请使用原生表格 (`elementType: table`)，或用外部脚本导出图片后通过 `elementType: image` 引入。
+
+#### Native chart part (PPTD round-trip form)
+
+```yaml
+- elementId: chart-growth
+  elementType: chart
+  bounds: [60, 80, 840, 380]
+  chartPart: media/chart1.xml                       # required; project-relative
+  workbookPart: media/Microsoft_Excel_Sheet1.xlsx   # optional; embedded workbook
+  chartKind: bar                                     # optional hint (bar/line/pie/…)
+```
+
+- `chartPart` 指向工程内的 `media/chartN.xml`，路径不得越出工程目录；文件缺失会在 `pptd check` 阶段报错。
+- `pptd convert` 会同时复制 `ppt/charts/chartN.xml`、其 `_rels` 与 `ppt/embeddings/*.xlsx` 到 `media/`，图表 XML 不做任何改写（字体与配色引用保持原样）。
+- 图表内部关系仅支持内嵌工作簿（`<c:externalData>`）；其他 chart 关系会让 `build` 明确报错而不是产出损坏包。
+- `chartPart` 与声明式 `data`/`series` 互斥。
+
+#### Declarative DSL (not compiled yet)
 
 PPTD v2's chart element follows the ECharts philosophy: **the chart top level carries no `type` field**; each `series[i].type` determines its own form. 13 series types are supported in total, laid out flat by type name, all equal in status:
 

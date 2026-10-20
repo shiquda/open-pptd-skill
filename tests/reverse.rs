@@ -242,6 +242,16 @@ fn read_part(path: &std::path::Path, name: &str) -> String {
     data
 }
 
+fn read_part_bytes(path: &std::path::Path, name: &str) -> Vec<u8> {
+    let mut zip = zip::ZipArchive::new(fs::File::open(path).unwrap()).unwrap();
+    let mut data = Vec::new();
+    zip.by_name(name)
+        .unwrap()
+        .read_to_end(&mut data)
+        .unwrap();
+    data
+}
+
 #[test]
 fn richtext_hyperlinks_roundtrip_through_convert_and_build() {
     let work = temp_dir("hyperlink");
@@ -336,4 +346,125 @@ fn element_link_roundtrips_through_convert() {
         decompiled.pages[0].elements[0].common().link.as_deref(),
         Some("https://example.com/source")
     );
+}
+
+/// Native charts survive `build → convert → build`: the chart XML and the
+/// embedded workbook are byte-identical after the round trip, the slide and
+/// chart relationships are regenerated, and a second convert still yields
+/// exactly one chart element (no loss, no duplication).
+#[test]
+fn chart_parts_roundtrip_through_convert() {
+    let work = temp_dir("chart");
+    let fixture = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/chart/chart.pptd");
+    let fixture_dir = fixture.parent().unwrap();
+    let chart_bytes = fs::read(fixture_dir.join("media/chart1.xml")).unwrap();
+    let workbook_bytes = fs::read(fixture_dir.join("media/Microsoft_Excel_Sheet1.xlsx")).unwrap();
+
+    let first = work.join("first.pptx");
+    let project = pptd::load_project(&fixture).unwrap();
+    pptx::writer::PptxWriter::new(&project)
+        .build(&first)
+        .unwrap();
+
+    assert_eq!(
+        read_part_bytes(&first, "ppt/charts/chart1.xml"),
+        chart_bytes,
+        "chart XML must be emitted verbatim"
+    );
+    assert_eq!(
+        read_part_bytes(&first, "ppt/embeddings/Microsoft_Excel_Sheet1.xlsx"),
+        workbook_bytes,
+        "embedded workbook must be emitted verbatim"
+    );
+    let slide = read_part(&first, "ppt/slides/slide1.xml");
+    assert!(slide.contains("<c:chart"), "{slide}");
+    assert!(slide.contains("r:id=\"rId2\""), "{slide}");
+    let slide_rels = read_part(&first, "ppt/slides/_rels/slide1.xml.rels");
+    assert!(
+        slide_rels.contains("relationships/chart")
+            && slide_rels.contains("../charts/chart1.xml"),
+        "{slide_rels}"
+    );
+    let chart_rels = read_part(&first, "ppt/charts/_rels/chart1.xml.rels");
+    assert!(
+        chart_rels.contains("relationships/package")
+            && chart_rels.contains("../embeddings/Microsoft_Excel_Sheet1.xlsx"),
+        "{chart_rels}"
+    );
+    let content_types = read_part(&first, "[Content_Types].xml");
+    assert!(
+        content_types.contains("drawingml.chart+xml"),
+        "{content_types}"
+    );
+    assert!(
+        content_types.contains("spreadsheetml.sheet"),
+        "{content_types}"
+    );
+
+    // Reverse: the chart element keeps both part paths and the plot hint.
+    let converted = work.join("converted");
+    let report = pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    assert!(report.skipped.is_empty(), "skips: {:?}", report.skipped);
+    assert_eq!(report.element_count, 1);
+    for part in [
+        "media/chart1.xml",
+        "media/chart1.xml.rels",
+        "media/Microsoft_Excel_Sheet1.xlsx",
+    ] {
+        assert!(converted.join(part).is_file(), "missing {part}");
+    }
+    assert_eq!(
+        fs::read(converted.join("media/chart1.xml")).unwrap(),
+        chart_bytes,
+        "convert must preserve the chart bytes"
+    );
+
+    let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
+    let charts: Vec<_> = decompiled.pages[0]
+        .elements
+        .iter()
+        .filter_map(|e| match e {
+            pptd::Element::Chart(c) => Some(c),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(charts.len(), 1, "exactly one chart expected");
+    assert_eq!(charts[0].chart_part.as_deref(), Some("media/chart1.xml"));
+    assert_eq!(
+        charts[0].workbook_part.as_deref(),
+        Some("media/Microsoft_Excel_Sheet1.xlsx")
+    );
+    assert_eq!(charts[0].chart_kind.as_deref(), Some("bar"));
+    assert_eq!(charts[0].common.bounds.x, 60.0);
+    assert_eq!(charts[0].common.bounds.width, 840.0);
+
+    // Forward again: identical chart payloads, valid rels, no duplicates.
+    let second = work.join("second.pptx");
+    pptx::writer::PptxWriter::new(&decompiled)
+        .build(&second)
+        .unwrap();
+    assert_eq!(
+        read_part_bytes(&second, "ppt/charts/chart1.xml"),
+        chart_bytes
+    );
+    assert_eq!(
+        read_part_bytes(&second, "ppt/embeddings/Microsoft_Excel_Sheet1.xlsx"),
+        workbook_bytes
+    );
+
+    let converted_again = work.join("converted-again");
+    let report = pptx::import::convert_pptx_to_pptd(&second, &converted_again).unwrap();
+    assert!(report.skipped.is_empty(), "skips: {:?}", report.skipped);
+    let again = pptd::load_project(&converted_again.join("deck.pptd")).unwrap();
+    assert_eq!(
+        again.pages[0]
+            .elements
+            .iter()
+            .filter(|e| e.type_name() == "chart")
+            .count(),
+        1,
+        "chart must neither vanish nor duplicate"
+    );
+
+    let _ = fs::remove_dir_all(&work);
 }

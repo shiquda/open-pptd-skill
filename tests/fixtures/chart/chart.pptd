@@ -1,0 +1,10 @@
+version: v2
+title: Chart round trip
+size: [960, 540]
+theme:
+  colors:
+    text: "#1F2937"
+    background: "#FFFFFF"
+    primary: "#2563EB"
+pages:
+  - pages/1.page

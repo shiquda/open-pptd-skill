@@ -8,6 +8,7 @@
 
 ### 新增
 
+- **原生图表回编（`elementType: chart`）**：`pptd convert` 将 `ppt/charts/chartN.xml`、其 `_rels` 与内嵌 `ppt/embeddings/*.xlsx` 原字节复制到工程 `media/`，生成带 `chartPart` / `workbookPart` / `chartKind` 的图表元素；`pptd build` 重新写出 `p:graphicFrame` + `<c:chart r:id>`、slide rels、chart rels 与 `[Content_Types].xml` override，图表 XML 不做任何改写。`pptd check` 校验 part 存在、路径不越出工程、bounds 为正；声明式 `data`/`series` 图表语法仍明确报错
 - **富文本超链接**：`<a href="https://…">文本</a>` 编译为 run 级 `<a:hlinkClick>` + `slideN.xml.rels` 外部关系（`TargetMode="External"`，同一 URL 去重）；`pptd convert` 还原为同样的行内标记，元素级 `link` 字段也完整回编
 - **字体名默认透传**：`pptd build` 默认原样写出 PPTD 中的字体名；Kimi 网页字体到系统字体的安全映射改为 `safeFonts: true` 显式开关（`pptd convert` 产出的工程默认关闭，保证回编排版不变）
 

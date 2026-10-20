@@ -9,14 +9,17 @@
 //!   import time and baked into the SVG path);
 //! * straight connectors (`p:cxnSp`) → `elementType: line`;
 //! * pictures (`p:pic`) with `media/…` assets copied next to the project;
+//! * native charts (`p:graphicFrame` + `c:chart`): the chart XML, its
+//!   embedded workbook and both parts' bytes are carried verbatim into
+//!   `media/` and re-emitted by the builder;
 //! * `pptd:icon` extension shapes → `elementType: icon` (round-trips our own
 //!   files and Kimi exports);
 //! * solid / gradient fills, borders, theme colors, page backgrounds.
 //!
 //! Constructs the downstream pipeline cannot represent are **not silently
 //! dropped**: they are reported in [`ConvertReport::skipped`] with the slide
-//! number, element name and reason (charts, tables, image fills, unusual
-//! geometry or transforms…).
+//! number, element name and reason (embedded OLE objects, image fills,
+//! unusual geometry or transforms…).
 //!
 //! [`crate::hash`] bookkeeping is built in: `convert` compares the source
 //! `.pptx` hash against the `.sync.hash` records in the output directory and
@@ -38,6 +41,7 @@ use crate::pptd::elements::{
     Element, ElementCommon, GroupDef, GroupXfrm, Icon, Image, Line, Media, Shape, ShapeDef, Text,
     TextAutofit, TextContent, TextDirection,
 };
+use crate::pptd::Chart;
 use crate::pptd::layout::{LayoutDef, PlaceholderDef};
 use crate::pptd::shared::{
     Alignment, Border, Bounds, Color, Fill, FontFamily, GradientFill, GradientType,
@@ -190,6 +194,7 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
 
     // Slides in `sldIdLst` presentation order (not archive order).
     let slide_parts = presentation_slides(&pres, &mut zip, &presentation_part)?;
+    let chart_info = scan_chart_parts(&mut zip);
 
     fs::create_dir_all(out_dir.join("pages"))
         .map_err(|e| Error::Invalid(format!("create pages dir: {e}")))?;
@@ -254,6 +259,7 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
                 lp,
                 master_of_layout.as_deref(),
                 &slots,
+                &chart_info,
                 &mut media,
                 &mut skipped,
                 key,
@@ -289,6 +295,7 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
                         lp,
                         master_of_layout.as_deref(),
                         &slots,
+                        &chart_info,
                         &mut media,
                         &mut skipped,
                         key,
@@ -330,6 +337,7 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
             used_ids: BTreeSet::new(),
             media: &mut media,
             skipped: &mut skipped,
+            charts: &chart_info,
             fallback_bg: lfbg,
             layout_key: layout_field.clone(),
             groups: HashMap::new(),
@@ -421,6 +429,46 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
     })
 }
 
+/// Native chart parts discovered in the source package: plot-family hint and
+/// the embedded workbook the chart's `<c:externalData>` points at.
+#[derive(Debug, Clone, Default)]
+struct ChartInfo {
+    kind: Option<String>,
+    workbook_part: Option<String>,
+}
+
+/// Discover every chart definition part in the source package.
+fn scan_chart_parts(zip: &mut zip::ZipArchive<fs::File>) -> HashMap<String, ChartInfo> {
+    let names: Vec<String> = (0..zip.len())
+        .filter_map(|i| zip.by_index(i).ok().map(|e| e.name().to_owned()))
+        .filter(|n| {
+            n.starts_with("ppt/charts/") && n.ends_with(".xml") && !n.contains("/_rels/")
+        })
+        .collect();
+    let mut out = HashMap::new();
+    for part in names {
+        let mut data = Vec::new();
+        let Ok(mut reader) = zip.by_name(&part) else {
+            continue;
+        };
+        if reader.read_to_end(&mut data).is_err() {
+            continue;
+        }
+        drop(reader);
+        if XmlEl::parse(data.as_slice()).is_err() {
+            continue;
+        }
+        out.insert(
+            part.clone(),
+            ChartInfo {
+                kind: super::chart::plot_kind(&data),
+                workbook_part: first_rels_target(zip, &part, "package"),
+            },
+        );
+    }
+    out
+}
+
 /// Context threaded through a single slide's element extraction.
 struct PageCtx<'a> {
     page_no: usize,
@@ -450,6 +498,8 @@ struct PageCtx<'a> {
     used_ids: BTreeSet<String>,
     media: &'a mut BTreeMap<String, String>,
     skipped: &'a mut Vec<Skipped>,
+    /// Source-package chart parts (`ppt/charts/chartN.xml`) → info.
+    charts: &'a HashMap<String, ChartInfo>,
     fallback_bg: Option<Fill>,
     /// SlideForge extension key this slide's page will reference
     /// (`Presentation.layouts[key]`); set from the resolved layout.
@@ -1115,11 +1165,13 @@ fn extract_notes(zip: &mut zip::ZipArchive<fs::File>, notes_part: &str) -> Optio
 /// layout's master spTree and the layout spTree once. Decorative shapes go
 /// into `def.elements`; placeholders into both `def.placeholders` and the
 /// returned `protos` (for slide-time inheritance).
+#[allow(clippy::too_many_arguments)]
 fn build_layout(
     zip: &mut zip::ZipArchive<fs::File>,
     layout_part: &str,
     master_part: Option<&str>,
     slots: &SlotColors,
+    charts: &HashMap<String, ChartInfo>,
     media: &mut BTreeMap<String, String>,
     skipped: &mut Vec<Skipped>,
     key: String,
@@ -1154,6 +1206,7 @@ fn build_layout(
             used_ids: BTreeSet::new(),
             media,
             skipped,
+            charts,
             fallback_bg: fallback_bg.clone(),
             layout_key: None,
             groups: HashMap::new(),
@@ -1501,15 +1554,12 @@ fn walk_sp_tree_child(
             let uri = graphic_uri(el).unwrap_or_default();
             if uri.contains("/table") {
                 out.push(map_table(el, rels, ctx, group));
+            } else if uri.contains("/chart") {
+                out.push(map_chart(el, rels, ctx, group));
             } else {
-                let kind = if uri.contains("/chart") {
-                    "chart"
-                } else {
-                    "graphicFrame"
-                };
                 ctx.skip(
                     &name,
-                    format!("{kind} elements are not representable in PPTD"),
+                    "graphicFrame elements are not representable in PPTD",
                 );
                 out.push(None);
             }
@@ -2758,6 +2808,63 @@ fn cell_border_spec(sides: [Option<Option<Border>>; 4]) -> Option<crate::pptd::s
         return l.map(crate::pptd::shared::BorderSpec::Uniform);
     }
     Some(crate::pptd::shared::BorderSpec::Clockwise([t, r, b, l]))
+}
+
+/// `graphicFrame` carrying chart graphicData → PPTD `chart` element.
+///
+/// The chart XML, its `.rels` and the embedded workbook are copied into
+/// `media/` verbatim; the model keeps only the part paths and a plot-kind
+/// hint. The chart part is never rewritten — internal font/color references
+/// stay exactly as authored.
+fn map_chart(
+    el: &XmlEl,
+    rels: &BTreeMap<String, String>,
+    ctx: &mut PageCtx<'_>,
+    group: Option<&Xform>,
+) -> Option<Element> {
+    let name = cnv_name(el).unwrap_or_else(|| "chart".into());
+    let xfrm_el = first(el, "xfrm")?;
+    let x = Xform::parse(xfrm_el).apply(group);
+
+    let rid = first(el, "graphic")
+        .and_then(|g| first(g, "graphicData"))
+        .and_then(|d| first(d, "chart"))
+        .and_then(|c| attr(c, "id"));
+    let Some(part) = rid.and_then(|r| rels.get(r)) else {
+        ctx.skip(&name, "chart without a resolvable r:id");
+        return None;
+    };
+    let Some(info) = ctx.charts.get(part) else {
+        ctx.skip(
+            &name,
+            format!("chart part `{part}` is missing from the package"),
+        );
+        return None;
+    };
+
+    let basename = part.rsplit('/').next().unwrap_or(part).to_string();
+    ctx.media.entry(part.clone()).or_insert(basename.clone());
+    // Copy the chart's own `.rels` verbatim: it carries the authored
+    // relationship id for `<c:externalData>` (and is the only rels the
+    // builder can satisfy — see `ChartRegistry`).
+    if info.workbook_part.is_some() {
+        ctx.media
+            .entry(rels_part(part))
+            .or_insert(format!("{basename}.rels"));
+    }
+    let workbook = info.workbook_part.as_ref().map(|wb| {
+        let wb_name = wb.rsplit('/').next().unwrap_or(wb).to_string();
+        ctx.media.entry(wb.clone()).or_insert(wb_name.clone());
+        format!("media/{wb_name}")
+    });
+
+    let id = ctx.unique_id(&name, "chart");
+    Some(Element::Chart(Box::new(Chart::passthrough(
+        common(&x, id, element_link(el, rels)),
+        format!("media/{basename}"),
+        workbook,
+        info.kind.clone(),
+    ))))
 }
 
 /// `graphicFrame` carrying table graphicData → PPTD `table` element.

@@ -19,6 +19,10 @@ pub enum ContentType {
     AppProperties,
     ImagePng,
     ImageJpeg,
+    /// `ppt/charts/chartN.xml`.
+    Chart,
+    /// `ppt/embeddings/*.xlsx` (the chart's embedded workbook).
+    Xlsx,
 }
 
 impl ContentType {
@@ -52,6 +56,12 @@ impl ContentType {
             }
             ContentType::ImagePng => "image/png",
             ContentType::ImageJpeg => "image/jpeg",
+            ContentType::Chart => {
+                "application/vnd.openxmlformats-officedocument.drawingml.chart+xml"
+            }
+            ContentType::Xlsx => {
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            }
         }
     }
 }

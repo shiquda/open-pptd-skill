@@ -3049,7 +3049,7 @@ fn map_pic(
     let (src, _part) = match embed.and_then(|rid| rels.get(rid)) {
         Some(target) => {
             let ext = target.rsplit('.').next().unwrap_or("").to_ascii_lowercase();
-            if !matches!(ext.as_str(), "png" | "jpg" | "jpeg") {
+            if !matches!(ext.as_str(), "png" | "jpg" | "jpeg" | "gif") {
                 ctx.skip(
                     &name,
                     format!("media extension .{ext} is not supported by the builder"),

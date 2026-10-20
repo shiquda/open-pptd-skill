@@ -1,0 +1,7 @@
+pageType: content
+elements:
+  - elementId: anim
+    elementType: image
+    bounds: [100, 100, 160, 80]
+    src: media/anim.gif
+    fit: {mode: contain}

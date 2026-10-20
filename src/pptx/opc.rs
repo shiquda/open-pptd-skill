@@ -136,6 +136,7 @@ pub fn content_types_xml(entries: &[PackageEntry], media_defaults: &[String]) ->
         let mime = match extension.as_str() {
             "png" => "image/png",
             "jpg" | "jpeg" => "image/jpeg",
+            "gif" => "image/gif",
             "mp4" | "m4v" => "video/mp4",
             "mov" => "video/quicktime",
             "mp3" => "audio/mpeg",

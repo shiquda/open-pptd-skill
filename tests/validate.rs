@@ -341,6 +341,26 @@ elements:
 }
 
 #[test]
+fn missing_gif_file_is_reported() {
+    let page = r#"
+elements:
+  - elementId: anim
+    elementType: image
+    bounds: [0, 0, 100, 50]
+    src: "assets/missing_animation.gif"
+"#;
+    let entry = tmp_deck("missing-gif", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        issues.iter().any(|d| d
+            .message
+            .contains("references missing file `assets/missing_animation.gif`")),
+        "expected missing GIF diagnostic, got {issues:?}"
+    );
+}
+
+#[test]
 fn missing_image_file_is_reported() {
     let page = r#"
 elements:

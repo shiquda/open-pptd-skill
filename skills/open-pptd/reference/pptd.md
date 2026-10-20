@@ -159,6 +159,7 @@ project/
    - The `pages` list in `.pptd`: `pages/1_cover.page`
    - Image paths in `.page`: `assets/image1.jpg`
 3. **Media does not support remote URLs yet**: the format documents `https://...` for `Image.src` and the [ImageFill](#fill).src of `background` / `fill`, but the compiler resolves `src` as a local path only (`failed to read https://...: No such file or directory`) while `check` skips the existence test. Download the asset into `assets/` first.
+4. **Supported asset extensions**: raster images `.png` / `.jpg` / `.jpeg` / `.gif` (GIFs are carried byte-for-byte into the package as `image/gif`, so animated GIFs keep their frames; PowerPoint shows the first frame while editing); audio/video clips `.mp4` / `.m4v` / `.mov` / `.mp3` / `.m4a` / `.wav` / `.wma`. Other extensions are rejected by `build` with an `unsupported extension` error.
 
 **Main entry is required:** everything must be loaded through the `.pptd` main entry file; a `.page` cannot be passed alone to the `convert`/`check` commands
 

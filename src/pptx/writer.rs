@@ -21,7 +21,7 @@
 //!   (`<a:hlinkClick>` + a deduplicated `TargetMode="External"` rel);
 //! - shape drop shadows (`a:effectLst > a:outerShdw` / `a:innerShdw`,
 //!   incl. the `scale` and `inner` SlideForge extensions);
-//! - media parts (`png`/`jpg`/`jpeg`) with `contain`/`cover` `a:srcRect`
+//! - media parts (`png`/`jpg`/`jpeg`/`gif`) with `contain`/`cover` `a:srcRect`
 //!   cropping computed from sniffed image dimensions;
 //! - native chart parts (`chartPart` + `workbookPart`): the chart XML is
 //!   emitted verbatim as `ppt/charts/chartN.xml`, with its workbook, chart

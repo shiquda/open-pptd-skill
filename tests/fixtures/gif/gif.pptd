@@ -1,0 +1,5 @@
+version: v2
+title: Animated GIF Demo
+size: [960, 540]
+pages:
+  - pages/1_gif.page

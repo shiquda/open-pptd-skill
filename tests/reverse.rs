@@ -576,3 +576,67 @@ elements:
 
     let _ = fs::remove_dir_all(&work);
 }
+
+/// GIF pictures survive `build → convert → build`: the bytes are copied
+/// verbatim into `ppt/media/imageN.gif`, declared as `image/gif`, and
+/// re-imported into the project `media/` directory instead of being skipped.
+#[test]
+fn gif_images_roundtrip_through_convert() {
+    let work = temp_dir("gif");
+    let fixture = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/gif/gif.pptd");
+    let fixture_dir = fixture.parent().unwrap();
+    let gif_bytes = fs::read(fixture_dir.join("media/anim.gif")).unwrap();
+
+    let first = work.join("first.pptx");
+    let project = pptd::load_project(&fixture).unwrap();
+    pptx::writer::PptxWriter::new(&project)
+        .build(&first)
+        .unwrap();
+
+    assert_eq!(
+        read_part_bytes(&first, "ppt/media/image1.gif"),
+        gif_bytes,
+        "GIF body must be emitted verbatim (no re-encoding)"
+    );
+    let content_types = read_part(&first, "[Content_Types].xml");
+    assert!(
+        content_types.contains("Extension=\"gif\"")
+            && content_types.contains("ContentType=\"image/gif\""),
+        "{content_types}"
+    );
+    let slide_rels = read_part(&first, "ppt/slides/_rels/slide1.xml.rels");
+    assert!(
+        slide_rels.contains("relationships/image") && slide_rels.contains("../media/image1.gif"),
+        "{slide_rels}"
+    );
+
+    // Reverse: the GIF is copied into the project, not reported as unsupported.
+    let converted = work.join("converted");
+    let report = pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    assert!(report.skipped.is_empty(), "skips: {:?}", report.skipped);
+    assert_eq!(
+        fs::read(converted.join("media/image1.gif")).unwrap(),
+        gif_bytes,
+        "convert must copy the GIF bytes unchanged"
+    );
+    let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
+    let images: Vec<_> = decompiled.pages[0]
+        .elements
+        .iter()
+        .filter_map(|e| match e {
+            pptd::Element::Image(image) => Some(image),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(images.len(), 1, "the GIF picture must survive the reverse");
+    assert_eq!(images[0].src, "media/image1.gif");
+
+    // Forward again: same bytes, same part name.
+    let second = work.join("second.pptx");
+    pptx::writer::PptxWriter::new(&decompiled)
+        .build(&second)
+        .unwrap();
+    assert_eq!(read_part_bytes(&second, "ppt/media/image1.gif"), gif_bytes);
+
+    let _ = fs::remove_dir_all(&work);
+}

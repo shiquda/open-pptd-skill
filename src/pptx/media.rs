@@ -1,6 +1,6 @@
 //! Media assets: image dimension sniffing and the package media registry.
 //!
-//! Image dimensions are read straight from the PNG/JPEG headers (no
+//! Image dimensions are read straight from the PNG/JPEG/GIF headers (no
 //! dependencies) — they are needed to compute `contain`/`cover` cropping for
 //! `a:srcRect`.
 
@@ -17,9 +17,26 @@ pub struct ImageSize {
     pub height: u32,
 }
 
-/// Sniff PNG or JPEG dimensions from the file bytes.
+/// Sniff PNG, JPEG or GIF dimensions from the file bytes.
 pub fn sniff_size(data: &[u8]) -> Option<ImageSize> {
-    png_size(data).or_else(|| jpeg_size(data))
+    png_size(data)
+        .or_else(|| jpeg_size(data))
+        .or_else(|| gif_size(data))
+}
+
+/// GIF header: `GIF87a`/`GIF89a`, then the logical-screen width and height
+/// as little-endian `u16`. Only the first frame's canvas is needed for
+/// fit/crop; the animation bytes are carried verbatim.
+fn gif_size(data: &[u8]) -> Option<ImageSize> {
+    if data.len() < 10 || (data.get(0..6)? != b"GIF87a" && data.get(0..6)? != b"GIF89a") {
+        return None;
+    }
+    let width = u16::from_le_bytes([data[6], data[7]]) as u32;
+    let height = u16::from_le_bytes([data[8], data[9]]) as u32;
+    if width == 0 || height == 0 {
+        return None;
+    }
+    Some(ImageSize { width, height })
 }
 
 fn png_size(data: &[u8]) -> Option<ImageSize> {
@@ -118,15 +135,15 @@ impl MediaRegistry {
             .map(|e| e.to_ascii_lowercase());
 
         // Raster images: dimensions are needed for fit/crop math.
-        if matches!(extension.as_deref(), Some("png" | "jpg" | "jpeg")) {
+        if matches!(extension.as_deref(), Some("png" | "jpg" | "jpeg" | "gif")) {
             let extension = extension.expect("checked above");
-            let content_type = if extension == "png" {
-                ContentType::ImagePng
-            } else {
-                ContentType::ImageJpeg
+            let content_type = match extension.as_str() {
+                "png" => ContentType::ImagePng,
+                "gif" => ContentType::ImageGif,
+                _ => ContentType::ImageJpeg,
             };
             let size = sniff_size(&data).ok_or_else(|| {
-                Error::Unsupported(format!("media `{src}` is not a readable PNG/JPEG image"))
+                Error::Unsupported(format!("media `{src}` is not a readable PNG/JPEG/GIF image"))
             })?;
             let index = self.parts.len();
             let package_path = format!("ppt/media/image{}.{extension}", index + 1);
@@ -147,7 +164,7 @@ impl MediaRegistry {
         // identifies clips by the part's content-type Default entry.
         let extension = extension.ok_or_else(|| {
             Error::Unsupported(format!(
-                "media `{src}` has no file extension (png/jpg/jpeg or a/v)"
+                "media `{src}` has no file extension (png/jpg/jpeg/gif or a/v)"
             ))
         })?;
         if !matches!(
@@ -156,7 +173,7 @@ impl MediaRegistry {
         ) {
             return Err(Error::Unsupported(format!(
                 "media `{src}` uses unsupported extension `{extension}` \
-                 (images: png/jpg/jpeg; a/v: mp4/m4v/mov/mp3/m4a/wav/wma)"
+                 (images: png/jpg/jpeg/gif; a/v: mp4/m4v/mov/mp3/m4a/wav/wma)"
             )));
         }
         let index = self.parts.len();
@@ -186,7 +203,7 @@ impl MediaRegistry {
         self.parts
     }
 
-    /// Unique lowercase extensions used (`png` / `jpg` / `jpeg` / a/v).
+    /// Unique lowercase extensions used (`png` / `jpg` / `jpeg` / `gif` / a/v).
     pub fn extensions(&self) -> Vec<String> {
         let mut seen: Vec<String> = Vec::new();
         for part in &self.parts {

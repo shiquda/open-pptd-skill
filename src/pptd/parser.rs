@@ -42,6 +42,7 @@ pub fn load_project(entry: &Path) -> Result<Project> {
 
     Ok(Project {
         root_dir,
+        entry_path: entry.to_path_buf(),
         presentation,
         pages,
         page_paths,

@@ -312,6 +312,195 @@ elements:
 }
 
 #[test]
+fn inline_tags_with_style_attributes_render_as_styled_runs() {
+    // `<b style=…>` used to fall through the tag matcher and leak into the
+    // slide as escaped literal text.
+    let deck = r#"
+version: v2
+title: Rich Tag Test
+size: [960, 540]
+pages: [pages/p.page]
+"#;
+    let page = r##"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [40, 40, 800, 240]
+    content:
+      fontSize: 20
+      text: |
+        <p><strong style="color:#C00000">红</strong> 与 <b style="color:#0060C0; font-size:26px">蓝</b></p>
+        <p>嵌套：<strong>粗 <em>斜</em> 仍粗</strong> 尾巴</p>
+"##;
+    let dir = std::env::temp_dir().join(format!("pptd-richtag-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(dir.join("deck.pptd"), deck).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let path = out_path("richtag");
+    let _ = fs::remove_file(&path);
+    PptxWriter::new(&project).build(&path).unwrap();
+    let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
+
+    assert!(
+        !slide.contains("&lt;strong") && !slide.contains("&lt;b style"),
+        "tag markup leaked into the slide text: {slide}"
+    );
+    assert!(slide.contains(r#"<a:srgbClr val="C00000""#), "{slide}");
+    assert!(slide.contains(r#"<a:srgbClr val="0060C0""#), "{slide}");
+    assert!(slide.contains(r#"sz="2600""#), "16px→26px run size: {slide}");
+    // The nested </em> must restore the surrounding bold, not clear it.
+    let after_em = slide
+        .split("仍粗")
+        .next()
+        .expect("text after the em");
+    assert!(
+        after_em.rfind(r#"b="1""#).is_some(),
+        "bold lost after a nested </em>: {slide}"
+    );
+    let _ = fs::remove_file(&path);
+}
+
+#[test]
+fn table_shadow_is_emitted_on_the_table_properties() {
+    let deck = r#"
+version: v2
+title: Table Shadow
+size: [960, 540]
+pages: [pages/p.page]
+"#;
+    let page = r##"
+elements:
+  - elementId: t1
+    elementType: table
+    bounds: [40, 40, 600, 200]
+    columnWidths: [0.5, 0.5]
+    rowHeights: [0.5, 0.5]
+    shadow: {blur: 8, color: "#000000", offset: [4, 4]}
+    rows:
+      - [{text: "A"}, {text: "B"}]
+      - [{text: "1"}, {text: "2"}]
+"##;
+    let dir = std::env::temp_dir().join(format!("pptd-tblshadow-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(dir.join("deck.pptd"), deck).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let path = out_path("tblshadow");
+    let _ = fs::remove_file(&path);
+    PptxWriter::new(&project).build(&path).unwrap();
+    let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
+
+    let tblpr = slide
+        .split("<a:tblPr")
+        .nth(1)
+        .and_then(|rest| rest.split("</a:tblPr>").next())
+        .expect("a:tblPr");
+    assert!(
+        tblpr.contains("<a:effectLst>") && tblpr.contains("<a:outerShdw"),
+        "table shadow must live inside a:tblPr: {tblpr}"
+    );
+    let _ = fs::remove_file(&path);
+}
+
+#[test]
+fn display_math_inherits_the_text_color() {
+    let deck = r##"
+version: v2
+title: Math Color
+size: [960, 540]
+theme:
+  colors:
+    ink: "#F5F5F5"
+pages: [pages/p.page]
+"##;
+    let page = r##"
+pageType: content
+background: {type: solid, color: "#101418"}
+elements:
+  - elementId: eq
+    elementType: text
+    bounds: [60, 120, 700, 200]
+    content:
+      fontSize: 20
+      color: "$ink"
+      text: '<latex>E = mc^2</latex>'
+"##;
+    let dir = std::env::temp_dir().join(format!("pptd-mathcolor-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(dir.join("deck.pptd"), deck).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let path = out_path("mathcolor");
+    let _ = fs::remove_file(&path);
+    PptxWriter::new(&project).build(&path).unwrap();
+    let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
+
+    let omml = slide
+        .split("<m:oMath>")
+        .nth(1)
+        .expect("display math");
+    assert!(
+        omml.contains(r#"<a:srgbClr val="F5F5F5"/>"#),
+        "math runs must carry the box colour: {omml}"
+    );
+    let _ = fs::remove_file(&path);
+}
+
+#[test]
+fn text_gradient_and_shadow_reach_the_run_properties() {
+    let deck = r#"
+version: v2
+title: Text FX
+size: [960, 540]
+pages: [pages/p.page]
+"#;
+    let page = r##"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [40, 40, 800, 200]
+    content:
+      fontSize: 48
+      bold: true
+      gradient:
+        gradientType: linear
+        angle: 90
+        stops:
+          - {position: 0, color: "#1E3A8A"}
+          - {position: 1, color: "#F59E0B"}
+      shadow: {blur: 6, color: "#000000", offset: [3, 3]}
+      text: 渐变文字
+"##;
+    let dir = std::env::temp_dir().join(format!("pptd-textfx-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(dir.join("deck.pptd"), deck).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let path = out_path("textfx");
+    let _ = fs::remove_file(&path);
+    PptxWriter::new(&project).build(&path).unwrap();
+    let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
+
+    let rpr = slide
+        .split("<a:rPr")
+        .nth(1)
+        .and_then(|rest| rest.split("</a:rPr>").next())
+        .expect("run properties");
+    assert!(rpr.contains("<a:gradFill"), "text gradient missing: {rpr}");
+    assert!(rpr.contains("<a:outerShdw"), "text shadow missing: {rpr}");
+    let _ = fs::remove_file(&path);
+}
+
+#[test]
 fn smooth_line_emits_wellformed_cubic_bezier() {
     let deck = r#"
 version: v2

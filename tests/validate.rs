@@ -561,3 +561,73 @@ elements:
         "two-element arrays keep the [top-bottom, left-right] meaning"
     );
 }
+
+#[test]
+fn documented_preset_shapes_validate() {
+    // reference/shapes.md is the contract; anything it documents must pass
+    // `check` instead of exiting 2 with "unknown shapeName".
+    let names = [
+        "irregularSeal1",
+        "irregularSeal2",
+        "nonIsoscelesTrapezoid",
+        "pieWedge",
+        "gear6",
+        "doubleWave",
+        "leftBrace",
+        "rightBracket",
+        "wedgeRoundRectCallout",
+        "accentBorderCallout3",
+        "leftRightCircularArrow",
+        "swooshArrow",
+        "flowChartDecision",
+        "ribbon2",
+        "lineInv",
+    ];
+    for name in names {
+        let page = format!(
+            "elements:\n  - elementId: s1\n    elementType: shape\n    shapeName: {name}\n    bounds: [0, 0, 100, 100]\n    fill: {{type: solid, color: \"#FF0000\"}}\n"
+        );
+        let entry = tmp_deck(&format!("shape-{name}"), MINIMAL_DECK, &[("p.page", &page)]);
+        let project = pptd::load_project(Path::new(&entry)).unwrap();
+        let issues = validate_project(&project);
+        assert!(
+            issues.is_empty(),
+            "documented shape `{name}` must validate: {issues:?}"
+        );
+    }
+
+    // A genuine typo still has to fail.
+    let bad = "elements:\n  - elementId: s1\n    elementType: shape\n    shapeName: irregularSeal3\n    bounds: [0, 0, 100, 100]\n";
+    let entry = tmp_deck("shape-typo", MINIMAL_DECK, &[("p.page", bad)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    assert!(
+        validate_project(&project)
+            .iter()
+            .any(|d| d.message.contains("unknown shapeName")),
+        "misspelled presets must still be reported"
+    );
+}
+
+#[test]
+fn manifest_whitelist_reads_the_entry_file_not_a_sibling() {
+    // A directory may hold several manifests; the diagnostics must inspect the
+    // one the caller passed, not a conventionally named neighbour.
+    let entry = tmp_deck("manifest-sibling", MINIMAL_DECK, &[("p.page", "elements: []\n")]);
+    let dir = Path::new(&entry).parent().unwrap().to_path_buf();
+    let custom = dir.join("custom.pptd");
+    fs::write(
+        &custom,
+        "version: v2\nsize: [960, 540]\npages: [pages/p.page]\nbogusTopField: 1\n",
+    )
+    .unwrap();
+
+    let project = pptd::load_project(&custom).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        issues
+            .iter()
+            .any(|d| d.message.contains("unknown field `bogusTopField`")),
+        "the passed manifest must be validated: {issues:?}"
+    );
+}
+

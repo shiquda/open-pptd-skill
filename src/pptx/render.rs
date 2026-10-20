@@ -370,7 +370,7 @@ fn border_xml(xml: &mut Xml, theme: Option<&Theme>, border: &Border) -> Result<(
 /// `a:effectLst > a:outerShdw` from a [`Shadow`]. Emitted inside `p:spPr`
 /// after the border. `blur` → `blurRad` (EMU); `offset` → `dist`+`dir`
 /// (dir in 1/60000 deg). The colour's alpha rides on the `<a:srgbClr>`.
-fn shadow_xml(xml: &mut Xml, theme: Option<&Theme>, shadow: &Shadow) -> Result<()> {
+pub(crate) fn shadow_xml(xml: &mut Xml, theme: Option<&Theme>, shadow: &Shadow) -> Result<()> {
     let resolved = resolve_color(theme, &shadow.color)?;
     xml.start("a:effectLst", &[]);
     let blur = emu(shadow.blur).to_string();
@@ -583,6 +583,8 @@ pub fn render_layout_placeholder(
         bullet_font: None,
         list_margin: None,
         list_indent: None,
+        gradient: None,
+        shadow: None,
     };
 
     xml.start("p:txBody", &[]);
@@ -628,6 +630,10 @@ pub struct EffTextStyle {
     pub list_margin: Option<f64>,
     /// Hanging indent in px (negative).
     pub list_indent: Option<f64>,
+    /// Gradient applied to the text fill (overrides `color`).
+    pub gradient: Option<crate::pptd::shared::GradientFill>,
+    /// Drop shadow applied to the text itself.
+    pub shadow: Option<crate::pptd::shared::Shadow>,
 }
 
 pub fn effective_text_style(theme: Option<&Theme>, content: &TextContent) -> EffTextStyle {
@@ -671,6 +677,8 @@ pub fn effective_text_style(theme: Option<&Theme>, content: &TextContent) -> Eff
         bullet_font: content.bullet_font.clone(),
         list_margin: content.list_margin,
         list_indent: content.list_indent,
+        gradient: content.gradient.clone(),
+        shadow: content.shadow.clone(),
     }
 }
 
@@ -965,7 +973,7 @@ fn render_text(
         emit_bullet(xml, &style);
         xml.end("a:pPr");
 
-        emit_run(xml, ctx.theme, &style, line);
+        emit_run(xml, ctx.theme, &style, line)?;
         // Kimi pins the paragraph end-mark size to the run size; without it
         // the mark takes the theme default (44pt here) and shifts the
         // vertically-centered text off position.
@@ -1189,9 +1197,74 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
         }
     }
 
+    /// Split `<name attr="v" ...>` into the tag name and the raw attribute text.
+    fn split_tag(raw: &str) -> (&str, &str) {
+        match raw.find(char::is_whitespace) {
+            Some(i) => (&raw[..i], raw[i..].trim()),
+            None => (raw, ""),
+        }
+    }
+
+    /// Value of a `style="..."` attribute inside a tag's attribute text.
+    fn style_attr(attrs: &str) -> Option<&str> {
+        let start = attrs.find("style=\"")? + "style=\"".len();
+        let tail = &attrs[start..];
+        let end = tail.find('"')?;
+        Some(&tail[..end])
+    }
+
+    /// Apply the CSS declarations shared by `<span style>` and the inline tags.
+    fn apply_css(flags: &mut Flags, style: &str) {
+        let pairs = css_pairs(style);
+        if let Some(v) = css_value(&pairs, "font-size").and_then(css_px) {
+            flags.size = Some(v);
+        }
+        if let Some(v) = css_value(&pairs, "color") {
+            flags.color = Some(v.to_string());
+        }
+        if let Some(v) = css_value(&pairs, "font-family") {
+            flags.family = Some(v.to_string());
+        }
+        if let Some(v) = css_value(&pairs, "letter-spacing").and_then(css_px) {
+            flags.letter_spacing = Some(v);
+        }
+        if let Some(w) = css_value(&pairs, "font-weight") {
+            flags.bold = Some(matches!(w, "bold" | "bolder" | "600" | "700" | "800" | "900"));
+        }
+        if let Some(v) = css_value(&pairs, "font-style") {
+            flags.italic = Some(v != "normal");
+        }
+        if let Some(dec) = css_value(&pairs, "text-decoration") {
+            if dec.contains("underline") {
+                flags.underline = Some(true);
+            }
+            if dec.contains("line-through") {
+                flags.strike = Some(true);
+            }
+        }
+        flags.styled = flags.size.is_some()
+            || flags.color.is_some()
+            || flags.family.is_some()
+            || flags.letter_spacing.is_some()
+            || flags.bold.is_some()
+            || flags.italic.is_some()
+            || flags.underline.is_some()
+            || flags.strike.is_some();
+    }
+
+    fn is_inline_tag(name: &str) -> bool {
+        matches!(
+            name,
+            "span" | "strong" | "b" | "em" | "i" | "u" | "s" | "strike" | "del" | "code"
+        )
+    }
+
     let mut out: Vec<ParaItem> = Vec::new();
     let mut buf = String::new();
     let mut flags = Flags::default();
+    // Open inline tags keep the flags they inherited, so a closing tag restores
+    // the surrounding style instead of resetting everything.
+    let mut stack: Vec<Flags> = Vec::new();
     let mut rest = inner;
     loop {
         let Some(lt) = rest.find('<') else {
@@ -1201,75 +1274,12 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
         buf.push_str(&rest[..lt]);
         let tag = &rest[lt..];
         if let Some(end) = tag.find('>') {
-            let name = tag[1..end].trim();
-            if let Some(style) = name
-                .strip_prefix("span style=\"")
-                .and_then(|s| s.strip_suffix('\"'))
-            {
-                flush_text(&mut out, &mut buf, &flags);
-                let pairs = css_pairs(style);
-                flags.size = css_value(&pairs, "font-size").and_then(css_px);
-                flags.color = css_value(&pairs, "color").map(str::to_string);
-                flags.family = css_value(&pairs, "font-family").map(str::to_string);
-                flags.letter_spacing = css_value(&pairs, "letter-spacing").and_then(css_px);
-                flags.bold = css_value(&pairs, "font-weight")
-                    .map(|w| matches!(w, "bold" | "bolder" | "600" | "700" | "800" | "900"));
-                flags.italic = css_value(&pairs, "font-style").map(|s| s != "normal");
-                if let Some(dec) = css_value(&pairs, "text-decoration") {
-                    if dec.contains("underline") {
-                        flags.underline = Some(true);
-                    }
-                    if dec.contains("line-through") {
-                        flags.strike = Some(true);
-                    }
-                }
-                flags.styled = flags.size.is_some()
-                    || flags.color.is_some()
-                    || flags.family.is_some()
-                    || flags.letter_spacing.is_some()
-                    || flags.bold.is_some()
-                    || flags.italic.is_some()
-                    || flags.underline.is_some()
-                    || flags.strike.is_some();
-            } else if name == "/span" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags = Flags::default();
-            } else if name == "strong" || name == "b" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags.bold = Some(true);
-                flags.styled = true;
-            } else if name == "/strong" || name == "/b" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags.bold = None;
-            } else if name == "em" || name == "i" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags.italic = Some(true);
-                flags.styled = true;
-            } else if name == "/em" || name == "/i" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags.italic = None;
-            } else if name == "u" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags.underline = Some(true);
-                flags.styled = true;
-            } else if name == "/u" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags.underline = None;
-            } else if name == "s" || name == "strike" || name == "del" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags.strike = Some(true);
-                flags.styled = true;
-            } else if name == "/s" || name == "/strike" || name == "/del" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags.strike = None;
-            } else if name == "code" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags.family = Some("Consolas".to_string());
-                flags.styled = true;
-            } else if name == "/code" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags.family = None;
-            } else if name == "latex" {
+            let raw = tag[1..end].trim();
+            let (name, attrs) = split_tag(raw);
+            let closing = name.starts_with('/');
+            let bare = name.trim_start_matches('/');
+
+            if bare == "latex" && !closing {
                 flush_text(&mut out, &mut buf, &flags);
                 let latex_start = lt + end + 1;
                 if let Some(latex_end_rel) = rest[latex_start..].find("</latex>") {
@@ -1281,13 +1291,41 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                     out.push(ParaItem::Math(unescape_xml(&rest[latex_start..])));
                     break;
                 }
-            } else if name == "/latex" {
-                // Ignore standalone closing tag
-            } else if name == "span" {
-                flush_text(&mut out, &mut buf, &flags);
-                flags = Flags::default();
-            } else if name == "br/" || name == "br" {
+            } else if bare == "br/" || bare == "br" {
                 buf.push('\n');
+            } else if is_inline_tag(bare) {
+                flush_text(&mut out, &mut buf, &flags);
+                if closing {
+                    flags = stack.pop().unwrap_or_default();
+                } else {
+                    stack.push(flags.clone());
+                    if let Some(style) = style_attr(attrs) {
+                        apply_css(&mut flags, style);
+                    }
+                    match bare {
+                        "strong" | "b" => {
+                            flags.bold = Some(true);
+                            flags.styled = true;
+                        }
+                        "em" | "i" => {
+                            flags.italic = Some(true);
+                            flags.styled = true;
+                        }
+                        "u" => {
+                            flags.underline = Some(true);
+                            flags.styled = true;
+                        }
+                        "s" | "strike" | "del" => {
+                            flags.strike = Some(true);
+                            flags.styled = true;
+                        }
+                        "code" => {
+                            flags.family = Some("Consolas".to_string());
+                            flags.styled = true;
+                        }
+                        _ => {}
+                    }
+                }
             } else {
                 // Unknown tag: keep it as literal text (rare).
                 buf.push_str(&tag[..=end]);
@@ -1328,6 +1366,19 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
     }
     merged
 }
+/// Apply the text box's resolved colour to a math fragment. Math runs are
+/// emitted without a fill, so without this a formula ignores `content.color`
+/// and disappears on dark backgrounds.
+fn math_colored(theme: Option<&Theme>, style: &EffTextStyle, omml: &str) -> Result<String> {
+    match &style.color {
+        Some(color) => {
+            let resolved = resolve_color(theme, color)?;
+            Ok(super::math::apply_text_color(omml, &resolved.rgb))
+        }
+        None => Ok(omml.to_owned()),
+    }
+}
+
 /// Render a rich-text body (inside an open `p:txBody`): per-paragraph `pPr`
 /// + styled runs.
 pub(crate) fn render_rich_body(
@@ -1450,17 +1501,18 @@ pub(crate) fn render_rich_body(
             {
                 let omml = super::math::latex_to_omml(latex, true)
                     .map_err(|e| crate::error::Error::Invalid(e.to_string()))?;
-                xml.raw(&omml);
+                xml.raw(&math_colored(theme, style, &omml)?);
             }
         } else {
             for item in &para.items {
                 match item {
                     ParaItem::Run(run) => {
-                        emit_run_styled(xml, theme, style, Some(run), &run.text);
+                        emit_run_styled(xml, theme, style, Some(run), &run.text)?;
                     }
                     ParaItem::Math(latex) => {
                         let omml = super::math::latex_to_omml(latex, false)
                             .map_err(|e| crate::error::Error::Invalid(e.to_string()))?;
+                        let omml = math_colored(theme, style, &omml)?;
                         let fallback_segs = super::math::latex_to_fallback_segments(latex)
                             .map_err(|e| crate::error::Error::Invalid(e.to_string()))?;
 
@@ -1486,7 +1538,7 @@ pub(crate) fn render_rich_body(
                                 baseline: seg.baseline,
                                 letter_spacing: None,
                             };
-                            emit_run_styled(xml, theme, style, Some(&r), &r.text);
+                            emit_run_styled(xml, theme, style, Some(&r), &r.text)?;
                         }
                         xml.end("mc:Fallback");
                         xml.end("mc:AlternateContent");
@@ -1516,8 +1568,13 @@ pub(crate) fn render_rich_body(
     Ok(())
 }
 
-fn emit_run(xml: &mut Xml, theme: Option<&Theme>, style: &EffTextStyle, text: &str) {
-    emit_run_styled(xml, theme, style, None, text);
+fn emit_run(
+    xml: &mut Xml,
+    theme: Option<&Theme>,
+    style: &EffTextStyle,
+    text: &str,
+) -> Result<()> {
+    emit_run_styled(xml, theme, style, None, text)
 }
 
 #[derive(Clone)]
@@ -1573,7 +1630,7 @@ fn emit_run_styled(
     style: &EffTextStyle,
     run: Option<&RichRun>,
     text: &str,
-) {
+) -> Result<()> {
     let run = run.filter(|r| r.styled);
     // Math script runs (baseline set) without an explicit size render at 70%.
     let baseline = run.and_then(|r| r.baseline);
@@ -1631,7 +1688,21 @@ fn emit_run_styled(
         rgb: "000000".to_owned(),
         alpha: None,
     });
-    emit_fill_color(xml, &resolved);
+    match &style.gradient {
+        Some(gradient) => {
+            let fill = Fill::Gradient {
+                gradient_type: gradient.gradient_type,
+                stops: gradient.stops.clone(),
+                angle: gradient.angle,
+                scaled: gradient.scaled,
+            };
+            fill_xml(xml, theme, &fill, None)?;
+        }
+        None => emit_fill_color(xml, &resolved),
+    }
+    if let Some(shadow) = &style.shadow {
+        shadow_xml(xml, theme, shadow)?;
+    }
     match &font_family {
         FontFamily::Single(name) => {
             let lat = super::theme::safe_latin_typeface(name);
@@ -1651,6 +1722,7 @@ fn emit_run_styled(
     xml.end("a:rPr");
     xml.text_elem("a:t", text);
     xml.end("a:r");
+    Ok(())
 }
 
 // ---------------------------------------------------------------------------

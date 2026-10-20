@@ -34,6 +34,10 @@ pub struct Project {
     /// Directory that contains the `.pptd` entry file. All paths inside the
     /// project are relative to this directory.
     pub root_dir: PathBuf,
+    /// The `.pptd` entry file that was loaded, exactly as it was passed to
+    /// [`load_project`]. Diagnostics that read the raw manifest must use this
+    /// path instead of guessing a conventional file name.
+    pub entry_path: PathBuf,
     /// The parsed main entry file.
     pub presentation: Presentation,
     /// Paths of the page files, parallel to [`Project::pages`].

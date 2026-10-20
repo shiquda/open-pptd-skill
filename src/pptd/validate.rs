@@ -698,6 +698,35 @@ const VALID_PRESET_SHAPES: &[&str] = &[
     "stripedRightArrow",
     "notchedRightArrow",
     "line",
+    // Shapes documented in reference/shapes.md (ECMA-376 preset geometries).
+    "nonIsoscelesTrapezoid", "plus", "pieWedge", "frame",
+    "halfFrame", "corner", "diagStripe", "noSmoking",
+    "funnel", "gear6", "gear9", "doubleWave",
+    "wave", "lineInv", "irregularSeal1", "irregularSeal2",
+    "circularArrow", "leftCircularArrow", "leftRightCircularArrow", "swooshArrow",
+    "rightArrowCallout", "leftArrowCallout", "upArrowCallout", "downArrowCallout",
+    "leftRightArrowCallout", "upDownArrowCallout", "quadArrowCallout", "wedgeRectCallout",
+    "wedgeRoundRectCallout", "wedgeEllipseCallout", "cloudCallout", "borderCallout1",
+    "borderCallout2", "borderCallout3", "accentCallout1", "accentCallout2",
+    "accentCallout3", "accentBorderCallout1", "accentBorderCallout2", "accentBorderCallout3",
+    "callout1", "callout2", "callout3", "leftBrace",
+    "rightBrace", "leftBracket", "rightBracket", "bracePair",
+    "bracketPair", "ribbon", "ribbon2", "ellipseRibbon",
+    "ellipseRibbon2", "leftRightRibbon", "horizontalScroll", "verticalScroll",
+    "mathPlus", "mathMinus", "mathMultiply", "mathDivide",
+    "mathEqual", "mathNotEqual", "chartPlus", "chartStar",
+    "chartX", "cornerTabs", "squareTabs", "plaqueTabs",
+    "actionButtonBackPrevious", "actionButtonBeginning", "actionButtonBlank", "actionButtonDocument",
+    "actionButtonEnd", "actionButtonForwardNext", "actionButtonHelp", "actionButtonHome",
+    "actionButtonInformation", "actionButtonMovie", "actionButtonReturn", "actionButtonSound",
+    "flowChartProcess", "flowChartAlternateProcess", "flowChartDecision", "flowChartDocument",
+    "flowChartMultidocument", "flowChartInputOutput", "flowChartPredefinedProcess", "flowChartInternalStorage",
+    "flowChartManualInput", "flowChartManualOperation", "flowChartPreparation", "flowChartDelay",
+    "flowChartTerminator", "flowChartConnector", "flowChartOffpageConnector", "flowChartPunchedCard",
+    "flowChartPunchedTape", "flowChartCollate", "flowChartSort", "flowChartExtract",
+    "flowChartMerge", "flowChartOr", "flowChartSummingJunction", "flowChartOnlineStorage",
+    "flowChartMagneticDisk", "flowChartMagneticDrum", "flowChartMagneticTape", "flowChartOfflineStorage",
+    "flowChartDisplay",
 ];
 
 fn check_shape_name(shape: &Shape, page_idx: usize, out: &mut Vec<Diagnostic>) {
@@ -1103,14 +1132,11 @@ fn check_text_overflow(
 }
 
 fn check_presentation_raw_yaml(project: &Project, out: &mut Vec<Diagnostic>) {
-    let mut entry_candidates = vec![
-        project.root_dir.join("deck.pptd"),
-        project.root_dir.join("presentation.pptd"),
-    ];
-    if let Some(title) = &project.presentation.title {
-        entry_candidates.push(project.root_dir.join(title));
-    }
-    for path in &entry_candidates {
+    // Read the manifest that was actually loaded. Guessing a conventional file
+    // name picked up a sibling `deck.pptd` and silently skipped the entry the
+    // caller asked to validate.
+    let path = &project.entry_path;
+    {
         if let Ok(content) = std::fs::read_to_string(path) {
             if let Ok(serde_yaml::Value::Mapping(map)) =
                 serde_yaml::from_str::<serde_yaml::Value>(&content)
@@ -1136,7 +1162,6 @@ fn check_presentation_raw_yaml(project: &Project, out: &mut Vec<Diagnostic>) {
                         }
                     }
                 }
-                break;
             }
         }
     }
@@ -1313,6 +1338,12 @@ fn check_page_raw_yaml(project: &Project, page_idx: usize, out: &mut Vec<Diagnos
                             "marginRight",
                             "marginBottom",
                             "bodyPrExtras",
+                            "gradient",
+                            "shadow",
+                            "bulletChar",
+                            "bulletFont",
+                            "listMargin",
+                            "listIndent",
                         ];
                         for (k, _) in cmap {
                             if let serde_yaml::Value::String(s) = k {
@@ -1401,6 +1432,7 @@ mod tests {
         let page: Page = serde_yaml::from_str(page_yaml).unwrap();
         Project {
             root_dir: PathBuf::from("."),
+            entry_path: PathBuf::from("deck.pptd"),
             presentation,
             pages: vec![page],
             page_paths: vec![PathBuf::from("pages/1.page")],

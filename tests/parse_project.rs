@@ -192,6 +192,7 @@ fn flags_dangling_layout_reference() {
     .unwrap();
     let page: Page = serde_yaml::from_str("layout: nope\nelements: []\n").unwrap();
     let project = Project {
+        entry_path: PathBuf::from("deck.pptd"),
         root_dir: PathBuf::from("."),
         presentation,
         page_paths: vec![PathBuf::from("pages/1.page")],
@@ -216,6 +217,7 @@ fn accepts_valid_layout_reference() {
     .unwrap();
     let page: Page = serde_yaml::from_str("layout: cover\nelements: []\n").unwrap();
     let project = Project {
+        entry_path: PathBuf::from("deck.pptd"),
         root_dir: PathBuf::from("."),
         presentation,
         page_paths: vec![PathBuf::from("pages/1.page")],

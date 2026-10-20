@@ -1049,6 +1049,30 @@ fn emit_run(out: &mut String, text: &str, upright: bool) {
     out.push_str("</m:t></m:r>");
 }
 
+/// Paint every math run in an OMML fragment.
+///
+/// Math runs are generated with a bare `<a:rPr lang="en-US">`, so without this
+/// the formula ignores the text box's `color` and renders in the renderer's
+/// default (black) — invisible on dark backgrounds. OOXML allows
+/// `<a:solidFill>` as the first child of `a:rPr`, so the fill is spliced in
+/// after each run's opening tag.
+pub fn apply_text_color(omml: &str, hex: &str) -> String {
+    const RUN_PR: &str = "<a:rPr lang=\"en-US\">";
+    let mut out = String::with_capacity(omml.len() + 64);
+    let mut rest = omml;
+    while let Some(pos) = rest.find(RUN_PR) {
+        let (head, tail) = rest.split_at(pos + RUN_PR.len());
+        out.push_str(head);
+        out.push_str(&format!(
+            "<a:solidFill><a:srgbClr val=\"{}\"/></a:solidFill>",
+            hex.to_ascii_uppercase()
+        ));
+        rest = tail;
+    }
+    out.push_str(rest);
+    out
+}
+
 fn emit_nodes(out: &mut String, nodes: &[MathNode]) {
     let mut text_buf = String::new();
     let mut text_upright = false;

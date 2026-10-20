@@ -570,8 +570,8 @@ interface TextContent {
   align?: Alignment;                           // default: ["left", "top"]
 
   // —— Visual decoration (unset = not applied) ——
-  gradient?: GradientFill;                     // ⚠️ NOT IMPLEMENTED: parsed by the AST but rejected by `check` and never rendered — do not use
-  shadow?: Shadow;                             // ⚠️ NOT IMPLEMENTED: parsed by the AST but rejected by `check` and never rendered — do not use
+  gradient?: GradientFill;                     // text fill gradient; emitted as `a:gradFill` inside every run's `a:rPr` (overrides `color`)
+  shadow?: Shadow;                             // text shadow; emitted as `a:effectLst` inside every run's `a:rPr`
 }
 ```
 
@@ -631,6 +631,7 @@ interface TextContent {
 |------|------|------|
 | `<p>` | Paragraph; may carry paragraph styles | `<p>paragraph</p>` |
 | `<span>` | Inline style; use this tag to set inline styles | `<span style="color:#f00">red</span>` |
+| `<b>`, `<i>`, `<code>` | Aliases of `<strong>`, `<em>`, and monospace; every inline tag accepts a `style="..."` attribute | `<b style="color:#0060C0">blue</b>` |
 | `<strong>` | Bold | `<strong>important</strong>` |
 | `<em>` | Italic | `<em>emphasis</em>` |
 | `<u>` | Underline | `<u>underline</u>` |
@@ -644,7 +645,7 @@ interface TextContent {
 
 **style attribute mapping**
 
-`<p>`, `<li>`, and `<span>` may use `style="..."`. Color-type values may all use theme references (e.g. `$primary`), resolved per the [Color](#color) rules.
+`<p>`, `<li>`, `<span>`, and every inline tag (`<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<s>`, `<code>`) may use `style="..."`; the tag's own meaning and the style declarations combine, so `<strong style="color:#C00000">` is bold red. Nested tags restore the enclosing style when they close. Color-type values may all use theme references (e.g. `$primary`), resolved per the [Color](#color) rules.
 
 1. **Paragraph styles (only `<p>` supports them)**
 

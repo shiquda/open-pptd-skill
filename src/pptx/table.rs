@@ -20,7 +20,7 @@ use crate::pptd::shared::{
 use crate::pptd::theme::{CellStyle, TableStyleConfig, TableStyleRef, TextStyleConfig};
 use crate::{Error, Result};
 
-use super::render::{EffTextStyle, emu, fill_xml, render_rich_body};
+use super::render::{EffTextStyle, emu, fill_xml, render_rich_body, shadow_xml};
 use super::xml::Xml;
 
 /// Accumulated cell style while walking the inheritance chain.
@@ -397,6 +397,11 @@ pub(crate) fn render_table(
     if let Some(fill) = &table.fill {
         fill_xml(xml, theme, fill, None)?;
     }
+    // `a:tblPr` accepts an `a:effectLst` slot; a graphicFrame has no `p:spPr`,
+    // so this is the only place a table-level shadow can be expressed.
+    if let Some(shadow) = &table.shadow {
+        shadow_xml(xml, theme, shadow)?;
+    }
     xml.end("a:tblPr");
     xml.start("a:tblGrid", &[]);
     for ratio in &table.column_widths {
@@ -457,6 +462,8 @@ fn cell_eff_style(acc: &CellAcc) -> EffTextStyle {
         bullet_font: None,
         list_margin: None,
         list_indent: None,
+        gradient: None,
+        shadow: None,
     }
 }
 

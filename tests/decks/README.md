@@ -84,12 +84,31 @@ RENDER=1 PYTHON=../../.venv/bin/python ./verify_all.sh
 6. **LaTeX `\lim` 生成非法单字符约束 `<m:chr m:val="lim"/>`**：
    - **位置**：`src/pptx/math.rs`
    - **根因**：`\lim` 被错误映射到 `<m:nary>`，其 `m:chr` 属性按 OOXML 规范只能为单个字符。LibreOffice 渲染为乱码倒置问号 `¿`。
+   - **修复**：改为 `<m:func>` + `<m:limLow>`（`lim` 作为 fName，下标作为下限），单元测试 `test_lim_becomes_function_not_invalid_nary_char`；deck04 封面与 P9 复验通过。
+6b. **校验器只放行 69 个 preset shape，文档却列了 177 个**：
+   - **位置**：`src/pptd/validate.rs` `VALID_PRESET_SHAPES`。
+   - **根因**：白名单手工维护，漏掉 109 个 ECMA-376 预设（callout 家族、`irregularSeal1/2`、flowChart、ribbon、brace/bracket、action button 等），`pptd check` 直接 exit 2，而渲染层本来就原样写 `prst`。
+   - **修复**：补齐 109 个名称；测试 `documented_preset_shapes_validate` 同时验证真实拼写错误仍被拦截。
+6c. **`pptd check` 的 manifest 白名单读错文件**：
+   - **位置**：`src/pptd/validate.rs` `check_presentation_raw_yaml`。
+   - **根因**：靠文件名猜测（`deck.pptd` / `presentation.pptd` / title）扫描目录，而不是使用调用者传入的入口文件。同一目录存在干净的 `deck.pptd` 时，校验 `custom.pptd` 会返回 "no issues"（rc=0）。
+   - **修复**：`Project` 增加 `entry_path`，只校验真正加载的清单；测试 `manifest_whitelist_reads_the_entry_file_not_a_sibling`。
 
 ### P2 — 体验与表现层缺陷 (Medium)
-7. **富文本携带样式的 `<b>`/`<strong>` 标签原样泄漏**：
-   - 带有行内属性的 `<b style="...">` 或 `<strong style="...">` 未能正确解析为带有样式的 Run，而是作为转义纯文本输出到幻灯片上。已在 `validate_pptx.py` 增强检测。
+7. **富文本携带样式的 `<b>`/`<strong>` 标签原样泄漏，且嵌套样式被错误重置**：
+   - 带有行内属性的 `<b style="...">` 或 `<strong style="...">` 未被解析成 Run，而是作为转义纯文本输出到幻灯片（`&lt;strong style=&quot;…`）。
+   - 同时 `</span>` 会把整个样式状态重置为默认值，导致 `<strong><span style="color:…">…</span></strong>` 里的粗体丢失（deck01、deck02 的标题层级因此变细）。
+   - **修复**：标签解析改为「切分标签名 + 属性」并支持全部行内标签的 `style="..."`；样式改为栈式恢复（进入压栈、闭合弹栈）。测试 `inline_tags_with_style_attributes_render_as_styled_runs`。
 8. **表格阴影（`Table.shadow`）静默丢弃**：
    - 表格语法允许声明 `shadow`，但渲染管线未向 `graphicFrame` 输出 `<a:effectLst>`，阴影无视觉效果。
+   - **修复**：`a:graphicFrame` 没有 `p:spPr`，效果只能挂在 `<a:tblPr>` 的 `a:effectLst` 槽位；已复用 `shadow_xml` 写入。测试 `table_shadow_is_emitted_on_the_table_properties`。
+8b. **`TextContent.gradient` / `TextContent.shadow` 被解析但从不渲染**：
+   - 两个字段在 AST 里存在、文档也描述，渲染层却丢弃，`check` 还会把它们当未知字段拒掉。
+   - **修复**：run 属性里输出 `<a:gradFill>`（覆盖 `color`）与 `<a:effectLst>`；`check` 白名单同步补齐。测试 `text_gradient_and_shadow_reach_the_run_properties`。
+8c. **公式不吃 `content.color`**：
+   - `<m:r>` 的 `a:rPr` 只有 `lang` + `latin`，没有 `solidFill`，暗色主题下公式固定黑色（等于不可见）。
+   - **修复**：`math::apply_text_color` 把解析后的颜色写进每个 math run 的 `a:rPr`；测试 `display_math_inherits_the_text_color`。
+   - **边界**：LibreOffice 的 OMML 导入会忽略 run 级颜色与阴影，仍按默认黑色排版（与 §4 的拉伸问题同源）；PowerPoint/WPS 遵循该属性。
 9. **`lineHeightPx` 与 `lineHeight` 优先级文档与实现相反**：
    - 文档声明冲突时 `lineHeightPx` 优先，但实现代码分支中 `lineHeight` 百分比优先。已在文档中明确纠正。
 10. **验证器 `--render-images` 存在旧图片残留累积与重复计数**：

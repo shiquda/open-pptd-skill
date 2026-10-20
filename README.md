@@ -173,6 +173,17 @@ cargo install --git https://github.com/shiquda/open-pptd-skill.git
   python3 skills/open-pptd/scripts/validate_pptx.py presentation.pptx --expected-pages 8 --check-notes
   ```
 
+### 3. 回归验证（端到端 fixture 套件）
+`tests/decks/` 下有 12 套真实场景文稿（98 页），覆盖表格、原生公式、箭头/连线、行列容器、主题、Kimi 基准等语法组合。每次改渲染或校验层后跑一遍：
+
+```bash
+cd tests/decks && ./verify_all.sh          # check → build → validate，约 10 秒
+RENDER=1 ./verify_all.sh                   # 额外用 LibreOffice 渲染页面图 + 接触表
+PPTD=../../target/debug/pptd ./verify_all.sh   # 用本地构建的二进制
+```
+
+产物写在各自 `build/`（已 gitignore）。缺陷排查记录与能力边界见 [`tests/decks/README.md`](tests/decks/README.md)。
+
 </details>
 
 ---

@@ -161,6 +161,17 @@ cargo install --git https://github.com/shiquda/open-pptd-skill.git
 - **Decompile PPTX**: `pptd convert presentation.pptx ./decompiled_project/`
 - **Automated QA**: `python3 skills/open-pptd/scripts/validate_pptx.py presentation.pptx --expected-pages 8 --check-notes`
 
+### 3. Regression suite (end-to-end fixtures)
+`tests/decks/` holds 12 real-world decks (98 pages) covering tables, native math, arrows/connectors, containers, themes and the Kimi benchmarks. Run it after touching the renderer or the validator:
+
+```bash
+cd tests/decks && ./verify_all.sh          # check -> build -> validate, ~10s
+RENDER=1 ./verify_all.sh                   # also rasterise pages + contact sheets through LibreOffice
+PPTD=../../target/debug/pptd ./verify_all.sh   # use the locally built binary
+```
+
+Outputs land in each deck's `build/` (git-ignored). Defect log and known boundaries: [`tests/decks/README.md`](tests/decks/README.md).
+
 </details>
 
 ---

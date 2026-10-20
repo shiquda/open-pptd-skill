@@ -1143,6 +1143,21 @@ fn emit_nodes(out: &mut String, nodes: &[MathNode]) {
                         sup,
                         body,
                     } => {
+                        // `\lim` is a function name, not an operator: ST_Char only
+                        // accepts a single character, so `<m:chr m:val="lim"/>` is
+                        // invalid OMML and renderers show a replacement glyph.
+                        if chr == "lim" && sup.is_none() {
+                            out.push_str("<m:func><m:funcPr/><m:fName><m:limLow><m:e>");
+                            emit_run(out, "lim", true);
+                            out.push_str("</m:e><m:lim>");
+                            if let Some(s) = sub {
+                                emit_nodes(out, s);
+                            }
+                            out.push_str("</m:lim></m:limLow></m:fName><m:e>");
+                            emit_nodes(out, body);
+                            out.push_str("</m:e></m:func>");
+                            continue;
+                        }
                         out.push_str("<m:nary><m:naryPr>");
                         let _ = write!(out, "<m:chr m:val=\"{}\"/>", xml_escape(chr));
                         let _ = write!(out, "<m:limLoc m:val=\"{lim_loc}\"/>");
@@ -1913,6 +1928,18 @@ mod tests {
         assert!(omml_deg.contains("<m:degHide m:val=\"0\"/>"));
         assert!(omml_deg.contains("<m:deg>"));
         assert!(omml_deg.contains("<m:t>3</m:t>"));
+    }
+
+    #[test]
+    fn test_lim_becomes_function_not_invalid_nary_char() {
+        let omml = latex_to_omml(r"\lim_{N \to \infty} \frac{1}{N}", true).unwrap();
+        assert!(omml.contains("<m:func>"), "{omml}");
+        assert!(omml.contains("<m:limLow>"), "{omml}");
+        assert!(omml.contains("<m:t>lim</m:t>"), "{omml}");
+        assert!(
+            !omml.contains("m:val=\"lim\""),
+            "lim must not be emitted as a nary character: {omml}"
+        );
     }
 
     #[test]

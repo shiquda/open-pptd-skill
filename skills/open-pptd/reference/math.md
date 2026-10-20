@@ -39,6 +39,20 @@ The compiler automatically distinguishes between **display formulas** and **inli
    - `\begin{align}`, `\begin{gather}` and `\begin{eqnarray}` are display environments in LaTeX and must own their paragraph. Using one inside a line of text fails the build with an explicit error instead of silently producing a broken inline equation.
    - The `…ed` variants (`\begin{aligned}`, `\begin{gathered}`, `\begin{split}`) may be used in either position.
 
+#### Box geometry drives the rendered formula in LibreOffice
+
+A display formula becomes one Office Math object. PowerPoint and WPS lay it out inline and scale it with the run font size, so the text box only needs to be big enough. LibreOffice (and its PDF export) instead sizes that object to the whole text frame, **stretching width and height independently**: the same formula in 400-wide frames 60 / 120 / 240 tall renders 388×52, 388×104, 388×209 slide units. A frame whose aspect ratio differs from the formula's own aspect therefore produces the squashed or stretched look.
+
+Measured on LibreOffice 25 (`soffice --convert-to pdf`, 150 DPI): `<a:autofit>` makes no difference — `normAutofit`, `noAutofit` and `spAutoFit` all render identically; `wrap="none"` does not change it either.
+
+What to do:
+
+- **Size the box to the formula.** Keep `bounds[2] / bounds[3]` close to the formula's natural aspect (a long single line is ~4–6:1, a fraction or radical ~3–4:1, a stacked matrix or multi-line `aligned` ~2–3:1). A 400×70 box holding a 2:1 matrix renders the matrix ~3× too flat.
+- **Split long formulas** across `aligned` / `split` rows or into two elements instead of stretching one line across the slide.
+- **Verify with a render.** `check` cannot measure OMML layout; the PNG from `validate_pptx.py --render-images` is the only reliable proof, and the box that looks right in PowerPoint may still be deformed in LibreOffice.
+
+PowerPoint is the reference renderer, so a box that satisfies the rule above is correct in both.
+
 ---
 
 ## 3. Supported LaTeX Subset
@@ -56,7 +70,8 @@ The compiler includes a built-in LaTeX-to-OMML converter supporting standard mat
 - Combined: `A_t^H`, `\sigma_{i,j}^2` (compiled to `<m:sSubSup>`)
 
 ### Big Operators and Limits
-- Summation, product, and integrals: `\sum`, `\prod`, `\int`, `\oint`, `\lim` (compiled to `<m:nary>`)
+- Summation, product, and integrals: `\sum`, `\prod`, `\int`, `\oint` (compiled to `<m:nary>`)
+- Function names with limits: `\lim` (compiled to `<m:func>` with `<m:limLow>`, because an OMML operator character must be a single character — emitting `lim` as `<m:chr>` produces a replacement glyph in every renderer)
 - Upper and lower limits attached via `_` and `^`:
   ```latex
   \sum_{i=1}^{n} x_i, \quad \int_{0}^{\infty} e^{-x} dx, \quad \lim_{x \to 0} \frac{\sin x}{x}

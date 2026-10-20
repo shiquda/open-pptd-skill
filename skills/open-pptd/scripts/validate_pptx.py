@@ -35,7 +35,7 @@ NAMESPACES = {
 
 # Regex for leaked HTML tags that should have been processed or stripped
 LEAKED_TAG_REGEX = re.compile(
-    r"</?(?:ul|ol|li|a|div|span|p|b|i|u|s|del|strike|font|code|h[1-6]|table|tr|td|th)(?:\s+[^>]*)?>|&(?:lt|gt|amp);",
+    r"</?(?:ul|ol|li|a|div|span|p|b|strong|i|em|u|s|del|strike|font|code|h[1-6]|table|tr|td|th)(?:\s+[^>]*)?>|&(?:lt|gt|amp);",
     re.IGNORECASE,
 )
 
@@ -453,6 +453,18 @@ class PptxValidator:
         """Attempt to render slides to PNG thumbnails via soffice or macOS QuickLook."""
         output_dir = output_dir.expanduser().resolve()
         output_dir.mkdir(parents=True, exist_ok=True)
+        # Clean previous renders to avoid stale slides and double-counting in glob
+        for old in output_dir.glob("slide-*.png"):
+            try:
+                old.unlink()
+            except OSError:
+                pass
+        old_cs = output_dir / "contact-sheet.jpg"
+        if old_cs.is_file():
+            try:
+                old_cs.unlink()
+            except OSError:
+                pass
         rendered: list[Path] = []
 
         # 1. Try LibreOffice / soffice

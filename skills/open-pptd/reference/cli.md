@@ -94,17 +94,85 @@ pptd build deck.pptd -o my_slides.pptx
 Decompiles an existing PowerPoint `.pptx` file into a clean, editable PPTD project.
 
 ```bash
-pptd convert <INPUT_PPTX> <OUTPUT_DIR>
+pptd convert <INPUT_PPTX> <OUTPUT_DIR> [--json] [--fail-on-loss]
 ```
 
 **Arguments:**
 - `<INPUT_PPTX>`: Path to input PowerPoint presentation.
 - `<OUTPUT_DIR>`: Output directory for the generated PPTD project.
 
+**Options:**
+- `--json`: Print the conversion report as JSON (counts, loss list, unsupported constructs) instead of the human-readable summary.
+- `--fail-on-loss`: Exit with code `2` when any lossy mapping is detected. Useful in CI to fail a round-trip that silently downgrades a deck.
+
 **Example:**
 ```bash
 pptd convert input.pptx ./project_dir
+pptd convert input.pptx ./project_dir --json > convert-report.json
+pptd convert input.pptx ./project_dir --fail-on-loss
 ```
+
+#### Loss report
+
+`convert` separates two kinds of downgrade:
+
+- **Unsupported constructs** — an element the PPTD pipeline cannot represent at all (embedded OLE objects, image fills, unknown graphic frames, unsupported media clips). Each is reported with its slide and shape name.
+- **Lossy mappings** — the element survives but one attribute does not. These are aggregated per category, with a count and the first occurrence:
+
+| `--json` category | What is lost | First-occurrence locator |
+|---|---|---|
+| `chart` | Native `<c:chart>` whose part or relationship is missing from the package | slide, shape |
+| `hyperlink` | Run-level `<a:hlinkClick>` that is internal, action-based (`ppaction://…`), or unresolved; also a `<a:endParaRPr>` click marker extending a link over the paragraph mark | slide, shape |
+| `media` | Picture/clip whose extension is outside PNG / JPEG / GIF (pictures) or MP4 / MOV / MP3 / WAV (clips) | slide, shape |
+| `font` | `+mj-lt` / `+mn-lt` alias that the theme cannot resolve, so the run falls back to the default face | slide, shape |
+| `table_cell_margin` | Cell insets that could not be carried into the PPTD model | slide, table |
+| `table_cell_autofit` | `a:normAutofit@fontScale` / `@lnSpcReduction` (the shrink factors PowerPoint applied) | slide, table |
+| `baseline` | Run-level `a:rPr@baseline` with no representation | slide, shape |
+| `space_after` | `a:spcAft` expressed as `spcPct`; only absolute `spcPts` maps to `spaceAfter` / `margin-bottom` | slide, shape |
+| `placeholder` | Slide or layout placeholder with no `<a:xfrm>` and no matching layout placeholder (one aggregated line instead of one per shape) | slide or `layout/master`, shape |
+
+Every category is reported only when it actually occurs; an empty `losses` array means the conversion is lossless for the supported corpus. Layout/master content uses `page: 0` in JSON and `layout/master` in the human summary.
+
+Human-readable output stays compact: one line per category plus a detail line, and no per-shape dump for categories that are already aggregated.
+
+`--json` schema:
+
+```json
+{
+  "input": "deck.pptx",
+  "output_dir": "out",
+  "skipped_unchanged": false,
+  "page_count": 11,
+  "element_count": 342,
+  "media_count": 15,
+  "src_hash": "…",
+  "migrated_sidecars": false,
+  "loss_count": 33,
+  "losses": [
+    {
+      "category": "placeholder",
+      "label": "unresolved placeholder",
+      "detail": "placeholder has no transform and no matching layout entry",
+      "count": 33,
+      "first": { "page": 0, "element": "Date Placeholder 1" }
+    }
+  ],
+  "skipped_count": 33,
+  "unsupported_count": 0,
+  "skipped": [
+    {
+      "page": 0,
+      "element": "Date Placeholder 1",
+      "reason": "placeholder has no a:xfrm and no matching layout placeholder",
+      "category": "placeholder"
+    }
+  ]
+}
+```
+
+`skipped_count` includes entries already aggregated into a loss category; `unsupported_count` counts only the unclassified remainder.
+
+**Exit codes:** `0` = conversion completed (and, without `--fail-on-loss`, losses do not fail the run); `1` = the package could not be read or written; `2` = `--fail-on-loss` was passed and at least one lossy mapping was reported. An unchanged source (`skipped_unchanged: true`) performs no conversion and exits `0`.
 
 ---
 

@@ -36,12 +36,12 @@ use std::path::{Path, PathBuf};
 use xmltree::Element as XmlEl;
 
 use crate::hash;
+use crate::pptd::Chart;
 use crate::pptd::ast::{Page, Presentation};
 use crate::pptd::elements::{
     CellMargin, Element, ElementCommon, GroupDef, GroupXfrm, Icon, Image, Line, Media, Shape,
     ShapeDef, Text, TextAutofit, TextContent, TextDirection,
 };
-use crate::pptd::Chart;
 use crate::pptd::layout::{LayoutDef, PlaceholderDef};
 use crate::pptd::shared::{
     Alignment, Border, Bounds, Color, Fill, FontFamily, GradientFill, GradientType,
@@ -75,12 +75,129 @@ const SEMANTIC_KEYS: [(&str, &str); 12] = [
 /// One unsupported construct that was reported instead of silently dropped.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Skipped {
-    /// One-based slide number.
+    /// One-based slide number; `0` for layout/master content.
     pub page: usize,
     /// Element name from `cNvPr`.
     pub name: String,
     /// Why it could not be represented in PPTD.
     pub reason: String,
+    /// Loss category this skip was also aggregated into (so the CLI can
+    /// report one summary line per category instead of one line per shape).
+    pub loss: Option<LossKind>,
+}
+
+/// A mapping that necessarily loses source information.
+///
+/// Unlike [`Skipped`] (an element the pipeline cannot represent at all),
+/// a loss is a style or attribute that is dropped while the element itself
+/// survives. Each variant names one such mapping; the report aggregates
+/// them so a regression is visible without diffing every `.page` file.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub enum LossKind {
+    /// Native `<c:chart>` whose part could not be carried over.
+    Chart,
+    /// Hyperlink target that cannot be expressed (internal/action links) or
+    /// a paragraph-end click marker with no PPTD representation.
+    Hyperlink,
+    /// Media outside the PNG/JPEG/GIF corpus the builder can package.
+    Media,
+    /// Font face that was replaced by a fallback or dropped by slate merging.
+    Font,
+    /// Table-cell inset reset to the PowerPoint default.
+    TableCellMargin,
+    /// Table-cell autofit scaling (`normAutofit` attributes) dropped.
+    TableCellAutofit,
+    /// Run-level baseline (superscript/subscript) flattened.
+    Baseline,
+    /// Paragraph space-after (`a:spcAft`) dropped, e.g. percentage spacing.
+    SpaceAfter,
+    /// Placeholder with neither `<a:xfrm>` nor a matching layout placeholder.
+    Placeholder,
+}
+
+impl LossKind {
+    /// Stable machine-readable code used by `--json`.
+    pub fn code(self) -> &'static str {
+        match self {
+            LossKind::Chart => "chart",
+            LossKind::Hyperlink => "hyperlink",
+            LossKind::Media => "media",
+            LossKind::Font => "font",
+            LossKind::TableCellMargin => "table_cell_margin",
+            LossKind::TableCellAutofit => "table_cell_autofit",
+            LossKind::Baseline => "baseline",
+            LossKind::SpaceAfter => "space_after",
+            LossKind::Placeholder => "placeholder",
+        }
+    }
+
+    /// Human-readable category name.
+    pub fn label(self) -> &'static str {
+        match self {
+            LossKind::Chart => "native chart",
+            LossKind::Hyperlink => "rich-text hyperlink",
+            LossKind::Media => "unsupported media",
+            LossKind::Font => "font face",
+            LossKind::TableCellMargin => "table cell padding",
+            LossKind::TableCellAutofit => "table cell autofit",
+            LossKind::Baseline => "run baseline",
+            LossKind::SpaceAfter => "paragraph space-after",
+            LossKind::Placeholder => "unresolved placeholder",
+        }
+    }
+
+    /// One-line explanation of what the category means for the rebuilt deck.
+    pub fn detail(self) -> &'static str {
+        match self {
+            LossKind::Chart => "chart part missing from the source package",
+            LossKind::Hyperlink => {
+                "link target is internal/action-based, or the click sits on a paragraph-end marker"
+            }
+            LossKind::Media => "builder packages PNG/JPEG/GIF only; file not copied",
+            LossKind::Font => {
+                "font alias could not be resolved, so the run falls back to the default face"
+            }
+            LossKind::TableCellMargin => "cell insets could not be carried into the PPTD model",
+            LossKind::TableCellAutofit => "normAutofit fontScale/lnSpcReduction has no PPTD field",
+            LossKind::Baseline => "run shift has no representation",
+            LossKind::SpaceAfter => "only absolute spcPts is representable, not spcPct",
+            LossKind::Placeholder => "placeholder has no transform and no matching layout entry",
+        }
+    }
+}
+
+/// Aggregated loss for one [`LossKind`], with the first occurrence as the
+/// locator (`page: 0` means layout/master content).
+#[derive(Debug, Clone, PartialEq)]
+pub struct Loss {
+    pub kind: LossKind,
+    pub count: usize,
+    pub page: usize,
+    pub element: String,
+}
+
+/// Accumulates losses across slides and layouts.
+#[derive(Debug, Default)]
+struct LossTracker {
+    entries: BTreeMap<LossKind, Loss>,
+}
+
+impl LossTracker {
+    fn record(&mut self, kind: LossKind, page: usize, element: &str) {
+        self.entries
+            .entry(kind)
+            .and_modify(|loss| loss.count += 1)
+            .or_insert_with(|| Loss {
+                kind,
+                count: 1,
+                page,
+                element: element.to_string(),
+            });
+    }
+
+    fn into_vec(self) -> Vec<Loss> {
+        self.entries.into_values().collect()
+    }
 }
 
 /// Result of a conversion.
@@ -96,6 +213,9 @@ pub struct ConvertReport {
     pub media_count: usize,
     /// Unsupported constructs (honest failures, never silent).
     pub skipped: Vec<Skipped>,
+    /// Lossy mappings aggregated per [`LossKind`], ordered by category.
+    /// Empty means every supported construct round-tripped losslessly.
+    pub losses: Vec<Loss>,
     /// SHA-256 of the source `.pptx`, also recorded in the `.sync.hash`
     /// sidecar. `None` only when a stored hash matched and nothing was
     /// re-converted (a fresh sync point re-emits the hash anyway).
@@ -152,6 +272,7 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
             element_count: 0,
             media_count: 0,
             skipped: Vec::new(),
+            losses: Vec::new(),
             src_hash: None,
             skipped_unchanged: true,
             migrated_sidecars: migrated,
@@ -203,6 +324,7 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
     let mut media: BTreeMap<String, String> = BTreeMap::new(); // part path -> basename
     let mut pages = Vec::with_capacity(slide_parts.len());
     let mut skipped = Vec::new();
+    let mut losses = LossTracker::default();
     let mut element_count = 0usize;
     // SlideForge layout extension: one `LayoutDef` per source slideLayout,
     // shared by every slide that references it. Decorative shapes,
@@ -262,6 +384,7 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
                 &chart_info,
                 &mut media,
                 &mut skipped,
+                &mut losses,
                 key,
             )?;
             layouts.insert(built.key.clone(), built.def.clone());
@@ -298,6 +421,7 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
                         &chart_info,
                         &mut media,
                         &mut skipped,
+                        &mut losses,
                         key,
                     )?;
                     layouts.insert(built.key.clone(), built.def.clone());
@@ -337,6 +461,7 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
             used_ids: BTreeSet::new(),
             media: &mut media,
             skipped: &mut skipped,
+            losses: &mut losses,
             charts: &chart_info,
             fallback_bg: lfbg,
             layout_key: layout_field.clone(),
@@ -423,6 +548,7 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
         element_count,
         media_count,
         skipped,
+        losses: losses.into_vec(),
         src_hash: Some(src_hash),
         skipped_unchanged: false,
         migrated_sidecars: migrated,
@@ -498,6 +624,7 @@ struct PageCtx<'a> {
     used_ids: BTreeSet<String>,
     media: &'a mut BTreeMap<String, String>,
     skipped: &'a mut Vec<Skipped>,
+    losses: &'a mut LossTracker,
     /// Source-package chart parts (`ppt/charts/chartN.xml`) → info.
     charts: &'a HashMap<String, ChartInfo>,
     fallback_bg: Option<Fill>,
@@ -523,6 +650,25 @@ impl<'a> PageCtx<'a> {
             page: self.page_no,
             name: name.to_string(),
             reason: reason.into(),
+            loss: None,
+        });
+    }
+
+    /// Record a lossy mapping (element survives, one attribute does not).
+    fn loss(&mut self, kind: LossKind, name: &str) {
+        self.losses.record(kind, self.page_no, name);
+    }
+
+    /// Record a construct that is both dropped and aggregated into the
+    /// loss report, so the CLI prints one summary line for the category
+    /// instead of one line per shape.
+    fn skip_loss(&mut self, name: &str, reason: impl Into<String>, kind: LossKind) {
+        self.losses.record(kind, self.page_no, name);
+        self.skipped.push(Skipped {
+            page: self.page_no,
+            name: name.to_string(),
+            reason: reason.into(),
+            loss: Some(kind),
         });
     }
 
@@ -1174,6 +1320,7 @@ fn build_layout(
     charts: &HashMap<String, ChartInfo>,
     media: &mut BTreeMap<String, String>,
     skipped: &mut Vec<Skipped>,
+    losses: &mut LossTracker,
     key: String,
 ) -> Result<LayoutBuild> {
     // Per-layout defaults/fonts/bg from the layout's master (same chain the
@@ -1206,6 +1353,7 @@ fn build_layout(
             used_ids: BTreeSet::new(),
             media,
             skipped,
+            losses,
             charts,
             fallback_bg: fallback_bg.clone(),
             layout_key: None,
@@ -1990,14 +2138,15 @@ fn map_sp(
             (proto.xfrm, proto.prst)
         }
         (None, None) => {
-            ctx.skip(
-                &name,
-                if ph.is_some() {
-                    "placeholder has no a:xfrm and no matching layout placeholder"
-                } else {
-                    "shape has no a:xfrm"
-                },
-            );
+            if ph.is_some() {
+                ctx.skip_loss(
+                    &name,
+                    "placeholder has no a:xfrm and no matching layout placeholder",
+                    LossKind::Placeholder,
+                );
+            } else {
+                ctx.skip(&name, "shape has no a:xfrm");
+            }
             return Ok(None);
         }
     };
@@ -2831,13 +2980,14 @@ fn map_chart(
         .and_then(|d| first(d, "chart"))
         .and_then(|c| attr(c, "id"));
     let Some(part) = rid.and_then(|r| rels.get(r)) else {
-        ctx.skip(&name, "chart without a resolvable r:id");
+        ctx.skip_loss(&name, "chart without a resolvable r:id", LossKind::Chart);
         return None;
     };
     let Some(info) = ctx.charts.get(part) else {
-        ctx.skip(
+        ctx.skip_loss(
             &name,
             format!("chart part `{part}` is missing from the package"),
+            LossKind::Chart,
         );
         return None;
     };
@@ -2970,9 +3120,16 @@ fn map_table(
                 };
                 (margin != CellMargin::POWERPOINT_DEFAULT).then_some(margin)
             });
-            let cell_autofit = first(tc, "txBody")
-                .and_then(|t| first(t, "bodyPr"))
-                .and_then(|b| body_pr_autofit(Some(b)));
+            let cell_body_pr = first(tc, "txBody").and_then(|t| first(t, "bodyPr"));
+            let cell_autofit = cell_body_pr.and_then(|b| body_pr_autofit(Some(b)));
+            // `Cell.autofit` carries the mode only. `normAutofit` also stores
+            // the shrink factors PowerPoint applied at layout time; those
+            // have no PPTD field, so the rebuilt cell reflows at 100%.
+            if let Some(scale) = cell_body_pr.and_then(|b| first(b, "normAutofit")) {
+                if attr(scale, "fontScale").is_some() || attr(scale, "lnSpcReduction").is_some() {
+                    ctx.loss(LossKind::TableCellAutofit, &name);
+                }
+            }
             row.push(crate::pptd::elements::Cell {
                 text: content.as_ref().map(|c| c.text.clone()),
                 text_style: None,
@@ -3051,9 +3208,10 @@ fn map_pic(
         Some(target) => {
             let ext = target.rsplit('.').next().unwrap_or("").to_ascii_lowercase();
             if !matches!(ext.as_str(), "png" | "jpg" | "jpeg" | "gif") {
-                ctx.skip(
+                ctx.skip_loss(
                     &name,
                     format!("media extension .{ext} is not supported by the builder"),
+                    LossKind::Media,
                 );
                 return None;
             }
@@ -3136,9 +3294,10 @@ fn map_media(
         ext.as_str(),
         "mp4" | "m4v" | "mov" | "mp3" | "m4a" | "wav" | "wma"
     ) {
-        ctx.skip(
+        ctx.skip_loss(
             &name,
             format!("media clip extension .{ext} is not supported"),
+            LossKind::Media,
         );
         return None;
     }
@@ -3546,7 +3705,7 @@ fn text_content(
     rels: &BTreeMap<String, String>,
     slots: &SlotColors,
     ctx: &mut PageCtx<'_>,
-    _name: &str,
+    name: &str,
     hoist_space_after: bool,
 ) -> Option<TextContent> {
     let body_pr = first(tx_body, "bodyPr");
@@ -3688,13 +3847,18 @@ fn text_content(
             // Placeholder paragraphs inherit the master/layout `lnSpc`
             // when their own `<a:pPr>` carries none (OOXML chain).
             .or(ctx.para_line_spacing);
-        let sa = p_pr
-            .and_then(|pp| first(pp, "spcAft"))
+        let spc_aft = p_pr.and_then(|pp| first(pp, "spcAft"));
+        let sa = spc_aft
             .and_then(|a| first(a, "spcPts"))
             .and_then(|s| attr(s, "val"))
             .and_then(|v| v.parse::<f64>().ok())
             .map(|v| v / 100.0) // spcPts is in hundredths of a point
             .filter(|v| *v > 0.0);
+        // PPTD's `spaceAfter` / `margin-bottom` are absolute; a percentage
+        // `spcPct` cannot be expressed and would silently disappear.
+        if sa.is_none() && spc_aft.and_then(|a| first(a, "spcPct")).is_some() {
+            ctx.loss(LossKind::SpaceAfter, name);
+        }
         let mt = p_pr
             .and_then(|pp| first(pp, "spcBef"))
             .and_then(|b| first(b, "spcPts"))
@@ -3714,12 +3878,20 @@ fn text_content(
                         .unwrap_or_default();
                     let rpr = first(child, "rPr");
                     let st = RunStyle::from_rpr(rpr, slots, &para_defaults, &ctx.fonts);
+                    if run_font_lossy(rpr, &para_defaults, &ctx.fonts) {
+                        ctx.loss(LossKind::Font, name);
+                    }
                     // `<a:rPr><a:hlinkClick r:id="…"/></a:rPr>` → external
                     // target from the slide/layout rels (verbatim URL).
-                    let link = rpr
-                        .and_then(|r| first(r, "hlinkClick"))
+                    let click = rpr.and_then(|r| first(r, "hlinkClick"));
+                    let link = click
                         .and_then(|h| attr(h, "id"))
                         .and_then(|rid| external_target(rels, rid));
+                    // A click element without an external target is an
+                    // internal slide jump / action; PPTD only models URLs.
+                    if click.is_some() && link.is_none() {
+                        ctx.loss(LossKind::Hyperlink, name);
+                    }
                     runs.push((st, t, link));
                 }
                 "br" => runs.push((None, "\n".into(), None)),
@@ -3769,6 +3941,13 @@ fn text_content(
                 }
                 _ => {}
             }
+        }
+        // `<a:endParaRPr><a:hlinkClick/></a:endParaRPr>` extends a link over
+        // the paragraph mark. It carries no text and PPTD has no slot for
+        // paragraph-end run properties, so the marker (and a clickable
+        // trailing space) is lost.
+        if first(p, "endParaRPr").is_some_and(|mark| first(mark, "hlinkClick").is_some()) {
+            ctx.loss(LossKind::Hyperlink, name);
         }
         // An empty paragraph (no runs) still renders as an empty line in
         // OOXML — it spaces the following paragraphs apart.
@@ -4010,6 +4189,28 @@ fn text_content(
     })
 }
 
+/// True when a run declares a Latin face the PPTD run model cannot carry.
+///
+/// Explicit typefaces pass through verbatim (`safeFonts` is off for
+/// converted projects). The one remaining loss is an unresolved theme alias
+/// such as `+mn-lt` when the theme declares no minor Latin face: the rebuilt
+/// run then falls back to the consumer's default font.
+fn run_font_lossy(rpr: Option<&XmlEl>, defaults: &MasterDefaults, fonts: &ThemeFonts) -> bool {
+    let Some(rpr) = rpr else {
+        return false;
+    };
+    let explicit = |tag: &str| {
+        first(rpr, tag)
+            .and_then(|e| attr(e, "typeface"))
+            .filter(|s| !s.is_empty())
+    };
+    let Some(tf) = explicit("latin").or(defaults.latin_typeface.as_deref()) else {
+        return false;
+    };
+    // A concrete face is copied through; only aliases need resolution.
+    tf.starts_with('+') && resolve_typeface(tf, fonts).is_none()
+}
+
 /// First run's text properties (others are compared for the flattening warn).
 #[derive(Debug, Clone, PartialEq)]
 struct RunStyle {
@@ -4168,6 +4369,7 @@ mod tests {
         slots: &'a SlotColors,
         media: &'a mut BTreeMap<String, String>,
         skipped: &'a mut Vec<Skipped>,
+        losses: &'a mut LossTracker,
         charts: &'a HashMap<String, ChartInfo>,
     ) -> PageCtx<'a> {
         PageCtx {
@@ -4183,6 +4385,7 @@ mod tests {
             used_ids: BTreeSet::new(),
             media,
             skipped,
+            losses,
             charts,
             fallback_bg: None,
             layout_key: None,
@@ -4206,14 +4409,17 @@ mod tests {
         let slots = SlotColors::new();
         let mut media = BTreeMap::new();
         let mut skipped = Vec::new();
+        let mut losses = LossTracker::default();
         let charts = HashMap::new();
-        let rels = BTreeMap::from([("rId1".to_string(), "https://arxiv.org/abs/2605.27223".to_string())]);
-        let mut ctx = page_ctx(&slots, &mut media, &mut skipped, &charts);
-        let content = text_content(&tx_body, &rels, &slots, &mut ctx, "t", true)
-            .expect("box has text");
+        let rels = BTreeMap::from([(
+            "rId1".to_string(),
+            "https://arxiv.org/abs/2605.27223".to_string(),
+        )]);
+        let mut ctx = page_ctx(&slots, &mut media, &mut skipped, &mut losses, &charts);
+        let content =
+            text_content(&tx_body, &rels, &slots, &mut ctx, "t", true).expect("box has text");
         assert!(
-            content.text.contains("Intro<span")
-                && content.text.contains("> </span><a href"),
+            content.text.contains("Intro<span") && content.text.contains("> </span><a href"),
             "spacer run lost: {}",
             content.text
         );
@@ -4222,7 +4428,7 @@ mod tests {
         let tx_body = parse(
             r#"<txBody xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:p><a:r><a:t xml:space="preserve">  padded label  </a:t></a:r></a:p></txBody>"#,
         );
-        let mut ctx = page_ctx(&slots, &mut media, &mut skipped, &charts);
+        let mut ctx = page_ctx(&slots, &mut media, &mut skipped, &mut losses, &charts);
         let content = text_content(&tx_body, &BTreeMap::new(), &slots, &mut ctx, "t", true)
             .expect("box has text");
         assert!(
@@ -4240,8 +4446,9 @@ mod tests {
         let slots = SlotColors::new();
         let mut media = BTreeMap::new();
         let mut skipped = Vec::new();
+        let mut losses = LossTracker::default();
         let charts = HashMap::new();
-        let mut ctx = page_ctx(&slots, &mut media, &mut skipped, &charts);
+        let mut ctx = page_ctx(&slots, &mut media, &mut skipped, &mut losses, &charts);
         let content = text_content(&tx_body, &BTreeMap::new(), &slots, &mut ctx, "t", true)
             .expect("box has text");
         let inner = content

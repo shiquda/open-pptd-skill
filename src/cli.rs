@@ -63,6 +63,13 @@ pub enum Command {
         file: PathBuf,
         /// Output directory for the PPTD project (created if missing).
         output: PathBuf,
+        /// Emit a machine-readable report (counts, loss list, unsupported
+        /// constructs) as JSON on stdout.
+        #[arg(long)]
+        json: bool,
+        /// Exit with code 2 when the conversion loses any source information.
+        #[arg(long = "fail-on-loss")]
+        fail_on_loss: bool,
     },
 }
 
@@ -73,65 +80,167 @@ impl Cli {
             Command::Check { file } => run_check(&file),
             Command::Dump { file } => run_dump(&file),
             Command::Build { file, output, force } => run_build(&file, output.as_deref(), force),
-            Command::Convert { file, output } => run_convert(&file, &output),
+            Command::Convert {
+                file,
+                output,
+                json,
+                fail_on_loss,
+            } => run_convert(&file, &output, json, fail_on_loss),
         }
     }
 }
 
-fn run_convert(input: &Path, out_dir: &Path) -> i32 {
-    match pptx::import::convert_pptx_to_pptd(input, out_dir) {
-        Ok(report) => {
-            if report.skipped_unchanged {
-                println!(
-                    "unchanged → skipped convert ({} already in sync with {})",
-                    out_dir.join("deck.pptd").display(),
-                    input.display()
-                );
-                println!("  hint: the existing PPTD reflects this exact .pptx; edit it directly.");
-                if report.migrated_sidecars {
-                    println!("  note: legacy .src.hash/.build.hash records migrated to .sync.hash");
-                }
-                return 0;
-            }
-            println!(
-                "converted {} → {}",
-                input.display(),
-                out_dir.join("deck.pptd").display()
-            );
-            println!(
-                "  {} page(s), {} element(s), {} media file(s)",
-                report.page_count, report.element_count, report.media_count
-            );
-            if report.skipped.is_empty() {
-                println!("  no unsupported constructs");
-            } else {
-                let mut by_reason = BTreeMap::<String, usize>::new();
-                for skip in &report.skipped {
-                    *by_reason.entry(skip.reason.clone()).or_default() += 1;
-                    eprintln!(
-                        "  skipped: page {} `{}` — {}",
-                        skip.page, skip.name, skip.reason
-                    );
-                }
-                let total: usize = report.skipped.len();
-                println!("  {total} unsupported construct(s):");
-                for (reason, count) in &by_reason {
-                    println!("    - {count}x {reason}");
-                }
-            }
-            if let Some(hash) = &report.src_hash {
-                println!("  sync point recorded: {} = {hash}", input.display());
-            }
-            if report.migrated_sidecars {
-                println!("  note: legacy .src.hash/.build.hash records migrated to .sync.hash");
-            }
-            0
-        }
+/// Human-readable location for a loss: `page 0` is layout/master content.
+fn loss_location(page: usize) -> String {
+    if page == 0 {
+        "layout/master".to_string()
+    } else {
+        format!("page {page}")
+    }
+}
+
+fn run_convert(input: &Path, out_dir: &Path, json: bool, fail_on_loss: bool) -> i32 {
+    let report = match pptx::import::convert_pptx_to_pptd(input, out_dir) {
+        Ok(report) => report,
         Err(err) => {
             eprintln!("error: {err}");
-            1
+            return 1;
+        }
+    };
+
+    let loss_total: usize = report.losses.iter().map(|loss| loss.count).sum();
+    if json {
+        let losses: Vec<_> = report
+            .losses
+            .iter()
+            .map(|loss| {
+                serde_json::json!({
+                    "category": loss.kind.code(),
+                    "label": loss.kind.label(),
+                    "detail": loss.kind.detail(),
+                    "count": loss.count,
+                    "first": {
+                        "page": loss.page,
+                        "element": loss.element,
+                    },
+                })
+            })
+            .collect();
+        let skipped: Vec<_> = report
+            .skipped
+            .iter()
+            .map(|skip| {
+                serde_json::json!({
+                    "page": skip.page,
+                    "element": skip.name,
+                    "reason": skip.reason,
+                    "category": skip.loss.map(|kind| kind.code()),
+                })
+            })
+            .collect();
+        let payload = serde_json::json!({
+            "input": input.display().to_string(),
+            "output_dir": report.output_dir.display().to_string(),
+            "skipped_unchanged": report.skipped_unchanged,
+            "page_count": report.page_count,
+            "element_count": report.element_count,
+            "media_count": report.media_count,
+            "src_hash": report.src_hash,
+            "migrated_sidecars": report.migrated_sidecars,
+            "loss_count": loss_total,
+            "losses": losses,
+            "skipped_count": report.skipped.len(),
+            "unsupported_count": report.skipped.len() - report.skipped.iter().filter(|s| s.loss.is_some()).count(),
+            "skipped": skipped,
+        });
+        println!(
+            "{}",
+            serde_json::to_string_pretty(&payload).expect("JSON report")
+        );
+        if fail_on_loss && !report.skipped_unchanged && loss_total > 0 {
+            return 2;
+        }
+        return 0;
+    }
+
+    if report.skipped_unchanged {
+        println!(
+            "unchanged → skipped convert ({} already in sync with {})",
+            out_dir.join("deck.pptd").display(),
+            input.display()
+        );
+        println!("  hint: the existing PPTD reflects this exact .pptx; edit it directly.");
+        if report.migrated_sidecars {
+            println!("  note: legacy .src.hash/.build.hash records migrated to .sync.hash");
+        }
+        return 0;
+    }
+    println!(
+        "converted {} → {}",
+        input.display(),
+        out_dir.join("deck.pptd").display()
+    );
+    println!(
+        "  {} page(s), {} element(s), {} media file(s)",
+        report.page_count, report.element_count, report.media_count
+    );
+    if report.losses.is_empty() {
+        println!("  loss report: no lossy mappings");
+    } else {
+        println!(
+            "  loss report: {loss_total} item(s) in {} category(ies)",
+            report.losses.len()
+        );
+        for loss in &report.losses {
+            println!(
+                "    - {} ({}): {}× (first: {} `{}`)",
+                loss.kind.label(),
+                loss.kind.code(),
+                loss.count,
+                loss_location(loss.page),
+                loss.element
+            );
+            println!("      {}", loss.kind.detail());
         }
     }
+    // Skips already aggregated into a loss category are printed once above;
+    // only unclassified unsupported constructs need their own section.
+    let detailed: Vec<_> = report
+        .skipped
+        .iter()
+        .filter(|skip| skip.loss.is_none())
+        .collect();
+    if detailed.is_empty() {
+        println!("  unsupported constructs: none");
+    } else {
+        let mut by_reason = BTreeMap::<String, usize>::new();
+        for skip in &detailed {
+            *by_reason.entry(skip.reason.clone()).or_default() += 1;
+            eprintln!(
+                "  skipped: {} `{}` — {}",
+                loss_location(skip.page),
+                skip.name,
+                skip.reason
+            );
+        }
+        println!("  {} unsupported construct(s):", detailed.len());
+        for (reason, count) in &by_reason {
+            println!("    - {count}x {reason}");
+        }
+    }
+    if let Some(hash) = &report.src_hash {
+        println!("  sync point recorded: {} = {hash}", input.display());
+    }
+    if report.migrated_sidecars {
+        println!("  note: legacy .src.hash/.build.hash records migrated to .sync.hash");
+    }
+    if fail_on_loss && loss_total > 0 {
+        eprintln!(
+            "error: conversion lost source information ({loss_total} item(s)); see the loss report"
+        );
+        return 2;
+    }
+    0
 }
 
 fn run_check(entry: &Path) -> i32 {

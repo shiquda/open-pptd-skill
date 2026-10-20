@@ -245,11 +245,45 @@ fn read_part(path: &std::path::Path, name: &str) -> String {
 fn read_part_bytes(path: &std::path::Path, name: &str) -> Vec<u8> {
     let mut zip = zip::ZipArchive::new(fs::File::open(path).unwrap()).unwrap();
     let mut data = Vec::new();
-    zip.by_name(name)
-        .unwrap()
-        .read_to_end(&mut data)
-        .unwrap();
+    zip.by_name(name).unwrap().read_to_end(&mut data).unwrap();
     data
+}
+
+/// Rewrite parts of an existing package and append new ones, keeping every
+/// other member byte-identical. Used to inject constructs the forward writer
+/// cannot produce.
+fn rewrite_pptx(path: &std::path::Path, replace: &[(&str, String)], add: &[(&str, &[u8])]) {
+    use std::io::Write as _;
+
+    let file = fs::File::open(path).unwrap();
+    let mut archive = zip::ZipArchive::new(file).unwrap();
+    let mut buf = std::io::Cursor::new(Vec::new());
+    {
+        let mut writer = zip::ZipWriter::new(&mut buf);
+        for i in 0..archive.len() {
+            let mut entry = archive.by_index(i).unwrap();
+            let name = entry.name().to_string();
+            let mut data = Vec::new();
+            entry.read_to_end(&mut data).unwrap();
+            let content = replace
+                .iter()
+                .find(|(part, _)| *part == name)
+                .map(|(_, text)| text.as_bytes())
+                .unwrap_or(&data);
+            writer
+                .start_file(name, zip::write::SimpleFileOptions::default())
+                .unwrap();
+            writer.write_all(content).unwrap();
+        }
+        for (name, data) in add {
+            writer
+                .start_file(*name, zip::write::SimpleFileOptions::default())
+                .unwrap();
+            writer.write_all(data).unwrap();
+        }
+        writer.finish().unwrap();
+    }
+    fs::write(path, buf.into_inner()).unwrap();
 }
 
 #[test]
@@ -294,7 +328,12 @@ elements:
     );
 
     let converted = work.join("converted");
-    pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    let report = pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    assert!(
+        !report.losses.iter().any(|l| l.kind.code() == "hyperlink"),
+        "external run links are preserved, not lost: {:?}",
+        report.losses
+    );
     let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
     let text = match &decompiled.pages[0].elements[0] {
         pptd::Element::Text(t) => &t.content.text,
@@ -381,8 +420,7 @@ fn chart_parts_roundtrip_through_convert() {
     assert!(slide.contains("r:id=\"rId2\""), "{slide}");
     let slide_rels = read_part(&first, "ppt/slides/_rels/slide1.xml.rels");
     assert!(
-        slide_rels.contains("relationships/chart")
-            && slide_rels.contains("../charts/chart1.xml"),
+        slide_rels.contains("relationships/chart") && slide_rels.contains("../charts/chart1.xml"),
         "{slide_rels}"
     );
     let chart_rels = read_part(&first, "ppt/charts/_rels/chart1.xml.rels");
@@ -535,7 +573,14 @@ elements:
 
     // Import direction: the converted AST carries both attributes.
     let converted = work.join("converted");
-    pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    let report = pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    for category in ["table_cell_margin", "table_cell_autofit"] {
+        assert!(
+            !report.losses.iter().any(|l| l.kind.code() == category),
+            "{category} is representable and must not be reported: {:?}",
+            report.losses
+        );
+    }
     let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
     let table = decompiled.pages[0]
         .elements
@@ -669,7 +714,9 @@ fn richtext_baseline_roundtrips_exactly() {
 
     let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
     let first = work.join("first.pptx");
-    pptx::writer::PptxWriter::new(&project).build(&first).unwrap();
+    pptx::writer::PptxWriter::new(&project)
+        .build(&first)
+        .unwrap();
     let first_xml = read_part(&first, "ppt/slides/slide1.xml");
     assert_eq!(
         first_xml.matches("baseline=\"30000\"").count(),
@@ -688,7 +735,12 @@ fn richtext_baseline_roundtrips_exactly() {
     );
 
     let converted = work.join("converted");
-    pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    let report = pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    assert!(
+        !report.losses.iter().any(|l| l.kind.code() == "baseline"),
+        "run baselines are preserved, not lost: {:?}",
+        report.losses
+    );
     let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
     let decompiled_text = match &decompiled.pages[0].elements[0] {
         pptd::Element::Text(t) => t.content.text.clone(),
@@ -759,7 +811,9 @@ fn whitespace_only_runs_roundtrip_through_convert_and_build() {
 
     let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
     let first = work.join("first.pptx");
-    pptx::writer::PptxWriter::new(&project).build(&first).unwrap();
+    pptx::writer::PptxWriter::new(&project)
+        .build(&first)
+        .unwrap();
     let first_xml = read_part(&first, "ppt/slides/slide1.xml");
     let intro_at = first_xml.find("<a:t>Intro</a:t>").expect(&first_xml);
     let spacer_at = first_xml
@@ -852,7 +906,9 @@ fn space_after_roundtrips_in_boxes_and_cells() {
 
     let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
     let first = work.join("first.pptx");
-    pptx::writer::PptxWriter::new(&project).build(&first).unwrap();
+    pptx::writer::PptxWriter::new(&project)
+        .build(&first)
+        .unwrap();
     let first_xml = read_part(&first, "ppt/slides/slide1.xml");
     // uniform: 2 paragraphs, mixed: 1, cell: 1.
     assert_eq!(
@@ -866,7 +922,12 @@ fn space_after_roundtrips_in_boxes_and_cells() {
     );
 
     let converted = work.join("converted");
-    pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    let report = pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    assert!(
+        !report.losses.iter().any(|l| l.kind.code() == "space_after"),
+        "absolute paragraph space-after is preserved: {:?}",
+        report.losses
+    );
     let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
     let uniform = decompiled.pages[0]
         .elements
@@ -919,12 +980,11 @@ fn space_after_roundtrips_in_boxes_and_cells() {
         .build(&second)
         .unwrap();
     let second_xml = read_part(&second, "ppt/slides/slide1.xml");
-    assert_eq!(
-        second_xml.matches("<a:spcAft>").count(),
-        4,
+    assert_eq!(second_xml.matches("<a:spcAft>").count(), 4, "{second_xml}");
+    assert!(
+        second_xml.contains(r#"<a:spcPts val="700"/>"#),
         "{second_xml}"
     );
-    assert!(second_xml.contains(r#"<a:spcPts val="700"/>"#), "{second_xml}");
 
     let _ = fs::remove_dir_all(&work);
 }
@@ -955,7 +1015,9 @@ fn math_fallback_and_rich_baseline_stay_separate() {
 
     let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
     let first = work.join("first.pptx");
-    pptx::writer::PptxWriter::new(&project).build(&first).unwrap();
+    pptx::writer::PptxWriter::new(&project)
+        .build(&first)
+        .unwrap();
     let first_xml = read_part(&first, "ppt/slides/slide1.xml");
     // One raised fallback segment for `x^2` plus the explicit `<sup>` run.
     assert_eq!(
@@ -1007,6 +1069,178 @@ fn math_fallback_and_rich_baseline_stay_separate() {
         2,
         "round-trip must not duplicate or drop either shift: {second_xml}"
     );
+
+    let _ = fs::remove_dir_all(&work);
+}
+
+/// Converting a built fixture deck must report no losses at all. This is
+/// the regression contract for DEV-583's four official samples: every
+/// construct the forward writer emits survives the reverse pass.
+#[test]
+fn fixture_decks_convert_without_losses() {
+    let work = temp_dir("loss-clean");
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
+    // `chart` and `demo` use the declarative chart form that `build` rejects;
+    // native chart parts are exercised by `chart_parts_roundtrip_verbatim`.
+    for name in ["buildable", "tables", "gif"] {
+        let dir = root.join(name);
+        let entry = dir.join(format!("{name}.pptd"));
+        let project = pptd::load_project(&entry).unwrap();
+        let first = work.join(format!("{name}.pptx"));
+        pptx::writer::PptxWriter::new(&project)
+            .build(&first)
+            .unwrap();
+
+        let converted = work.join(format!("{name}-converted"));
+        let report = pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+        assert!(
+            report.losses.is_empty(),
+            "{name}: unexpected lossy mappings: {:?}",
+            report.losses
+        );
+    }
+    let _ = fs::remove_dir_all(&work);
+}
+
+/// Every loss category that an arbitrary deck can trigger must appear in the
+/// aggregated report, and `--fail-on-loss` must turn it into exit code 2.
+#[test]
+fn loss_report_catches_dropped_mappings() {
+    use clap::Parser as _;
+    use open_pptd::cli::Cli;
+
+    let work = temp_dir("loss-report");
+    let fixture =
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/buildable/buildable.pptd");
+    let project = pptd::load_project(&fixture).unwrap();
+    let first = work.join("first.pptx");
+    pptx::writer::PptxWriter::new(&project)
+        .build(&first)
+        .unwrap();
+
+    let mut slide = read_part(&first, "ppt/slides/slide1.xml");
+    // Internal link: `<a:hlinkClick>` resolves to a slide, not a URL.
+    slide = slide.replacen("</a:rPr>", "<a:hlinkClick r:id=\"rId99\"/></a:rPr>", 1);
+    // Percentage space-after has no absolute PT equivalent.
+    slide = slide.replacen(
+        "<a:pPr algn=\"ctr\">",
+        "<a:pPr algn=\"ctr\"><a:spcAft><a:spcPct val=\"20000\"/></a:spcAft>",
+        1,
+    );
+    // A slide placeholder with no transform and no layout peer; a table cell
+    // whose `normAutofit` shrink factors cannot be represented; a chart
+    // whose part relationship is missing; and an unsupported .bmp picture.
+    let injected = r#"
+      <p:sp>
+        <p:nvSpPr>
+          <p:cNvPr id="90" name="orphan-placeholder"/>
+          <p:cNvSpPr/>
+          <p:nvPr><p:ph type="body" idx="9"/></p:nvPr>
+        </p:nvSpPr>
+        <p:spPr/>
+        <p:txBody><a:bodyPr/><a:p/></p:txBody>
+      </p:sp>
+      <p:graphicFrame>
+        <p:nvGraphicFramePr>
+          <p:cNvPr id="91" name="scaled-table"/>
+          <p:cNvGraphicFramePr/>
+          <p:nvPr/>
+        </p:nvGraphicFramePr>
+        <p:xfrm><a:off x="0" y="0"/><a:ext cx="100000" cy="100000"/></p:xfrm>
+        <a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/table">
+          <a:tbl>
+            <a:tblGrid><a:gridCol w="100000"/></a:tblGrid>
+            <a:tr h="100000"><a:tc>
+              <a:txBody><a:bodyPr><a:normAutofit fontScale="90000" lnSpcReduction="20000"/></a:bodyPr><a:p><a:r><a:t>cell</a:t></a:r></a:p></a:txBody>
+              <a:tcPr/>
+            </a:tc></a:tr>
+          </a:tbl>
+        </a:graphicData></a:graphic>
+      </p:graphicFrame>
+      <p:graphicFrame>
+        <p:nvGraphicFramePr>
+          <p:cNvPr id="92" name="orphan-chart"/>
+          <p:cNvGraphicFramePr/>
+          <p:nvPr/>
+        </p:nvGraphicFramePr>
+        <p:xfrm><a:off x="0" y="0"/><a:ext cx="100000" cy="100000"/></p:xfrm>
+        <a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/chart">
+          <c:chart xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" r:id="rId97"/>
+        </a:graphicData></a:graphic>
+      </p:graphicFrame>
+      <p:pic>
+        <p:nvPicPr>
+          <p:cNvPr id="93" name="bitmap-picture"/>
+          <p:cNvPicPr/>
+          <p:nvPr/>
+        </p:nvPicPr>
+        <p:blipFill><a:blip r:embed="rId98"/><a:stretch><a:fillRect/></a:stretch></p:blipFill>
+        <p:spPr>
+          <a:xfrm><a:off x="0" y="0"/><a:ext cx="100000" cy="100000"/></a:xfrm>
+          <a:prstGeom prst="rect"><a:avLst/></a:prstGeom>
+        </p:spPr>
+      </p:pic>
+    </p:spTree>"#;
+    slide = slide.replacen("</p:spTree>", injected, 1);
+    let rels = read_part(&first, "ppt/slides/_rels/slide1.xml.rels").replace(
+        "</Relationships>",
+        concat!(
+            r#"  <Relationship Id="rId98" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image9.bmp"/>"#,
+            "\n",
+            r#"  <Relationship Id="rId99" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="../slides/slide1.xml"/>"#,
+            "\n</Relationships>"
+        ),
+    );
+    rewrite_pptx(
+        &first,
+        &[
+            ("ppt/slides/slide1.xml", slide),
+            ("ppt/slides/_rels/slide1.xml.rels", rels),
+        ],
+        &[("ppt/media/image9.bmp", b"BM not really a bitmap")],
+    );
+
+    let converted = work.join("converted");
+    let report = pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    let counts: std::collections::BTreeMap<&str, usize> = report
+        .losses
+        .iter()
+        .map(|loss| (loss.kind.code(), loss.count))
+        .collect();
+    for category in [
+        "hyperlink",
+        "space_after",
+        "table_cell_autofit",
+        "placeholder",
+        "chart",
+        "media",
+    ] {
+        assert_eq!(
+            counts.get(category),
+            Some(&1),
+            "{category} missing from {:?}",
+            report.losses
+        );
+    }
+    // These two are preserved by the model and must never be reported here.
+    assert!(!counts.contains_key("baseline"), "{:?}", report.losses);
+    assert!(
+        !counts.contains_key("table_cell_margin"),
+        "{:?}",
+        report.losses
+    );
+    assert_eq!(report.losses.len(), 6);
+
+    let cli_out = work.join("cli-out");
+    let code = Cli::parse_from([
+        "pptd",
+        "convert",
+        &first.to_string_lossy(),
+        &cli_out.to_string_lossy(),
+        "--fail-on-loss",
+    ])
+    .run();
+    assert_eq!(code, 2, "losses must fail the conversion");
 
     let _ = fs::remove_dir_all(&work);
 }

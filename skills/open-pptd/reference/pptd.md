@@ -2091,3 +2091,16 @@ animations:
 `path` is an SVG path string. Path coordinates are offsets relative to the element's current position, measured in page px. The path must start with `M 0 0`, contain only one subpath, and may use `L` (line), `Q` / `C` (curves), and `Z` (close). For example, `M 0 0 L 200 -100` moves the element 200px to the right and 100px upward.
 
 The same element may define multiple animations in array order. Keep each page to 1–3 animation groups when possible, prefer simple effects such as fade, fly, and zoom, and avoid applying multiple emphasis effects to the same element in succession.
+
+---
+
+## 7. Round-trip Loss Report (`pptd convert`)
+
+PPTX → PPTD is lossless for the supported corpus, but not for every construct PowerPoint can author. `pptd convert` therefore finishes with a structured report instead of failing silently. Two sections matter:
+
+- **Unsupported constructs** — the element itself cannot be represented (embedded OLE objects, image fills on shapes, unknown graphic frames, unsupported media clips). Reported per shape with slide number and name.
+- **Lossy mappings** — the element is kept but one attribute is dropped. Aggregated per category with a count and the first occurrence. Categories: native chart, rich-text hyperlink, unsupported media, font face, table cell padding, table cell autofit, run baseline, paragraph space-after, unresolved placeholder.
+
+The report describes the *actual* converter, not a wish list: after the hyperlink/font/chart/table/baseline/GIF fixes, a converted official sample normally reports only the placeholder category (layout footer/date placeholders that carry no transform), plus paragraph-end link markers on decks that write `<a:endParaRPr><a:hlinkClick>` (no text is affected, but the clickable trailing space is not modeled). Every `pptd build`-produced fixture deck reports **no lossy mappings**.
+
+`--json` emits the machine-readable form (`losses[]` with `category`, `count`, `first`, plus `skipped[]`); `--fail-on-loss` exits with code `2` when any loss exists, which is the intended CI gate. Human-readable output stays compact: one line per category, no per-shape dump for aggregated categories. See `cli.md` for the exact schema and exit codes.

@@ -80,6 +80,9 @@ python3 <SKILL_DIR>/scripts/validate_pptx.py <output.pptx> --render-images
    - **如何解决**：若确认需要以 PPTD 源码强制覆盖，在命令中追加 `--force`（或 `-f`）参数即可：`pptd build deck.pptd -o presentation.pptx --force`
 2. **跳过未变更的 Convert**：
    - 执行 `pptd convert presentation.pptx output_dir/` 时，若源 PPTX 的 SHA-256 与上次记录一致，编译器将自动输出 `unchanged → skipped convert` 并跳过，保护本地已有的 PPTD 源码不被重复覆写。
+3. **丢失清单 (Loss Report)**：
+   - `pptd convert` 结束时会汇总本次回编损失的属性（图表部件、run 级超链接、不支持的媒体、字体别名、表格内边距 / autofit、baseline、段后距、无 xfrm 占位符），按类别给出计数与首个元素位置；无丢失时输出 `loss report: no lossy mappings`。
+   - 需要机器可读结果时加 `--json`；需要让 CI 拦截回编降级时加 `--fail-on-loss`（存在丢失则以退出码 2 结束）。
 
 ---
 

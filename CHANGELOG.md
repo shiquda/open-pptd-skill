@@ -11,6 +11,7 @@
 - **原生图表回编（`elementType: chart`）**：`pptd convert` 将 `ppt/charts/chartN.xml`、其 `_rels` 与内嵌 `ppt/embeddings/*.xlsx` 原字节复制到工程 `media/`，生成带 `chartPart` / `workbookPart` / `chartKind` 的图表元素；`pptd build` 重新写出 `p:graphicFrame` + `<c:chart r:id>`、slide rels、chart rels 与 `[Content_Types].xml` override，图表 XML 不做任何改写。`pptd check` 校验 part 存在、路径不越出工程、bounds 为正；声明式 `data`/`series` 图表语法仍明确报错
 - **富文本超链接**：`<a href="https://…">文本</a>` 编译为 run 级 `<a:hlinkClick>` + `slideN.xml.rels` 外部关系（`TargetMode="External"`，同一 URL 去重）；`pptd convert` 还原为同样的行内标记，元素级 `link` 字段也完整回编
 - **字体名默认透传**：`pptd build` 默认原样写出 PPTD 中的字体名；Kimi 网页字体到系统字体的安全映射改为 `safeFonts: true` 显式开关（`pptd convert` 产出的工程默认关闭，保证回编排版不变）
+- **`pptd convert` 丢失清单与 `--fail-on-loss`**：转换结束输出按类别聚合的结构化丢失报告（图表、富文本超链接、不支持的媒体、字体别名、表格单元格内边距 / autofit、run baseline、段后距、无 xfrm 占位符），每类给出计数与首个元素定位；`--json` 输出机器可读报告，`--fail-on-loss` 在存在丢失时以退出码 `2` 结束，便于 CI 拦截回编降级。默认人类可读输出保持简洁，已聚合的占位符不再逐条刷屏；`pptd build` 产出的 fixture deck 回编为零丢失
 - **GIF 媒体支持**：`pptd build` 将 `.gif` 与 PNG/JPEG 同样作为图片写出（`p:pic` + `a:blip`、`[Content_Types].xml` 的 `image/gif` Default、slide rels 指向 `ppt/media/imageN.gif`），字节原样打包、不做转码或重采样；`pptd convert` 将 GIF 复制到工程 `media/` 而不再报 `unsupported construct`，动画帧完整保留（PowerPoint 编辑态显示首帧）
 
 ### 修复

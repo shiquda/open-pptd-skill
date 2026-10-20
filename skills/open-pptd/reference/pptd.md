@@ -27,7 +27,7 @@ PPTD (PPT-DSL) is a YAML abstraction layer for PowerPoint presentations, used to
 
 For property values that conflict, the first source with a value is found by searching the following priorities from top to bottom; when none of the levels is set, fall back to the default values at the end of that section.
 
-> The following rule applies to all subsections of this section: `lineHeight` (a multiple) and `lineHeightPx` (fixed px) are mutually exclusive; when both are set, `lineHeightPx` takes precedence.
+> The following rule applies to all subsections of this section: `lineHeight` (a multiple) and `lineHeightPx` (fixed px) are mutually exclusive. The implementation currently lets `lineHeight` win when both are set (only `<a:spcPct>` is emitted), which is the opposite of the older wording of this document — set exactly one of them.
 
 #### 1. Text Styles Inside a Text Box
 
@@ -155,7 +155,7 @@ project/
 2. **Only relative paths are supported** (relative to the directory containing the `.pptd` file):
    - The `pages` list in `.pptd`: `pages/1_cover.page`
    - Image paths in `.page`: `assets/image1.jpg`
-3. **Media supports URLs**: `Image.src`, and the [ImageFill](#fill).src of `background` / `fill`, may be `https://...` (only jpg/jpeg/png/gif supported)
+3. **Media does not support remote URLs yet**: the format documents `https://...` for `Image.src` and the [ImageFill](#fill).src of `background` / `fill`, but the compiler resolves `src` as a local path only (`failed to read https://...: No such file or directory`) while `check` skips the existence test. Download the asset into `assets/` first.
 
 **Main entry is required:** everything must be loaded through the `.pptd` main entry file; a `.page` cannot be passed alone to the `convert`/`check` commands
 
@@ -196,8 +196,9 @@ type Alignment       = [HorizontalAlign, VerticalAlign];
 
 ### LineStyle
 ```ts
-type LineStyle = "solid" | "dash" | "dot";
+type LineStyle = "solid" | "dash" | "dot" | "sys_dot";
 ```
+> `sys_dot` (OOXML `sysDot`) is accepted by the compiler but is not part of the documented set in older revisions. `dashed` is **not** a valid spelling; the compiler rejects it with the full list of accepted values.
 
 ### Border
 ```ts
@@ -220,12 +221,22 @@ type BorderSpec = null
 
 | Form | Meaning |
 |------|------|
-| `null` | Explicit clear: no border on any of the four sides (used to override a border set higher up the inheritance chain)|
+| `null` | Documented as an explicit clear, but **currently does not work**: a top-level `null` deserializes to the same state as an omitted field, so a border inherited from `tableStyles` / `cellStyle` survives. |
 | `Border` | Same on all four sides |
 | Two-element array `[Border\|null, Border\|null]` | `[top-bottom, left-right]` |
 | Four-element array `[Border\|null, Border\|null, Border\|null, Border\|null]` | `[top, right, bottom, left]` (clockwise) |
 
-> A `null` inside the array means no border at the corresponding position; a top-level `null` clears everything.
+> A `null` inside an array leaves that side unspecified: the `ln*` element is omitted, so an inherited border may still show through.
+>
+> **To clear an inherited border on one or more sides**, use `width: 0` for that side — the compiler then emits `<a:lnX><a:noFill/></a:lnX>`, which removes the border unconditionally. Example: clear every side of a cell that inherits a 2pt `#CCCCCC` `cellStyle` border:
+>
+> ```yaml
+> rows:
+>   - - text: plain
+>       border: [{width: 0}, {width: 0}, {width: 0}, {width: 0}]
+> ```
+>
+> To keep only the bottom edge: `border: [{width: 0}, {width: 0}, null, {style: solid, width: 1, color: "#1F2937"}]`.
 
 ### Shadow
 
@@ -406,7 +417,7 @@ interface TextStyleConfig {
   italic?: boolean;                  // italic
   backgroundColor?: Color;           // text background color (e.g., text highlight)
   lineHeight?: number;               // line-height multiple
-  lineHeightPx?: number;             // fixed line height (px); when it conflicts with lineHeight, lineHeightPx prevails
+  lineHeightPx?: number;             // fixed line height (px); when it conflicts with lineHeight, lineHeight currently prevails
   letterSpacing?: number;
   marginTop?: number;
 }
@@ -559,8 +570,8 @@ interface TextContent {
   align?: Alignment;                           // default: ["left", "top"]
 
   // —— Visual decoration (unset = not applied) ——
-  gradient?: GradientFill;                     // text gradient (applied to the text itself)
-  shadow?: Shadow;                             // text shadow
+  gradient?: GradientFill;                     // ⚠️ NOT IMPLEMENTED: parsed by the AST but rejected by `check` and never rendered — do not use
+  shadow?: Shadow;                             // ⚠️ NOT IMPLEMENTED: parsed by the AST but rejected by `check` and never rendered — do not use
 }
 ```
 

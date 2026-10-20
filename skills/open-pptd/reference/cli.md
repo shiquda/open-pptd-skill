@@ -52,6 +52,20 @@ Checks for:
 - Declared animations (warns that `animations` are parsed in AST but not emitted to `p:timing`)
 - Unsupported LaTeX commands in math blocks
 - Potential vertical or horizontal text box overflows
+
+**Exit codes:** `0` = clean (warnings may still have been printed), `2` = at least one error was reported. The summary line tells the two apart (`no issues` vs `N warning(s)` vs `check failed: N error(s)`).
+
+**`check` is a lint, not a build dry-run.** These constructs pass `check` and only fail in `build`:
+
+- LaTeX that the parser rejects but the lint does not scan for, e.g. an unclosed `{` (`error: invalid PPTD: LaTeX math syntax error: unclosed '{'`)
+- Table merges that escape the grid (`not supported yet: table 'tb1' merge at row 1 col 1 escapes the grid`; coordinates are 0-based)
+- A `line` with fewer than two points (`line 'l1' needs at least 2 points`)
+- Unsupported SVG path commands
+- Documented-but-unimplemented fields (`cropShape`, `softEdge`, `fill` on a table, `customFonts` in the manifest) — these were rejected by `check` before v1.4.2 and are accepted now
+
+Manifest-level field checking only runs when the entry file is named `deck.pptd` or `presentation.pptd` (or matches the deck `title`); a manifest with any other file name is validated without that check.
+
+Always run `pptd build` before declaring a deck done.
 ---
 
 

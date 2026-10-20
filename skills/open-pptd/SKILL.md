@@ -62,7 +62,7 @@ python3 <SKILL_DIR>/scripts/validate_pptx.py <output.pptx> --render-images
 | **图表 / Charts** | ❌ **编译器尚未支持** | `elementType: chart` 会在 `check` 和 `build` 时被**直接报错拦截**。替代方案：使用原生表格 (`elementType: table`) 呈现数据，或使用脚本将图表导出为图片 (`elementType: image`) |
 | **动画效果** | 🟡 **仅解析不报错** | 编译器支持 `animations` 节点语法解析，但当前版本生成的 OOXML 暂缓写入时序动画，文稿以纯静态排版完整呈现 |
 | **矢量形状 / Shapes** | ✅ 完全支持 | `rect`, `roundRect`, `ellipse`, `triangle`, `diamond`, `rightArrow`, `pentagon`, `hexagon`, `callout` 等 DrawingML 预设形状（支持纯色与渐变填充；⚠️ 形状不支持图片填充 `fill.type: image`，仅背景支持） |
-| **线条与箭头** | ✅ 完全支持 | `elementType: line`，支持相对坐标 `points: "0,0 dx,dy"`，以及两端箭头 `arrow: [start, end]` (可选: `triangle`, `stealth`, `arrow`, `diamond`, `oval`, `none`) |
+| **线条与箭头** | ✅ 完全支持 | `elementType: line`，支持相对坐标 `points: "0,0 dx,dy"`，以及两端箭头 `arrow: [start, end]`（可选: `triangle`, `stealth`, `arrow`, `diamond`, `oval`；不需要箭头的一端写 YAML `null` 或省略——`none` 字符串会被编译器拒绝） |
 | **表格 / Tables** | ✅ 完全支持 | 原生 PowerPoint 表格 (`<a:tbl>`)，支持 `columnWidths`、`rowHeights`、单元格跨行跨列、边框样式、底色填充 |
 | **图片与媒体** | ✅ 完全支持 | 统一存放在 `assets/` 目录；支持透明通道、裁切 `crop`、填充模式 `fit: {mode: cover/contain}`、边框与阴影 |
 | **主题色彩与继承** | ✅ 完全支持 | `theme.colors` 统一声明命名色，元素中通过 `"$colorKey"` 引用；引用未定义颜色会在 `check` 阶段拦截 |

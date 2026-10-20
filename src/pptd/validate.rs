@@ -170,21 +170,26 @@ fn validate_page(project: &Project, page_idx: usize, page: &Page, out: &mut Vec<
         }
 
         let bounds = element.bounds();
-        let degenerate = match element {
+        let flattened = match element {
             // A straight connector is legitimately degenerate in one axis
             // (horizontal: height 0, vertical: width 0), so a flattened
             // box is allowed as long as at least one axis is non-zero.
-            Element::Line(_) => {
-                let w = bounds.width;
-                let h = bounds.height;
-                !(w.is_finite() && h.is_finite() && (w > 0.0 || h > 0.0))
-            }
-            _ => {
-                !(bounds.width.is_finite()
-                    && bounds.height.is_finite()
-                    && bounds.width > 0.0
-                    && bounds.height > 0.0)
-            }
+            Element::Line(_) => true,
+            // PowerPoint/PptxGenJS draw rules as `<p:sp>` with
+            // `prstGeom prst="line"` and a zero extent on one axis, and
+            // `pptd convert` maps those faithfully — they must survive.
+            Element::Shape(shape) => shape.shape_name.trim().eq_ignore_ascii_case("line"),
+            _ => false,
+        };
+        let degenerate = if flattened {
+            let w = bounds.width;
+            let h = bounds.height;
+            !(w.is_finite() && h.is_finite() && (w > 0.0 || h > 0.0))
+        } else {
+            !(bounds.width.is_finite()
+                && bounds.height.is_finite()
+                && bounds.width > 0.0
+                && bounds.height > 0.0)
         };
         if degenerate {
             diag(

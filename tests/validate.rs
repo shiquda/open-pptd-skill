@@ -631,3 +631,61 @@ fn manifest_whitelist_reads_the_entry_file_not_a_sibling() {
     );
 }
 
+#[test]
+fn flattened_line_shapes_survive_validation() {
+    // PptxGenJS (and PowerPoint's own rule tool) draws hairline rules as
+    // `<p:sp>` with `prstGeom prst="line"` and a zero extent on one axis.
+    // `pptd convert` reproduces them faithfully, so they must not be treated
+    // like a degenerate rectangle.
+    let page = r#"
+elements:
+  - elementId: rule-h
+    elementType: shape
+    bounds: [40, 200, 880, 0]
+    shapeName: line
+    border:
+      style: solid
+      width: 0.75
+      color: '#3A3A40'
+  - elementId: rule-v
+    elementType: shape
+    bounds: [400, 40, 0, 300]
+    shapeName: line
+    border:
+      style: solid
+      width: 0.75
+      color: '#3A3A40'
+"#;
+    let entry = tmp_deck("flattened-line", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        !issues
+            .iter()
+            .any(|d| d.message.contains("positive width and height")),
+        "zero-extent line presets are legal: {issues:?}"
+    );
+}
+
+#[test]
+fn zero_area_rectangles_are_still_rejected() {
+    let page = r#"
+elements:
+  - elementId: invisible
+    elementType: shape
+    bounds: [40, 200, 0, 0]
+    shapeName: rect
+    fill:
+      type: solid
+      color: '#FF0000'
+"#;
+    let entry = tmp_deck("zero-rect", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        issues
+            .iter()
+            .any(|d| d.message.contains("positive width and height")),
+        "a zero-area rect is a modelling mistake: {issues:?}"
+    );
+}

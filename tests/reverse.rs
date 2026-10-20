@@ -468,3 +468,111 @@ fn chart_parts_roundtrip_through_convert() {
 
     let _ = fs::remove_dir_all(&work);
 }
+
+/// Cell insets (`a:tcPr@marL/marR/marT/marB`) and per-cell autofit must
+/// survive build → convert → build. Before this, the writer always emitted
+/// PowerPoint's default insets and dropped the cell's `a:bodyPr` autofit
+/// child, which reflowed every converted table.
+#[test]
+fn cell_margins_and_autofit_roundtrip() {
+    let work = temp_dir("cell-margin-autofit");
+    let dir = work.join("src");
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(
+        dir.join("deck.pptd"),
+        "version: v2\nsize: [960, 540]\npages: [pages/p.page]\n",
+    )
+    .unwrap();
+    fs::write(
+        dir.join("pages/p.page"),
+        r#"
+elements:
+  - elementId: t1
+    elementType: table
+    bounds: [100, 100, 600, 300]
+    columnWidths: [0.5, 0.5]
+    rowHeights: [0.5, 0.5]
+    rows:
+      - - text: Padded
+          margin: {left: 4.3, right: 3.6, top: 2.5, bottom: 2.2}
+          autofit: fit_shape
+        - text: Shrunk
+          autofit: fit_text
+      - - text: Default insets
+        - text: ""
+          autofit: fit_shape
+"#,
+    )
+    .unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let first = work.join("first.pptx");
+    pptx::writer::PptxWriter::new(&project)
+        .build(&first)
+        .unwrap();
+    let first_xml = read_part(&first, "ppt/slides/slide1.xml");
+    for attr in [
+        r#"marL="54610""#,
+        r#"marR="45720""#,
+        r#"marT="31750""#,
+        r#"marB="27940""#,
+    ] {
+        assert!(
+            first_xml.contains(attr),
+            "cell margin {attr} missing from built table: {first_xml}"
+        );
+    }
+    assert_eq!(
+        first_xml.matches("<a:spAutoFit/>").count(),
+        2,
+        "both fit_shape cells must keep spAutoFit"
+    );
+    assert_eq!(
+        first_xml.matches("<a:normAutofit/>").count(),
+        1,
+        "the fit_text cell must keep normAutofit"
+    );
+
+    // Import direction: the converted AST carries both attributes.
+    let converted = work.join("converted");
+    pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
+    let table = decompiled.pages[0]
+        .elements
+        .iter()
+        .find_map(|e| match e {
+            pptd::Element::Table(t) => Some(t),
+            _ => None,
+        })
+        .expect("converted table");
+    assert_eq!(
+        table.rows[0][0].margin,
+        Some(pptd::CellMargin {
+            left: Some(4.3),
+            right: Some(3.6),
+            top: Some(2.5),
+            bottom: Some(2.2),
+        })
+    );
+    assert_eq!(table.rows[0][0].autofit, Some(pptd::TextAutofit::FitShape));
+    assert_eq!(table.rows[0][1].autofit, Some(pptd::TextAutofit::FitText));
+    assert_eq!(table.rows[1][1].autofit, Some(pptd::TextAutofit::FitShape));
+    assert_eq!(
+        table.rows[1][0].margin, None,
+        "cells without explicit insets must not invent a margin"
+    );
+
+    // Render direction again: the rebuilt deck emits the same values.
+    let second = work.join("second.pptx");
+    pptx::writer::PptxWriter::new(&decompiled)
+        .build(&second)
+        .unwrap();
+    let second_xml = read_part(&second, "ppt/slides/slide1.xml");
+    assert!(second_xml.contains(r#"marL="54610""#), "{second_xml}");
+    assert!(second_xml.contains(r#"marR="45720""#), "{second_xml}");
+    assert!(second_xml.contains(r#"marT="31750""#), "{second_xml}");
+    assert!(second_xml.contains(r#"marB="27940""#), "{second_xml}");
+    assert_eq!(second_xml.matches("<a:spAutoFit/>").count(), 2);
+
+    let _ = fs::remove_dir_all(&work);
+}

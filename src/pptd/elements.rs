@@ -423,6 +423,33 @@ pub struct Icon {
     pub shadow: Option<Shadow>,
 }
 
+/// Cell text insets in points (`a:tcPr@marL/marR/marT/marB`). Unset sides
+/// keep PowerPoint's defaults: 7.2 pt left/right, 3.6 pt top/bottom.
+#[derive(Debug, Clone, Copy, PartialEq, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CellMargin {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub left: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub right: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub top: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bottom: Option<f64>,
+}
+
+impl CellMargin {
+    /// PowerPoint's default insets in points (0.1in horizontal, 0.05in
+    /// vertical). The importer folds these back to `None` so a converted
+    /// project does not repeat default insets on every cell.
+    pub const POWERPOINT_DEFAULT: Self = Self {
+        left: Some(7.2),
+        right: Some(7.2),
+        top: Some(3.6),
+        bottom: Some(3.6),
+    };
+}
+
 /// One table cell (see the spec for merged-cell layout rules).
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -453,6 +480,13 @@ pub struct Cell {
     pub letter_spacing: Option<f64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub margin_top: Option<f64>,
+    /// Text insets in points; unset sides keep the PowerPoint defaults.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub margin: Option<CellMargin>,
+    /// Cell `a:bodyPr` autofit child (`spAutoFit` / `normAutofit` /
+    /// `noAutofit`); unset emits no child.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub autofit: Option<TextAutofit>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub fill: Option<Fill>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

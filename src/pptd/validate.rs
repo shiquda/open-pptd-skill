@@ -414,6 +414,27 @@ fn validate_element(
                         out,
                         &table.common.element_id,
                     );
+                    if let Some(margin) = &cell.margin {
+                        for (side, value) in [
+                            ("left", margin.left),
+                            ("right", margin.right),
+                            ("top", margin.top),
+                            ("bottom", margin.bottom),
+                        ] {
+                            if let Some(value) = value
+                                && value < 0.0
+                            {
+                                diag(
+                                    out,
+                                    page_idx,
+                                    format!(
+                                        "table `{}` cell margin.{side} must not be negative, got {value}",
+                                        table.common.element_id
+                                    ),
+                                );
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1742,5 +1763,31 @@ animations:
             .expect("expected animation warning");
         assert!(anim_diag.is_warning());
         assert!(anim_diag.message.contains("warning: page declares 1 animation(s)"));
+    }
+
+    #[test]
+    fn negative_cell_margin_is_reported_as_error() {
+        let page_yaml = r#"
+elements:
+  - elementId: t1
+    elementType: table
+    bounds: [50, 50, 400, 200]
+    columnWidths: [1]
+    rowHeights: [1]
+    rows:
+      - - text: bad
+          margin: {left: -1, top: 2}
+"#;
+        let proj = make_project([960.0, 540.0], page_yaml);
+        let diags = validate_project(&proj);
+        let found = diags
+            .iter()
+            .find(|d| d.message.contains("margin.left"))
+            .unwrap_or_else(|| panic!("expected negative margin error, got: {diags:?}"));
+        assert!(!found.is_warning(), "negative margin must be an error");
+        assert!(
+            !diags.iter().any(|d| d.message.contains("margin.top")),
+            "positive sides must not be reported: {diags:?}"
+        );
     }
 }

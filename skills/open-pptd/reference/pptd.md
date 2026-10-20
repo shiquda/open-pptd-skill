@@ -81,6 +81,8 @@ For property values that conflict, the first source with a value is found by sea
 | lineHeightPx | Not applied |
 | letterSpacing | `0` |
 | marginTop | `0` |
+| margin | `{left: 7.2, right: 7.2, top: 3.6, bottom: 3.6}` (pt, per side) |
+| autofit | Not applied — no `a:bodyPr` autofit child is written, which OOXML reads as "do not autofit" |
 | fill | Not applied (transparent) |
 | border | `{style: solid, width: 1, color: "#000000"}` |
 | align | `["center", "middle"]` |
@@ -984,6 +986,15 @@ interface Cell {
   lineHeightPx?: number;               // fixed line height (px)
   letterSpacing?: number;
   marginTop?: number;
+
+  // —— Cell text insets (`a:tcPr@marL/marR/marT/marB`, in pt) ——
+  // Unset sides keep PowerPoint's defaults: left/right 7.2, top/bottom 3.6.
+  margin?: { left?: number; right?: number; top?: number; bottom?: number };
+
+  // —— Cell autofit (`a:bodyPr` child) ——
+  // "fit_shape" = `<a:spAutoFit/>`, "fit_text" = `<a:normAutofit/>`,
+  // "fixed" = `<a:noAutofit/>`; unset writes no child (= do not autofit).
+  autofit?: "fit_shape" | "fit_text" | "fixed";
 
   // —— Cell styles (when unset, fall back along the inheritance chain) ——
   fill?: Fill;                         // background fill; supports solid / gradient / image

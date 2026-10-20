@@ -38,8 +38,8 @@ use xmltree::Element as XmlEl;
 use crate::hash;
 use crate::pptd::ast::{Page, Presentation};
 use crate::pptd::elements::{
-    Element, ElementCommon, GroupDef, GroupXfrm, Icon, Image, Line, Media, Shape, ShapeDef, Text,
-    TextAutofit, TextContent, TextDirection,
+    CellMargin, Element, ElementCommon, GroupDef, GroupXfrm, Icon, Image, Line, Media, Shape,
+    ShapeDef, Text, TextAutofit, TextContent, TextDirection,
 };
 use crate::pptd::Chart;
 use crate::pptd::layout::{LayoutDef, PlaceholderDef};
@@ -2952,6 +2952,26 @@ fn map_table(
                     vertical,
                 });
             }
+            // Cell insets are stored in EMU; PPTD expresses them in pt
+            // (1 pt = 12700 EMU). Absent attributes keep the PowerPoint
+            // defaults (7.2 / 7.2 / 3.6 / 3.6 pt) by staying `None`.
+            let cell_margin = tc_pr.and_then(|p| {
+                let pt = |key: &str| {
+                    attr(p, key)
+                        .and_then(|v| v.parse::<f64>().ok())
+                        .map(|emu| emu / EMU_PER_PX)
+                };
+                let margin = CellMargin {
+                    left: pt("marL"),
+                    right: pt("marR"),
+                    top: pt("marT"),
+                    bottom: pt("marB"),
+                };
+                (margin != CellMargin::POWERPOINT_DEFAULT).then_some(margin)
+            });
+            let cell_autofit = first(tc, "txBody")
+                .and_then(|t| first(t, "bodyPr"))
+                .and_then(|b| body_pr_autofit(Some(b)));
             row.push(crate::pptd::elements::Cell {
                 text: content.as_ref().map(|c| c.text.clone()),
                 text_style: None,
@@ -2965,6 +2985,8 @@ fn map_table(
                 line_height_px: None,
                 letter_spacing: None,
                 margin_top: None,
+                margin: cell_margin,
+                autofit: cell_autofit,
                 fill,
                 border,
                 align,
@@ -3497,6 +3519,22 @@ fn bg_fill(slide_or_master: &XmlEl, slots: &SlotColors) -> Option<Fill> {
 // Text extraction
 // ---------------------------------------------------------------------------
 
+/// `a:bodyPr` autofit child → [`TextAutofit`]. Absent child → `None`, which
+/// OOXML reads as "do not autofit" and which the writer reproduces by
+/// emitting no child at all.
+fn body_pr_autofit(body_pr: Option<&XmlEl>) -> Option<TextAutofit> {
+    let body_pr = body_pr?;
+    if first(body_pr, "spAutoFit").is_some() {
+        Some(TextAutofit::FitShape)
+    } else if first(body_pr, "normAutofit").is_some() {
+        Some(TextAutofit::FitText)
+    } else if first(body_pr, "noAutofit").is_some() {
+        Some(TextAutofit::Fixed)
+    } else {
+        None
+    }
+}
+
 /// Build `TextContent` from `p:txBody`. `None` when the box has no text.
 fn text_content(
     tx_body: &XmlEl,
@@ -3521,17 +3559,7 @@ fn text_content(
         _ => None,
     });
     // Auto-fit: `spAutoFit` / `normAutofit` / `noAutofit` children of bodyPr.
-    let autofit = body_pr.and_then(|b| {
-        if first(b, "spAutoFit").is_some() {
-            Some(TextAutofit::FitShape)
-        } else if first(b, "normAutofit").is_some() {
-            Some(TextAutofit::FitText)
-        } else if first(b, "noAutofit").is_some() {
-            Some(TextAutofit::Fixed)
-        } else {
-            None
-        }
-    });
+    let autofit = body_pr_autofit(body_pr);
     // Preserve unfamilar `a:bodyPr` attributes verbatim (`vertOverflow`,
     // `horzOverflow`, `numCol`, `spcCol`, `fromWordArt`, `anchorCtr`,
     // `forceAA`, `compatLnSpc`, …). These tweak PowerPoint/WPS text layout

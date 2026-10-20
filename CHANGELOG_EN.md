@@ -12,6 +12,10 @@ This project follows [Semantic Versioning](https://semver.org/).
 - **Rich-text hyperlinks**: `<a href="https://…">text</a>` compiles to a run-level `<a:hlinkClick>` plus an external relationship in `slideN.xml.rels` (`TargetMode="External"`, URLs deduplicated). `pptd convert` restores the same inline markup, and the element-level `link` field round-trips as well
 - **Font names pass through by default**: `pptd build` writes the PPTD typeface verbatim; the Kimi web-font → system-font safety map is now the explicit `safeFonts: true` switch (off for `pptd convert` output, so rebuilt decks keep their source typography)
 
+### Fixed
+
+- **Table cell insets and autofit were lost on round-trip**: `Cell` gains `margin: {left,right,top,bottom}` (pt) and `autofit`. `pptd convert` reads `a:tcPr@marL/marR/marT/marB` plus the cell `a:bodyPr` child (`spAutoFit` / `normAutofit` / `noAutofit`), and `pptd build` writes them back verbatim (default insets collapse to "not written", preserving the previous default behaviour). Previously every cell was forced to 7.2/7.2/3.6/3.6 pt, which reflowed cell text; `pptd check` now rejects negative insets
+
 ## [1.4.1] - 2026-10-19
 
 ### Added

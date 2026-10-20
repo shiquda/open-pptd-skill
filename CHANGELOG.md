@@ -12,6 +12,10 @@
 - **富文本超链接**：`<a href="https://…">文本</a>` 编译为 run 级 `<a:hlinkClick>` + `slideN.xml.rels` 外部关系（`TargetMode="External"`，同一 URL 去重）；`pptd convert` 还原为同样的行内标记，元素级 `link` 字段也完整回编
 - **字体名默认透传**：`pptd build` 默认原样写出 PPTD 中的字体名；Kimi 网页字体到系统字体的安全映射改为 `safeFonts: true` 显式开关（`pptd convert` 产出的工程默认关闭，保证回编排版不变）
 
+### 修复
+
+- **表格单元格内边距与 autofit 回编丢失**：`Cell` 新增 `margin: {left,right,top,bottom}`（pt）与 `autofit`；`pptd convert` 读取 `a:tcPr@marL/marR/marT/marB` 和单元格 `a:bodyPr` 的 `spAutoFit`/`normAutofit`/`noAutofit`，`pptd build` 原样写出（默认内边距折叠为不写出，保持原有默认行为）。此前自定义内边距被强制改写成 7.2/7.2/3.6/3.6pt，单元格文本重新折行；`pptd check` 拒绝负数内边距
+
 ## [1.4.1] - 2026-10-19
 
 ### 新增

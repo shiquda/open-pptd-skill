@@ -12,7 +12,7 @@
 //! `gridSpan` / `rowSpan`.
 
 use crate::pptd::Theme;
-use crate::pptd::elements::{Cell, Table};
+use crate::pptd::elements::{Cell, CellMargin, Table, TextAutofit};
 use crate::pptd::shared::{
     Alignment, Border, BorderSpec, Color, Fill, FontFamily, HorizontalAlign, LineStyle,
     VerticalAlign,
@@ -36,6 +36,8 @@ struct CellAcc {
     line_height_px: Option<f64>,
     letter_spacing: Option<f64>,
     margin_top: Option<f64>,
+    margin: Option<CellMargin>,
+    autofit: Option<TextAutofit>,
     fill: Option<Fill>,
     border: Option<BorderSpec>,
     align: Option<Alignment>,
@@ -185,6 +187,12 @@ fn apply_inline(acc: &mut CellAcc, theme: Option<&Theme>, cell: &Cell) {
     }
     if let Some(v) = cell.margin_top {
         acc.margin_top = Some(v);
+    }
+    if let Some(v) = cell.margin {
+        acc.margin = Some(v);
+    }
+    if let Some(v) = cell.autofit {
+        acc.autofit = Some(v);
     }
     if let Some(v) = &cell.fill {
         acc.fill = Some(v.clone());
@@ -459,7 +467,7 @@ fn cell_eff_style(acc: &CellAcc) -> EffTextStyle {
         margin_left: None,
         margin_right: None,
         margin_bottom: None,
-        autofit: None,
+        autofit: acc.autofit,
         body_pr_extras: None,
         bullet_char: None,
         bullet_font: None,
@@ -478,11 +486,13 @@ fn emit_tc_pr(
     acc: Option<&CellAcc>,
     anchor: &str,
 ) -> Result<()> {
+    // Explicit `Cell.margin` sides win; unset sides keep PowerPoint's defaults.
+    let margin = acc.and_then(|a| a.margin).unwrap_or_default();
     let (l, r, t, b) = (
-        emu(7.2).to_string(),
-        emu(7.2).to_string(),
-        emu(3.6).to_string(),
-        emu(3.6).to_string(),
+        emu(margin.left.unwrap_or(7.2)).to_string(),
+        emu(margin.right.unwrap_or(7.2)).to_string(),
+        emu(margin.top.unwrap_or(3.6)).to_string(),
+        emu(margin.bottom.unwrap_or(3.6)).to_string(),
     );
     xml.start(
         "a:tcPr",
@@ -535,6 +545,22 @@ fn emit_cell(
     Ok(())
 }
 
+/// `<a:bodyPr>` for a textless cell; an unset autofit stays `<a:bodyPr/>`.
+fn emit_cell_body_pr(xml: &mut Xml, autofit: Option<TextAutofit>) {
+    if autofit.is_none() {
+        xml.leaf("a:bodyPr", &[]);
+        return;
+    }
+    xml.start("a:bodyPr", &[]);
+    match autofit {
+        Some(TextAutofit::FitShape) => xml.leaf("a:spAutoFit", &[]),
+        Some(TextAutofit::FitText) => xml.leaf("a:normAutofit", &[]),
+        Some(TextAutofit::Fixed) => xml.leaf("a:noAutofit", &[]),
+        None => {}
+    }
+    xml.end("a:bodyPr");
+}
+
 /// A content cell with resolved style and optional merge spans.
 fn emit_origin_cell(
     xml: &mut Xml,
@@ -559,7 +585,7 @@ fn emit_origin_cell(
     let text = cell.text.as_deref().unwrap_or("");
     xml.start("a:txBody", &[]);
     if text.is_empty() {
-        xml.leaf("a:bodyPr", &[]);
+        emit_cell_body_pr(xml, cell.autofit);
         xml.leaf("a:lstStyle", &[]);
         xml.leaf("a:p", &[]);
     } else {

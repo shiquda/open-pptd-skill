@@ -312,6 +312,50 @@ elements:
 }
 
 #[test]
+fn smooth_line_emits_wellformed_cubic_bezier() {
+    let deck = r#"
+version: v2
+title: Bezier Test
+size: [960, 540]
+pages: [pages/p.page]
+"#;
+    let page = r##"
+elements:
+  - elementId: l1
+    elementType: line
+    bounds: [100, 100, 300, 100]
+    viewBox: [3, 1]
+    points: "0,0 1,1 2,0 3,1"
+    curve: smooth
+    border: {style: solid, width: 2, color: "#FF0000"}
+"##;
+    let dir = std::env::temp_dir().join(format!("pptd-bezier-test-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(dir.join("deck.pptd"), deck).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let path = out_path("bezier");
+    let _ = fs::remove_file(&path);
+
+    PptxWriter::new(&project)
+        .build(&path)
+        .expect("smooth-curve line deck must build");
+
+    let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
+    let opens = slide.matches("<a:cubicBezTo>").count();
+    let closes = slide.matches("</a:cubicBezTo>").count();
+    assert!(opens > 0, "smooth curve must emit cubicBezTo segments");
+    assert_eq!(opens, closes, "every cubicBezTo must be closed by name");
+    assert!(
+        !slide.contains("</a:cTo>"),
+        "a:cubicBezTo must not be closed as </a:cTo> (malformed XML)"
+    );
+    let _ = fs::remove_file(&path);
+}
+
+#[test]
 fn font_fallback_maps_misans_safely() {
     let deck = r#"
 version: v2

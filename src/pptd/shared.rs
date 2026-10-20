@@ -160,17 +160,24 @@ pub struct Border {
 /// Per-side border spec: `null`, a uniform [`Border`], `[top-bottom,
 /// left-right]` or `[top, right, bottom, left]` (clockwise). A `null` inside
 /// the array clears the corresponding side.
+///
+/// Variant order matters: this enum is `untagged`, so serde tries the
+/// variants top to bottom, and a derived struct also accepts a *sequence*
+/// (`Border` has exactly four fields). With `Uniform` before the array forms,
+/// a four-element array such as `[null, null, null, null]` deserialized as
+/// `Uniform(Border { .. })` — a visible 1pt black border on all four sides —
+/// instead of `Clockwise([None; 4])`. Keep the array forms ahead of `Uniform`.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BorderSpec {
     /// `null`: no border on any of the four sides (explicit clear).
     Clear,
-    /// One border on all four sides.
-    Uniform(Border),
     /// `[top-bottom, left-right]`.
     VerticalHorizontal([Option<Border>; 2]),
     /// `[top, right, bottom, left]` (clockwise).
     Clockwise([Option<Border>; 4]),
+    /// One border on all four sides.
+    Uniform(Border),
 }
 
 /// A drop shadow.

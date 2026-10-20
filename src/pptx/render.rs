@@ -1998,7 +1998,7 @@ fn render_line(xml: &mut Xml, ctx: &mut RenderCtx<'_>, line: &Line) -> Result<()
                 xml.leaf("a:pt", &[("x", &p1), ("y", &p1y)]);
                 xml.leaf("a:pt", &[("x", &p2), ("y", &p2y)]);
                 xml.leaf("a:pt", &[("x", &p3), ("y", &p3y)]);
-                xml.end("a:cTo");
+                xml.end("a:cubicBezTo");
             }
         } else {
             for (x, y) in rest {

@@ -433,3 +433,131 @@ elements:
         "supported commands must stay clean: {issues:?}"
     );
 }
+
+#[test]
+fn documented_image_fields_are_accepted() {
+    // `cropShape` and `softEdge` are implemented by the writer (a:prstGeom /
+    // a:softEdge) and documented in pptd.md; the field whitelist must not
+    // reject them as unknown.
+    let page = r#"
+elements:
+  - elementId: img
+    elementType: image
+    bounds: [0, 0, 200, 200]
+    src: assets/pic.png
+    cropShape: {shapeName: roundRect, adjustments: [20000]}
+    softEdge: 4
+    fit: {mode: cover}
+"#;
+    let dir = std::env::temp_dir().join(format!("slideforge-test-img-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::create_dir_all(dir.join("assets")).unwrap();
+    fs::write(dir.join("deck.pptd"), MINIMAL_DECK).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+    fs::write(dir.join("assets/pic.png"), b"\x89PNG\r\n\x1a\n").unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        !issues.iter().any(|d| d.message.contains("unknown field")),
+        "documented image fields must validate: {issues:?}"
+    );
+}
+
+#[test]
+fn documented_table_fill_is_accepted() {
+    let page = r##"
+elements:
+  - elementId: tbl
+    elementType: table
+    bounds: [0, 0, 400, 200]
+    columnWidths: [0.5, 0.5]
+    rowHeights: [0.5, 0.5]
+    fill: {type: solid, color: "#F1F1F1"}
+    rows:
+      - [{text: a}, {text: b}]
+      - [{text: c}, {text: d}]
+"##;
+    let entry = tmp_deck("table-fill", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        !issues.iter().any(|d| d.message.contains("unknown field")),
+        "table-level fill must validate: {issues:?}"
+    );
+}
+
+#[test]
+fn custom_fonts_in_manifest_are_accepted() {
+    let deck = "version: v2\nsize: [960, 540]\ncustomFonts:\n  - family: JetBrains Mono\n    src: \"https://fonts.googleapis.com/css2?family=JetBrains+Mono\"\npages:\n  - pages/p.page\n";
+    let page = "elements:\n  - elementId: t1\n    elementType: text\n    bounds: [0, 0, 400, 60]\n    content:\n      fontFamily: JetBrains Mono\n      text: \"mono 123\"\n";
+    let entry = tmp_deck("custom-fonts", deck, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        !issues.iter().any(|d| d.message.contains("unknown field")),
+        "customFonts is documented and parsed, so it must not be reported: {issues:?}"
+    );
+}
+
+#[test]
+fn four_side_border_array_is_clockwise_not_uniform() {
+    // `[null, null, null, null]` must clear all four sides (Clockwise with four
+    // `None`s). `Border` also accepts a four-element sequence, so a `Uniform`
+    // variant placed first would swallow it and emit a default 1pt border.
+    let page = r#"
+elements:
+  - elementId: tbl
+    elementType: table
+    bounds: [0, 0, 400, 200]
+    columnWidths: [0.5, 0.5]
+    rowHeights: [0.5, 0.5]
+    rows:
+      - [{text: a, border: [null, null, null, null]}, {text: b}]
+      - [{text: c}, {text: d}]
+"#;
+    let entry = tmp_deck("border-array", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let pptd::Element::Table(table) = &project.pages[0].elements[0] else {
+        panic!("expected a table element");
+    };
+    assert_eq!(
+        table.rows[0][0].border,
+        Some(pptd::BorderSpec::Clockwise([None, None, None, None])),
+        "four null sides must clear the border, not fall back to Uniform"
+    );
+}
+
+#[test]
+fn two_side_border_array_stays_vertical_horizontal() {
+    let page = r##"
+elements:
+  - elementId: tbl
+    elementType: table
+    bounds: [0, 0, 400, 200]
+    columnWidths: [0.5, 0.5]
+    rowHeights: [0.5, 0.5]
+    rows:
+      - [{text: a, border: [{style: solid, width: 1, color: "#000000"}, null]}, {text: b}]
+      - [{text: c}, {text: d}]
+"##;
+    let entry = tmp_deck("border-pair", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let pptd::Element::Table(table) = &project.pages[0].elements[0] else {
+        panic!("expected a table element");
+    };
+    assert_eq!(
+        table.rows[0][0].border,
+        Some(pptd::BorderSpec::VerticalHorizontal([
+            Some(pptd::Border {
+                style: Some(pptd::LineStyle::Solid),
+                width: Some(1.0),
+                color: Some(pptd::Color("#000000".to_string())),
+                gradient: None,
+            }),
+            None
+        ])),
+        "two-element arrays keep the [top-bottom, left-right] meaning"
+    );
+}

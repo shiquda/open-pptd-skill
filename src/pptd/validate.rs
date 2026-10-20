@@ -1124,6 +1124,7 @@ fn check_presentation_raw_yaml(project: &Project, out: &mut Vec<Diagnostic>) {
                     "layouts",
                     "author",
                     "description",
+                    "customFonts",
                 ];
                 for (k, _) in &map {
                     if let serde_yaml::Value::String(s) = k {
@@ -1236,12 +1237,22 @@ fn check_page_raw_yaml(project: &Project, page_idx: usize, out: &mut Vec<Diagnos
                         "endPoint",
                     ],
                     "icon" => &["iconName", "viewBox", "path", "fill", "border", "shadow"],
-                    "image" => &["src", "crop", "fit", "border", "shadow", "opacity"],
+                    "image" => &[
+                        "src",
+                        "crop",
+                        "fit",
+                        "border",
+                        "shadow",
+                        "opacity",
+                        "cropShape",
+                        "softEdge",
+                    ],
                     "table" => &[
                         "rows",
                         "columnWidths",
                         "rowHeights",
                         "style",
+                        "fill",
                         "border",
                         "shadow",
                         "cellPadding",

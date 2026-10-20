@@ -346,6 +346,7 @@ interface Presentation {
   version: "v2";                // required, fixed to "v2" (version identifier)
   title?: string;              // default: no title
   customFonts?: CustomFont[];  // default: no custom fonts are loaded
+  safeFonts?: boolean;         // default: false; true maps web-only typefaces onto system fonts
   size: [number, number];      // [width, height]; see "Coordinate System and Units" for PPT and poster recommendations
   theme?: Theme;
   pages: string[];             // list of relative paths to page files, e.g. "pages/cover.page"
@@ -358,6 +359,7 @@ interface Presentation {
 version: v2
 title: Annual Work Summary
 size: [960, 540]
+safeFonts: false
 customFonts:
   - family: Noto Serif SC
     src: "https://fonts.googleapis.com/css2?family=Noto+Serif+SC"
@@ -526,6 +528,7 @@ interface ElementBase {
   elementId: string;                                                      // constraint: unique within the same page; unique element ID
   elementType: "text" | "shape" | "line" | "image" | "icon" | "table";  // element type (note: "chart" is unsupported)
   bounds: [number, number, number, number];                               // element size and position, [x, y, width, height]
+  link?: string;                                                          // external click target; written as TargetMode="External"
 }
 
 type Element = Text | Shape | Line | Image | Icon | Table;
@@ -638,14 +641,14 @@ interface TextContent {
 | `<s>` | Strikethrough | `<s>deleted</s>` |
 | `<sup>` | *(暂不支持 / Unsupported)* 上标，请使用 LaTeX 公式 `\( x^2 \)` 代替 | — |
 | `<sub>` | *(暂不支持 / Unsupported)* 下标，请使用 LaTeX 公式 `\( x_i \)` 代替 | — |
-| `<a>` | *(暂不支持 / Unsupported)* 超链接，编译器会报错拦截，请使用纯文本 URL 或脚注声明 | — |
+| `<a href="...">` | 超链接，写入 run 级 `<a:hlinkClick>` + 外部关系（同一 URL 去重） | `<a href="https://example.com">example</a>` |
 | `<ul>` | *(暂不支持 / Unsupported)* 无序列表，编译器会报错拦截，请直接在段落中写项目符号 `•` | — |
 | `<ol>` | *(暂不支持 / Unsupported)* 有序列表，编译器会报错拦截，请直接在段落中写序号 `1.` | — |
 | `<li>` | *(暂不支持 / Unsupported)* 列表项，编译器会报错拦截 | — |
 
 **style attribute mapping**
 
-`<p>`, `<li>`, `<span>`, and every inline tag (`<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<s>`, `<code>`) may use `style="..."`; the tag's own meaning and the style declarations combine, so `<strong style="color:#C00000">` is bold red. Nested tags restore the enclosing style when they close. Color-type values may all use theme references (e.g. `$primary`), resolved per the [Color](#color) rules.
+`<p>`, `<li>`, `<span>`, and every inline tag (`<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<s>`, `<code>`, `<a>`) may use `style="..."`; the tag's own meaning and the style declarations combine, so `<strong style="color:#C00000">` is bold red. Nested tags restore the enclosing style when they close. Color-type values may all use theme references (e.g. `$primary`), resolved per the [Color](#color) rules.
 
 1. **Paragraph styles (only `<p>` supports them)**
 

@@ -54,7 +54,7 @@ Note: custom fonts follow the same "exactly identical names" requirement
 
 ## pptd Native Font Resolution & Safe Fallbacks
 
-When compiling PPTD to OpenXML (`.pptx`), `pptd` automatically maps abstract font names to physically safe, universally installed system fonts to prevent operating systems (such as macOS CoreText) from falling back to cursive handwriting fonts like `HanziPen SC` (翩翩体):
+By default `pptd build` writes the declared font names verbatim, so `convert` → `build` keeps the source typography (including web fonts such as `QuattrocentoSans`, `Unna`, `MiSans`). Set `safeFonts: true` in the `.pptd` entry file to opt into mapping abstract font names onto physically safe, universally installed system fonts — useful when an AI-authored deck must render on machines without those fonts and must not let operating systems (such as macOS CoreText) fall back to cursive handwriting fonts like `HanziPen SC` (翩翩体):
 
 | PPTD Declared Font | East Asian (`<a:ea>`) | Latin (`<a:latin>`) | Target Aesthetic |
 |---|---|---|---|

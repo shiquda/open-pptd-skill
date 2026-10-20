@@ -924,14 +924,15 @@ fn check_rich_text_tags(text: &Text, page_idx: usize, out: &mut Vec<Diagnostic>)
                 .trim_end_matches('/');
             let name_clean = name.trim_start_matches('/');
             const VALID_TAGS: &[&str] = &[
-                "p", "span", "strong", "b", "em", "i", "u", "s", "strike", "del", "br", "code", "latex",
+                "p", "span", "strong", "b", "em", "i", "u", "s", "strike", "del", "br", "code",
+                "latex", "a",
             ];
             if !VALID_TAGS.contains(&name_clean) {
                 diag(
                     out,
                     page_idx,
                     format!(
-                        "text `{}` contains unsupported tag `<{name}>` (supported: <p>, <span>, <strong>, <em>, <b>, <i>, <u>, <s>, <code>, <latex>, <br>)",
+                        "text `{}` contains unsupported tag `<{name}>` (supported: <p>, <span>, <strong>, <em>, <b>, <i>, <u>, <s>, <a href>, <code>, <latex>, <br>)",
                         text.common.element_id
                     ),
                 );
@@ -1151,6 +1152,7 @@ fn check_presentation_raw_yaml(project: &Project, out: &mut Vec<Diagnostic>) {
                     "author",
                     "description",
                     "customFonts",
+                    "safeFonts",
                 ];
                 for (k, _) in &map {
                     if let serde_yaml::Value::String(s) = k {
@@ -1227,6 +1229,7 @@ fn check_page_raw_yaml(project: &Project, page_idx: usize, out: &mut Vec<Diagnos
                     "className",
                     "style",
                     "order",
+                    "link",
                 ];
                 let type_keys: &[&str] = match elem_type {
                     "text" => &[

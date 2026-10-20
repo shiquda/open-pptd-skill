@@ -43,6 +43,10 @@ pub struct ElementCommon {
     /// the reconstructed `<p:grpSp>`. Only meaningful with `groupId`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub group_bounds: Option<Bounds>,
+    /// External click target (`<a:hlinkClick>` on the element's `p:cNvPr`).
+    /// Written as an external relationship; the URL is never fetched.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub link: Option<String>,
 }
 
 /// Any element on a page, discriminated by the `elementType` field:

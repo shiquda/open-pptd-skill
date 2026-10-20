@@ -5,6 +5,7 @@
 //! be preserved to the EMU and every element class must survive.
 
 use std::fs;
+use std::io::Read;
 use std::path::PathBuf;
 
 use open_pptd::pptd;
@@ -207,9 +208,20 @@ fn math_formulas_roundtrip_through_convert() {
         _ => panic!("expected text element"),
     };
 
-    assert!(decompiled_text.contains(r"\frac{a+b}{c+d}"), "got {decompiled_text}");
-    assert!(decompiled_text.contains(r"\sqrt{x^{2}+y^{2}}") || decompiled_text.contains(r"\sqrt{x^2+y^2}"), "got {decompiled_text}");
-    assert!(decompiled_text.contains(r"\sum_{i=1}^{n} i^{2}") || decompiled_text.contains(r"\sum_{i=1}^{n} i^2"), "got {decompiled_text}");
+    assert!(
+        decompiled_text.contains(r"\frac{a+b}{c+d}"),
+        "got {decompiled_text}"
+    );
+    assert!(
+        decompiled_text.contains(r"\sqrt{x^{2}+y^{2}}")
+            || decompiled_text.contains(r"\sqrt{x^2+y^2}"),
+        "got {decompiled_text}"
+    );
+    assert!(
+        decompiled_text.contains(r"\sum_{i=1}^{n} i^{2}")
+            || decompiled_text.contains(r"\sum_{i=1}^{n} i^2"),
+        "got {decompiled_text}"
+    );
 
     // Rebuild from the converted PPTD
     let rebuild_pptx = work.join("rebuild_math.pptx");
@@ -218,4 +230,110 @@ fn math_formulas_roundtrip_through_convert() {
         .expect("converted math project must rebuild");
 
     let _ = fs::remove_dir_all(&work);
+}
+
+fn read_part(path: &std::path::Path, name: &str) -> String {
+    let mut zip = zip::ZipArchive::new(fs::File::open(path).unwrap()).unwrap();
+    let mut data = String::new();
+    zip.by_name(name)
+        .unwrap()
+        .read_to_string(&mut data)
+        .unwrap();
+    data
+}
+
+#[test]
+fn richtext_hyperlinks_roundtrip_through_convert_and_build() {
+    let work = temp_dir("hyperlink");
+    let dir = work.join("src");
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(
+        dir.join("deck.pptd"),
+        r#"
+version: v2
+title: Link Roundtrip
+size: [960, 540]
+pages: [pages/p.page]
+"#,
+    )
+    .unwrap();
+    fs::write(
+        dir.join("pages/p.page"),
+        r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [50, 50, 500, 120]
+    content:
+      text: |
+        <p>Read <a href="https://arxiv.org/abs/2605.27223">arXiv:2605.27223</a>.</p>
+"#,
+    )
+    .unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let first = work.join("first.pptx");
+    pptx::writer::PptxWriter::new(&project)
+        .build(&first)
+        .unwrap();
+    assert_eq!(
+        read_part(&first, "ppt/slides/slide1.xml")
+            .matches("<a:hlinkClick")
+            .count(),
+        1
+    );
+
+    let converted = work.join("converted");
+    pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
+    let text = match &decompiled.pages[0].elements[0] {
+        pptd::Element::Text(t) => &t.content.text,
+        other => panic!("expected text element, got {other:?}"),
+    };
+    assert!(
+        text.contains("<a href=\"https://arxiv.org/abs/2605.27223\">"),
+        "hyperlink markup must be restored: {text}"
+    );
+
+    let second = work.join("second.pptx");
+    pptx::writer::PptxWriter::new(&decompiled)
+        .build(&second)
+        .unwrap();
+    let slide = read_part(&second, "ppt/slides/slide1.xml");
+    assert_eq!(slide.matches("<a:hlinkClick").count(), 1, "{slide}");
+    let rels = read_part(&second, "ppt/slides/_rels/slide1.xml.rels");
+    assert!(rels.contains("TargetMode=\"External\""), "{rels}");
+    assert!(
+        rels.contains("Target=\"https://arxiv.org/abs/2605.27223\""),
+        "{rels}"
+    );
+}
+
+#[test]
+fn element_link_roundtrips_through_convert() {
+    let work = temp_dir("element-link");
+    let dir = work.join("src");
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(
+        dir.join("deck.pptd"),
+        "version: v2\ntitle: Link\nsize: [960, 540]\npages: [pages/p.page]\n",
+    )
+    .unwrap();
+    fs::write(
+        dir.join("pages/p.page"),
+        "elements:\n  - elementId: card\n    elementType: shape\n    shapeName: roundRect\n    bounds: [50, 50, 300, 120]\n    link: \"https://example.com/source\"\n    fill: {type: solid, color: \"#EEF2FF\"}\n",
+    )
+    .unwrap();
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let first = work.join("first.pptx");
+    pptx::writer::PptxWriter::new(&project)
+        .build(&first)
+        .unwrap();
+    let converted = work.join("converted");
+    pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
+    assert_eq!(
+        decompiled.pages[0].elements[0].common().link.as_deref(),
+        Some("https://example.com/source")
+    );
 }

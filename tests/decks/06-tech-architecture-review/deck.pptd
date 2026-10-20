@@ -1,4 +1,5 @@
 version: v2
+safeFonts: true
 title: "核心交易系统异地多活容灾架构演进评审"
 size: [960, 540]
 theme:

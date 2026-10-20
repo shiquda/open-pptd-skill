@@ -35,6 +35,13 @@ pub struct RenderCtx<'a> {
     /// emit `<p:ph type=…>` + their `lstStyle`/prompt so slide placeholders
     /// inherit them; slide placeholders stay plain shapes (`txBox="1"`).
     pub in_layout: bool,
+    /// External hyperlink targets used by this part, in first-use order.
+    /// Relationship ids follow the media ids (`rId2` onwards).
+    pub hyperlinks: Vec<String>,
+    /// `safeFonts: true` maps web-only typefaces onto system fonts. Default
+    /// is `false`: PPTD font names are written verbatim so round-trips keep
+    /// the source typography.
+    pub safe_fonts: bool,
 }
 
 impl<'a> RenderCtx<'a> {
@@ -45,7 +52,22 @@ impl<'a> RenderCtx<'a> {
             media: Vec::new(),
             image_sizes: Vec::new(),
             in_layout: false,
+            hyperlinks: Vec::new(),
+            safe_fonts: false,
         }
+    }
+
+    /// Relationship id for an external hyperlink, registering the target on
+    /// first use. Ids start after the part's media relationships.
+    pub fn hyperlink_rid(&mut self, url: &str) -> String {
+        let pos = match self.hyperlinks.iter().position(|u| u == url) {
+            Some(pos) => pos,
+            None => {
+                self.hyperlinks.push(url.to_owned());
+                self.hyperlinks.len() - 1
+            }
+        };
+        format!("rId{}", self.media.len() + 2 + pos)
     }
 
     pub(crate) fn next_id(&mut self) -> usize {
@@ -269,6 +291,25 @@ fn is_descendant(
 /// px → EMU (1px = 1pt = 12700 EMU).
 pub fn emu(px: f64) -> i64 {
     (px * 12700.0).round() as i64
+}
+
+/// Emit `p:cNvPr` with its optional external click target.
+pub(crate) fn cnv_pr(
+    xml: &mut Xml,
+    ctx: &mut RenderCtx<'_>,
+    id: &str,
+    name: &str,
+    link: Option<&str>,
+) {
+    match link {
+        Some(url) => {
+            xml.start("p:cNvPr", &[("id", id), ("name", name)]);
+            let rid = ctx.hyperlink_rid(url);
+            xml.leaf("a:hlinkClick", &[("r:id", &rid)]);
+            xml.end("p:cNvPr");
+        }
+        None => xml.leaf("p:cNvPr", &[("id", id), ("name", name)]),
+    }
 }
 
 /// `a:xfrm` from bounds / rotation / flip.
@@ -589,7 +630,7 @@ pub fn render_layout_placeholder(
 
     xml.start("p:txBody", &[]);
     xml.leaf("a:bodyPr", &[]);
-    emit_lst_style(xml, &style, true);
+    emit_lst_style(xml, &style, true, ctx.safe_fonts);
     xml.leaf("a:p", &[]);
     xml.end("p:txBody");
     xml.end("p:sp");
@@ -717,7 +758,7 @@ fn emit_bullet(xml: &mut Xml, style: &EffTextStyle) {
 /// effective style (algn/lnSpc/spcBef/defRPr) so slide placeholders inherit
 /// the layout/master text style (font/size/colour/bold/align/spacing) —
 /// e.g. an empty slide title shows the layout's prompt in blue/bold 24pt.
-fn emit_lst_style(xml: &mut Xml, style: &EffTextStyle, is_placeholder: bool) {
+fn emit_lst_style(xml: &mut Xml, style: &EffTextStyle, is_placeholder: bool, safe_fonts: bool) {
     if !is_placeholder {
         xml.leaf("a:lstStyle", &[]);
         return;
@@ -772,16 +813,16 @@ fn emit_lst_style(xml: &mut Xml, style: &EffTextStyle, is_placeholder: bool) {
         if let Some(f) = &style.font_family {
             match f {
                 FontFamily::Single(name) => {
-                    let lat = super::theme::safe_latin_typeface(name);
-                    let ea = super::theme::safe_ea_typeface(name);
+                    let lat = super::theme::latin_typeface(name, safe_fonts);
+                    let ea = super::theme::ea_typeface(name, safe_fonts);
                     xml.leaf("a:latin", &[("typeface", lat)]);
                     xml.leaf("a:ea", &[("typeface", ea)]);
                 }
                 FontFamily::Bilingual { latin, ea } => {
-                    let lat = super::theme::safe_latin_typeface(latin);
-                    let ea_safe = super::theme::safe_ea_typeface(ea);
+                    let lat = super::theme::latin_typeface(latin, safe_fonts);
+                    let ea = super::theme::ea_typeface(ea, safe_fonts);
                     xml.leaf("a:latin", &[("typeface", lat)]);
-                    xml.leaf("a:ea", &[("typeface", ea_safe)]);
+                    xml.leaf("a:ea", &[("typeface", ea)]);
                 }
             }
         }
@@ -805,8 +846,7 @@ fn render_text(
 
     xml.start("p:sp", &[]);
     xml.start("p:nvSpPr", &[]);
-    xml.start("p:cNvPr", &[("id", &id), ("name", &name)]);
-    xml.end("p:cNvPr");
+    cnv_pr(xml, ctx, &id, &name, text.common.link.as_deref());
     if let Some(ph_type) = text.placeholder.as_deref() {
         // Re-emit the `<p:ph type>` so the rebuilt shape keeps inheriting
         // the master/layout placeholder styles (default fonts, line
@@ -865,7 +905,7 @@ fn render_text(
     if is_empty_placeholder {
         xml.start("p:txBody", &[]);
         xml.leaf("a:bodyPr", &[]);
-        emit_lst_style(xml, &style, true);
+        emit_lst_style(xml, &style, true, ctx.safe_fonts);
         xml.leaf("a:p", &[]);
         xml.end("p:txBody");
         xml.end("p:sp");
@@ -877,7 +917,7 @@ fn render_text(
         xml.start("p:txBody", &[]);
         render_rich_body(
             xml,
-            ctx.theme,
+            ctx,
             &style,
             &text.content.text,
             anchor,
@@ -928,7 +968,7 @@ fn render_text(
         None => xml.leaf("a:normAutofit", &[]),
     }
     xml.end("a:bodyPr");
-    emit_lst_style(xml, &style, text.placeholder.is_some());
+    emit_lst_style(xml, &style, text.placeholder.is_some(), ctx.safe_fonts);
 
     // Plain text: every line becomes one paragraph (the `<p>` equivalence).
     let sz = (style.font_size.unwrap_or(18.0) * 100.0)
@@ -973,7 +1013,7 @@ fn render_text(
         emit_bullet(xml, &style);
         xml.end("a:pPr");
 
-        emit_run(xml, ctx.theme, &style, line)?;
+        emit_run(xml, ctx, &style, line)?;
         // Kimi pins the paragraph end-mark size to the run size; without it
         // the mark takes the theme default (44pt here) and shifts the
         // vertically-centered text off position.
@@ -1134,6 +1174,8 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
         underline: Option<bool>,
         strike: Option<bool>,
         styled: bool,
+        /// External hyperlink from `<a href="…">`.
+        link: Option<String>,
     }
 
     fn flush_text(out: &mut Vec<ParaItem>, buf: &mut String, f: &Flags) {
@@ -1156,6 +1198,7 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                     strike: f.strike,
                     styled: f.styled,
                     baseline: None,
+                    link: f.link.clone(),
                 }));
             }
             let after = &rest[start + 2..];
@@ -1175,6 +1218,7 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                     strike: f.strike,
                     styled: f.styled,
                     baseline: None,
+                    link: f.link.clone(),
                 }));
                 rest = "";
                 break;
@@ -1193,6 +1237,7 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                 strike: f.strike,
                 styled: f.styled,
                 baseline: None,
+                link: f.link.clone(),
             }));
         }
     }
@@ -1208,6 +1253,15 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
     /// Value of a `style="..."` attribute inside a tag's attribute text.
     fn style_attr(attrs: &str) -> Option<&str> {
         let start = attrs.find("style=\"")? + "style=\"".len();
+        let tail = &attrs[start..];
+        let end = tail.find('"')?;
+        Some(&tail[..end])
+    }
+
+    /// Value of an arbitrary `name="..."` attribute inside a tag.
+    fn tag_attr<'a>(attrs: &'a str, name: &str) -> Option<&'a str> {
+        let needle = format!("{name}=\"");
+        let start = attrs.find(&needle)? + needle.len();
         let tail = &attrs[start..];
         let end = tail.find('"')?;
         Some(&tail[..end])
@@ -1229,7 +1283,10 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
             flags.letter_spacing = Some(v);
         }
         if let Some(w) = css_value(&pairs, "font-weight") {
-            flags.bold = Some(matches!(w, "bold" | "bolder" | "600" | "700" | "800" | "900"));
+            flags.bold = Some(matches!(
+                w,
+                "bold" | "bolder" | "600" | "700" | "800" | "900"
+            ));
         }
         if let Some(v) = css_value(&pairs, "font-style") {
             flags.italic = Some(v != "normal");
@@ -1255,7 +1312,7 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
     fn is_inline_tag(name: &str) -> bool {
         matches!(
             name,
-            "span" | "strong" | "b" | "em" | "i" | "u" | "s" | "strike" | "del" | "code"
+            "span" | "strong" | "b" | "em" | "i" | "u" | "s" | "strike" | "del" | "code" | "a"
         )
     }
 
@@ -1323,6 +1380,12 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                             flags.family = Some("Consolas".to_string());
                             flags.styled = true;
                         }
+                        "a" => {
+                            if let Some(href) = tag_attr(attrs, "href") {
+                                flags.link = Some(unescape_xml(href));
+                                flags.styled = true;
+                            }
+                        }
                         _ => {}
                     }
                 }
@@ -1351,7 +1414,8 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                         && last.bold == run.bold
                         && last.italic == run.italic
                         && last.underline == run.underline
-                        && last.strike == run.strike;
+                        && last.strike == run.strike
+                        && last.link == run.link;
                     if same && !run.styled {
                         last.text.push_str(&run.text);
                         continue;
@@ -1383,12 +1447,14 @@ fn math_colored(theme: Option<&Theme>, style: &EffTextStyle, omml: &str) -> Resu
 /// + styled runs.
 pub(crate) fn render_rich_body(
     xml: &mut Xml,
-    theme: Option<&Theme>,
+    ctx: &mut RenderCtx<'_>,
     style: &EffTextStyle,
     text: &str,
     anchor: &str,
     is_placeholder: bool,
 ) -> Result<()> {
+    let theme = ctx.theme;
+    let safe_fonts = ctx.safe_fonts;
     // Box-level defaults (shared with the plain-text path).
     let wrap = if style.wrap == Some(false) {
         "none"
@@ -1428,7 +1494,7 @@ pub(crate) fn render_rich_body(
         None => xml.leaf("a:normAutofit", &[]),
     }
     xml.end("a:bodyPr");
-    emit_lst_style(xml, style, is_placeholder);
+    emit_lst_style(xml, style, is_placeholder, safe_fonts);
 
     for para in parse_rich(text) {
         xml.start("a:p", &[]);
@@ -1494,10 +1560,8 @@ pub(crate) fn render_rich_body(
         let is_display = math_count == 1 && !has_non_empty_runs;
 
         if is_display {
-            if let Some(ParaItem::Math(latex)) = para
-                .items
-                .iter()
-                .find(|i| matches!(i, ParaItem::Math(_)))
+            if let Some(ParaItem::Math(latex)) =
+                para.items.iter().find(|i| matches!(i, ParaItem::Math(_)))
             {
                 let omml = super::math::latex_to_omml(latex, true)
                     .map_err(|e| crate::error::Error::Invalid(e.to_string()))?;
@@ -1507,7 +1571,7 @@ pub(crate) fn render_rich_body(
             for item in &para.items {
                 match item {
                     ParaItem::Run(run) => {
-                        emit_run_styled(xml, theme, style, Some(run), &run.text)?;
+                        emit_run_styled(xml, ctx, style, Some(run), &run.text)?;
                     }
                     ParaItem::Math(latex) => {
                         let omml = super::math::latex_to_omml(latex, false)
@@ -1518,7 +1582,10 @@ pub(crate) fn render_rich_body(
 
                         xml.start(
                             "mc:AlternateContent",
-                            &[("xmlns:mc", "http://schemas.openxmlformats.org/markup-compatibility/2006")],
+                            &[(
+                                "xmlns:mc",
+                                "http://schemas.openxmlformats.org/markup-compatibility/2006",
+                            )],
                         );
                         xml.start("mc:Choice", &[("Requires", "a14")]);
                         xml.raw(&omml);
@@ -1537,8 +1604,9 @@ pub(crate) fn render_rich_body(
                                 strike: None,
                                 baseline: seg.baseline,
                                 letter_spacing: None,
+                                link: None,
                             };
-                            emit_run_styled(xml, theme, style, Some(&r), &r.text)?;
+                            emit_run_styled(xml, ctx, style, Some(&r), &r.text)?;
                         }
                         xml.end("mc:Fallback");
                         xml.end("mc:AlternateContent");
@@ -1570,11 +1638,11 @@ pub(crate) fn render_rich_body(
 
 fn emit_run(
     xml: &mut Xml,
-    theme: Option<&Theme>,
+    ctx: &mut RenderCtx<'_>,
     style: &EffTextStyle,
     text: &str,
 ) -> Result<()> {
-    emit_run_styled(xml, theme, style, None, text)
+    emit_run_styled(xml, ctx, style, None, text)
 }
 
 #[derive(Clone)]
@@ -1599,6 +1667,8 @@ struct RichRun {
     styled: bool,
     /// OOXML `a:rPr@baseline` shift (1000ths of a percent) for math scripts.
     baseline: Option<i32>,
+    /// External hyperlink target (`<a href="…">`).
+    link: Option<String>,
 }
 
 /// One rich-text paragraph: per-paragraph overrides + items.
@@ -1626,12 +1696,16 @@ impl RichPara {
 /// back to the box-level `EffTextStyle`.
 fn emit_run_styled(
     xml: &mut Xml,
-    theme: Option<&Theme>,
+    ctx: &mut RenderCtx<'_>,
     style: &EffTextStyle,
     run: Option<&RichRun>,
     text: &str,
 ) -> Result<()> {
-    let run = run.filter(|r| r.styled);
+    let theme = ctx.theme;
+    let safe_fonts = ctx.safe_fonts;
+    // Link-only runs must survive the "explicit style" filter, otherwise
+    // `<a href="…">plain text</a>` would be emitted without its click target.
+    let run = run.filter(|r| r.styled || r.link.is_some());
     // Math script runs (baseline set) without an explicit size render at 70%.
     let baseline = run.and_then(|r| r.baseline);
     let mut font_size = run.and_then(|r| r.size).or(style.font_size).unwrap_or(18.0);
@@ -1643,7 +1717,7 @@ fn emit_run_styled(
         .map(|f| FontFamily::Single(f.to_owned()))
         .or_else(|| style.font_family.clone())
         .unwrap_or_else(|| {
-            let (latin, ea) = super::theme::default_fonts(theme);
+            let (latin, ea) = super::theme::default_fonts(theme, safe_fonts);
             FontFamily::Bilingual { latin, ea }
         });
     let color = run
@@ -1705,19 +1779,23 @@ fn emit_run_styled(
     }
     match &font_family {
         FontFamily::Single(name) => {
-            let lat = super::theme::safe_latin_typeface(name);
-            let ea = super::theme::safe_ea_typeface(name);
+            let lat = super::theme::latin_typeface(name, safe_fonts);
+            let ea = super::theme::ea_typeface(name, safe_fonts);
             xml.leaf("a:latin", &[("typeface", lat)]);
             xml.leaf("a:ea", &[("typeface", ea)]);
             xml.leaf("a:cs", &[("typeface", lat)]);
         }
         FontFamily::Bilingual { latin, ea } => {
-            let lat = super::theme::safe_latin_typeface(latin);
-            let ea_safe = super::theme::safe_ea_typeface(ea);
+            let lat = super::theme::latin_typeface(latin, safe_fonts);
+            let ea = super::theme::ea_typeface(ea, safe_fonts);
             xml.leaf("a:latin", &[("typeface", lat)]);
-            xml.leaf("a:ea", &[("typeface", ea_safe)]);
+            xml.leaf("a:ea", &[("typeface", ea)]);
             xml.leaf("a:cs", &[("typeface", lat)]);
         }
+    }
+    if let Some(url) = run.and_then(|r| r.link.as_deref()) {
+        let rid = ctx.hyperlink_rid(url);
+        xml.leaf("a:hlinkClick", &[("r:id", &rid)]);
     }
     xml.end("a:rPr");
     xml.text_elem("a:t", text);
@@ -1735,8 +1813,7 @@ fn render_shape(xml: &mut Xml, ctx: &mut RenderCtx<'_>, shape: &Shape) -> Result
 
     xml.start("p:sp", &[]);
     xml.start("p:nvSpPr", &[]);
-    xml.start("p:cNvPr", &[("id", &id), ("name", &name)]);
-    xml.end("p:cNvPr");
+    cnv_pr(xml, ctx, &id, &name, shape.common.link.as_deref());
     xml.leaf("p:cNvSpPr", &[]);
     xml.leaf("p:nvPr", &[]);
     xml.end("p:nvSpPr");
@@ -1998,8 +2075,7 @@ fn render_line(xml: &mut Xml, ctx: &mut RenderCtx<'_>, line: &Line) -> Result<()
 
         xml.start("p:cxnSp", &[]);
         xml.start("p:nvCxnSpPr", &[]);
-        xml.start("p:cNvPr", &[("id", &id), ("name", &name)]);
-        xml.end("p:cNvPr");
+        cnv_pr(xml, ctx, &id, &name, line.common.link.as_deref());
         xml.leaf("p:cNvCxnSpPr", &[]);
         xml.leaf("p:nvPr", &[]);
         xml.end("p:nvCxnSpPr");
@@ -2016,8 +2092,7 @@ fn render_line(xml: &mut Xml, ctx: &mut RenderCtx<'_>, line: &Line) -> Result<()
     } else {
         xml.start("p:sp", &[]);
         xml.start("p:nvSpPr", &[]);
-        xml.start("p:cNvPr", &[("id", &id), ("name", &name)]);
-        xml.end("p:cNvPr");
+        cnv_pr(xml, ctx, &id, &name, line.common.link.as_deref());
         xml.leaf("p:cNvSpPr", &[]);
         xml.leaf("p:nvPr", &[]);
         xml.end("p:nvSpPr");
@@ -2130,8 +2205,7 @@ fn render_icon(xml: &mut Xml, ctx: &mut RenderCtx<'_>, icon: &Icon) -> Result<()
 
     xml.start("p:sp", &[]);
     xml.start("p:nvSpPr", &[]);
-    xml.start("p:cNvPr", &[("id", &id), ("name", &name)]);
-    xml.end("p:cNvPr");
+    cnv_pr(xml, ctx, &id, &name, icon.common.link.as_deref());
     xml.leaf("p:cNvSpPr", &[]);
     // Keep the PPTD identity for round-tripping (mirrors the Kimi exporter).
     let payload = base64url(format!("{{\"iconName\":\"{}\"}}", icon.icon_name).as_bytes());
@@ -2263,8 +2337,7 @@ fn render_image(xml: &mut Xml, ctx: &mut RenderCtx<'_>, image: &Image) -> Result
 
     xml.start("p:pic", &[]);
     xml.start("p:nvPicPr", &[]);
-    xml.start("p:cNvPr", &[("id", &id), ("name", &name)]);
-    xml.end("p:cNvPr");
+    cnv_pr(xml, ctx, &id, &name, image.common.link.as_deref());
     xml.leaf("p:cNvPicPr", &[]);
     xml.leaf("p:nvPr", &[]);
     xml.end("p:nvPicPr");
@@ -2536,7 +2609,7 @@ mod tests {
         let mut xml = Xml::new();
         render_rich_body(
             &mut xml,
-            None,
+            &mut RenderCtx::new(None),
             &style,
             "<p><u>underline</u> <s>strike</s></p>",
             "tl",
@@ -2558,7 +2631,7 @@ mod tests {
         let mut xml = Xml::new();
         render_rich_body(
             &mut xml,
-            None,
+            &mut RenderCtx::new(None),
             &style,
             "<p>Vertical Text</p>",
             "tl",
@@ -2579,7 +2652,7 @@ mod tests {
         // Display formula (whole paragraph)
         render_rich_body(
             &mut xml,
-            None,
+            &mut RenderCtx::new(None),
             &style,
             "<p><latex>\\frac{a+b}{c+d}</latex></p>",
             "tl",
@@ -2594,7 +2667,7 @@ mod tests {
         // Inline formula
         render_rich_body(
             &mut xml_inline,
-            None,
+            &mut RenderCtx::new(None),
             &style,
             "<p>Formula: <latex>\\sqrt{x}</latex> inline</p>",
             "tl",

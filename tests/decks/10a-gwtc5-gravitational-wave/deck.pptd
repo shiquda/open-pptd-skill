@@ -1,4 +1,5 @@
 version: v2
+safeFonts: true
 title: "GWTC-5 Gravitational-Wave Catalog"
 size: [960, 540]
 theme:

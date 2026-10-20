@@ -267,7 +267,9 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
         let page_no = idx + 1;
         let slide = parse_part(&mut zip, part)?;
         let (rels, layout_part, notes_part) = parse_slide_rels(&mut zip, part);
-        let notes = notes_part.as_deref().and_then(|np| extract_notes(&mut zip, np));
+        let notes = notes_part
+            .as_deref()
+            .and_then(|np| extract_notes(&mut zip, np));
 
         // Build (or reuse) the layout for this slide's source layout part:
         // decorative shapes + placeholders + per-layout defaults, captured
@@ -384,6 +386,9 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
         title,
         custom_fonts: Vec::new(),
         size,
+        // Converted decks must round-trip the source typography: no safety
+        // mapping unless the author opts in later.
+        safe_fonts: false,
         theme,
         layouts: if layouts.is_empty() {
             None
@@ -1052,7 +1057,11 @@ fn parse_slide_rels(
         for rel in children(&rels_root, "Relationship") {
             let id = attr(rel, "Id").unwrap_or_default().to_string();
             let target = attr(rel, "Target").unwrap_or_default();
-            let resolved = resolve_target(part, target);
+            let resolved = if attr(rel, "TargetMode") == Some("External") {
+                target.to_string()
+            } else {
+                resolve_target(part, target)
+            };
             if attr(rel, "Type").is_some_and(|t| t.ends_with("/slideLayout"))
                 && layout_part.is_none()
             {
@@ -1459,7 +1468,12 @@ fn layout_rels(zip: &mut zip::ZipArchive<fs::File>, layout_part: &str) -> BTreeM
         for rel in children(&rels_root, "Relationship") {
             let id = attr(rel, "Id").unwrap_or_default().to_string();
             let target = attr(rel, "Target").unwrap_or_default();
-            rels.insert(id, resolve_target(layout_part, target));
+            let resolved = if attr(rel, "TargetMode") == Some("External") {
+                target.to_string()
+            } else {
+                resolve_target(layout_part, target)
+            };
+            rels.insert(id, resolved);
         }
     }
     rels
@@ -1478,7 +1492,7 @@ fn walk_sp_tree_child(
     match el.name.as_str() {
         "sp" => out.push(map_sp(el, rels, ctx, group, in_layout)?),
         "pic" => out.push(map_pic(el, rels, ctx, group)),
-        "cxnSp" => out.push(map_line(el, ctx, group)),
+        "cxnSp" => out.push(map_line(el, rels, ctx, group)),
         "grpSp" => {
             flatten_group(el, rels, ctx, group, group_id, None, in_layout, out)?;
         }
@@ -1486,7 +1500,7 @@ fn walk_sp_tree_child(
             let name = cnv_name(el).unwrap_or_else(|| "graphicFrame".into());
             let uri = graphic_uri(el).unwrap_or_default();
             if uri.contains("/table") {
-                out.push(map_table(el, ctx, group));
+                out.push(map_table(el, rels, ctx, group));
             } else {
                 let kind = if uri.contains("/chart") {
                     "chart"
@@ -1797,7 +1811,7 @@ fn to_bounds(x: &Xform) -> Bounds {
     }
 }
 
-fn common(x: &Xform, id: String) -> ElementCommon {
+fn common(x: &Xform, id: String, link: Option<String>) -> ElementCommon {
     ElementCommon {
         element_id: id,
         bounds: to_bounds(x),
@@ -1806,6 +1820,31 @@ fn common(x: &Xform, id: String) -> ElementCommon {
         flip: x.flip.filter(|(h, v)| *h || *v),
         group_id: None,
         group_bounds: None,
+        link,
+    }
+}
+
+/// External click target on an element's `p:cNvPr` (`a:hlinkClick r:id`).
+fn element_link(el: &XmlEl, rels: &BTreeMap<String, String>) -> Option<String> {
+    let nv = el
+        .children
+        .iter()
+        .filter_map(|n| n.as_element())
+        .find(|c| c.name.starts_with("nv") && c.name.ends_with("Pr"))?;
+    let cnv = first(nv, "cNvPr")?;
+    let rid = attr(first(cnv, "hlinkClick")?, "id")?;
+    external_target(rels, rid)
+}
+
+/// Resolve a relationship id only when it points outside the package.
+/// Internal jump actions (`ppaction://…`, slide targets) are not represented
+/// in PPTD, so they must not masquerade as external URLs.
+fn external_target(rels: &BTreeMap<String, String>, rid: &str) -> Option<String> {
+    let target = rels.get(rid)?;
+    if target.contains("://") || target.starts_with("mailto:") {
+        Some(target.clone())
+    } else {
+        None
     }
 }
 
@@ -1835,7 +1874,7 @@ fn graphic_uri(el: &XmlEl) -> Option<&str> {
 
 fn map_sp(
     el: &XmlEl,
-    _rels: &BTreeMap<String, String>,
+    rels: &BTreeMap<String, String>,
     ctx: &mut PageCtx<'_>,
     group: Option<&Xform>,
     in_layout: bool,
@@ -1919,7 +1958,7 @@ fn map_sp(
             let id = ctx.unique_id(&name, "icon");
             let fill = sp_pr.and_then(|p| solid_fill(p, ctx.slots));
             return Ok(Some(Element::Icon(Icon {
-                common: common(&x, id),
+                common: common(&x, id, element_link(el, rels)),
                 icon_name,
                 fill,
                 border: border_from_el(el, ctx.slots),
@@ -2000,7 +2039,7 @@ fn map_sp(
         ctx.para_line_spacing = para_line_spacing;
         let saved_mtop = ctx.para_margin_top;
         ctx.para_margin_top = para_margin_top;
-        let mut content = text_content(tx_body, ctx.slots, ctx, &name);
+        let mut content = text_content(tx_body, rels, ctx.slots, ctx, &name);
         ctx.para_margin_top = saved_mtop;
         ctx.para_line_spacing = saved_para;
         ctx.defaults = saved_defaults;
@@ -2049,7 +2088,7 @@ fn map_sp(
                 .as_ref()
                 .map(|p| attr(p, "type").unwrap_or("body").to_string());
             return Ok(Some(Element::Text(Box::new(Text {
-                common: common(&x, id),
+                common: common(&x, id, element_link(el, rels)),
                 content,
                 fill,
                 border,
@@ -2067,7 +2106,7 @@ fn map_sp(
                 .unwrap_or("body")
                 .to_string();
             return Ok(Some(Element::Text(Box::new(Text {
-                common: common(&x, id),
+                common: common(&x, id, element_link(el, rels)),
                 content: TextContent::default(),
                 fill: None,
                 border: None,
@@ -2089,7 +2128,7 @@ fn map_sp(
             Ok(Some((view_box, path, adjustments))) => {
                 let id = ctx.unique_id(&name, "custom shape");
                 element = Some(Element::Shape(Shape {
-                    common: common(&x, id),
+                    common: common(&x, id, element_link(el, rels)),
                     shape_name: "custom".to_string(),
                     adjustments,
                     view_box: Some(view_box),
@@ -2109,7 +2148,7 @@ fn map_sp(
         let id = ctx.unique_id(&name, "shape");
         let adjustments = av_list_values(sp_pr.and_then(|p| first(p, "prstGeom")));
         element = Some(Element::Shape(Shape {
-            common: common(&x, id),
+            common: common(&x, id, element_link(el, rels)),
             shape_name: prst.to_string(),
             adjustments,
             view_box: None,
@@ -2726,7 +2765,12 @@ fn cell_border_spec(sides: [Option<Option<Border>>; 4]) -> Option<crate::pptd::s
 /// Merge reconstruction mirrors the forward writer: `hMerge` / `vMerge`
 /// placeholder cells are dropped from the ragged `rows` arrays, while the
 /// origin cell carries `rowSpan` / `colSpan`.
-fn map_table(el: &XmlEl, ctx: &mut PageCtx<'_>, group: Option<&Xform>) -> Option<Element> {
+fn map_table(
+    el: &XmlEl,
+    rels: &BTreeMap<String, String>,
+    ctx: &mut PageCtx<'_>,
+    group: Option<&Xform>,
+) -> Option<Element> {
     let name = cnv_name(el).unwrap_or_else(|| "table".into());
     let xfrm_el = first(el, "xfrm")?;
     let x = Xform::parse(xfrm_el).apply(group);
@@ -2775,7 +2819,8 @@ fn map_table(el: &XmlEl, ctx: &mut PageCtx<'_>, group: Option<&Xform>) -> Option
             }
             let row_span = attr(tc, "rowSpan").and_then(|v| v.parse::<u32>().ok());
             let col_span = attr(tc, "gridSpan").and_then(|v| v.parse::<u32>().ok());
-            let content = first(tc, "txBody").and_then(|t| text_content(t, ctx.slots, ctx, &name));
+            let content =
+                first(tc, "txBody").and_then(|t| text_content(t, rels, ctx.slots, ctx, &name));
             let tc_pr = first(tc, "tcPr");
             let fill = tc_pr
                 .and_then(|p| first(p, "solidFill"))
@@ -2829,7 +2874,7 @@ fn map_table(el: &XmlEl, ctx: &mut PageCtx<'_>, group: Option<&Xform>) -> Option
         .map(|c| Fill::Solid { color: c });
     let id = ctx.unique_id(&name, "table");
     Some(Element::Table(crate::pptd::elements::Table {
-        common: common(&x, id),
+        common: common(&x, id, element_link(el, rels)),
         column_widths,
         row_heights,
         rows,
@@ -2920,7 +2965,7 @@ fn map_pic(
         .and_then(|v| v.parse::<f64>().ok())
         .map(|emu| emu / EMU_PER_PX);
     Some(Element::Image(Image {
-        common: common(&x, id),
+        common: common(&x, id, element_link(el, rels)),
         src,
         crop_shape,
         fit,
@@ -2985,7 +3030,7 @@ fn map_media(
 
     let id = ctx.unique_id(&name, kind);
     let media = Media {
-        common: common(&x, id),
+        common: common(&x, id, element_link(el, rels)),
         src: format!("media/{basename}"),
         poster,
     };
@@ -3054,7 +3099,12 @@ fn src_rect_fit(
 }
 
 /// Straight connector → `elementType: line` (degenerate axis allowed).
-fn map_line(el: &XmlEl, ctx: &mut PageCtx<'_>, group: Option<&Xform>) -> Option<Element> {
+fn map_line(
+    el: &XmlEl,
+    rels: &BTreeMap<String, String>,
+    ctx: &mut PageCtx<'_>,
+    group: Option<&Xform>,
+) -> Option<Element> {
     let name = cnv_name(el).unwrap_or_else(|| "line".to_string());
     let sp_pr = first(el, "spPr");
     let xfrm = sp_pr.and_then(|p| first(p, "xfrm"))?;
@@ -3080,7 +3130,7 @@ fn map_line(el: &XmlEl, ctx: &mut PageCtx<'_>, group: Option<&Xform>) -> Option<
     let border = border_from_el(el, ctx.slots);
     let id = ctx.unique_id(&name, "line");
     Some(Element::Line(Line {
-        common: common(&x, id),
+        common: common(&x, id, element_link(el, rels)),
         view_box,
         points,
         curve: None,
@@ -3343,6 +3393,7 @@ fn bg_fill(slide_or_master: &XmlEl, slots: &SlotColors) -> Option<Fill> {
 /// Build `TextContent` from `p:txBody`. `None` when the box has no text.
 fn text_content(
     tx_body: &XmlEl,
+    rels: &BTreeMap<String, String>,
     slots: &SlotColors,
     ctx: &mut PageCtx<'_>,
     _name: &str,
@@ -3426,7 +3477,7 @@ fn text_content(
         align: Option<HorizontalAlign>,
         line_height: Option<f64>,
         margin_top_px: Option<f64>,
-        runs: Vec<(Option<RunStyle>, String)>,
+        runs: Vec<(Option<RunStyle>, String, Option<String>)>,
     }
     fn css_align(a: HorizontalAlign) -> &'static str {
         match a {
@@ -3442,6 +3493,10 @@ fn text_content(
         t.replace('&', "&amp;")
             .replace('<', "&lt;")
             .replace('>', "&gt;")
+    }
+
+    fn escape_attr(t: &str) -> String {
+        escape_text(t).replace('"', "&quot;")
     }
 
     let mut out_lines: Vec<RichLine> = Vec::new();
@@ -3499,7 +3554,7 @@ fn text_content(
             // Placeholder paragraphs inherit the master/layout `spcBef`
             // when their own `<a:pPr>` carries none (OOXML chain).
             .or(ctx.para_margin_top);
-        let mut runs: Vec<(Option<RunStyle>, String)> = Vec::new();
+        let mut runs: Vec<(Option<RunStyle>, String, Option<String>)> = Vec::new();
         for child in p.children.iter().filter_map(|n| n.as_element()) {
             match child.name.as_str() {
                 "r" => {
@@ -3507,17 +3562,23 @@ fn text_content(
                         .and_then(|t| t.get_text())
                         .map(|c| c.to_string())
                         .unwrap_or_default();
-                    let st =
-                        RunStyle::from_rpr(first(child, "rPr"), slots, &para_defaults, &ctx.fonts);
-                    runs.push((st, t));
+                    let rpr = first(child, "rPr");
+                    let st = RunStyle::from_rpr(rpr, slots, &para_defaults, &ctx.fonts);
+                    // `<a:rPr><a:hlinkClick r:id="…"/></a:rPr>` → external
+                    // target from the slide/layout rels (verbatim URL).
+                    let link = rpr
+                        .and_then(|r| first(r, "hlinkClick"))
+                        .and_then(|h| attr(h, "id"))
+                        .and_then(|rid| external_target(rels, rid));
+                    runs.push((st, t, link));
                 }
-                "br" => runs.push((None, "\n".into())),
+                "br" => runs.push((None, "\n".into(), None)),
                 "fld" => {
                     let t = first(child, "t")
                         .and_then(|t| t.get_text())
                         .map(|c| c.to_string())
                         .unwrap_or_default();
-                    runs.push((None, t));
+                    runs.push((None, t, None));
                 }
                 "m" | "oMath" | "oMathPara" => {
                     let omath = if child.name == "oMath" {
@@ -3525,12 +3586,13 @@ fn text_content(
                     } else if child.name == "oMathPara" {
                         first(child, "oMath")
                     } else {
-                        first(child, "oMath")
-                            .or_else(|| first(child, "oMathPara").and_then(|omp| first(omp, "oMath")))
+                        first(child, "oMath").or_else(|| {
+                            first(child, "oMathPara").and_then(|omp| first(omp, "oMath"))
+                        })
                     };
                     if let Some(om) = omath {
                         let latex = crate::pptx::math::omml_to_latex(om);
-                        runs.push((None, format!("<latex>{latex}</latex>")));
+                        runs.push((None, format!("<latex>{latex}</latex>"), None));
                     }
                 }
                 "AlternateContent" => {
@@ -3544,12 +3606,13 @@ fn text_content(
                             } else if m_node.name == "oMathPara" {
                                 first(m_node, "oMath")
                             } else {
-                                first(m_node, "oMath")
-                                    .or_else(|| first(m_node, "oMathPara").and_then(|omp| first(omp, "oMath")))
+                                first(m_node, "oMath").or_else(|| {
+                                    first(m_node, "oMathPara").and_then(|omp| first(omp, "oMath"))
+                                })
                             };
                             if let Some(om) = omath {
                                 let latex = crate::pptx::math::omml_to_latex(om);
-                                runs.push((None, format!("<latex>{latex}</latex>")));
+                                runs.push((None, format!("<latex>{latex}</latex>"), None));
                             }
                         }
                     }
@@ -3560,7 +3623,7 @@ fn text_content(
         // An empty paragraph (no runs) still renders as an empty line in
         // OOXML — it spaces the following paragraphs apart.
         if runs.is_empty() {
-            runs.push((None, String::new()));
+            runs.push((None, String::new(), None));
         }
         out_lines.push(RichLine {
             align: algn,
@@ -3573,7 +3636,7 @@ fn text_content(
     // Drop trailing placeholder paragraphs.
     while out_lines
         .last()
-        .is_some_and(|l| l.runs.iter().all(|(_, t)| t.is_empty()))
+        .is_some_and(|l| l.runs.iter().all(|(_, t, _)| t.is_empty()))
     {
         out_lines.pop();
     }
@@ -3588,8 +3651,8 @@ fn text_content(
     // line height (QuickLook/WPS ≈ 1.2× font), and emitting `spcPct=100000`
     // would force a tight 1.0× that doesn't match the source.
     let line_height = first.line_height;
-    let run_style = first.runs.first().and_then(|(st, _)| st.clone());
-    if first.runs.iter().all(|(_, t)| t.is_empty()) && out_lines.len() == 1 {
+    let run_style = first.runs.first().and_then(|(st, _, _)| st.clone());
+    if first.runs.iter().all(|(_, t, _)| t.is_empty()) && out_lines.len() == 1 {
         return None; // textless box
     }
 
@@ -3603,7 +3666,7 @@ fn text_content(
     // preserves as an empty `<a:p>` (a visible blank line).
     let has_empty_para = out_lines
         .iter()
-        .any(|l| l.runs.iter().all(|(_, t)| t.is_empty()));
+        .any(|l| l.runs.iter().all(|(_, t, _)| t.is_empty()));
     let uniform = !has_empty_para
         && out_lines.iter().all(|l| {
             l.runs.len() == 1
@@ -3611,6 +3674,7 @@ fn text_content(
                 && l.line_height == line_height
                 && l.margin_top_px.is_none()
                 && l.runs[0].0 == run_style
+                && l.runs[0].2.is_none()
         });
 
     let text = if uniform {
@@ -3640,7 +3704,7 @@ fn text_content(
                 format!(" style=\"{}\"", style_parts.join("; "))
             };
             markup.push_str(&format!("<p{style_attr}>"));
-            for (st, t) in &l.runs {
+            for (st, t, link) in &l.runs {
                 if t.is_empty() {
                     continue;
                 }
@@ -3652,7 +3716,11 @@ fn text_content(
                 // stay plain; anything else gets an explicit wrapper so the
                 // rebuild does not inherit the box style from paragraph 1.
                 if st == &run_style && (st.is_none() || !t.contains('\n')) {
-                    markup.push_str(&escape_text(t));
+                    let escaped = escape_text(t);
+                    markup.push_str(&match link {
+                        Some(href) => format!("<a href=\"{}\">{escaped}</a>", escape_attr(href)),
+                        None => escaped,
+                    });
                     continue;
                 }
                 if t == "\n" {
@@ -3699,6 +3767,9 @@ fn text_content(
                 }
                 if st.as_ref().is_some_and(|s| s.bold == Some(true)) {
                     inner = format!("<strong>{inner}</strong>");
+                }
+                if let Some(href) = link {
+                    inner = format!("<a href=\"{}\">{inner}</a>", escape_attr(href));
                 }
                 markup.push_str(&inner);
             }

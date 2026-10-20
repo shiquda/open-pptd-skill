@@ -24,6 +24,12 @@ pub struct Presentation {
     pub custom_fonts: Vec<CustomFont>,
     /// Canvas size in px; e.g. `[960, 540]` for 16:9.
     pub size: Size,
+    /// Map web-only typefaces (`MiSans`, `Liter`, `QuattrocentoSans`, …) onto
+    /// universally installed system fonts at build time. Default `false`:
+    /// font names are written verbatim, so `convert` → `build` keeps the
+    /// source typography. Decks that rely on the safety mapping opt in.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub safe_fonts: bool,
     /// Shared theme: colors, text styles and table styles.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub theme: Option<Theme>,

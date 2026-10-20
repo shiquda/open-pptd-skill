@@ -1,4 +1,5 @@
 version: v2
+safeFonts: true
 title: "北纬三十度烘焙年度品牌手册"
 size: [1280, 720]
 theme:

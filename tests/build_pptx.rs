@@ -13,10 +13,7 @@ const BUILDABLE: &str = concat!(
 );
 
 fn out_path(tag: &str) -> PathBuf {
-    std::env::temp_dir().join(format!(
-        "pptd-build-{tag}-{}.pptx",
-        std::process::id()
-    ))
+    std::env::temp_dir().join(format!("pptd-build-{tag}-{}.pptx", std::process::id()))
 }
 
 const REQUIRED_PARTS: [&str; 11] = [
@@ -350,12 +347,12 @@ elements:
     );
     assert!(slide.contains(r#"<a:srgbClr val="C00000""#), "{slide}");
     assert!(slide.contains(r#"<a:srgbClr val="0060C0""#), "{slide}");
-    assert!(slide.contains(r#"sz="2600""#), "16px→26px run size: {slide}");
+    assert!(
+        slide.contains(r#"sz="2600""#),
+        "16px→26px run size: {slide}"
+    );
     // The nested </em> must restore the surrounding bold, not clear it.
-    let after_em = slide
-        .split("仍粗")
-        .next()
-        .expect("text after the em");
+    let after_em = slide.split("仍粗").next().expect("text after the em");
     assert!(
         after_em.rfind(r#"b="1""#).is_some(),
         "bold lost after a nested </em>: {slide}"
@@ -442,10 +439,7 @@ elements:
     PptxWriter::new(&project).build(&path).unwrap();
     let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
 
-    let omml = slide
-        .split("<m:oMath>")
-        .nth(1)
-        .expect("display math");
+    let omml = slide.split("<m:oMath>").nth(1).expect("display math");
     assert!(
         omml.contains(r#"<a:srgbClr val="F5F5F5"/>"#),
         "math runs must carry the box colour: {omml}"
@@ -548,6 +542,7 @@ elements:
 fn font_fallback_maps_misans_safely() {
     let deck = r#"
 version: v2
+safeFonts: true
 title: Font Test
 size: [960, 540]
 theme:
@@ -605,6 +600,7 @@ elements:
 fn font_fallback_maps_source_han_serif_safely() {
     let deck = r#"
 version: v2
+safeFonts: true
 title: Serif Font Test
 size: [960, 540]
 theme:
@@ -657,6 +653,57 @@ elements:
 }
 
 #[test]
+fn font_names_pass_through_unless_safe_fonts_is_enabled() {
+    let deck = r#"
+version: v2
+title: Passthrough Font Test
+size: [960, 540]
+theme:
+  textStyles:
+    body:
+      fontFamily: QuattrocentoSans
+pages: [pages/p.page]
+"#;
+    let page = r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [50, 50, 400, 100]
+    content:
+      fontFamily: QuattrocentoSans
+      text: "Typography must round-trip"
+"#;
+    let dir = std::env::temp_dir().join(format!("pptd-font-passthrough-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(dir.join("deck.pptd"), deck).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let path = out_path("font_passthrough");
+    let _ = fs::remove_file(&path);
+    PptxWriter::new(&project)
+        .build(&path)
+        .expect("passthrough font deck must build");
+
+    let theme = read_zip_part(&path, "ppt/theme/theme1.xml");
+    assert!(
+        theme.contains("typeface=\"QuattrocentoSans\""),
+        "theme must preserve the source typeface: {theme}"
+    );
+    let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
+    assert!(
+        slide.contains("typeface=\"QuattrocentoSans\""),
+        "slide must preserve the source typeface: {slide}"
+    );
+    assert!(
+        !slide.contains("typeface=\"Arial\""),
+        "font name must not be rewritten by default: {slide}"
+    );
+    let _ = fs::remove_file(&path);
+}
+
+#[test]
 fn math_formula_default_upright_and_subscripts() {
     let deck = r#"
 version: v2
@@ -688,12 +735,24 @@ elements:
         .expect("math deck must build");
 
     let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
-    assert!(slide.contains("<a14:m><m:oMath>"), "native OMML inline math missing");
+    assert!(
+        slide.contains("<a14:m><m:oMath>"),
+        "native OMML inline math missing"
+    );
     assert!(slide.contains("<m:sSub>"), "subscript structure missing");
     assert!(slide.contains("≥"), "ge symbol missing");
-    assert!(slide.contains("mc:AlternateContent"), "inline math must use mc:AlternateContent");
-    assert!(slide.contains("mc:Fallback"), "inline math must include fallback");
-    assert!(slide.contains("baseline=\"-25000\""), "fallback must contain subscript baseline shift");
+    assert!(
+        slide.contains("mc:AlternateContent"),
+        "inline math must use mc:AlternateContent"
+    );
+    assert!(
+        slide.contains("mc:Fallback"),
+        "inline math must include fallback"
+    );
+    assert!(
+        slide.contains("baseline=\"-25000\""),
+        "fallback must contain subscript baseline shift"
+    );
     let _ = fs::remove_file(&path);
 }
 
@@ -730,7 +789,10 @@ elements:
 
     let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
     // Both formulas are emitted as native OMML
-    assert!(slide.contains("<a14:m><m:oMath>"), "native OMML formula missing");
+    assert!(
+        slide.contains("<a14:m><m:oMath>"),
+        "native OMML formula missing"
+    );
     assert!(slide.contains("<m:t>z</m:t>"), "formula z content missing");
     assert!(slide.contains("x"), "formula x content missing");
     assert!(slide.contains("y"), "formula y content missing");
@@ -795,4 +857,100 @@ elements:
 
     let _ = fs::remove_file(&path);
     let _ = fs::remove_dir_all(&dir);
+}
+
+#[test]
+fn rich_text_hyperlinks_write_external_relationships() {
+    let deck = r#"
+version: v2
+title: Link Test
+size: [960, 540]
+pages: [pages/p.page]
+"#;
+    let page = r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [50, 50, 500, 120]
+    content:
+      text: |
+        <p>See <a href="https://arxiv.org/abs/2605.27223">arXiv</a> and <a href="https://arxiv.org/abs/2605.27223">the paper</a>.</p>
+"#;
+    let dir = std::env::temp_dir().join(format!("pptd-link-test-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(dir.join("deck.pptd"), deck).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let path = out_path("hyperlink");
+    let _ = fs::remove_file(&path);
+    PptxWriter::new(&project)
+        .build(&path)
+        .expect("hyperlink deck must build");
+
+    let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
+    assert_eq!(
+        slide.matches("<a:hlinkClick").count(),
+        2,
+        "both linked runs need a click target: {slide}"
+    );
+    assert!(
+        slide.contains("<a:hlinkClick r:id=\"rId2\"/>"),
+        "link relationship id missing: {slide}"
+    );
+    let rels = read_zip_part(&path, "ppt/slides/_rels/slide1.xml.rels");
+    assert_eq!(
+        rels.matches("relationships/hyperlink").count(),
+        1,
+        "the same URL must be deduplicated: {rels}"
+    );
+    assert!(rels.contains("TargetMode=\"External\""), "{rels}");
+    assert!(
+        rels.contains("Target=\"https://arxiv.org/abs/2605.27223\""),
+        "URL must be written verbatim: {rels}"
+    );
+    let _ = fs::remove_file(&path);
+}
+
+#[test]
+fn element_level_links_survive_build() {
+    let deck = r#"
+version: v2
+title: Shape Link Test
+size: [960, 540]
+pages: [pages/p.page]
+"#;
+    let page = r##"
+elements:
+  - elementId: card
+    elementType: shape
+    shapeName: roundRect
+    bounds: [50, 50, 300, 120]
+    link: "https://example.com/source"
+    fill: {type: solid, color: "#EEF2FF"}
+"##;
+    let dir = std::env::temp_dir().join(format!("pptd-elem-link-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(dir.join("deck.pptd"), deck).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let path = out_path("element_link");
+    let _ = fs::remove_file(&path);
+    PptxWriter::new(&project)
+        .build(&path)
+        .expect("element link deck must build");
+
+    let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
+    assert_eq!(slide.matches("<a:hlinkClick").count(), 1, "{slide}");
+    assert!(slide.contains("<a:hlinkClick r:id=\"rId2\"/>"), "{slide}");
+    let rels = read_zip_part(&path, "ppt/slides/_rels/slide1.xml.rels");
+    assert!(
+        rels.contains("Target=\"https://example.com/source\""),
+        "{rels}"
+    );
+    assert!(rels.contains("TargetMode=\"External\""), "{rels}");
+    let _ = fs::remove_file(&path);
 }

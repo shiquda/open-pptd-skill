@@ -1,4 +1,5 @@
 version: v2
+safeFonts: true
 title: ColdSync 极鲜智链 · A轮融资商业计划书
 size: [960, 540]
 theme:

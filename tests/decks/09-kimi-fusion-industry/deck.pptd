@@ -1,4 +1,5 @@
 version: v2
+safeFonts: true
 title: "Controlled Nuclear Fusion: From Scientific Experiment to Energy Industry"
 size: [960, 540]
 theme:

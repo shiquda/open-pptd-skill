@@ -4,6 +4,13 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [Unreleased]
+
+### 新增
+
+- **富文本超链接**：`<a href="https://…">文本</a>` 编译为 run 级 `<a:hlinkClick>` + `slideN.xml.rels` 外部关系（`TargetMode="External"`，同一 URL 去重）；`pptd convert` 还原为同样的行内标记，元素级 `link` 字段也完整回编
+- **字体名默认透传**：`pptd build` 默认原样写出 PPTD 中的字体名；Kimi 网页字体到系统字体的安全映射改为 `safeFonts: true` 显式开关（`pptd convert` 产出的工程默认关闭，保证回编排版不变）
+
 ## [1.4.1] - 2026-10-19
 
 ### 新增

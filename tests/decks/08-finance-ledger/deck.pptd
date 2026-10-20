@@ -1,4 +1,5 @@
 version: v2
+safeFonts: true
 title: 示例公司 2026 年中报财务账本与三张表深度穿透
 size: [960, 540]
 theme:

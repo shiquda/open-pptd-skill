@@ -15,17 +15,18 @@
 //!   custom geometry, `pptd:icon` round-trip extension) and `image`
 //!   elements, page/layout backgrounds (solid/gradient and image
 //!   `a:blipFill`), and a default fade transition;
-//! - rich text (`<p>`/`<span style>`/`<strong>`/`<em>`): per-paragraph
-//!   `text-align`/`line-height`/`margin-top`, per-run color/font-size/...
-//!   style overrides;
+//! - rich text (`<p>`/`<span style>`/`<strong>`/`<em>`/`<a href>`):
+//!   per-paragraph `text-align`/`line-height`/`margin-top`, per-run
+//!   color/font-size/... style overrides, and run-level external links
+//!   (`<a:hlinkClick>` + a deduplicated `TargetMode="External"` rel);
 //! - shape drop shadows (`a:effectLst > a:outerShdw` / `a:innerShdw`,
 //!   incl. the `scale` and `inner` SlideForge extensions);
 //! - media parts (`png`/`jpg`/`jpeg`) with `contain`/`cover` `a:srcRect`
 //!   cropping computed from sniffed image dimensions.
 //!
 //! Not yet: `table`, `chart` elements (build fails with an explicit
-//! [`Error::Unsupported`]); rich text tags beyond `p`/`span`/`strong`/`em`
-//! (`<u>`/`<s>`/`<sup>`/`<sub>`/`<a>`/`<ul>`/`<ol>`/`<li>`); image fills on
+//! [`Error::Unsupported`]); rich text tags beyond `p`/`span`/`strong`/`em`/
+//! `u`/`s`/`code`/`a` (`<sup>`/`<sub>`/`<ul>`/`<ol>`/`<li>`); image fills on
 //! shapes (`fill_xml` rejects `Fill::Image` — only backgrounds support
 //! `a:blipFill`); `notes` (notesSlide) and `animations` (`p:timing`) are
 //! not emitted yet.
@@ -85,7 +86,10 @@ impl<'a> PptxWriter<'a> {
     /// checks, but calling the writer directly from tests/embeddings must
     /// not produce a package from an invalid deck.
     pub fn build(&self, output: &Path) -> Result<()> {
-        if let Some(issue) = validate_project(self.project).iter().find(|i| !i.is_warning()) {
+        if let Some(issue) = validate_project(self.project)
+            .iter()
+            .find(|i| !i.is_warning())
+        {
             return Err(Error::Validation(issue.to_string()));
         }
 
@@ -129,7 +133,7 @@ impl<'a> PptxWriter<'a> {
         entries.push(PackageEntry::typed(
             "ppt/theme/theme1.xml",
             ContentType::Theme,
-            theme_xml(presentation.theme.as_ref()),
+            theme_xml(presentation.theme.as_ref(), presentation.safe_fonts),
         ));
 
         // SlideForge layout extension (P3): if the deck declares layouts,
@@ -197,6 +201,7 @@ impl<'a> PptxWriter<'a> {
                 let ln = i + 1;
                 let lmedia = collect_media_from(def.background.as_ref(), &def.elements);
                 let mut ctx = render::RenderCtx::new(presentation.theme.as_ref());
+                ctx.safe_fonts = presentation.safe_fonts;
                 ctx.media = lmedia.clone();
                 for src in &lmedia {
                     let part_index = media.index_of(src)?;
@@ -222,6 +227,7 @@ impl<'a> PptxWriter<'a> {
                         rel_target(&path),
                     ));
                 }
+                push_hyperlink_rels(&mut rels, &ctx.hyperlinks, lmedia.len());
                 entries.push(PackageEntry::opaque(
                     format!("ppt/slideLayouts/_rels/slideLayout{ln}.xml.rels"),
                     rels_xml(&rels),
@@ -251,6 +257,7 @@ impl<'a> PptxWriter<'a> {
             // (layout decorations live on the slideLayout part now).
             let used = collect_media_from(page.background.as_ref(), &page.elements);
             let mut ctx = render::RenderCtx::new(presentation.theme.as_ref());
+            ctx.safe_fonts = presentation.safe_fonts;
             ctx.media = used.clone();
             for src in &used {
                 let part_index = media.index_of(src)?;
@@ -289,6 +296,7 @@ impl<'a> PptxWriter<'a> {
                     rel_target(&part.package_path),
                 ));
             }
+            push_hyperlink_rels(&mut rels, &ctx.hyperlinks, used.len());
 
             let has_notes = page.notes.as_deref().is_some_and(|n| !n.trim().is_empty());
             if has_notes {
@@ -301,8 +309,16 @@ impl<'a> PptxWriter<'a> {
                 entries.push(PackageEntry::opaque(
                     format!("ppt/notesSlides/_rels/notesSlide{index}.xml.rels"),
                     rels_xml(&[
-                        Rel::new("rId1", rel_kind::SLIDE, format!("../slides/slide{index}.xml")),
-                        Rel::new("rId2", rel_kind::NOTES_MASTER, "../notesMasters/notesMaster1.xml"),
+                        Rel::new(
+                            "rId1",
+                            rel_kind::SLIDE,
+                            format!("../slides/slide{index}.xml"),
+                        ),
+                        Rel::new(
+                            "rId2",
+                            rel_kind::NOTES_MASTER,
+                            "../notesMasters/notesMaster1.xml",
+                        ),
                     ]),
                 ));
                 let next_rid = rels.len() + 1;
@@ -413,9 +429,18 @@ impl<'a> PptxWriter<'a> {
                 ("xmlns:a", ns::DRAWINGML),
                 ("xmlns:r", ns::RELATIONSHIPS),
                 ("xmlns:pptd", ns::PPTD),
-                ("xmlns:a14", "http://schemas.microsoft.com/office/drawing/2010/main"),
-                ("xmlns:m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-                ("xmlns:mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+                (
+                    "xmlns:a14",
+                    "http://schemas.microsoft.com/office/drawing/2010/main",
+                ),
+                (
+                    "xmlns:m",
+                    "http://schemas.openxmlformats.org/officeDocument/2006/math",
+                ),
+                (
+                    "xmlns:mc",
+                    "http://schemas.openxmlformats.org/markup-compatibility/2006",
+                ),
                 // Math lives in `a14:m`; a consumer that does not know the
                 // extension must skip it instead of failing on the part.
                 ("mc:Ignorable", "a14"),
@@ -446,6 +471,18 @@ impl<'a> PptxWriter<'a> {
         x.end("p:transition");
         x.end("p:sld");
         Ok(x.into_string())
+    }
+}
+
+/// Append one external relationship per hyperlink target, after the media
+/// relationship ids (`rId2..=media+1`), matching `RenderCtx::hyperlink_rid`.
+fn push_hyperlink_rels(rels: &mut Vec<Rel>, hyperlinks: &[String], media_count: usize) {
+    for (pos, url) in hyperlinks.iter().enumerate() {
+        rels.push(Rel::external(
+            &format!("rId{}", media_count + 2 + pos),
+            rel_kind::HYPERLINK,
+            url,
+        ));
     }
 }
 
@@ -539,7 +576,10 @@ fn app_properties_xml(page_count: usize, notes_count: usize) -> PackageEntry {
         "Properties",
         &[
             ("xmlns", ns::EXTENDED_PROPS),
-            ("xmlns:vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"),
+            (
+                "xmlns:vt",
+                "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes",
+            ),
         ],
     );
     x.text_elem("Application", "Open PPTD");
@@ -586,9 +626,15 @@ fn notes_master_xml() -> Vec<u8> {
     // sldImg placeholder
     x.start("p:sp", &[]);
     x.start("p:nvSpPr", &[]);
-    x.leaf("p:cNvPr", &[("id", "2"), ("name", "Slide Image Placeholder 1")]);
+    x.leaf(
+        "p:cNvPr",
+        &[("id", "2"), ("name", "Slide Image Placeholder 1")],
+    );
     x.start("p:cNvSpPr", &[]);
-    x.leaf("a:spLocks", &[("noGrp", "1"), ("noRot", "1"), ("noChangeAspect", "1")]);
+    x.leaf(
+        "a:spLocks",
+        &[("noGrp", "1"), ("noRot", "1"), ("noChangeAspect", "1")],
+    );
     x.end("p:cNvSpPr");
     x.start("p:nvPr", &[]);
     x.leaf("p:ph", &[("type", "sldImg")]);
@@ -628,7 +674,17 @@ fn notes_master_xml() -> Vec<u8> {
     x.leaf("a:noFill", &[]);
     x.end("p:spPr");
     x.start("p:txBody", &[]);
-    x.leaf("a:bodyPr", &[("vert", "horz"), ("lIns", "91440"), ("tIns", "45720"), ("rIns", "91440"), ("bIns", "45720"), ("rtlCol", "0")]);
+    x.leaf(
+        "a:bodyPr",
+        &[
+            ("vert", "horz"),
+            ("lIns", "91440"),
+            ("tIns", "45720"),
+            ("rIns", "91440"),
+            ("bIns", "45720"),
+            ("rtlCol", "0"),
+        ],
+    );
     x.leaf("a:lstStyle", &[]);
     x.start("a:p", &[]);
     x.leaf("a:pPr", &[("lvl", "0")]);
@@ -670,9 +726,18 @@ fn notes_slide_xml(text: &str) -> Vec<u8> {
             ("xmlns:a", ns::DRAWINGML),
             ("xmlns:r", ns::RELATIONSHIPS),
             ("xmlns:p", ns::PRESENTATIONML),
-            ("xmlns:a14", "http://schemas.microsoft.com/office/drawing/2010/main"),
-            ("xmlns:m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
-            ("xmlns:mc", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
+            (
+                "xmlns:a14",
+                "http://schemas.microsoft.com/office/drawing/2010/main",
+            ),
+            (
+                "xmlns:m",
+                "http://schemas.openxmlformats.org/officeDocument/2006/math",
+            ),
+            (
+                "xmlns:mc",
+                "http://schemas.openxmlformats.org/markup-compatibility/2006",
+            ),
         ],
     );
     x.start("p:cSld", &[]);

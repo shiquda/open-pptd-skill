@@ -106,7 +106,7 @@ To guarantee deterministic builds and avoid silent degradations, the following f
 - 🎬 **Animations (`animations`)**: Animation syntax is parsed and validated in AST, but the compiler does not yet emit OOXML `p:timing` blocks (🟡 parsed but not emitted). Decks render as clean, complete static slides.
 - 🌐 **HTML Document & Extended Tags**:
   - HTML list tags (`<ul>`, `<ol>`, `<li>`) are not supported; write normal paragraphs with bullet prefixes (e.g. `1. first` or `• first`).
-  - HTML hyperlinks (`<a>`) are not supported; write URLs as plain text or annotate sources in slide footers/notes.
+  - HTML hyperlinks are supported as `<a href="https://…">text</a>` (run-level click target with an external relationship); write bare URLs as plain text.
   - HTML superscript/subscript tags (`<sup>`, `<sub>`) are not supported; use native LaTeX math (`<latex>x^2</latex>`, `\( H_2O \)`).
   - HTML headings and structural containers (`<h1>`~`<h6>`, `<table>`, `<div>`, `<img>`) are not supported inside rich text; use top-level PPTD elements instead.
 - 🖼️ **Shape Image Fills**: Shapes only support solid (`type: solid`) and gradient (`type: gradient`) fills; image fills on shapes (`fill: {type: image}`) are rejected (`a:blipFill` is only supported on slide backgrounds). Use separate `image` elements for photos.

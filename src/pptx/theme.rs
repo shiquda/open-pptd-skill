@@ -9,7 +9,7 @@
 
 use std::collections::BTreeMap;
 
-use crate::pptd::{Theme, TextStyleConfig, shared::Color, shared::FontFamily};
+use crate::pptd::{TextStyleConfig, Theme, shared::Color, shared::FontFamily};
 use crate::{Error, Result};
 
 use super::opc::ns;
@@ -190,15 +190,12 @@ pub fn build_color_slots(theme: Option<&Theme>) -> ColorSlots {
 }
 
 /// Render `ppt/theme/theme1.xml` from the presentation theme.
-pub fn theme_xml(theme: Option<&Theme>) -> String {
+pub fn theme_xml(theme: Option<&Theme>, safe_fonts: bool) -> String {
     let slots = build_color_slots(theme);
-    let (latin, ea) = default_fonts(theme);
+    let (latin, ea) = default_fonts(theme, safe_fonts);
 
     let mut x = Xml::new();
-    x.start(
-        "a:theme",
-        &[("xmlns:a", ns::DRAWINGML), ("name", "PPTD")],
-    );
+    x.start("a:theme", &[("xmlns:a", ns::DRAWINGML), ("name", "PPTD")]);
     x.start("a:themeElements", &[]);
 
     // clrScheme
@@ -222,8 +219,8 @@ pub fn theme_xml(theme: Option<&Theme>) -> String {
 
     // fontScheme
     x.start("a:fontScheme", &[("name", "PPTD")]);
-    emit_font_scheme(&mut x, "a:majorFont", &latin, &ea);
-    emit_font_scheme(&mut x, "a:minorFont", &latin, &ea);
+    emit_font_scheme(&mut x, "a:majorFont", &latin, &ea, safe_fonts);
+    emit_font_scheme(&mut x, "a:minorFont", &latin, &ea, safe_fonts);
     x.end("a:fontScheme");
 
     // fmtScheme: standard Office default (fills / lines / effects / backgrounds).
@@ -361,9 +358,28 @@ pub fn safe_latin_typeface(name: &str) -> &str {
     }
 }
 
+/// Map a Latin typeface through the optional safety policy. `safe_fonts`
+/// off means the PPTD name is written verbatim (lossless round-trips).
+pub fn latin_typeface(name: &str, safe_fonts: bool) -> &str {
+    if safe_fonts {
+        safe_latin_typeface(name)
+    } else {
+        name
+    }
+}
+
+/// Map an East Asian typeface through the optional safety policy.
+pub fn ea_typeface(name: &str, safe_fonts: bool) -> &str {
+    if safe_fonts {
+        safe_ea_typeface(name)
+    } else {
+        name
+    }
+}
+
 /// Default `(latin, ea)` font pair: the first font declared in the theme's
 /// text styles, or the spec default safe fonts.
-pub fn default_fonts(theme: Option<&Theme>) -> (String, String) {
+pub fn default_fonts(theme: Option<&Theme>, safe_fonts: bool) -> (String, String) {
     if let Some(font) = theme.and_then(|theme| {
         let mut sorted_styles: Vec<(&String, &TextStyleConfig)> =
             theme.text_styles.iter().collect();
@@ -374,21 +390,21 @@ pub fn default_fonts(theme: Option<&Theme>) -> (String, String) {
     }) {
         return match font {
             FontFamily::Single(name) => (
-                safe_latin_typeface(&name).to_owned(),
-                safe_ea_typeface(&name).to_owned(),
+                latin_typeface(&name, safe_fonts).to_owned(),
+                ea_typeface(&name, safe_fonts).to_owned(),
             ),
             FontFamily::Bilingual { latin, ea } => (
-                safe_latin_typeface(&latin).to_owned(),
-                safe_ea_typeface(&ea).to_owned(),
+                latin_typeface(&latin, safe_fonts).to_owned(),
+                ea_typeface(&ea, safe_fonts).to_owned(),
             ),
         };
     }
     ("Arial".to_owned(), "Microsoft YaHei".to_owned())
 }
 
-fn emit_font_scheme(x: &mut Xml, name: &str, latin: &str, ea: &str) {
-    let safe_latin = safe_latin_typeface(latin);
-    let safe_ea = safe_ea_typeface(ea);
+fn emit_font_scheme(x: &mut Xml, name: &str, latin: &str, ea: &str, safe_fonts: bool) {
+    let safe_latin = latin_typeface(latin, safe_fonts);
+    let safe_ea = ea_typeface(ea, safe_fonts);
     x.start(name, &[]);
     x.leaf("a:latin", &[("typeface", safe_latin)]);
     x.leaf("a:ea", &[("typeface", safe_ea)]);
@@ -482,10 +498,13 @@ mod tests {
             ..Default::default()
         };
 
-        let baseline = default_fonts(Some(&theme));
+        let baseline = default_fonts(Some(&theme), true);
         for _ in 0..50 {
-            let next = default_fonts(Some(&theme));
-            assert_eq!(baseline, next, "default_fonts must return identical font pairs");
+            let next = default_fonts(Some(&theme), true);
+            assert_eq!(
+                baseline, next,
+                "default_fonts must return identical font pairs"
+            );
         }
     }
 
@@ -516,10 +535,13 @@ mod tests {
             ..Default::default()
         };
 
-        let baseline = theme_xml(Some(&theme));
+        let baseline = theme_xml(Some(&theme), true);
         for _ in 0..50 {
-            let next = theme_xml(Some(&theme));
-            assert_eq!(baseline, next, "theme_xml output must be 100% byte identical across runs");
+            let next = theme_xml(Some(&theme), true);
+            assert_eq!(
+                baseline, next,
+                "theme_xml output must be 100% byte identical across runs"
+            );
         }
     }
 }

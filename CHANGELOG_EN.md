@@ -4,6 +4,13 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Rich-text hyperlinks**: `<a href="https://…">text</a>` compiles to a run-level `<a:hlinkClick>` plus an external relationship in `slideN.xml.rels` (`TargetMode="External"`, URLs deduplicated). `pptd convert` restores the same inline markup, and the element-level `link` field round-trips as well
+- **Font names pass through by default**: `pptd build` writes the PPTD typeface verbatim; the Kimi web-font → system-font safety map is now the explicit `safeFonts: true` switch (off for `pptd convert` output, so rebuilt decks keep their source typography)
+
 ## [1.4.1] - 2026-10-19
 
 ### Added

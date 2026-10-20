@@ -1,4 +1,5 @@
 version: v2
+safeFonts: true
 size: [960, 540]
 theme:
   colors:

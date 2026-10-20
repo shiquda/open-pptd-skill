@@ -1,4 +1,5 @@
 version: v2
+safeFonts: true
 title: 全球储能电池（BESS）产业链格局与中国厂商机会
 size: [960, 540]
 theme:

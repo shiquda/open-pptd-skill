@@ -30,7 +30,7 @@ pptd build <project_dir>/deck.pptd -o <output.pptx> [--force]
 # ➔ 若因 .sync.hash 覆写守卫报错退出 (退出码 2)：说明 output.pptx 已被外部修改。若确认以 PPTD 源码覆盖，追加 --force 参数：pptd build <project_dir>/deck.pptd -o <output.pptx> --force
 # 4. 成品全面验证与质检
 python3 <SKILL_DIR>/scripts/validate_pptx.py <output.pptx> --expected-pages <N> --check-notes
-# ➔ 若报 leaked HTML tag：检查源码中是否有未转换的 <ul>/<li>/<a> 标签，改用普通文本段落与标号
+# ➔ 若报 leaked HTML tag：检查源码中是否有未转换的 <ul>/<li> 标签，改用普通文本段落与标号
 
 # 5. 渲染预览与看图排版 (视觉质检)
 python3 <SKILL_DIR>/scripts/validate_pptx.py <output.pptx> --render-images
@@ -57,7 +57,7 @@ python3 <SKILL_DIR>/scripts/validate_pptx.py <output.pptx> --render-images
 |---|---|---|
 | **文本与排版** | ✅ 完全支持 | `fontSize`, `color`, `bold`, `italic`, `lineHeight`, `lineHeightPx`, `align` (支持 `[水平, 垂直]`), `letterSpacing` (编译为 `spc`), `textDirection` (编译为 `vert`), `marginTop`, `marginLeft`, `marginRight`, `marginBottom`, `wrap`, `autofit` |
 | **富文本标签** | ✅ 完全支持 | `<p>`, `<span>`, `<b>`/`<strong>`, `<i>`/`<em>`, `<u>` (下划线), `<s>`/`<del>`/`<strike>` (删除线), `<code>` (等宽), `<latex>` / `\( ... \)` (原生 OOXML 公式，生成真实可编辑分数线、根号、大运算符、矩阵与多行方程数组 `<m:eqArr>`（`\begin{align}`/`aligned`/`gather`/`split`）；支持公式内宏定义 `\newcommand`/`\def`；整段独占自动居中，混合段落内联显示；不支持命令硬报错拦截) |
-| **非支持标签** | ❌ **严禁使用** | `<ul>`, `<ol>`, `<li>`, `<a>`, `<sup>`, `<sub>` **不受支持**！编译器与校验器会**直接拦截报错**。列表必须写成常规段落并手写序号（如 `1. 第一点` 或 `• 第一点`）；上标下标使用原生 LaTeX 数学公式（如 `<latex>x^2</latex>`、`\( x_i \)`） |
+| **非支持标签** | ❌ **严禁使用** | `<ul>`, `<ol>`, `<li>`, `<sup>`, `<sub>` **不受支持**！编译器与校验器会**直接拦截报错**。列表必须写成常规段落并手写序号（如 `1. 第一点` 或 `• 第一点`）；上标下标使用原生 LaTeX 数学公式（如 `<latex>x^2</latex>`、`\( x_i \)`）；超链接使用 `<a href="https://…">文本</a>` |
 | **演讲者备注 (Notes)** | ✅ 完全支持 | 页面根级属性 `notes: "备注内容..."`，自动生成原生 PowerPoint 演讲者备注 (`notesSlide`) |
 | **图表 / Charts** | ❌ **编译器尚未支持** | `elementType: chart` 会在 `check` 和 `build` 时被**直接报错拦截**。替代方案：使用原生表格 (`elementType: table`) 呈现数据，或使用脚本将图表导出为图片 (`elementType: image`) |
 | **动画效果** | 🟡 **仅解析不报错** | 编译器支持 `animations` 节点语法解析，但当前版本生成的 OOXML 暂缓写入时序动画，文稿以纯静态排版完整呈现 |

@@ -366,9 +366,12 @@ pub(crate) fn render_table(
     let id = ctx.next_id().to_string();
     xml.start("p:graphicFrame", &[]);
     xml.start("p:nvGraphicFramePr", &[]);
-    xml.leaf(
-        "p:cNvPr",
-        &[("id", &id), ("name", &table.common.element_id)],
+    super::render::cnv_pr(
+        xml,
+        ctx,
+        &id,
+        &table.common.element_id,
+        table.common.link.as_deref(),
     );
     xml.leaf("p:cNvGraphicFramePr", &[]);
     xml.leaf("p:nvPr", &[]);
@@ -421,7 +424,7 @@ pub(crate) fn render_table(
                 }
                 Slot::Origin(cell, rs, cs) => {
                     let acc = resolve_cell(theme, cfg.as_ref(), cell, r, c, n_rows, n_cols);
-                    emit_origin_cell(xml, theme, cell, &acc, *rs, *cs)?;
+                    emit_origin_cell(xml, ctx, cell, &acc, *rs, *cs)?;
                 }
             }
         }
@@ -535,12 +538,13 @@ fn emit_cell(
 /// A content cell with resolved style and optional merge spans.
 fn emit_origin_cell(
     xml: &mut Xml,
-    theme: Option<&Theme>,
+    ctx: &mut super::render::RenderCtx<'_>,
     cell: &Cell,
     acc: &CellAcc,
     row_span: u32,
     col_span: u32,
 ) -> Result<()> {
+    let theme = ctx.theme;
     let rs = row_span.to_string();
     let cs = col_span.to_string();
     let mut attrs: Vec<(&str, &str)> = Vec::new();
@@ -560,7 +564,7 @@ fn emit_origin_cell(
         xml.leaf("a:p", &[]);
     } else {
         let eff = cell_eff_style(acc);
-        render_rich_body(xml, theme, &eff, text, anchor, false)?;
+        render_rich_body(xml, ctx, &eff, text, anchor, false)?;
     }
     xml.end("a:txBody");
     emit_tc_pr(xml, theme, Some(acc), anchor)?;
@@ -577,7 +581,10 @@ mod tests {
         let mut xml = Xml::new();
         cell_border_xml(&mut xml, None, "a:lnT", None).unwrap();
         let out = xml.into_string();
-        assert!(!out.contains("<a:lnT"), "unspecified border must not emit any XML element: `{out}`");
+        assert!(
+            !out.contains("<a:lnT"),
+            "unspecified border must not emit any XML element: `{out}`"
+        );
     }
 
     #[test]
@@ -589,7 +596,10 @@ mod tests {
         };
         cell_border_xml(&mut xml, None, "a:lnT", Some(&zero)).unwrap();
         let out = xml.into_string();
-        assert!(out.contains("<a:lnT") && out.contains("<a:noFill/>"), "width 0 must emit noFill: `{out}`");
+        assert!(
+            out.contains("<a:lnT") && out.contains("<a:noFill/>"),
+            "width 0 must emit noFill: `{out}`"
+        );
     }
 
     #[test]
@@ -630,7 +640,10 @@ mod tests {
         assert!(!header_out.contains("<a:lnT"), "header must omit lnT");
         assert!(!header_out.contains("<a:lnL"), "header must omit lnL");
         assert!(!header_out.contains("<a:lnR"), "header must omit lnR");
-        assert!(!header_out.contains("noFill"), "header must not contain noFill");
+        assert!(
+            !header_out.contains("noFill"),
+            "header must not contain noFill"
+        );
 
         // Body cell with border: null (BorderSpec::Clear)
         let body_acc = CellAcc {
@@ -640,11 +653,16 @@ mod tests {
         let mut xml_body = Xml::new();
         emit_tc_pr(&mut xml_body, None, Some(&body_acc), "ctr").unwrap();
         let body_out = xml_body.into_string();
-        assert!(!body_out.contains("<a:lnT"), "body cell must omit lnT so header lnB survives");
+        assert!(
+            !body_out.contains("<a:lnT"),
+            "body cell must omit lnT so header lnB survives"
+        );
         assert!(!body_out.contains("<a:lnB"), "body cell must omit lnB");
         assert!(!body_out.contains("<a:lnL"), "body cell must omit lnL");
         assert!(!body_out.contains("<a:lnR"), "body cell must omit lnR");
-        assert!(!body_out.contains("noFill"), "body cell must not contain noFill");
+        assert!(
+            !body_out.contains("noFill"),
+            "body cell must not contain noFill"
+        );
     }
-
 }

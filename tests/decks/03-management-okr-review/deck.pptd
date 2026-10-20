@@ -1,4 +1,5 @@
 version: v2
+safeFonts: true
 title: "云枢网络 2026 Q3 经营复盘与 Q4 OKR 承诺"
 size: [960, 540]
 theme:

@@ -45,7 +45,7 @@ Checks for:
 - Invalid DrawingML preset shape names with automatic suggestions
 - Undefined theme color `$colorKey` references
 - Missing local image or media files under `assets/`
-- Unsupported rich text tags (such as `<ul>`, `<ol>`, `<li>`, `<a>`, `<sup>`, `<sub>`)
+- Unsupported rich text tags (such as `<ul>`, `<ol>`, `<li>`, `<sup>`, `<sub>`)
 - Unsupported element types (such as `chart`)
 - Image fills on shapes (`fill: {type: image}` is rejected; only backgrounds support image fills)
 - Elements positioned outside the slide canvas boundaries (error for entirely out-of-bounds, warning for partially out-of-bounds)

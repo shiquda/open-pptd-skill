@@ -49,6 +49,8 @@ pub mod rel_kind {
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/audio";
     pub const NOTES_MASTER: &str =
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesMaster";
+    pub const HYPERLINK: &str =
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink";
     pub const EXTENDED_PROPERTIES: &str =
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties";
 }
@@ -58,6 +60,8 @@ pub struct Rel {
     pub id: String,
     pub kind: &'static str,
     pub target: String,
+    /// `Some("External")` for targets outside the package (hyperlinks).
+    pub target_mode: Option<&'static str>,
 }
 
 impl Rel {
@@ -66,6 +70,19 @@ impl Rel {
             id: id.to_owned(),
             kind,
             target: target.into(),
+            target_mode: None,
+        }
+    }
+
+    /// An external relationship (`TargetMode="External"`). External targets
+    /// are written verbatim — never resolved against the part's directory,
+    /// never fetched.
+    pub fn external(id: &str, kind: &'static str, target: impl Into<String>) -> Self {
+        Self {
+            id: id.to_owned(),
+            kind,
+            target: target.into(),
+            target_mode: Some("External"),
         }
     }
 }
@@ -75,10 +92,15 @@ pub fn rels_xml(rels: &[Rel]) -> String {
     let mut xml = Xml::new();
     xml.start("Relationships", &[("xmlns", ns::PACKAGE_REL)]);
     for rel in rels {
-        xml.leaf(
-            "Relationship",
-            &[("Id", &rel.id), ("Type", rel.kind), ("Target", &rel.target)],
-        );
+        let mut attrs = vec![
+            ("Id", rel.id.as_str()),
+            ("Type", rel.kind),
+            ("Target", rel.target.as_str()),
+        ];
+        if let Some(mode) = rel.target_mode {
+            attrs.push(("TargetMode", mode));
+        }
+        xml.leaf("Relationship", &attrs);
     }
     xml.end("Relationships");
     xml.into_string()

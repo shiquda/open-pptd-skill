@@ -1,0 +1,105 @@
+version: v2
+title: ColdSync 极鲜智链 · A轮融资商业计划书
+size: [960, 540]
+theme:
+  colors:
+    primary: "#03522C"
+    accent: "#29B974"
+    mint: "#D1F5E2"
+    lightGreen: "#B8EDBC"
+    olive: "#D3DF33"
+    cyan: "#2FC1D6"
+    text: "#565656"
+    muted: "#7E7E7E"
+    bgLight: "#F1F1F1"
+    white: "#FFFFFF"
+    dark: "#042616"
+    alert: "#E71C56"
+  textStyles:
+    title:
+      fontSize: 20
+      color: "$primary"
+      bold: true
+      fontFamily:
+        latin: "Liter"
+        ea: "MiSans"
+    chapter:
+      fontSize: 12
+      color: "$primary"
+      bold: true
+      letterSpacing: 1
+      fontFamily:
+        latin: "Liter"
+        ea: "MiSans"
+    subtitle:
+      fontSize: 11
+      color: "$muted"
+      fontFamily:
+        latin: "Liter"
+        ea: "MiSans"
+    body:
+      fontSize: 11.5
+      color: "$text"
+      lineHeight: 1.45
+      fontFamily:
+        latin: "Liter"
+        ea: "MiSans"
+    bodyBold:
+      fontSize: 11.5
+      color: "$primary"
+      bold: true
+      lineHeight: 1.45
+      fontFamily:
+        latin: "Liter"
+        ea: "MiSans"
+    caption:
+      fontSize: 9
+      color: "$muted"
+      fontFamily:
+        latin: "Liter"
+        ea: "MiSans"
+    statNum:
+      fontSize: 36
+      color: "$primary"
+      bold: true
+      fontFamily:
+        latin: "Liter"
+        ea: "MiSans"
+    synthesis:
+      fontSize: 10.5
+      color: "$primary"
+      bold: true
+      lineHeight: 1.35
+      fontFamily:
+        latin: "Liter"
+        ea: "MiSans"
+  tableStyles:
+    pineTable:
+      firstRowStyle:
+        fill: {type: solid, color: "$primary"}
+        color: "#FFFFFF"
+        bold: true
+        fontSize: 10.5
+      lastRowStyle:
+        fill: {type: solid, color: "#F0FAF4"}
+        color: "$primary"
+        bold: true
+        fontSize: 10.5
+      bodyStyles:
+        - fill: {type: solid, color: "#FFFFFF"}
+          fontSize: 10
+          color: "$text"
+        - fill: {type: solid, color: "#F7FAF8"}
+          fontSize: 10
+          color: "$text"
+pages:
+  - pages/01_cover.page
+  - pages/02_executive_summary.page
+  - pages/03_market_pain_points.page
+  - pages/04_market_opportunity.page
+  - pages/05_section_solution.page
+  - pages/06_product_architecture.page
+  - pages/07_business_model.page
+  - pages/08_customer_traction.page
+  - pages/09_competitive_moat.page
+  - pages/10_fundraising_ask.page

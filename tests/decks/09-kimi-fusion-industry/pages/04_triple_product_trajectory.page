@@ -1,0 +1,129 @@
+pageType: content
+notes: |
+  Triple product milestone slide. Integrates a publication-grade chart tracking the Lawson triple product (n * T * tau_E) from 1968 to 2025. Highlights the 10,000-fold progress from early Soviet T-3 experiments through JET DT campaigns and NIF inertial ignition. Sets up the current transition from public national laboratories to private HTS-driven ventures (CFS, Energy Singularity).
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "01 · SCIENTIFIC BASIS"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Confinement Performance Grew 10,000-Fold; Private Ventures Now Target Commercial Ignition Territory"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "60-year trajectory of the fusion triple product against the Lawson ignition boundary (1965–2030)"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Chart Image Left
+  - elementId: chart-triple-product
+    elementType: image
+    bounds: [50, 104, 500, 358]
+    src: "assets/chart_triple_product.png"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Right Column - Analysis & Landmark Table
+  - elementId: right-bg
+    elementType: shape
+    bounds: [562, 104, 348, 358]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: right-header
+    elementType: shape
+    bounds: [562, 104, 348, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: right-title
+    elementType: text
+    bounds: [572, 109, 328, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "LANDMARK EXPERIMENTAL MILESTONES"
+
+  - elementId: right-content
+    elementType: text
+    bounds: [572, 138, 328, 316]
+    content:
+      fontSize: 8.2
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>1968 · T-3 Tokamak (Kurchatov Institute, USSR):</b></p>
+        <p>British diagnostic team verified core electron temperatures &gt;1 keV (~11M °C), establishing the tokamak as the dominant magnetic topology worldwide.</p>
+        <p><br><b>1997 · JET DTE1 (Culham, UK):</b></p>
+        <p>Achieved peak fusion power of 16.1 MW with \( Q_{\mathrm{plasma}} = 0.67 \) using 50:50 D-T fuel. Stood as the world power record for over two decades.</p>
+        <p><br><b>2022 · NIF Target Ignition (LLNL, USA):</b></p>
+        <p>Dec 5, 2022: Delivered 3.15 MJ fusion yield from 2.05 MJ UV laser input onto target capsule (\( Q = 1.54 \)), achieving first laboratory ignition in history.</p>
+        <p><br><b>2023 · JET DTE3 Final Campaign (UKAEA):</b></p>
+        <p>Sustained a record 69.3 MJ fusion energy over 5.2 seconds, confirming steady plasma-wall equilibrium in beryllium/tungsten environments.</p>
+        <p><br><b>2026–2028 · The HTS Commercial Cohort:</b></p>
+        <p>Commonwealth Fusion Systems (SPARC) and Energy Singularity target \( Q &gt; 2 \) in compact high-field tokamaks before 2028.</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Historical Synthesis:</b> Confinement performance doubled every 1.8 years from 1970–1995 (outpacing Moore's law); the 2000–2020 pause ended with HTS high-field magnets."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: IAEA Nuclear Fusion database; EUROfusion JET technical reports (2023); Lawrence Livermore National Laboratory (2022)."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 04 / 16"

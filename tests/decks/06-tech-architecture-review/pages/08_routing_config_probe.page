@@ -1,0 +1,192 @@
+background: { type: solid, color: "$paper" }
+notes: |
+  本页左侧展示了生产网关的核心单元化路由配置与熔断规约，右侧则详述了配置考量与 PPTD 离线字体探针的技术发现。
+  路由配置通过 1024 个虚拟槽位固定将 UID 映射到物理单元，并设定了租约超时 1500 毫秒后自动熔断降级为只读模式。
+  同时，本页严格履行了评审要求，对 PPTD 的 customFonts（Google Fonts CSS 引入）进行了离线探针测试：
+  编译器虽然支持语法声明，但在完全离线的无头编译环境中，并不会发起外网拉取字体包，而是直接在 DrawingML 中保留原始 typeface 并依赖终端系统的安全字体回退链。
+  这一实测结论已被记录在选型报告中，指导后续生产文档编写。
+elements:
+  # Header
+  - elementId: sec-tag
+    elementType: text
+    bounds: [45, 24, 400, 14]
+    content:
+      text: "08 / 路由配置与字体探针 | ROUTING CONFIG & FONT PROBE"
+      fontSize: 8.5
+      bold: true
+      color: "$active"
+
+  - elementId: main-title
+    elementType: text
+    bounds: [45, 38, 870, 26]
+    content:
+      text: "用户分片路由规则与熔断规约生产落地，离线环境字体探测与排版降级分析"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+
+  - elementId: header-line
+    elementType: line
+    bounds: [45, 68, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # ==========================================
+  # Left Column: Configuration Window Panel
+  # ==========================================
+  - elementId: code-container
+    elementType: shape
+    shapeName: rect
+    bounds: [45, 78, 430, 418]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 1, color: "$borderDark" }
+
+  - elementId: code-header-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [45, 78, 430, 26]
+    fill: { type: solid, color: "$tagBg" }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  # 3 Mac-style dots
+  - elementId: dot1
+    elementType: shape
+    shapeName: ellipse
+    bounds: [56, 87, 8, 8]
+    fill: { type: solid, color: "$critical" }
+
+  - elementId: dot2
+    elementType: shape
+    shapeName: ellipse
+    bounds: [68, 87, 8, 8]
+    fill: { type: solid, color: "$brand" }
+
+  - elementId: dot3
+    elementType: shape
+    shapeName: ellipse
+    bounds: [80, 87, 8, 8]
+    fill: { type: solid, color: "$sync" }
+
+  - elementId: code-title
+    elementType: text
+    bounds: [100, 82, 360, 18]
+    content:
+      text: "config/cell_routing_policy.yaml"
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+
+  - elementId: code-body
+    elementType: text
+    bounds: [55, 110, 410, 375]
+    content:
+      text: |
+        01: # 生产网关单元分片路由与动态熔断策略
+        02: version: "v2.4-rc3"
+        03: routing_engine:
+        04:   sharding_key: "header.x-user-id"
+        05:   algorithm: "murmur3_32"
+        06:   total_slots: 1024
+        07: 
+        08:   # 物理单元绑定映射规则 (三地四单元)
+        09:   cell_bindings:
+        10:     - cell_id: "Cell-SH01"
+        11:       slot_range: [0, 255]
+        12:       standby_cell: "Cell-SZ01"
+        13:     - cell_id: "Cell-SH02"
+        14:       slot_range: [256, 511]
+        15:       standby_cell: "Cell-SZ01"
+        16:     - cell_id: "Cell-SZ01"
+        17:       slot_range: [512, 767]
+        18:       standby_cell: "Cell-SH01"
+        19: 
+        20:   # 专线异常自动熔断与降级保护
+        21:   circuit_breaker:
+        22:     error_rate_threshold: 0.05       # 5% 失败率阈值
+        23:     slow_call_latency_ms: 2500       # 2.5s 慢调用判定
+        24:     consecutive_failures: 20         # 连续失败次数
+        25:     lease_timeout_ms: 1500           # 租约超时弃主
+        26:     degrade_mode: "READ_ONLY_FENCED" # 脑裂隔离只读
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+
+  # ==========================================
+  # Right Column: Analysis & CustomFont Probe
+  # ==========================================
+  - elementId: right-sec1-title
+    elementType: text
+    bounds: [490, 78, 425, 18]
+    content:
+      text: "一、分片路由设计考量与高可用保障"
+      fontSize: 10
+      bold: true
+      color: "$ink"
+
+  - elementId: right-sec1-body
+    elementType: text
+    bounds: [490, 100, 425, 120]
+    content:
+      text: |
+        • 单一真理分片键：全链路必须且仅能以 user_id 作为分片键，严禁按商户或订单 ID 进行交叉分片，从根源上杜绝跨分片分布式事务。
+        • 1024 槽位预分配机制：逻辑槽位支持后续无感知平滑扩容至 8 单元或 16 单元，容量倍增时无需停机重新哈希。
+        • 确定性脑裂熔断：当 circuit_breaker 连续触发 20 次慢调用或专线租约超过 1500ms 未续期，单元即刻强制自锁进入 READ_ONLY_FENCED。
+      fontSize: 8.5
+      lineHeight: 1.35
+      color: "$ink"
+
+  - elementId: right-div
+    elementType: line
+    bounds: [490, 226, 425, 1]
+    points: "0,0 425,0"
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  - elementId: right-sec2-title
+    elementType: text
+    bounds: [490, 236, 425, 18]
+    content:
+      text: "二、PPTD 离线字体探针与排版发现 (CustomFont Probe)"
+      fontSize: 10
+      bold: true
+      color: "$active"
+
+  - elementId: right-sec2-body
+    elementType: text
+    bounds: [490, 258, 425, 235]
+    content:
+      text: |
+        【探针操作与验证过程】：
+        1. 语法声明：在 deck.pptd 清单中声明 customFonts: [{family: "JetBrains Mono", src: "https://fonts.googleapis.com/..."}]。
+        2. 编译器编译表现：pptd check 校验通过，pptd build 成功生成 PPTX 文件，并在 OOXML 中正常输出 typeface="JetBrains Mono"。
+        3. 离线无头渲染表现：由于处于完全断网离线环境，pptd 编译器自身并未包含网络字体拉取与字体子集嵌入逻辑；当在未本地预装该字体的 Linux / macOS 环境下使用 LibreOffice 导出预览时，字体安全降级至系统无衬线字体。
+        
+        【工程规范与建议结论】：
+        • 对于追求绝对像素级等宽对齐的代码块，切勿依赖外部未预装字体。
+        • 本文稿采用“结构化代码容器 + 规范字符缩进 + 纯文本语法分段”进行版式兜底，确保在离线环境、跨平台阅读与无头打印中均呈现完美统一的工程质感。
+      fontSize: 8.2
+      lineHeight: 1.35
+      color: "$muted"
+
+  # Footer
+  - elementId: footer-line
+    elementType: line
+    bounds: [45, 510, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  - elementId: footer-meta
+    elementType: text
+    bounds: [45, 516, 500, 16]
+    content:
+      text: "交易核心多活架构评审 | 单元化路由配置与字体探针 | 2026-10-20"
+      fontSize: 8.5
+      color: "$muted"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [840, 516, 75, 16]
+    content:
+      text: "PAGE 08 / 10"
+      fontSize: 8.5
+      color: "$muted"
+      align: [right, top]

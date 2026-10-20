@@ -1,0 +1,295 @@
+pageType: content
+background: { type: solid, color: "$paper" }
+notes: |
+  Slide 9: Astrophysical Population Synthesis: Masses, Spins, and Origins.
+  - Explores the underlying astrophysical demographics of the binary black hole population inferred from hierarchical Bayesian modeling.
+  - Details the primary mass spectrum: a broken power-law with a pronounced Gaussian peak at ~35 M_sun, reflecting pulsational pair-instability supernova (PPISN) mass pile-up.
+  - Analyzes the effective inspiral spin parameter chi_eff: the observed distribution is peaked narrowly near 0.06 with a small positive skew and minimal negative spin fraction, indicating low intrinsic stellar spins prior to merger.
+  - Contrasts two competing formation channels: isolated binary evolution in galactic fields (common envelope, aligned spins, q ~ 1) vs dynamical assembly in dense globular clusters or AGN migration traps (isotropic spin orientations, hierarchical mergers, eccentricities).
+elements:
+  # Left Rail
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [14, 24, 142, 484]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [18, 30, 134, 84]
+    src: "assets/thumb_detectors.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [18, 122, 134, 84]
+    src: "assets/thumb_timeline.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-3
+    elementType: image
+    bounds: [18, 214, 134, 84]
+    src: "assets/thumb_catalog.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-4
+    elementType: image
+    bounds: [18, 306, 134, 84]
+    src: "assets/thumb_mass.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-divider
+    elementType: line
+    bounds: [168, 24, 1, 484]
+    points: "0,0 0,484"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Header
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 24, 475, 34]
+    content:
+      style: "$title"
+      text: "Demographics Reveal Two Competing Merger Pathways"
+
+  - elementId: slide-category
+    elementType: text
+    bounds: [660, 27, 260, 18]
+    content:
+      style: "$category"
+      align: [right, middle]
+      text: "08 · POPULATION SYNTHESIS"
+
+  - elementId: header-rule
+    elementType: line
+    bounds: [185, 58, 735, 1]
+    points: "0,0 735,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Center Area: Population Matplotlib Chart
+  - elementId: chart-pop
+    elementType: image
+    bounds: [185, 70, 420, 210]
+    src: "assets/population_mass_spin.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Two Channels Structural Diagram
+  - elementId: channel-title
+    elementType: text
+    bounds: [185, 290, 420, 16]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+      text: "Two Competing Astrophysical Binary Formation Pathways:"
+
+  # Channel A Box: Isolated Field
+  - elementId: chan-a-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 310, 205, 130]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: chan-a-txt
+    elementType: text
+    bounds: [192, 316, 191, 118]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>Channel A: Isolated Field Binaries</b><br/>
+        • Massive stellar binary undergoes common-envelope phase.<br/>
+        • Tidal torques align stellar spins parallel to orbit (\( \chi_{\text{eff}} > 0 \)).<br/>
+        • Produces mass ratios near unity (\( q \ge 0.7 \)) and low eccentricity.
+
+  # Channel B Box: Dynamical Clusters
+  - elementId: chan-b-box
+    elementType: shape
+    shapeName: rect
+    bounds: [400, 310, 205, 130]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$teal" }
+
+  - elementId: chan-b-txt
+    elementType: text
+    bounds: [407, 316, 191, 118]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>Channel B: Dynamical Cluster Assembly</b><br/>
+        • Three-body encounters in globular clusters & AGN migration traps.<br/>
+        • Random isotropic spin orientations; negative \( \chi_{\text{eff}} \) allowed.<br/>
+        • Remnant black holes merge repeatedly into hierarchical giants.
+
+  # Right Sidebar
+  - elementId: side-1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 75, 295, 110]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-1-icon
+    elementType: icon
+    iconName: "fas:mountain"
+    bounds: [637, 85, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-1-head
+    elementType: text
+    bounds: [658, 85, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "PPISN MASS PILE-UP"
+
+  - elementId: side-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 103, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-1-formula
+    elementType: text
+    bounds: [642, 107, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: |
+        \( p(m_1) \sim (1-\lambda_g)\, m^{-\alpha} + \lambda_g\, \mathrm{G}(m_1|\mu,\sigma) \)
+
+  - elementId: side-1-desc
+    elementType: text
+    bounds: [637, 134, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "The distinct Gaussian peak near 34 M☉ reflects pulsational pair-instability supernova shedding, where stars shed outer layers before collapsing."
+
+  - elementId: side-2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 195, 295, 118]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-2-icon
+    elementType: icon
+    iconName: "fas:arrows-split-up-and-left"
+    bounds: [637, 205, 15, 15]
+    fill: { type: solid, color: "$teal" }
+
+  - elementId: side-2-head
+    elementType: text
+    bounds: [658, 205, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "EFFECTIVE INSPIRAL SPIN"
+
+  - elementId: side-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 223, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-2-formula
+    elementType: text
+    bounds: [642, 227, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$teal"
+      text: |
+        \( \chi_{\text{eff}} = (m_1 \chi_1 + m_2 \chi_2)/(m_1 + m_2) \approx 0.06 \)
+
+  - elementId: side-2-desc
+    elementType: text
+    bounds: [637, 254, 271, 52]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "The narrow spin distribution centered near zero confirms that stellar-mass black holes are born with small core spins, disproving extreme Kerr natal spin hypotheses."
+
+  - elementId: side-3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 323, 295, 108]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-3-icon
+    elementType: icon
+    iconName: "fas:cubes-stacked"
+    bounds: [637, 333, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-3-head
+    elementType: text
+    bounds: [658, 333, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "COSMIC MERGER RATE"
+
+  - elementId: side-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 351, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-3-formula
+    elementType: text
+    bounds: [642, 355, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$primary"
+      text: |
+        \( \mathrm{R}_{\text{BBH}}(z=0) = 16-38\text{ Gpc}^{-3}\text{ yr}^{-1} \)
+
+  - elementId: side-3-desc
+    elementType: text
+    bounds: [637, 382, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "The local binary black hole merger rate density scales with redshift as (1+z)^2.7, closely mirroring the peak of cosmic star formation at z ~ 2."
+
+  # Takeaway Line
+  - elementId: footer-takeaway
+    elementType: text
+    bounds: [185, 456, 735, 24]
+    content:
+      style: "$takeaway"
+      text: "<b>Takeaway</b> · <b>The 35 M☉ pile-up and low spin dispersion prove both field and cluster channels operate in nature.</b>"
+
+  # Sources Line
+  - elementId: footer-sources
+    elementType: text
+    bounds: [185, 490, 680, 20]
+    content:
+      style: "$footer"
+      text: "Sources: LVK Collaboration, GWTC-3 Population Properties, PRX 13, 011048 (2023) · notes/demographics.md"
+
+  # Page Number
+  - elementId: footer-page
+    elementType: text
+    bounds: [875, 490, 45, 20]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      text: "9"

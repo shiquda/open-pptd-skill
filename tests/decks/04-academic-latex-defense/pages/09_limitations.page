@@ -1,0 +1,169 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+notes: |
+  第八部分秉持严谨求实的学术准则，坦诚剖析本论文方法的理论局限与失效边界。
+  没有万能的架构。通过理论建模与极端压力测试，我们明确界定了算法的适用范围与失效模式：
+  第一，在多跳复杂因果推理中，由式 9.1 可见，多步累积误差随跳数 T 呈乘积级联放大；当多跳步数大于 5 时，检索精度将出现可测量的滑落；
+  第二，在微小序列（N < 2048）场景下，由于硬件 Kernel Launch 开销与质心维护成本，稀疏化不但没有正收益，反而会导致 12.8% 的额外耗时；
+  第三，在 INT4 极端量化条件下，低秩投影空间容易发生几何扭曲，对超低比特量化兼容性有待后续研究。
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 30, 600, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$primary"
+      letterSpacing: 1.2
+      text: 08 · THEORETICAL LIMITATIONS & FAILURE BOUNDARIES
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 48, 860, 34]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$fg"
+      text: 极端稀疏化在全局多跳跨段联想与微小序列下存在显著性能边界
+
+  # Top dividing line
+  - elementId: div-top
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 86, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: math-bound-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 98, 860, 110]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$ruleColor"
+
+  - elementId: formula-cascade
+    elementType: text
+    bounds: [60, 108, 410, 50]
+    content:
+      fontSize: 12.5
+      align: [center, middle]
+      text: |
+        <p>\( \epsilon_{\mathrm{cascade}}(T) \le 1 - \prod_{t=1}^T (1 - \delta_t) \approx \sum_{t=1}^T \delta_t + O\left( \sum_{t &lt; s} \delta_t \delta_s \right) \)</p>
+
+  - elementId: num-91
+    elementType: text
+    bounds: [475, 116, 45, 34]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$gray"
+      align: [right, middle]
+      text: (式 9.1)
+
+  - elementId: formula-contour
+    elementType: text
+    bounds: [520, 108, 335, 50]
+    content:
+      fontSize: 12.5
+      align: [center, middle]
+      text: |
+        <p>\( \oint_C \nabla \Phi(z) \, dz = 0, \quad \lim_{\delta \to 0} \frac{\Delta \mathrm{Loss}}{\delta} = \mathrm{Tr}\left( J^T J \right) \)</p>
+
+  - elementId: num-92
+    elementType: text
+    bounds: [860, 116, 40, 34]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$gray"
+      align: [right, middle]
+      text: (式 9.2)
+
+  - elementId: math-bound-desc
+    elementType: text
+    bounds: [70, 162, 820, 36]
+    content:
+      fontSize: 10
+      lineHeight: 1.3
+      color: "$gray"
+      text: |
+        <p><strong>数学约束诠释：</strong>式 (9.1) 刻画了多跳推理步数 \( T \) 对单步误判率 \( \delta_t \) 的乘性级联累积效应；式 (9.2) 基于复变闭合围道积分证明了连续势流近似在奇异奇点附近的保守场守恒条件与误差退化渐近线。</p>
+
+  # Middle vertical separation line
+  - elementId: v-div
+    elementType: shape
+    shapeName: rect
+    bounds: [470, 222, 2, 262]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: proven-title
+    elementType: text
+    bounds: [50, 222, 405, 24]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: ● 已证适用与严格优势区间 (Proven Scope)
+
+  - elementId: proven-content
+    elementType: text
+    bounds: [50, 252, 405, 228]
+    content:
+      fontSize: 11
+      lineHeight: 1.48
+      color: "$fg"
+      text: |
+        <p>1. <strong>单针长程密集检索：</strong>在 128K 长度下保持 98.4% 检索准确率，适用于文档摘要、长文本代码续写、多轮长对话；</p>
+        <p>2. <strong>阶数级复杂度压降：</strong>理论严格保证 \( O(N^{1.5}) \) 渐近界，在大规模集群上消除显存爆炸隐患；</p>
+        <p>3. <strong>全栈硬件吞吐释放：</strong>端到端吞吐提升 3.82×，首字生成延迟压降 60.4%，显存占用削减 72%；</p>
+        <p>4. <strong>即插即用生态兼容：</strong>无需重训练，直接基于 SVD 投影权重在开源 Llama-3 / Qwen 模型上即开即用。</p>
+
+  # Right Column: Theoretical Limitations & Open Challenges (失效边界与未解学术局限)
+  - elementId: limit-title
+    elementType: text
+    bounds: [490, 222, 420, 24]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$accentRed"
+      text: ▲ 失效边界与未解学术局限 (Failure Boundaries)
+
+  - elementId: limit-content
+    elementType: text
+    bounds: [490, 252, 420, 228]
+    content:
+      fontSize: 11
+      lineHeight: 1.48
+      color: "$fg"
+      text: |
+        <p>1. <strong>长程多跳推理级联误差（式 9.1）：</strong>当因果链深度 \( T &gt; 5 \) 时，单步候选块假阴性累积导致多跳问答准确率从 48.1 下滑至 39.5；</p>
+        <p>2. <strong>微小序列反向开销：</strong>当序列长度 \( N &lt; 2048 \) 时，投影与聚类质心维护耗时占优，推理延迟反向增加 12.8%；</p>
+        <p>3. <strong>极端超低比特量化失真：</strong>在 FP4 / INT4 强量化下，低秩投影相似度保序性出现显著漂移；</p>
+        <p>4. <strong>高度异构硬件适配：</strong>当前 Triton Kernel 高度依赖 NVIDIA Hopper 架构 Tensor Core，跨厂商算力平台移植尚待优化。</p>
+
+  # Footer dividing line
+  - elementId: div-bottom
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 498, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: footer-nav
+    elementType: text
+    bounds: [50, 506, 860, 20]
+    content:
+      fontSize: 10
+      color: "$gray"
+      text: |
+        <p>面向长上下文推理的稀疏注意力机制 · 博士学位论文答辩 <span style="float:right;">§8 理论局限 ｜ 09 / 10</span></p>

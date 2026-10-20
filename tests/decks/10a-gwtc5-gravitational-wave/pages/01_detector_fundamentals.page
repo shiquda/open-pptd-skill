@@ -1,0 +1,511 @@
+pageType: content
+background: { type: solid, color: "$paper" }
+notes: |
+  Slide 1: Detector Fundamentals & Physical Principles.
+  - Explains the dual-recycled Michelson interferometer with Fabry-Perot cavities.
+  - Emphasizes the physical scale: h = delta L / L ~ 10^-21 corresponds to a mirror displacement of 4x10^-18 m over the 4 km arm length, less than 1/400th of a proton radius.
+  - Details quantum noise mitigation: frequency-dependent squeezed vacuum injection achieving up to 6.1 dB quantum noise reduction in O4b.
+  - Baseline network geometry requires >=2 detectors for glitch rejection and >=3 detectors for unambiguous sky localization.
+elements:
+  # Left Rail: Vertical Miniature Previews (Matching Benchmark)
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [14, 24, 142, 484]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [18, 30, 134, 84]
+    src: "assets/thumb_detectors.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [18, 122, 134, 84]
+    src: "assets/thumb_timeline.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-3
+    elementType: image
+    bounds: [18, 214, 134, 84]
+    src: "assets/thumb_catalog.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-4
+    elementType: image
+    bounds: [18, 306, 134, 84]
+    src: "assets/thumb_mass.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  # Left Rail Divider
+  - elementId: rail-divider
+    elementType: line
+    bounds: [168, 24, 1, 484]
+    points: "0,0 0,484"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Header
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 24, 460, 32]
+    content:
+      style: "$title"
+      text: "How We Detect Gravitational Waves"
+
+  - elementId: slide-category
+    elementType: text
+    bounds: [660, 27, 260, 18]
+    content:
+      style: "$category"
+      align: [right, middle]
+      text: "01 · DETECTOR NETWORK"
+
+  - elementId: header-rule
+    elementType: line
+    bounds: [185, 58, 735, 1]
+    points: "0,0 735,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Center Area: Michelson Schematic (Drawn with shapes & lines)
+  - elementId: gw-label
+    elementType: text
+    bounds: [200, 75, 130, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "Gravitational wave"
+
+  # GW incoming wave
+  - elementId: gw-wave
+    elementType: line
+    bounds: [205, 95, 55, 60]
+    points: "0,0 12,18 8,32 30,45 45,55"
+    curve: round
+    arrow: [null, triangle]
+    border: { style: solid, width: 2, color: "$primary" }
+
+  # Polarization icons
+  - elementId: gw-pol-plus
+    elementType: shape
+    shapeName: ellipse
+    bounds: [215, 160, 18, 18]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: gw-pol-plus-txt
+    elementType: text
+    bounds: [238, 160, 30, 18]
+    content:
+      fontSize: 9
+      color: "$ink"
+      text: |
+        \( h_+ \)
+
+  - elementId: gw-pol-cross
+    elementType: shape
+    shapeName: ellipse
+    bounds: [215, 182, 18, 18]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: gw-pol-cross-txt
+    elementType: text
+    bounds: [238, 182, 30, 18]
+    content:
+      fontSize: 9
+      color: "$ink"
+      text: |
+        \( h_\times \)
+
+  # Laser Box
+  - elementId: laser-box
+    elementType: shape
+    shapeName: rect
+    bounds: [200, 225, 65, 34]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: laser-text
+    elementType: text
+    bounds: [200, 227, 65, 30]
+    content:
+      align: [center, middle]
+      fontSize: 9
+      bold: true
+      color: "$ink"
+      text: "Laser\n(1064 nm)"
+
+  # Power Recycling Mirror
+  - elementId: prm-mirror
+    elementType: shape
+    shapeName: rect
+    bounds: [282, 236, 6, 14]
+    fill: { type: solid, color: "$ink" }
+
+  - elementId: prm-label
+    elementType: text
+    bounds: [248, 258, 80, 24]
+    content:
+      align: [center, top]
+      fontSize: 8
+      color: "$muted"
+      text: "Power-recycling\nmirror"
+
+  # Laser beam from Laser to Beam Splitter
+  - elementId: beam-input
+    elementType: line
+    bounds: [265, 242, 60, 2]
+    points: "0,0 60,0"
+    border: { style: solid, width: 2, color: "$teal" }
+
+  # Beam Splitter (45 deg Diamond)
+  - elementId: beam-splitter
+    elementType: shape
+    shapeName: diamond
+    bounds: [320, 232, 22, 22]
+    fill: { type: solid, color: "$teal" }
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: bs-label
+    elementType: text
+    bounds: [265, 212, 75, 16]
+    content:
+      align: [center, middle]
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: "Beam splitter"
+
+  # Vertical Arm (Input test mass, cavity, End test mass)
+  - elementId: itm-y
+    elementType: shape
+    shapeName: rect
+    bounds: [324, 198, 14, 6]
+    fill: { type: solid, color: "$ink" }
+
+  - elementId: etm-y
+    elementType: shape
+    shapeName: rect
+    bounds: [322, 88, 18, 8]
+    fill: { type: solid, color: "$ink" }
+
+  - elementId: beam-y-up
+    elementType: line
+    bounds: [328, 96, 2, 102]
+    points: "0,0 0,102"
+    border: { style: solid, width: 2, color: "$teal" }
+
+  - elementId: beam-y-down
+    elementType: line
+    bounds: [332, 96, 2, 102]
+    points: "0,0 0,102"
+    border: { style: solid, width: 2, color: "$teal" }
+
+  - elementId: label-4km-y
+    elementType: text
+    bounds: [302, 135, 20, 30]
+    content:
+      fontSize: 8.5
+      color: "$muted"
+      text: "4 km"
+
+  # Horizontal Arm (Input test mass, cavity, End test mass)
+  - elementId: itm-x
+    elementType: shape
+    shapeName: rect
+    bounds: [348, 236, 6, 14]
+    fill: { type: solid, color: "$ink" }
+
+  - elementId: etm-x
+    elementType: shape
+    shapeName: rect
+    bounds: [445, 233, 8, 20]
+    fill: { type: solid, color: "$ink" }
+
+  - elementId: beam-x-right
+    elementType: line
+    bounds: [342, 241, 103, 2]
+    points: "0,0 103,0"
+    border: { style: solid, width: 2, color: "$teal" }
+
+  - elementId: beam-x-left
+    elementType: line
+    bounds: [342, 245, 103, 2]
+    points: "0,0 103,0"
+    border: { style: solid, width: 2, color: "$teal" }
+
+  - elementId: label-itm
+    elementType: text
+    bounds: [348, 212, 75, 14]
+    content:
+      fontSize: 8
+      color: "$muted"
+      text: "Input test mass"
+
+  - elementId: label-etm
+    elementType: text
+    bounds: [420, 212, 75, 14]
+    content:
+      fontSize: 8
+      color: "$muted"
+      text: "End test mass"
+  - elementId: label-fp-cavity
+    elementType: text
+    bounds: [350, 222, 100, 14]
+    content:
+      align: [center, middle]
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: "Fabry–Perot cavity"
+
+  - elementId: label-4km-x
+    elementType: text
+    bounds: [375, 260, 50, 14]
+    content:
+      align: [center, middle]
+      fontSize: 8.5
+      color: "$muted"
+      text: "4 km"
+
+  # Photodetector (Dark Port)
+  - elementId: beam-to-pd
+    elementType: line
+    bounds: [330, 254, 2, 28]
+    points: "0,0 0,28"
+    border: { style: solid, width: 2, color: "$teal" }
+
+  - elementId: pd-circle
+    elementType: shape
+    shapeName: ellipse
+    bounds: [322, 282, 18, 18]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: pd-text
+    elementType: text
+    bounds: [322, 284, 18, 14]
+    content:
+      align: [center, middle]
+      fontSize: 8
+      bold: true
+      color: "$ink"
+      text: "PD"
+
+  - elementId: pd-label
+    elementType: text
+    bounds: [344, 283, 90, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$ink"
+      text: "Photodetector"
+
+  - elementId: pd-delta-l
+    elementType: text
+    bounds: [340, 302, 160, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$accent"
+      text: |
+        \( \Delta L = h \cdot L \approx 4\times 10^{-18}\text{ m} \)
+
+  # Schematic Caption
+  - elementId: schematic-caption
+    elementType: text
+    bounds: [185, 342, 420, 26]
+    content:
+      style: "$caption"
+      text: "Figure 1. Dual-recycled Michelson with Fabry–Pérot arm cavities: a passing gravitational wave alternately stretches and squeezes the 4 km arms (schematic, not to scale)."
+
+  # Physics Definition Strip
+  - elementId: physics-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 375, 420, 56]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: physics-text
+    elementType: text
+    bounds: [193, 381, 404, 44]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$ink"
+      text: |
+        A GW is a transverse, spin-2 perturbation with two polarizations (\( h_+ \), \( h_\times \)), traveling at the speed of light. Detector band \( \approx 10-1000\text{ Hz} \) (GEO 600: 100 Hz–10 kHz).
+
+  # Right Sidebar: 3 Boxed Metric Panels
+  # Panel 1: THE MEASUREMENT
+  - elementId: card-meas-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 75, 295, 110]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: card-meas-icon
+    elementType: icon
+    iconName: "fas:wave-square"
+    bounds: [637, 85, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: card-meas-head
+    elementType: text
+    bounds: [658, 85, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "THE MEASUREMENT"
+
+  - elementId: card-meas-subbox
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 103, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: card-meas-formula
+    elementType: text
+    bounds: [642, 107, 261, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$ink"
+      text: |
+        \( h = \Delta L / L \sim 10^{-21} \to \Delta L \approx 4\times 10^{-18}\text{ m (over 4 km)} \)
+
+  - elementId: card-meas-desc
+    elementType: text
+    bounds: [637, 134, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9.5
+      text: "One arm stretches while the other squeezes — about 1/400 of a proton diameter. The arms' differential phase is read out at the dark port."
+
+  # Panel 2: THE INSTRUMENT
+  - elementId: card-inst-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 195, 295, 118]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: card-inst-icon
+    elementType: icon
+    iconName: "fas:gear"
+    bounds: [637, 205, 15, 15]
+    fill: { type: solid, color: "$teal" }
+
+  - elementId: card-inst-head
+    elementType: text
+    bounds: [658, 205, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "THE INSTRUMENT"
+
+  - elementId: card-inst-subbox
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 223, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: card-inst-formula
+    elementType: text
+    bounds: [642, 227, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$teal"
+      text: |
+        \( 2-3\text{ dB (O3)} \to 4.6-5.8\text{ dB (O4a)} \to 6.1\text{ dB (LLO, O4b)} \)
+
+  - elementId: card-inst-desc
+    elementType: text
+    bounds: [637, 254, 271, 52]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Squeezed light, Michelson + Fabry–Pérot arms (gain ≈ 144, O1), power recycling (≈ 115 kW circulating); 40 kg fused-silica test masses on multistage pendulums; shot noise dominant >200 Hz."
+
+  # Panel 3: THE NETWORK
+  - elementId: card-net-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 323, 295, 108]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: card-net-icon
+    elementType: icon
+    iconName: "fas:globe"
+    bounds: [637, 333, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: card-net-head
+    elementType: text
+    bounds: [658, 333, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "THE NETWORK"
+
+  - elementId: card-net-subbox
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 351, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: card-net-formula
+    elementType: text
+    bounds: [642, 355, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$primary"
+      text: |
+        \( \approx 10\text{ ms (HL baseline)}, \le 30\text{ ms (global)} \)
+
+  - elementId: card-net-desc
+    elementType: text
+    bounds: [637, 382, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "≥ 2 detectors: coincidence & glitch rejection. ≥ 3: sky triangulation. GW150914: broad arc with two; GW170817: ≈ 30 deg² with three."
+
+  # Takeaway Line
+  - elementId: footer-takeaway
+    elementType: text
+    bounds: [185, 456, 735, 24]
+    content:
+      style: "$takeaway"
+      text: "<b>Takeaway</b> · <b>A 10⁻²¹ strain — the quietest measurement ever made — is now routine.</b>"
+
+  # Sources Line
+  - elementId: footer-sources
+    elementType: text
+    bounds: [185, 490, 680, 20]
+    content:
+      style: "$footer"
+      text: "Sources: LVK, GWTC-5.0 Intro and Methods, arXiv:2605.27223, arXiv:2605.27224 · notes/detectors.md"
+
+  # Page Number
+  - elementId: footer-page
+    elementType: text
+    bounds: [875, 490, 45, 20]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      text: "1"

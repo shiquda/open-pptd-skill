@@ -1,0 +1,312 @@
+pageType: content
+notes: |
+  第八页深入研判中国储能企业出海必须直面的全球各大区域地缘政策与技术准入壁垒。
+  通过横向对比北美、欧洲、澳大利亚、中东与中国本土五大市场：
+  1. 北美市场：利润率最高但政治地缘风险最大。IRA法案提供30%-50%的ITC税收抵免，但美国政府宣布对中国非动力锂电池加征的301关税税率将在2026年从7.5%大幅上调至25%；此外FEOC（受关注外国实体）细则对供应链实施严格穿透审查。对此，中国企业的应对策略包括：技术授权（如宁德时代与福特模式）、墨西哥及东南亚建厂贴牌、以及在合同中加入关税转嫁与不可抗力免责条款；
+  2. 欧洲市场：无显著关税壁垒，但技术合规与碳足迹门槛不断提升。欧盟《新电池法》要求提供电池全生命周期碳足迹声明并引入“电池护照”数字化追踪，同时并网需要严苛的VDE与IEC认证；
+  3. 澳大利亚市场：商业化套利收益率全球最高，但电网运营商AEMO对储能系统的并网稳定性测试（PSCAD电磁暂态建模）极其严苛，对构网型控制算法提出了极高要求；
+  4. 中东市场：沙特、阿联酋等主权基金主导的吉瓦级超级绿电项目密集招标，国内一线企业通过联合中国能建、中国电建等央国企联合体总包出海，实现了确定性大规模交付。
+elements:
+  # Navigation Bar (Active: Section 4)
+  - elementId: nav-s1
+    elementType: text
+    bounds: [40, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">01 市场容量与装机</span></p>"
+  - elementId: nav-s2
+    elementType: text
+    bounds: [180, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">02 产业链与技术</span></p>"
+  - elementId: nav-s3
+    elementType: text
+    bounds: [320, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">03 竞争格局与成本</span></p>"
+  - elementId: nav-s4
+    elementType: text
+    bounds: [460, 18, 125, 16]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9pt;\">04 政策壁垒与投资</span></strong></p>"
+  - elementId: nav-tag
+    elementType: text
+    bounds: [700, 18, 220, 16]
+    content:
+      text: "<p style=\"text-align: right;\"><span style=\"color: #2151FF; font-weight: bold; font-size: 8.5pt;\">INVESTMENT COMMITTEE REPORT</span></p>"
+      letterSpacing: 0.8
+  - elementId: nav-active-indicator
+    elementType: shape
+    shapeName: rect
+    bounds: [460, 35, 125, 2]
+    fill: { type: solid, color: "$primary" }
+
+  # Slide Title & Subtitle
+  - elementId: slide-title
+    elementType: text
+    bounds: [40, 42, 880, 26]
+    content:
+      style: "$slideTitle"
+      text: "<p>北美关税与IRA抬高准入门槛，欧洲与新兴市场成为中国厂商多元化出海主战场</p>"
+
+  - elementId: slide-subtitle
+    elementType: text
+    bounds: [40, 69, 880, 16]
+    content:
+      style: "$subtitle"
+      text: "<p>区域监管与贸易壁垒多维透视：装机预期、电网安全认证、地缘关税/FEOC限制与中国厂商破局应对路径</p>"
+
+  - elementId: slide-top-divider
+    elementType: line
+    bounds: [40, 89, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Dense Regional Comparison Native Table
+  - elementId: table-regional-barriers
+    elementType: table
+    bounds: [40, 98, 880, 330]
+    columnWidths: [0.13, 0.11, 0.22, 0.18, 0.18, 0.18]
+    rowHeights: [0.08, 0.08, 0.168, 0.168, 0.168, 0.168, 0.168]
+    rows:
+      # Header Row 0
+      - - text: "<p style=\"text-align: left;\"><strong>目标区域及定位</strong></p>"
+          rowSpan: 2
+          align: [left, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: right;\"><strong>2024E装机</strong></p>"
+          rowSpan: 2
+          align: [right, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: center;\"><strong>监管政策与准入技术门槛</strong></p>"
+          colSpan: 2
+          align: [center, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: left;\"><strong>地缘关税与壁垒</strong></p>"
+          rowSpan: 2
+          align: [left, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: left;\"><strong>中企破局路径</strong></p>"
+          rowSpan: 2
+          align: [left, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+
+      # Header Row 1 (sub-headers for col 2 & 3)
+      - - text: "<p style=\"text-align: left;\"><strong>核心商业驱动机制</strong></p>"
+          align: [left, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p style=\"text-align: left;\"><strong>并网与安全认证</strong></p>"
+          align: [left, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 1: North America (US) - Emphasis
+      - - text: "<p><strong>北美 (美国)</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p><strong>48 GWh</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>Standalone ITC抵免30%-50%；电网调频套利收益丰厚</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>UL9540/NFPA855消防防爆；IEEE1547电网并网测试</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>301关税加征至25%(2026年生效)；FEOC穿透审查限制</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>借道墨西哥组装、专利技术授权(LRS)或绑定本地系统商</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 2: Europe - Emphasis
+      - - text: "<p><strong>欧洲 (德/英/意)</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p><strong>26 GWh</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>日前现货负电价频发驱动充放套利；容量机制陆续落地</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>CE认证、VDE-AR-N 4110中高压网规、IEC62619测试</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>欧盟新电池法案执行：全生命周期碳足迹声明与电池护照</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>建立西欧本地售后仓储备件网络，前置绿电与零碳工厂认证</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 3: Australia
+      - - text: "<p><strong>澳大利亚</strong></p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>10 GWh</p>"
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>煤电大规模提前退役，FCAS辅助服务市场套利空间巨大</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>AEMO电网入网测试极其严苛（需提交PSCAD电磁模型）</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>无惩罚性贸易关税；但并网延误违约赔偿金（LD）风险极高</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>主推自研构网型(Grid-forming)PCS算法，强化现场调试工程</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 4: Middle East
+      - - text: "<p><strong>中东 (沙特/阿联酋)</strong></p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>12 GWh</p>"
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>主权财富基金推动NEOM新城等吉瓦级绿电离网储能标段</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>沙特SASO认证；需经受55℃环境极端高温及严重沙尘考验</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>目前关税宽松；但“愿景2030”规划逐步提高本地制造比例</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>携手中国电建/能建等中资总包联合体出海，成套捆绑中标</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 5: China Domestic
+      - - text: "<p><strong>中国本土 (参考基准)</strong></p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>78 GWh</p>"
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>新能源强配储能向独立共享储能演进；容量补偿机制落地</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>GB/T 36276新国标型式试验；中国电科院检测与消防验收</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>无贸易壁垒；但低价竞标极度内卷，行业处于优胜劣汰出清期</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>加速314Ah与全栈自研技术降本，强化供应链成本管理底座</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+  # Bottom Takeaway Card (Structured consulting synthesis)
+  - elementId: takeaway-bar-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 436, 880, 60]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: takeaway-bar-left-stripe
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 436, 4, 60]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: takeaway-bar-txt
+    elementType: text
+    bounds: [55, 442, 855, 48]
+    content:
+      text: |
+        <p><strong><span style="color: #041C2C; font-size: 8.5pt;">投委会出海风险研判与尽调实操准则：</span></strong></p>
+        <p style="margin-top: 2px; color: #334155; font-size: 8pt; line-height: 1.35;">① 审查出海标的在北美供货合同中是否约定了<strong>关税与不可抗力风险转嫁条款（Pass-through Clause）</strong>；② 严查欧洲市场产品是否具备<strong>第三方机构出具的碳足迹验证报告与EPD环境产品声明</strong>；③ 严控澳大利亚等严监管市场的<strong>电网建模交付周期及履约保函敞口</strong>。</p>
+
+  # Bottom hairline and footer
+  - elementId: slide-bottom-line
+    elementType: line
+    bounds: [40, 508, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: slide-foot-src
+    elementType: text
+    bounds: [40, 514, 740, 16]
+    content:
+      style: "$footnote"
+      text: "<p>数据来源：美国联邦能源署(FERC)、USTR 301关税细则、欧盟新电池法规(EU 2023/1542)、BNEF全球储能政策库</p>"
+
+  - elementId: slide-foot-page
+    elementType: text
+    bounds: [820, 514, 100, 16]
+    content:
+      style: "$footnote"
+      text: "<p style=\"text-align: right;\"><strong><span style=\"color: #041C2C;\">08</span></strong> / 10</p>"

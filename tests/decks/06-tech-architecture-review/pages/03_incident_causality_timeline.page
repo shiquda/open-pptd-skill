@@ -1,0 +1,282 @@
+background: { type: solid, color: "$paper" }
+notes: |
+  本页是对 2026 年 3 月重大故障的因果链复盘，也是启动异地多活演进的直接诱因。
+  当时上海主中心的物理裸纤被市政施工挖断，主备专线瞬间中断。
+  哨兵集群因无法在双机房之间达成法定多数派仲裁而死锁；SRE 人工介入后发现从库滞后 18.4 秒，涉及 3420 笔资金流水。
+  在“强切导致数据丢失”与“不强切等待修复”之间，委员会不得不选择停摆 105 分钟。
+  这次事故暴露了同城冷备的两大致命缺陷：一是物理管道共享导致的单点，二是全局单点单写导致故障无法隔离在局部。
+elements:
+  # Header
+  - elementId: sec-tag
+    elementType: text
+    bounds: [45, 24, 400, 14]
+    content:
+      text: "03 / 生产事故因果分析 | INCIDENT CAUSALITY & TIMELINE"
+      fontSize: 8.5
+      bold: true
+      color: "$critical"
+
+  - elementId: main-title
+    elementType: text
+    bounds: [45, 38, 870, 26]
+    content:
+      text: "2026-03 主中心市政光纤熔断事故，暴露同城冷备数据同步滞后与强切决议阻滞"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+
+  - elementId: header-line
+    elementType: line
+    bounds: [45, 68, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # Timeline Top Section: Thick Line
+  - elementId: timeline-main-line
+    elementType: line
+    bounds: [55, 120, 850, 4]
+    points: "0,0 850,0"
+    border: { style: solid, width: 3.5, color: "$critical" }
+
+  # Node 1: T+00:00
+  - elementId: node1-point
+    elementType: shape
+    shapeName: ellipse
+    bounds: [70, 114, 16, 16]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 3, color: "$critical" }
+
+  - elementId: node1-time
+    elementType: text
+    bounds: [50, 86, 150, 24]
+    content:
+      text: "T+00:00 (14:15:00)\n光缆同沟物理熔断"
+      fontSize: 8.5
+      bold: true
+      color: "$critical"
+
+  - elementId: node1-desc
+    elementType: text
+    bounds: [50, 138, 155, 120]
+    content:
+      text: |
+        【事件发生】
+        上海外部市政道路施工违规作业，挖断主中心双路由直埋裸纤；主备机房专线心跳瞬间彻底中断。
+        
+        【现场证据】
+        网络交换机 BGP 告警突增 140+；单路光功率从 -12dBm 暴跌至 -40dBm（完全衰减）。
+      fontSize: 8.2
+      lineHeight: 1.25
+      color: "$ink"
+
+  # Node 2: T+00:02
+  - elementId: node2-point
+    elementType: shape
+    shapeName: ellipse
+    bounds: [238, 114, 16, 16]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 3, color: "$critical" }
+
+  - elementId: node2-time
+    elementType: text
+    bounds: [218, 86, 150, 24]
+    content:
+      text: "T+00:02 (14:17:00)\n哨兵仲裁脑裂拦截"
+      fontSize: 8.5
+      bold: true
+      color: "$critical"
+
+  - elementId: node2-desc
+    elementType: text
+    bounds: [218, 138, 155, 120]
+    content:
+      text: |
+        【仲裁死锁】
+        哨兵集群检测到主库心跳丢失，但因跨机房公网/专线双断无法形成多数派法定票数（Quorum 仅获 1/3）。
+        
+        【控制失效】
+        自动化故障转移被防脑裂保护机制严格拦截，未执行主从切换。
+      fontSize: 8.2
+      lineHeight: 1.25
+      color: "$ink"
+
+  # Node 3: T+00:14
+  - elementId: node3-point
+    elementType: shape
+    shapeName: ellipse
+    bounds: [426, 114, 16, 16]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 3, color: "$brand" }
+
+  - elementId: node3-time
+    elementType: text
+    bounds: [406, 86, 150, 24]
+    content:
+      text: "T+00:14 (14:29:00)\n确认从库严重滞后"
+      fontSize: 8.5
+      bold: true
+      color: "$brand"
+
+  - elementId: node3-desc
+    elementType: text
+    bounds: [406, 138, 155, 120]
+    content:
+      text: |
+        【人工介入】
+        SRE 团队进入深圳灾备机房控制台，发现 MySQL 异步 Binlog 复制位点落后主库 18.4 秒。
+        
+        【数据威胁】
+        若强制切主，预计将造成 3,420 笔在途资金交易不可逆丢失，引发监管通报与客户纠纷。
+      fontSize: 8.2
+      lineHeight: 1.25
+      color: "$ink"
+
+  # Node 4: T+00:32
+  - elementId: node4-point
+    elementType: shape
+    shapeName: ellipse
+    bounds: [614, 114, 16, 16]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 3, color: "$brand" }
+
+  - elementId: node4-time
+    elementType: text
+    bounds: [594, 86, 150, 24]
+    content:
+      text: "T+00:32 (14:47:00)\n委员会决议暂缓强切"
+      fontSize: 8.5
+      bold: true
+      color: "$brand"
+
+  - elementId: node4-desc
+    elementType: text
+    bounds: [594, 138, 155, 120]
+    content:
+      text: |
+        【应急权衡】
+        技术、风控与合规委员会召开线上紧急会议，评估数据丢失审计红线。
+        
+        【降级决策】
+        决议禁止强切主库，将交易系统整体置于只读降级状态，调配应急抢修队伍熔接光纤。
+      fontSize: 8.2
+      lineHeight: 1.25
+      color: "$ink"
+
+  # Node 5: T+01:45
+  - elementId: node5-point
+    elementType: shape
+    shapeName: ellipse
+    bounds: [802, 114, 16, 16]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 3, color: "$sync" }
+
+  - elementId: node5-time
+    elementType: text
+    bounds: [782, 86, 150, 24]
+    content:
+      text: "T+01:45 (16:00:00)\n熔接抢通追补对账"
+      fontSize: 8.5
+      bold: true
+      color: "$sync"
+
+  - elementId: node5-desc
+    elementType: text
+    bounds: [782, 138, 155, 120]
+    content:
+      text: |
+        【抢通复原】
+        市政光纤熔接抢修完成，专线恢复通信；灾备端全量回放追平 18.4s 积压 Binlog。
+        
+        【最终损失】
+        人工对账确认平账，核心交易业务累计停摆 105 分钟，触发重大业务中断SLA违约。
+      fontSize: 8.2
+      lineHeight: 1.25
+      color: "$ink"
+
+  # Middle Horizontal Divider
+  - elementId: mid-div
+    elementType: line
+    bounds: [45, 275, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # Bottom Section: Causal Analysis (Direct vs Systemic)
+  - elementId: left-cause-title
+    elementType: text
+    bounds: [45, 288, 415, 18]
+    content:
+      text: "事故直接原因分析 (Direct Causes & Infrastructure Defects)"
+      fontSize: 10
+      bold: true
+      color: "$critical"
+
+  - elementId: left-cause-content
+    elementType: text
+    bounds: [45, 310, 415, 180]
+    content:
+      text: |
+        1. 物理链路共管敷设单点：
+        • 主备机房名义上租用了两家不同运营商的专线，但现场勘查发现，两路裸纤在出园区 2.1 公里处进入了同一市政地下管道，属于典型的「伪双路由」，单次挖掘即全军覆没。
+        
+        2. 仲裁法定人数 (Quorum) 结构缺陷：
+        • 哨兵仲裁节点仅部署于上海与深圳两个机房（2+1 节点），缺乏独立的第三方仲裁点（如公有云或第三方机房）。两机房专线失联后，任何一方都无法凑齐超过半数的仲裁票，导致自动化决策死锁。
+        
+        3. 状态定性：【生产环境物理漏洞 · 基础设施整改中】
+      fontSize: 8.5
+      lineHeight: 1.35
+      color: "$ink"
+
+  - elementId: col-div
+    elementType: line
+    bounds: [475, 288, 1, 205]
+    points: "0,0 0,205"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  - elementId: right-cause-title
+    elementType: text
+    bounds: [495, 288, 420, 18]
+    content:
+      text: "系统性脆弱性与架构深层根因 (Systemic Architectural Bottlenecks)"
+      fontSize: 10
+      bold: true
+      color: "$ink"
+
+  - elementId: right-cause-content
+    elementType: text
+    bounds: [495, 310, 420, 180]
+    content:
+      text: |
+        1. 全局粗粒度单机房单写：
+        • 交易系统全量读写强依赖上海单个主库，系统未对用户、账户或交易品类进行分片隔离。单机房故障直接传导为 100% 全局业务瘫痪，缺乏部分可用（Graceful Degradation）的弹性。
+        
+        2. 冷备机房无热态校验与预热：
+        • 深圳灾备机房常年无真实业务流量，本地缓存未预热，连接池与微服务实例处于待机态。即使人工强切，也极易因流量洪峰瞬时击穿数据库而引发二次雪崩。
+        
+        3. 架构演进定性：【传统主备模式已无法支撑业务，必须向单元化多活演进】
+      fontSize: 8.5
+      lineHeight: 1.35
+      color: "$ink"
+
+  # Footer
+  - elementId: footer-line
+    elementType: line
+    bounds: [45, 510, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  - elementId: footer-meta
+    elementType: text
+    bounds: [45, 516, 500, 16]
+    content:
+      text: "交易核心多活架构评审 | 生产事故因果分析复盘 | 2026-10-20"
+      fontSize: 8.5
+      color: "$muted"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [840, 516, 75, 16]
+    content:
+      text: "PAGE 03 / 10"
+      fontSize: 8.5
+      color: "$muted"
+      align: [right, top]

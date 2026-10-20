@@ -1,0 +1,216 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+notes: |
+  第二部分聚焦文献证据鸿沟。针对自注意力的高昂开销，学术界曾提出以 Longformer 为代表的静态局部滑动窗口与以 StreamingLLM 为代表的固定缓存截断机制。
+  由式 3.1 和式 3.2 可见，静态稀疏人为假设注意力仅存在于邻近局部窗口 W 内或固定步长 S 上。
+  但在实际长程推理场景（如长文档大海捞针、跨章节多跳问答）中，关键证据常常随机散落在 100K Token 以外。静态截断将远离窗口的注意力权重强制置为负无穷，直接造成严重的信息截断与精度坍塌。
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 30, 600, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$primary"
+      letterSpacing: 1.2
+      text: 02 · EVIDENCE GAP & STATIC SPARSITY BREAKDOWN
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 48, 860, 34]
+    content:
+      fontSize: 21
+      bold: true
+      color: "$fg"
+      text: 静态局部窗口与固定步长稀疏模式造成长程跨段联想致命断裂
+
+  # Top dividing line
+  - elementId: div-top
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 86, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: static-label
+    elementType: text
+    bounds: [50, 98, 430, 20]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$primary"
+      text: 现有代表性静态稀疏算子数学建模与硬截断缺陷
+
+  - elementId: formula-local
+    elementType: text
+    bounds: [50, 118, 380, 85]
+    content:
+      fontSize: 14
+      align: [center, middle]
+      text: |
+        <p>\( A_{\mathrm{local}}(i, j) = \begin{cases} \dfrac{q_i k_j^T}{\sqrt{d_k}} & \text{if } |i - j| \le W \\ -\infty & \text{otherwise} \end{cases} \)</p>
+  - elementId: num-31
+    elementType: text
+    bounds: [435, 145, 45, 24]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$gray"
+      align: [right, middle]
+      text: (式 3.1)
+
+  - elementId: formula-strided
+    elementType: text
+    bounds: [50, 206, 380, 85]
+    content:
+      fontSize: 14
+      align: [center, middle]
+      text: |
+        <p>\( A_{\mathrm{strided}}(i, j) = \begin{cases} \dfrac{q_i k_j^T}{\sqrt{d_k}} & \text{if } (i - j) \equiv 0 \ (\mathrm{mod} \ S) \\ -\infty & \text{otherwise} \end{cases} \)</p>
+  - elementId: num-32
+    elementType: text
+    bounds: [435, 235, 45, 24]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$gray"
+      align: [right, middle]
+      text: (式 3.2)
+
+  - elementId: static-analysis
+    elementType: text
+    bounds: [50, 298, 430, 185]
+    content:
+      fontSize: 11.5
+      lineHeight: 1.45
+      color: "$fg"
+      text: |
+        <p><strong>证据失效机理剖析：</strong></p>
+        <p>1. <strong>局部归纳偏置失效：</strong>自然语言与代码逻辑并非严格满足欧氏局域性；式 (3.1) 强制假设 \( |i-j| > W \)（如 \( W=2048 \)）权重为零，导致跨章节依赖完全丢失；</p>
+        <p>2. <strong>固定步长错位：</strong>式 (3.2) 的步长 \( S \) 难以自适应不同注意力头的敏感波长；</p>
+        <p>3. <strong>精度坍塌实测：</strong>在 Needle-in-a-Haystack 128K 检索任务中，静态窗口准确率由 99.1% 断崖式跌落至 32.4%（Beltagy et al., 2020; Kamradt, 2023）。</p>
+
+  # Right Column: Vector Comparison of Sparsity Topologies
+  - elementId: topo-panel-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [505, 98, 405, 385]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$ruleColor"
+
+  - elementId: topo-title
+    elementType: text
+    bounds: [520, 110, 375, 22]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$fg"
+      text: 注意力拓扑结构与可达路径对比 (Topology & Reachability)
+
+  # Pattern 1: Full Attention
+  - elementId: pat1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [520, 138, 375, 66]
+    fill:
+      type: solid
+      color: "#FFFFFF"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: pat1-text
+    elementType: text
+    bounds: [530, 144, 355, 54]
+    content:
+      fontSize: 10.5
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><strong>A. 全稠密自注意力 (Full Dense) · 复杂度 \( O(N^2) \)</strong></p>
+        <p style="color:#868686;">全向图连通，无信息遗失；但计算与显存开销随 \( N \) 呈二次方爆炸。</p>
+
+  # Pattern 2: Static Local
+  - elementId: pat2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [520, 214, 375, 78]
+    fill:
+      type: solid
+      color: "#FFFFFF"
+    border:
+      style: solid
+      width: 0.8
+      color: "$accentRed"
+
+  - elementId: pat2-text
+    elementType: text
+    bounds: [530, 220, 355, 66]
+    content:
+      fontSize: 10.5
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><span style="color:#B51E00; font-weight:bold;">B. 静态带状/窗口稀疏 (Static Band/Local) · 复杂度 \( O(N \cdot W) \)</span></p>
+        <p style="color:#868686;">局限于对角线附近带状区域；<strong>致命缺陷：</strong>远距路径截断，多跳推理链发生结构性中断。</p>
+
+  # Pattern 3: Proposed Dynamic Routing
+  - elementId: pat3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [520, 302, 375, 84]
+    fill:
+      type: solid
+      color: "#FFFFFF"
+    border:
+      style: solid
+      width: 1.2
+      color: "$primary"
+
+  - elementId: pat3-text
+    elementType: text
+    bounds: [530, 308, 355, 72]
+    content:
+      fontSize: 10.5
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">C. 本文提出：动态轻量路由稀疏 (DLR-Attn) · 复杂度 \( O(N \sqrt{N}) \)</span></p>
+        <p style="color:#868686;">查询自适应动态寻址：近端保留局部窗口，远端按语义聚类质心路由，兼具全局可达性与亚二次方效率。</p>
+
+  - elementId: gap-summary
+    elementType: text
+    bounds: [520, 396, 375, 78]
+    content:
+      fontSize: 10
+      lineHeight: 1.35
+      color: "$gray"
+      text: |
+        <p><strong>核心学术共识与研究缺口：</strong>必须突破「固定空间几何位置」假设，构建「<strong>数据驱动的轻量级查询感知动态路由</strong>」机制，使远端高价值 Token 能被零损失即时召回。</p>
+
+  # Footer dividing line
+  - elementId: div-bottom
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 498, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: footer-nav
+    elementType: text
+    bounds: [50, 506, 860, 20]
+    content:
+      fontSize: 10
+      color: "$gray"
+      text: |
+        <p>面向长上下文推理的稀疏注意力机制 · 博士学位论文答辩 <span style="float:right;">§2 文献鸿沟 ｜ 03 / 10</span></p>

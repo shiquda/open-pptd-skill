@@ -1,0 +1,197 @@
+pageType: final
+background:
+  type: solid
+  color: "#FFFFFF"
+notes: |
+  最后一部分总结本文的核心学术贡献与代表性参考文献。
+  本学位论文的主要学术贡献体现在理论、算法与系统三个维度：
+  理论上，解析推导并证明了动态稀疏注意力的 O(N^1.5) 最优复杂度阶数与近似误差收敛界；
+  算法上，提出了即插即用的轻量查询投影与动态聚类路由架构 DLR-Attn，在 128K 超长序列下保持 98.4% 检索准确率；
+  工程系统上，研制了基于 Triton 的高性能稀疏计算 Kernel，取得 3.82× 实测端到端吞吐提速。
+  汇报完毕，恳请答辩委员会各位专家批评指正！
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 30, 600, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$primary"
+      letterSpacing: 1.2
+      text: 09 · CONCLUSIONS, CONTRIBUTIONS & REFERENCES
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 48, 860, 34]
+    content:
+      fontSize: 21
+      bold: true
+      color: "$fg"
+      text: 论文核心学术贡献总结与代表性学术参考文献
+
+  # Top dividing line
+  - elementId: div-top
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 86, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: contrib-title
+    elementType: text
+    bounds: [50, 98, 430, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: ● 博士论文三大核心学术贡献 (Key Contributions)
+
+  # C1
+  - elementId: c1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 126, 430, 100]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: c1-text
+    elementType: text
+    bounds: [62, 134, 406, 84]
+    content:
+      fontSize: 11
+      lineHeight: 1.4
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">贡献 1 · 理论建模贡献 (Theoretical Contribution)</span></p>
+        <p>建立了动态稀疏注意力的解析算力优化模型，首次严密证明了在维持全局全向动态感知的前提下，最优聚类分块阶数 \( B^* = \Theta(\sqrt{N}) \) 可将复杂度从 \( O(N^2) \) 严格降阶至 \( O(N^{1.5}) \)。</p>
+
+  # C2
+  - elementId: c2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 236, 430, 100]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: c2-text
+    elementType: text
+    bounds: [62, 244, 406, 84]
+    content:
+      fontSize: 11
+      lineHeight: 1.4
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">贡献 2 · 算法创新贡献 (Algorithmic Innovation)</span></p>
+        <p>提出了低维查询投影与两阶段层次聚类动态路由注意力（DLR-Attn），摆脱静态几何窗口截断弊端；在 128K 极端长上下文下实现 98.4% 检索准确率，且<strong>完全无需重训练微调</strong>。</p>
+
+  # C3
+  - elementId: c3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 346, 430, 100]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: c3-text
+    elementType: text
+    bounds: [62, 354, 406, 84]
+    content:
+      fontSize: 11
+      lineHeight: 1.4
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">贡献 3 · 系统与工程贡献 (System & Engineering)</span></p>
+        <p>研制了基于 Triton 的高性能融合非连续稀疏注意力算子库，结合 GPU 寄存器级 Top-K 快速筛选，在主流开源大模型上实测取得 <strong>3.82× 端到端吞吐提升</strong>与 60.4% 首字延时压降。</p>
+
+  # Right Column: Academic References
+  - elementId: ref-title
+    elementType: text
+    bounds: [505, 98, 405, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$fg"
+      text: ■ 代表性学术参考文献 (Selected References)
+
+  - elementId: ref-box
+    elementType: shape
+    shapeName: rect
+    bounds: [505, 126, 405, 320]
+    fill:
+      type: solid
+      color: "#FFFFFF"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: ref-content
+    elementType: text
+    bounds: [518, 134, 380, 304]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.45
+      color: "$fg"
+      text: |
+        <p>[1] <strong>Vaswani, A.</strong>, Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). Attention is all you need. <em>Advances in Neural Information Processing Systems (NeurIPS)</em>, 30, 5998–6008.</p>
+        <p>[2] <strong>Dao, T.</strong>, Fu, D. Y., Ermon, S., Rudra, A., & Ré, C. (2022). FlashAttention: Fast and memory-efficient exact attention with IO-awareness. <em>NeurIPS</em>, 35, 16344–16359.</p>
+        <p>[3] <strong>Beltagy, I.</strong>, Peters, M. E., & Cohan, A. (2020). Longformer: The long-document transformer. <em>arXiv preprint arXiv:2004.05150</em>.</p>
+        <p>[4] <strong>Zhang, Z.</strong>, Sheng, Y., Zhou, T., Chen, T., Zheng, L., Cai, R., Song, Z., Tian, Y., Ré, C., Barrett, C., Wang, Z., & Chen, B. (2023). H2O: Heavy-hitter oracle for efficient generative inference of large language models. <em>NeurIPS</em>, 36, 33501–33528.</p>
+        <p>[5] <strong>AI@Meta</strong>. (2024). The Llama 3 herd of models. <em>arXiv preprint arXiv:2407.21783</em>.</p>
+
+  # Bottom Acknowledgement banner
+  - elementId: ack-banner
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 456, 860, 34]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$primary"
+
+  - elementId: ack-text
+    elementType: text
+    bounds: [60, 462, 840, 22]
+    content:
+      fontSize: 11.5
+      bold: true
+      color: "$primary"
+      align: [center, middle]
+      text: 感谢导师与答辩委员会各位专家的悉心指导与评审！请各位专家批评指正！
+
+  # Footer dividing line
+  - elementId: div-bottom
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 498, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: footer-nav
+    elementType: text
+    bounds: [50, 506, 860, 20]
+    content:
+      fontSize: 10
+      color: "$gray"
+      text: |
+        <p>面向长上下文推理的稀疏注意力机制 · 博士学位论文答辩 <span style="float:right;">§9 总结与致谢 ｜ 10 / 10</span></p>

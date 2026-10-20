@@ -1,0 +1,381 @@
+pageType: content
+background: { type: solid, color: "$paper" }
+notes: |
+  Slide 10: Open Science Workflow: From Strain HDF5 to Gravitational Wave Data Center.
+  - Details the open-science architecture enabling global research:
+    1. Low-latency alert streaming (<30s) via GCN Kafka notices, distributing sky localization maps and classification parameters worldwide.
+    2. Bulk open-access archival data distributed by the Gravitational Wave Open Science Center (GWOSC.org), providing 4 kHz and 16 kHz calibrated strain h(t) files in HDF5 and Frame formats.
+    3. Community open-source Python stack (PyCBC, GWpy, Bilby, LALSuite) guaranteeing 100% end-to-end computational reproducibility.
+  - Explains the data volume (~1 PB across observing runs) and the open data commons licensing policy.
+elements:
+  # Left Rail
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [14, 24, 142, 484]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [18, 30, 134, 84]
+    src: "assets/thumb_detectors.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [18, 122, 134, 84]
+    src: "assets/thumb_timeline.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-3
+    elementType: image
+    bounds: [18, 214, 134, 84]
+    src: "assets/thumb_catalog.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-4
+    elementType: image
+    bounds: [18, 306, 134, 84]
+    src: "assets/thumb_mass.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-divider
+    elementType: line
+    bounds: [168, 24, 1, 484]
+    points: "0,0 0,484"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Header
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 24, 475, 34]
+    content:
+      style: "$title"
+      text: "A Globally Accessible Pipeline Powers Open Discovery"
+
+  - elementId: slide-category
+    elementType: text
+    bounds: [660, 27, 260, 18]
+    content:
+      style: "$category"
+      align: [right, middle]
+      text: "09 · OPEN SCIENCE"
+
+  - elementId: header-rule
+    elementType: line
+    bounds: [185, 58, 735, 1]
+    points: "0,0 735,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Center Area: End-to-End Pipeline Workflow Diagram (Built with vector boxes and arrows)
+  - elementId: flow-title
+    elementType: text
+    bounds: [185, 70, 420, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "End-to-End Data Flow Architecture (Interferometer to Public Notebook)"
+
+  # Step 1
+  - elementId: step-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 95, 420, 42]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$muted" }
+
+  - elementId: step-1-txt
+    elementType: text
+    bounds: [195, 100, 400, 32]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.25
+      color: "$ink"
+      text: "<b>1. Real-Time Photodiode Strain Acquisition & Calibration</b><br/>Continuous 16 kHz sampling; photon calibrator laser actuators; online state vectors."
+
+  # Arrow 1
+  - elementId: step-1-arr
+    elementType: line
+    bounds: [390, 137, 10, 12]
+    points: "5,0 5,12"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$teal" }
+
+  # Step 2
+  - elementId: step-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 150, 420, 42]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: step-2-txt
+    elementType: text
+    bounds: [195, 155, 400, 32]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.25
+      color: "$ink"
+      text: "<b>2. Low-Latency Coincidence & Alert Streaming (&lt; 30s)</b><br/>GstLAL / PyCBC / MBTA match filtering; BAYESTAR skymaps; Kafka GCN JSON notices."
+
+  # Arrow 2
+  - elementId: step-2-arr
+    elementType: line
+    bounds: [390, 192, 10, 12]
+    points: "5,0 5,12"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$teal" }
+
+  # Step 3
+  - elementId: step-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 205, 420, 42]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$teal" }
+
+  - elementId: step-3-txt
+    elementType: text
+    bounds: [195, 210, 400, 32]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.25
+      color: "$ink"
+      text: "<b>3. Multi-Messenger Worldwide Robotic Triggering</b><br/>Global telescope arrays (ZTF, Rubin, Swift, Fermi) slew automatically to target fields."
+
+  # Arrow 3
+  - elementId: step-3-arr
+    elementType: line
+    bounds: [390, 247, 10, 12]
+    points: "5,0 5,12"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$teal" }
+
+  # Step 4
+  - elementId: step-4-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 260, 420, 42]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$muted" }
+
+  - elementId: step-4-txt
+    elementType: text
+    bounds: [195, 265, 400, 32]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.25
+      color: "$ink"
+      text: "<b>4. Bulk Archival Release via GWOSC.org Portal</b><br/>Calibrated strain files (HDF5 / GWF), posterior samples, glitch quality flags (>1 PB)."
+
+  # Arrow 4
+  - elementId: step-4-arr
+    elementType: line
+    bounds: [390, 302, 10, 12]
+    points: "5,0 5,12"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$teal" }
+
+  # Step 5
+  - elementId: step-5-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 315, 420, 42]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: step-5-txt
+    elementType: text
+    bounds: [195, 320, 400, 32]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.25
+      color: "$ink"
+      text: "<b>5. Open-Source Python Reproducibility Stack</b><br/>PyCBC, GWpy, Bilby, LALSuite, Jupyter; 100% of published figures fully runnable."
+
+  # Reproducibility Policy Box
+  - elementId: repro-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 368, 420, 68]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: repro-txt
+    elementType: text
+    bounds: [193, 374, 404, 56]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>Open Science Guarantee:</b> Zero proprietary software required. Every waveform model, detector response function, and parameter estimation MCMC sampler is published under open GPL/BSD licenses, enabling independent peer verification across universities worldwide.
+
+  # Right Sidebar
+  - elementId: side-1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 75, 295, 110]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-1-icon
+    elementType: icon
+    iconName: "fas:folder-open"
+    bounds: [637, 85, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-1-head
+    elementType: text
+    bounds: [658, 85, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "GWOSC REPOSITORY"
+
+  - elementId: side-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 103, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-1-formula
+    elementType: text
+    bounds: [642, 107, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: |
+        \( > 1\text{ Petabyte of open strain data in HDF5} \)
+
+  - elementId: side-1-desc
+    elementType: text
+    bounds: [637, 134, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Calibrated 4 kHz / 16 kHz time-series strain h(t) and segment metadata freely downloadable under Open Data Commons Attribution license."
+
+  - elementId: side-2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 195, 295, 118]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-2-icon
+    elementType: icon
+    iconName: "fas:rss"
+    bounds: [637, 205, 15, 15]
+    fill: { type: solid, color: "$teal" }
+
+  - elementId: side-2-head
+    elementType: text
+    bounds: [658, 205, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "GCN KAFKA NOTICES"
+
+  - elementId: side-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 223, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-2-formula
+    elementType: text
+    bounds: [642, 227, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$teal"
+      text: |
+        \( \text{JSON alert latency } < 30\text{ s via Apache Kafka} \)
+
+  - elementId: side-2-desc
+    elementType: text
+    bounds: [637, 254, 271, 52]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Public streaming circulars distribute multi-messenger alerts with p_astro probabilities and HEALPix skymaps directly to automated observatories."
+
+  - elementId: side-3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 323, 295, 108]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-3-icon
+    elementType: icon
+    iconName: "fas:code"
+    bounds: [637, 333, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-3-head
+    elementType: text
+    bounds: [658, 333, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "PYTHON ECOSYSTEM"
+
+  - elementId: side-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 351, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-3-formula
+    elementType: text
+    bounds: [642, 355, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$primary"
+      text: |
+        \( \text{pip install gwpy pycbc bilby lalsuite} \)
+
+  - elementId: side-3-desc
+    elementType: text
+    bounds: [637, 382, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Community Python libraries power everything from matched filtering to parameter estimation and spectrogram generation, democratizing cosmic discovery."
+
+  # Takeaway Line
+  - elementId: footer-takeaway
+    elementType: text
+    bounds: [185, 456, 735, 24]
+    content:
+      style: "$takeaway"
+      text: "<b>Takeaway</b> · <b>Open data and streaming Kafka alerts transform gravitational-wave physics into a global utility.</b>"
+
+  # Sources Line
+  - elementId: footer-sources
+    elementType: text
+    bounds: [185, 490, 680, 20]
+    content:
+      style: "$footer"
+      text: "Sources: Abbott et al., SoftwareX 13, 100658 (2021); gwosc.org; gcn.nasa.gov · notes/workflow.md"
+
+  # Page Number
+  - elementId: footer-page
+    elementType: text
+    bounds: [875, 490, 45, 20]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      text: "10"

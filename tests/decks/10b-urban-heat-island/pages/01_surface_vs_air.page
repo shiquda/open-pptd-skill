@@ -1,0 +1,325 @@
+pageType: content
+background: { type: solid, color: "$darkBg" }
+notes: |
+  Slide 1: Surface Temperature vs Air Temperature Discrepancy across four representative urban micro-zones.
+  Demonstrates that satellite radiometric skin temperature measured by thermal infrared instruments (Landsat/MODIS)
+  diverges drastically from pedestrian-level air temperature (1.5 m thermocouple).
+  Highlights the surface energy balance equation Rn = H + lambda*E + G + Qf.
+elements:
+  # ---------------- Left Rail ----------------
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [0, 0, 160, 540]
+    fill: { type: solid, color: "#080C14" }
+    border: { style: solid, width: 1, color: "$borderMuted" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [13, 30, 134, 84]
+    src: "assets/thumb_slide1.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 2, color: "$hotOrange" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [13, 130, 134, 84]
+    src: "assets/thumb_slide2.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 1, color: "$borderMuted" }
+
+  # ---------------- Title & Category ----------------
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 20, 560, 26]
+    content:
+      style: "$title"
+      fontSize: 15
+      text: "Surface Temperature Diverges by 20°C Across Urban Micro-Zones"
+
+  - elementId: slide-cat
+    elementType: text
+    bounds: [760, 22, 164, 22]
+    content:
+      style: "$subtitle"
+      align: [right, middle]
+      text: "01 · ENERGY BALANCE"
+
+  # ---------------- Column 1: City Center CBD ----------------
+  - elementId: col-bg-1
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 52, 175, 298]
+    fill: { type: solid, color: "$cardDark" }
+    border: { style: solid, width: 1, color: "$cardDarkBorder" }
+
+  - elementId: col-hdr-1
+    elementType: text
+    bounds: [193, 58, 159, 28]
+    content:
+      style: "$body"
+      fontSize: 8.5
+      color: "$textWhite"
+      text: "<b>Commercial CBD</b><br/><span style=\"color:#94A3B8;font-size:7pt;\">High-Rise Concrete & Asphalt</span>"
+
+  - elementId: col-badge-1
+    elementType: shape
+    shapeName: rect
+    bounds: [193, 90, 159, 18]
+    fill: { type: solid, color: "#7C2D12" }
+    border: { style: solid, width: 1, color: "$hotOrange" }
+
+  - elementId: col-badge-txt-1
+    elementType: text
+    bounds: [193, 92, 159, 14]
+    content:
+      style: "$badge"
+      fontSize: 8
+      align: [center, middle]
+      text: "T_surf: 45–55°C (Extreme)"
+
+  - elementId: col-img-1
+    elementType: image
+    bounds: [193, 114, 159, 114]
+    src: "assets/grid_city_center.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 1, color: "$borderMuted" }
+
+  - elementId: col-metrics-1
+    elementType: text
+    bounds: [193, 234, 159, 32]
+    content:
+      style: "$body"
+      fontSize: 8
+      color: "$textWhite"
+      text: "Air (1.5 m): 37.8°C<br/>Surface ΔT: <span style=\"color:#F97316;font-weight:bold;\">+14.2°C</span>"
+
+  - elementId: col-desc-1
+    elementType: text
+    bounds: [193, 270, 159, 74]
+    content:
+      style: "$body"
+      fontSize: 7.5
+      text: "Low albedo (0.12), zero evapotranspiration, massive daytime sensible heat storage in dense street canyons."
+
+  # ---------------- Column 2: Built-Up Residential ----------------
+  - elementId: col-bg-2
+    elementType: shape
+    shapeName: rect
+    bounds: [373, 52, 175, 298]
+    fill: { type: solid, color: "$cardDark" }
+    border: { style: solid, width: 1, color: "$cardDarkBorder" }
+
+  - elementId: col-hdr-2
+    elementType: text
+    bounds: [381, 58, 159, 28]
+    content:
+      style: "$body"
+      fontSize: 8.5
+      color: "$textWhite"
+      text: "<b>Mid-Rise Residential</b><br/><span style=\"color:#94A3B8;font-size:7pt;\">Mixed Built-Up Canopy</span>"
+
+  - elementId: col-badge-2
+    elementType: shape
+    shapeName: rect
+    bounds: [381, 90, 159, 18]
+    fill: { type: solid, color: "#9A3412" }
+    border: { style: solid, width: 1, color: "$hotOrange" }
+
+  - elementId: col-badge-txt-2
+    elementType: text
+    bounds: [381, 92, 159, 14]
+    content:
+      style: "$badge"
+      fontSize: 8
+      align: [center, middle]
+      text: "T_surf: 38–45°C (Elevated)"
+
+  - elementId: col-img-2
+    elementType: image
+    bounds: [381, 114, 159, 114]
+    src: "assets/grid_built_up.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 1, color: "$borderMuted" }
+
+  - elementId: col-metrics-2
+    elementType: text
+    bounds: [381, 234, 159, 32]
+    content:
+      style: "$body"
+      fontSize: 8
+      color: "$textWhite"
+      text: "Air (1.5 m): 37.1°C<br/>Surface ΔT: <span style=\"color:#FB923C;font-weight:bold;\">+5.4°C</span>"
+
+  - elementId: col-desc-2
+    elementType: text
+    bounds: [381, 270, 159, 74]
+    content:
+      style: "$body"
+      fontSize: 7.5
+      text: "Moderate shadow masking from buildings, rooftop thermal reradiation, restricted street-level wind dispersion."
+
+  # ---------------- Column 3: Green Space Park ----------------
+  - elementId: col-bg-3
+    elementType: shape
+    shapeName: rect
+    bounds: [561, 52, 175, 298]
+    fill: { type: solid, color: "$cardDark" }
+    border: { style: solid, width: 1, color: "$cardDarkBorder" }
+
+  - elementId: col-hdr-3
+    elementType: text
+    bounds: [569, 58, 159, 28]
+    content:
+      style: "$body"
+      fontSize: 8.5
+      color: "$textWhite"
+      text: "<b>Urban Forest Park</b><br/><span style=\"color:#94A3B8;font-size:7pt;\">Dense Vegetated Canopy</span>"
+
+  - elementId: col-badge-3
+    elementType: shape
+    shapeName: rect
+    bounds: [569, 90, 159, 18]
+    fill: { type: solid, color: "#064E3B" }
+    border: { style: solid, width: 1, color: "$greenCool" }
+
+  - elementId: col-badge-txt-3
+    elementType: text
+    bounds: [569, 92, 159, 14]
+    content:
+      style: "$badge"
+      fontSize: 8
+      align: [center, middle]
+      text: "T_surf: 30–38°C (Cool Island)"
+
+  - elementId: col-img-3
+    elementType: image
+    bounds: [569, 114, 159, 114]
+    src: "assets/grid_green_space.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 1, color: "$borderMuted" }
+
+  - elementId: col-metrics-3
+    elementType: text
+    bounds: [569, 234, 159, 32]
+    content:
+      style: "$body"
+      fontSize: 8
+      color: "$textWhite"
+      text: "Air (1.5 m): 35.8°C<br/>Surface ΔT: <span style=\"color:#34D399;font-weight:bold;\">-1.2°C</span>"
+
+  - elementId: col-desc-3
+    elementType: text
+    bounds: [569, 270, 159, 74]
+    content:
+      style: "$body"
+      fontSize: 7.5
+      text: "Latent heat transpirational cooling (-250 W/m²), continuous tree canopy shading intercepts direct solar insolation."
+
+  # ---------------- Column 4: Waterfront Corridor ----------------
+  - elementId: col-bg-4
+    elementType: shape
+    shapeName: rect
+    bounds: [749, 52, 175, 298]
+    fill: { type: solid, color: "$cardDark" }
+    border: { style: solid, width: 1, color: "$cardDarkBorder" }
+
+  - elementId: col-hdr-4
+    elementType: text
+    bounds: [757, 58, 159, 28]
+    content:
+      style: "$body"
+      fontSize: 8.5
+      color: "$textWhite"
+      text: "<b>Waterfront Corridor</b><br/><span style=\"color:#94A3B8;font-size:7pt;\">Riverside Riparian Buffer</span>"
+
+  - elementId: col-badge-4
+    elementType: shape
+    shapeName: rect
+    bounds: [757, 90, 159, 18]
+    fill: { type: solid, color: "#0C4A6E" }
+    border: { style: solid, width: 1, color: "$cyanCool" }
+
+  - elementId: col-badge-txt-4
+    elementType: text
+    bounds: [757, 92, 159, 14]
+    content:
+      style: "$badge"
+      fontSize: 8
+      align: [center, middle]
+      text: "T_surf: 30–34°C (Thermal Sink)"
+
+  - elementId: col-img-4
+    elementType: image
+    bounds: [757, 114, 159, 114]
+    src: "assets/grid_waterfront.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 1, color: "$borderMuted" }
+
+  - elementId: col-metrics-4
+    elementType: text
+    bounds: [757, 234, 159, 32]
+    content:
+      style: "$body"
+      fontSize: 8
+      color: "$textWhite"
+      text: "Air (1.5 m): 35.2°C<br/>Surface ΔT: <span style=\"color:#38BDF8;font-weight:bold;\">-3.8°C</span>"
+
+  - elementId: col-desc-4
+    elementType: text
+    bounds: [757, 270, 159, 74]
+    content:
+      style: "$body"
+      fontSize: 7.5
+      text: "High thermal inertia of water bodies, daytime surface evaporation, mesoscale thermal breeze circulation."
+
+  # ---------------- Bottom Energy Balance Panel ----------------
+  - elementId: balance-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 360, 739, 82]
+    fill: { type: solid, color: "$cardDark" }
+    border: { style: solid, width: 1, color: "$borderMuted" }
+
+  - elementId: balance-formula-box
+    elementType: shape
+    shapeName: rect
+    bounds: [195, 366, 719, 24]
+    fill: { type: solid, color: "#080C14" }
+    border: { style: solid, width: 1, color: "$cardDarkBorder" }
+
+  - elementId: balance-formula
+    elementType: text
+    bounds: [200, 369, 709, 18]
+    content:
+      style: "$code"
+      fontSize: 8.5
+      bold: true
+      color: "$hotOrange"
+      text: |
+        <span style="color:#F97316;font-weight:bold;font-size:9pt;">R_n = H + λE + G + Q_F</span>    ≡    <span style="color:#F8FAFC;">Net Radiation = Sensible + Latent + Ground Storage + Anthropogenic</span>
+
+  - elementId: balance-desc
+    elementType: text
+    bounds: [195, 396, 719, 42]
+    content:
+      style: "$body"
+      fontSize: 8
+      text: "<b>Energy Partitioning Principle:</b> Impervious urban surfaces partition up to 80% of net radiation (Rn) into sensible heat flux (H) and substrate conduction (G), driving radiative skin temperature up to 55°C. In vegetated zones, latent heat flux (lambda*E) dominates, cooling surfaces via evapotranspiration."
+
+  # ---------------- Takeaway & Sources ----------------
+  - elementId: takeaway
+    elementType: text
+    bounds: [185, 452, 739, 22]
+    content:
+      style: "$body"
+      fontSize: 9
+      color: "$textWhite"
+      text: "<b>Takeaway</b> · Radiometric skin temperature diverges by over 20°C across urban fabrics, while air temperature remains buffered within 3°C."
+
+  - elementId: sources
+    elementType: text
+    bounds: [185, 485, 739, 18]
+    content:
+      style: "$footer"
+      text: "Sources: Oke (1982) Boundary Layer Climates; Voogt & Oke (2003) Remote Sensing of Environment 86 · Synthetic 30 m grid model (示意网格)"

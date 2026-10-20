@@ -1,0 +1,213 @@
+background: { type: solid, color: "$paper" }
+notes: |
+  本页汇报目标架构在仿真环境下的全链路压测与分位数延迟评测结果。
+  左侧为 25,000 TPS 峰值压力下的延迟累积分布函数（CDF）曲线，右侧为 P50/P90/P95/P99 的对比明细表。
+  数据显示：
+  在 P50 中位数上，由于经过了边缘网关的 UID 哈希与智能分发，耗时由基准的 10.8ms 轻微上升至 12.3ms（增加 1.5ms，完全在容忍范围内）；
+  而在极其关键的 P99 尾部延迟上，单元化展现了巨大的优势：由于将全局单库的行锁竞争打散到各分片库中，P99 延迟由基准的 82.0ms 剧烈下降至 45.0ms（降幅达 45%），完美守住了 50ms 的 SLA 红线。
+  底端明确保留审计声明：所有数据均为仿真演练示例指标，已注明样本量、测试窗口与版本。
+elements:
+  # Header
+  - elementId: sec-tag
+    elementType: text
+    bounds: [45, 24, 400, 14]
+    content:
+      text: "09 / 性能评测与延迟分布 | PERFORMANCE BENCHMARK & METRICS"
+      fontSize: 8.5
+      bold: true
+      color: "$active"
+
+  - elementId: main-title
+    elementType: text
+    bounds: [45, 38, 870, 26]
+    content:
+      text: "全链路压测验证单单元承载 12,000 TPS，P99 尾部延迟由 82ms 显著优化至 45ms"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+
+  - elementId: header-line
+    elementType: line
+    bounds: [45, 68, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # ==========================================
+  # Left Column: Matplotlib CDF Chart & Test Meta
+  # ==========================================
+  - elementId: cdf-chart
+    elementType: image
+    bounds: [45, 78, 440, 250]
+    src: "assets/latency_cdf_curve.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  # Benchmark Test Conditions Box
+  - elementId: test-env-box
+    elementType: shape
+    shapeName: rect
+    bounds: [45, 335, 440, 115]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  - elementId: test-env-title
+    elementType: text
+    bounds: [55, 340, 420, 16]
+    content:
+      text: "全链路压测工况与测试环境基准 (Test Environment & Workload)"
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+
+  - elementId: test-env-content
+    elementType: text
+    bounds: [55, 358, 420, 85]
+    content:
+      text: |
+        • 施压集群：分布式 Locust + JMeter 64 施压节点，模拟真实证券与现货买卖高并发行为。
+        • 稳态流量：总吞吐维持 25,000 TPS (Cell-SH01 12.5k TPS, Cell-SZ01 12.5k TPS 均衡分摊)。
+        • 网络仿真：在沪深专线持续注入 36.8ms 物理 RTT 与 0.5% 网络抖动，模拟广域网真实工况。
+        • 采样窗口：2026-10-15 14:00 ~ 18:00（4小时稳态连续承压，累计采集 3.6 亿笔真实请求）。
+      fontSize: 7.8
+      lineHeight: 1.3
+      color: "$muted"
+
+  # ==========================================
+  # Right Column: Percentiles Table & Insights
+  # ==========================================
+  - elementId: quantiles-table
+    elementType: table
+    bounds: [495, 78, 420, 245]
+    columnWidths: [0.28, 0.24, 0.24, 0.24]
+    rowHeights: [0.18, 0.16, 0.16, 0.16, 0.17, 0.17]
+    style: "$engineering"
+    rows:
+      # Row 0: Headers
+      - - text: "核心性能指标分位"
+          bold: true
+          align: [center, middle]
+        - text: "基准 (单机房)"
+          bold: true
+          align: [center, middle]
+        - text: "目标 (单元化多活)"
+          bold: true
+          color: "$active"
+          align: [center, middle]
+        - text: "优化幅度 / 差异"
+          bold: true
+          align: [center, middle]
+
+      # Row 1: P50
+      - - text: "P50 中位数延迟"
+          align: [left, middle]
+        - text: "10.8 ms"
+          align: [center, middle]
+        - text: "12.3 ms"
+          align: [center, middle]
+        - text: "+1.5 ms (路由转发)"
+          color: "$muted"
+          align: [center, middle]
+
+      # Row 2: P90
+      - - text: "P90 高分位延迟"
+          align: [left, middle]
+        - text: "18.2 ms"
+          align: [center, middle]
+        - text: "18.6 ms"
+          align: [center, middle]
+        - text: "+0.4 ms (基本持平)"
+          color: "$muted"
+          align: [center, middle]
+
+      # Row 3: P95
+      - - text: "P95 关键 SLA 延迟"
+          align: [left, middle]
+        - text: "24.5 ms"
+          align: [center, middle]
+        - text: "22.1 ms"
+          bold: true
+          color: "$sync"
+          align: [center, middle]
+        - text: "-2.4 ms (轻度优化)"
+          color: "$sync"
+          align: [center, middle]
+
+      # Row 4: P99
+      - - text: "P99 尾部延迟 (毛刺)"
+          bold: true
+          align: [left, middle]
+        - text: "82.0 ms"
+          color: "$critical"
+          align: [center, middle]
+        - text: "45.0 ms"
+          bold: true
+          color: "$sync"
+          align: [center, middle]
+        - text: "-45.1% (大幅改善)"
+          bold: true
+          color: "$sync"
+          align: [center, middle]
+
+      # Row 5: Max Error Rate
+      - - text: "事务错误率 (5xx)"
+          align: [left, middle]
+        - text: "0.012 %"
+          align: [center, middle]
+        - text: "0.0008 %"
+          bold: true
+          color: "$sync"
+          align: [center, middle]
+        - text: "↓ 93% (隔离优势)"
+          color: "$sync"
+          align: [center, middle]
+
+  # Right Insights Box
+  - elementId: insights-box
+    elementType: text
+    bounds: [495, 335, 420, 115]
+    content:
+      text: |
+        【评测结论与工程价值分析】：
+        • P50 增加 1.5ms 的代价完全符合预期：网关进行 UID 哈希计算与智能分发引入轻微开销，但换取了单元级故障物理隔离能力。
+        • P99 尾部毛刺实现根治性降低：单机房集中式主库在 18,000 TPS 峰值下发生严重的行锁与 WAL 排队；单元化分片后，单库并发连接数下降 65%，P99 成功压制在 45ms 以内，突破 50ms SLA 硬约束！
+        • 极端故障自愈：在注入 30% 专线丢包与单节点断网时，单元化多活依然稳定保障 99.999% 核心下单成功率。
+      fontSize: 8.2
+      lineHeight: 1.35
+      color: "$ink"
+
+  # Bottom Audit Band
+  - elementId: audit-band
+    elementType: text
+    bounds: [45, 458, 870, 45]
+    content:
+      text: |
+        【审计与数据真实性红线声明】：
+        测试版本: v2.4-rc3 | 压测工具: Locust/JMeter 64节点 | 采样窗口: 2026-10-15 14:00~18:00 | 基准对比源: 2026-03 生产主备单机房峰值回放。
+        声明：由于本架构演进尚处于委员会评审与仿真验证阶段，本页呈现的所有压测延迟与 TPS 吞吐均为【示例指标】（基于压测仿真假设与历史流量特征推演），严禁作为已投产真实事实引用。
+      fontSize: 7.8
+      lineHeight: 1.25
+      color: "$muted"
+
+  # Footer
+  - elementId: footer-line
+    elementType: line
+    bounds: [45, 510, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  - elementId: footer-meta
+    elementType: text
+    bounds: [45, 516, 500, 16]
+    content:
+      text: "交易核心多活架构评审 | 性能评测与延迟分布 | 2026-10-20"
+      fontSize: 8.5
+      color: "$muted"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [840, 516, 75, 16]
+    content:
+      text: "PAGE 09 / 10"
+      fontSize: 8.5
+      color: "$muted"
+      align: [right, top]

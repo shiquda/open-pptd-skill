@@ -1,0 +1,391 @@
+background: { type: solid, color: "$paper" }
+notes: |
+  本页重点展示单元化账户生命周期的状态机转换与防脑裂数学模型。
+  异地多活最大的隐患是脑裂导致的双写穿透（即两个机房同时对同一个账户扣款）。
+  我们通过五态状态机与租约机制彻底杜绝此问题：
+  常态下为 NormalActive，单元持有 2.0 秒的写租约；
+  一旦发生网络分区，旧单元在 1.5 秒后因无法续约而超时，强制跌入 SplitBrainFenced 只读隔离态；
+  而第三方仲裁中心会在第 2.5 秒才向接管单元发放新租约。这中间存在的 500 毫秒强制时间锁空隙，从数学模型上彻底阻断了双写冲突的可能性。
+elements:
+  # Header
+  - elementId: sec-tag
+    elementType: text
+    bounds: [45, 24, 400, 14]
+    content:
+      text: "06 / 状态机与写冲突防范 | STATE MACHINE & SHARDING ROUTING"
+      fontSize: 8.5
+      bold: true
+      color: "$active"
+
+  - elementId: main-title
+    elementType: text
+    bounds: [45, 38, 870, 26]
+    content:
+      text: "账户生命周期状态机杜绝双写穿透，动态租约仲裁确保网络分区下确定性降级"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+
+  - elementId: header-line
+    elementType: line
+    bounds: [45, 68, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # ==========================================
+  # Left: State Machine Topology
+  # ==========================================
+  # State 1: NormalActive
+  - elementId: s1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [55, 95, 175, 75]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 1.5, color: "$sync" }
+
+  - elementId: s1-tag
+    elementType: text
+    bounds: [60, 100, 165, 16]
+    content:
+      text: "① NormalActive [常态活跃]"
+      fontSize: 8.5
+      bold: true
+      color: "$sync"
+
+  - elementId: s1-desc
+    elementType: text
+    bounds: [60, 118, 165, 48]
+    content:
+      text: |
+        • 读写完全自闭环，持有有效租约
+        • 租约有效期 2.0s，每 500ms 自动续约
+        • 覆盖 98.5% 的核心就地写入
+      fontSize: 7.5
+      lineHeight: 1.25
+      color: "$ink"
+
+  # State 2: FrozenForMigrate
+  - elementId: s2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [385, 95, 185, 75]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 1.5, color: "$brand" }
+
+  - elementId: s2-tag
+    elementType: text
+    bounds: [390, 100, 175, 16]
+    content:
+      text: "② FrozenForMigrate [计划切流]"
+      fontSize: 8.5
+      bold: true
+      color: "$brand"
+
+  - elementId: s2-desc
+    elementType: text
+    bounds: [390, 118, 175, 48]
+    content:
+      text: |
+        • 运维切流或分片重平衡触发
+        • 原单元禁写，等待在途事务提交
+        • 增量 Binlog 追平至目标单元
+      fontSize: 7.5
+      lineHeight: 1.25
+      color: "$ink"
+
+  # State 3: CrossCellPending
+  - elementId: s3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [55, 235, 175, 75]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 1.5, color: "$active" }
+
+  - elementId: s3-tag
+    elementType: text
+    bounds: [60, 240, 165, 16]
+    content:
+      text: "③ CrossCellPending [跨域划转]"
+      fontSize: 8.5
+      bold: true
+      color: "$active"
+
+  - elementId: s3-desc
+    elementType: text
+    bounds: [60, 258, 165, 48]
+    content:
+      text: |
+        • 仅占 1.5% 的跨单元资产转账
+        • 本地 Try 冻结额度，异步发起 TCC
+        • 异地 Confirm 提交，超时自动 Cancel
+      fontSize: 7.5
+      lineHeight: 1.25
+      color: "$ink"
+
+  # State 4: SplitBrainFenced
+  - elementId: s4-box
+    elementType: shape
+    shapeName: rect
+    bounds: [385, 235, 185, 75]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 1.5, color: "$critical" }
+
+  - elementId: s4-tag
+    elementType: text
+    bounds: [390, 240, 175, 16]
+    content:
+      text: "④ SplitBrainFenced [脑裂隔离]"
+      fontSize: 8.5
+      bold: true
+      color: "$critical"
+
+  - elementId: s4-desc
+    elementType: text
+    bounds: [390, 258, 175, 48]
+    content:
+      text: |
+        • 专线中断，租约超时 1500ms 未续约
+        • 单元写权限被强制收回，降级为只读
+        • 强行阻断孤岛机房继续产生脏写
+      fontSize: 7.5
+      lineHeight: 1.25
+      color: "$ink"
+
+  # State 5: FailoverRecovered
+  - elementId: s5-box
+    elementType: shape
+    shapeName: rect
+    bounds: [220, 365, 195, 75]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 1.5, color: "$borderDark" }
+
+  - elementId: s5-tag
+    elementType: text
+    bounds: [225, 370, 185, 16]
+    content:
+      text: "⑤ FailoverRecovered [容灾接管]"
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+
+  - elementId: s5-desc
+    elementType: text
+    bounds: [225, 388, 185, 48]
+    content:
+      text: |
+        • 第三方仲裁多数派授权新主单元
+        • 校验对齐最新复制位点，生成对账底表
+        • 确认平账后平滑提升为 NormalActive
+      fontSize: 7.5
+      lineHeight: 1.25
+      color: "$ink"
+
+  # ==========================================
+  # State Transitions (Clean, Zero Collision)
+  # ==========================================
+  # Line 1: S1 -> S2 (Top Horizontal)
+  - elementId: trans-1-2
+    elementType: line
+    bounds: [230, 120, 155, 1]
+    points: "0,0 155,0"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$brand" }
+
+  - elementId: trans-1-2-lbl
+    elementType: text
+    bounds: [238, 104, 140, 14]
+    content:
+      text: "切流指令 / 禁写排空 (<200ms)"
+      fontSize: 7.2
+      align: [center, top]
+      color: "$brand"
+
+  # Line 2: S1 <-> S3 (Left Vertical)
+  - elementId: trans-1-3
+    elementType: line
+    bounds: [142, 170, 1, 65]
+    points: "0,0 0,65"
+    arrow: [triangle, triangle]
+    border: { style: solid, width: 1.5, color: "$active" }
+
+  - elementId: trans-1-3-lbl
+    elementType: text
+    bounds: [148, 188, 90, 24]
+    content:
+      text: "跨域 TCC 划转\nTry-Confirm 协议"
+      fontSize: 7.2
+      color: "$active"
+
+  # Line 3: S1 -> S4 (Middle Clean Diagonal)
+  - elementId: trans-1-4
+    elementType: line
+    bounds: [230, 150, 155, 85]
+    points: "0,0 155,85"
+    arrow: [null, diamond]
+    border: { style: solid, width: 1.5, color: "$critical" }
+
+  - elementId: trans-1-4-lbl
+    elementType: text
+    bounds: [240, 128, 142, 16]
+    content:
+      text: "专线中断 / 租约超时强制隔离"
+      fontSize: 7.2
+      color: "$critical"
+
+  # Line 4: S4 -> S5 (Bottom-Right Connection)
+  - elementId: trans-4-5
+    elementType: line
+    bounds: [370, 310, 60, 55]
+    points: "60,0 0,55"
+    arrow: [null, stealth]
+    border: { style: solid, width: 1.5, color: "$sync" }
+
+  - elementId: trans-4-5-lbl
+    elementType: text
+    bounds: [252, 336, 116, 24]
+    content:
+      text: "仲裁授权新单元接管\n位点强制对齐校验"
+      fontSize: 7.2
+      align: [right, top]
+      color: "$sync"
+
+  # Line 5: S5 -> S1 (Outside Loop around S3)
+  - elementId: trans-5-1
+    elementType: line
+    bounds: [42, 132, 178, 270]
+    points: "178,270 0,270 0,0 13,0"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: trans-5-1-lbl
+    elementType: text
+    bounds: [48, 448, 165, 16]
+    content:
+      text: "对账平账完成 / 恢复常态活跃"
+      fontSize: 7.2
+      color: "$ink"
+
+  # Line 6: S2 -> S5 (Outside Loop around S4)
+  - elementId: trans-2-5
+    elementType: line
+    bounds: [415, 132, 165, 270]
+    points: "155,0 165,0 165,270 0,270"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$brand" }
+
+  - elementId: trans-2-5-lbl
+    elementType: text
+    bounds: [425, 448, 165, 16]
+    content:
+      text: "增量追平完成 / 切换路由绑定"
+      fontSize: 7.2
+      align: [right, top]
+      color: "$brand"
+
+  # Bottom summary band under state diagram
+  - elementId: state-bottom-summary
+    elementType: text
+    bounds: [55, 468, 530, 32]
+    content:
+      text: |
+        【状态机安全准则】：任意 UID 在全网任意时刻，有且仅能有一个单元处于 NormalActive 状态。
+        任何状态跃迁必须经过 Quorum 仲裁认证，彻底规避双写脏数据与账务不平。
+      fontSize: 8
+      color: "$muted"
+
+  # Vertical Separator between State Diagram and Mathematical Proof
+  - elementId: v-sep
+    elementType: line
+    bounds: [610, 80, 1, 415]
+    points: "0,0 0,415"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # ==========================================
+  # Right: Mathematical Model & Safety Bounds
+  # ==========================================
+  - elementId: right-math-title
+    elementType: text
+    bounds: [625, 80, 290, 16]
+    content:
+      text: "双写冲突概率模型与租约时间锁证明"
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+
+  - elementId: math-eq-1-label
+    elementType: text
+    bounds: [625, 102, 290, 14]
+    content:
+      text: "1. 跨单元双写并发冲突概率上限模型："
+      fontSize: 8
+      bold: true
+      color: "$ink"
+
+  - elementId: math-eq-1
+    elementType: text
+    bounds: [625, 118, 290, 28]
+    content:
+      text: "<latex>P_{\\text{conflict}} = 1 - \\exp\\left(-\\lambda_{\\text{cross}} \\cdot \\tau_{\\text{window}}\\right)</latex>"
+      fontSize: 9.5
+      color: "$critical"
+
+  - elementId: math-eq-2-label
+    elementType: text
+    bounds: [625, 150, 290, 14]
+    content:
+      text: "2. 动态租约时间锁安全空隙不等式："
+      fontSize: 8
+      bold: true
+      color: "$ink"
+
+  - elementId: math-eq-2
+    elementType: text
+    bounds: [625, 166, 290, 32]
+    content:
+      text: "<latex>T_{\\text{grant}} - T_{\\text{expire}} \\ge \\Delta t_{\\text{gap}} = 500\\,\\text{ms}</latex>"
+      fontSize: 9.5
+      color: "$sync"
+
+  - elementId: math-notes
+    elementType: text
+    bounds: [625, 204, 290, 290]
+    content:
+      text: |
+        【形式化证明与参数设定】：
+        
+        • 租约有效周期锁定为 2000ms，每 500ms 由各单元向北京第三方仲裁集群自动续期。
+        
+        • 当机房发生网络分区（如专线中断）时，原主单元在 T+1500ms 探测到心跳丢失，在 T+2000ms 租约完全过期并强制自杀其写权限，自动降级为只读。
+        
+        • 第三方仲裁集群在判定原单元失联后，必须等待至 T+2500ms 之后，才允许向新接管单元授予新写租约。
+        
+        • 在 T+2000ms 至 T+2500ms 之间，存在恒定的 500ms 全局物理禁写静默期 (Safety Gap)。
+        
+        • 结论：由于 T_grant > T_expire 严格恒成立，全网双写冲突概率在物理上收敛为 0，彻底从根源上消除了脑裂双写的隐患。
+      fontSize: 8.2
+      lineHeight: 1.35
+      color: "$muted"
+
+  # Footer
+  - elementId: footer-line
+    elementType: line
+    bounds: [45, 510, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  - elementId: footer-meta
+    elementType: text
+    bounds: [45, 516, 500, 16]
+    content:
+      text: "交易核心多活架构评审 | 单元化状态机与写冲突防范 | 2026-10-20"
+      fontSize: 8.5
+      color: "$muted"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [840, 516, 75, 16]
+    content:
+      text: "PAGE 06 / 10"
+      fontSize: 8.5
+      color: "$muted"
+      align: [right, top]

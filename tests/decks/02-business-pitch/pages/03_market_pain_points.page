@@ -1,0 +1,143 @@
+pageType: content
+notes: "深入看市场痛点。为什么东南亚生鲜物流成本占货值高达 28%？核心在断链损耗。由于热带高温高湿和群岛跳岛运输，司机为了节省柴油常在途中私自关闭冷机，平均每次运输出现 4.2 小时温度异常。货主收到货时已经变质，但无法证明责任在谁。右侧我们引用的 FAO 与亚行权威数据显示，东南亚生鲜损耗率高达 32%，是北美的三倍以上。"
+elements:
+  # Navigation / Chapter locator
+  - elementId: nav-chapter
+    elementType: text
+    bounds: [50, 24, 400, 20]
+    content:
+      style: "$chapter"
+      text: "02 市场痛点 | MARKET PAIN POINTS"
+
+  - elementId: nav-line
+    elementType: line
+    bounds: [50, 48, 860, 1]
+    viewBox: [860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 1, color: "$primary"}
+
+  # Assertion Title & Subtitle
+  - elementId: title
+    elementType: text
+    bounds: [50, 58, 860, 32]
+    content:
+      style: "$title"
+      text: "东南亚易腐食品流通损耗率高达 32%，运力孤岛与温控黑盒制约产业升级"
+
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 92, 860, 20]
+    content:
+      style: "$subtitle"
+      text: "热带高温高湿叠加千岛群岛跳运地貌，传统物流缺乏过程感知与动态编排，货损成本每年吞噬数十亿美元产业利润"
+
+  # Left Column: 3 Structural Diagnosis Blocks (w: 390)
+  - elementId: pain-item1-title
+    elementType: text
+    bounds: [50, 126, 390, 24]
+    content:
+      fontSize: 12.5
+      bold: true
+      color: "$alert"
+      text: "1. 过程不可视：温控黑盒与随意断链"
+
+  - elementId: pain-item1-body
+    elementType: text
+    bounds: [50, 152, 390, 68]
+    content:
+      style: "$body"
+      text: "司机为节省柴油在长途运输中频繁关闭冷机，单程平均出现 <b>4.2 小时</b> 严重超温；货主仅能在卸货时凭手持探针检测表层温度，货物内部已发生不可逆变质解冻。"
+
+  - elementId: pain-divider-1
+    elementType: line
+    bounds: [50, 226, 390, 1]
+    viewBox: [390, 1]
+    points: "0,0 390,0"
+    border: {style: solid, width: 0.75, color: "#CCCCCC"}
+
+  - elementId: pain-item2-title
+    elementType: text
+    bounds: [50, 234, 390, 24]
+    content:
+      fontSize: 12.5
+      bold: true
+      color: "$alert"
+      text: "2. 跨岛协同断档：多式联运信息孤岛"
+
+  - elementId: pain-item2-body
+    elementType: text
+    bounds: [50, 260, 390, 68]
+    content:
+      style: "$body"
+      text: "印尼与菲律宾跨岛冷藏跳运涉及 <b>3-5 次倒驳换装</b>（公路-滚装轮渡-海港-末端短驳）；各承运主体系统互不兼容，冷藏集装箱在渡口港区平均失联滞留超 <b>18 小时</b>。"
+
+  - elementId: pain-divider-2
+    elementType: line
+    bounds: [50, 334, 390, 1]
+    viewBox: [390, 1]
+    points: "0,0 390,0"
+    border: {style: solid, width: 0.75, color: "#CCCCCC"}
+
+  - elementId: pain-item3-title
+    elementType: text
+    bounds: [50, 342, 390, 24]
+    content:
+      fontSize: 12.5
+      bold: true
+      color: "$alert"
+      text: "3. 权责追溯真空：货损理赔推诿率超 76%"
+
+  - elementId: pain-item3-body
+    elementType: text
+    bounds: [50, 368, 390, 60]
+    content:
+      style: "$body"
+      text: "纸质签收单（POD）易涂改损毁，货主、3PL 承运商与零售收货方扯皮耗时数月；商业保险机构因缺乏全流程连续温度存证数据，普遍拒绝为中途断链承保。"
+
+  # Right Column: Matplotlib Chart with crop & fit (w: 440)
+  - elementId: market-chart-img
+    elementType: image
+    bounds: [470, 122, 440, 280]
+    src: assets/market_perishable_loss.png
+    crop: {left: 0.0, right: 0.0, top: 0.0, bottom: 0.0}
+    fit: {mode: cover}
+    border: {style: solid, width: 1, color: "#E0E0E0"}
+
+  - elementId: chart-caption
+    elementType: text
+    bounds: [470, 403, 440, 18]
+    content:
+      fontSize: 8.5
+      color: "$muted"
+      text: "图表解读：东盟六国冷链损耗率超欧美 3 倍，且人均冷库容量极端匮乏（不足中国 1/5）。"
+
+  # Bottom Synthesis Bar
+  - elementId: so-what-bar
+    elementType: shape
+    bounds: [50, 428, 860, 42]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1, color: "$primary"}
+
+  - elementId: so-what-text
+    elementType: text
+    bounds: [65, 432, 830, 32]
+    content:
+      style: "$synthesis"
+      text: "行业洞察：解决东南亚冷链断层的关键不在于盲目追加重型冷库投资，而在于通过轻量级云原生感知中枢打通多式联运全链路。"
+
+  # Fixed Footer
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 498, 600, 18]
+    content:
+      style: "$caption"
+      text: "数据来源：联合国粮农组织 (FAO) 2022, 亚洲开发银行 (ADB) 2023, GCCA 2023"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [810, 498, 100, 18]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "03 / 10"

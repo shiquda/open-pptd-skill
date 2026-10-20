@@ -1,0 +1,361 @@
+pageType: content
+background:
+  type: solid
+  color: "$white"
+notes: "本页展示标准四步排障操作流。很多用户在遇到断网时，往往没有条理，一会儿重启手机，一会儿拔电源，甚至拿牙签去戳Reset孔。我们设计的‘查灯-查线-查端-序贯重启’流程，是一个严格递进的排除法闭环。每一步都有清晰的检查动作与分支判据。只有在前一步排除了外部物理故障后，才进入下一步的终端与重启操作。这样既能保证在5分钟内定位故障，又能彻底避免误操作带来的配置损失。"
+elements:
+  - elementId: top-rule
+    elementType: shape
+    bounds: [40, 20, 880, 2]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: nav-section
+    elementType: text
+    bounds: [40, 28, 260, 18]
+    content:
+      text: "阶段三 / 流程示范 (DEMONSTRATION)"
+      fontSize: 9.5
+      bold: true
+      color: "$primaryDeep"
+      letterSpacing: 1.0
+
+  - elementId: running-head
+    elementType: text
+    bounds: [680, 28, 240, 18]
+    content:
+      text: "家庭网络排障实操课 · 标准处置流"
+      fontSize: 9.5
+      color: "$grayLight"
+      align: [right, top]
+
+  - elementId: page-title
+    elementType: text
+    bounds: [40, 48, 880, 28]
+    content:
+      text: "遵循「一查灯、二查线、三查配、四重启」标准排障操作流"
+      style: "$title"
+
+  - elementId: page-subtitle
+    elementType: text
+    bounds: [40, 78, 880, 20]
+    content:
+      text: "严格按因果梯度推进排查，杜绝未定界前的无序盲动与意外二次致障"
+      style: "$subtitle"
+
+  - elementId: step-1-box
+    elementType: shape
+    bounds: [40, 110, 195, 290]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: step-1-badge
+    elementType: shape
+    bounds: [54, 122, 60, 22]
+    shapeName: rect
+    fill: { type: solid, color: "$primaryDeep" }
+
+  - elementId: step-1-badge-text
+    elementType: text
+    bounds: [54, 122, 60, 22]
+    content:
+      text: "步骤 01"
+      style: "$badge"
+      fontSize: 10
+      align: [center, middle]
+      wrap: false
+
+  - elementId: step-1-icon
+    elementType: icon
+    bounds: [190, 122, 22, 22]
+    iconName: "fas:lightbulb"
+    fill: { type: solid, color: "$primaryDeep" }
+
+  - elementId: step-1-title
+    elementType: text
+    bounds: [54, 150, 168, 22]
+    content:
+      text: "<p><strong>一查灯态 (定界)</strong></p>"
+      fontSize: 12.5
+      color: "$primaryDeep"
+
+  - elementId: step-1-content
+    elementType: text
+    bounds: [54, 174, 168, 116]
+    content:
+      text: |
+        <p><strong>标准操作：</strong><br/>先低头看光猫 LOS/PON，再看路由器 WAN 口指示灯。</p>
+        <p><strong>判定基准：</strong><br/>• LOS 红灯闪 ➔ 局端断光，立即报修；<br/>• WAN 橙灯 ➔ 物理网线松脱，进入第 2 步；<br/>• 全绿 ➔ 进入第 3 步。</p>
+      style: "$body"
+      fontSize: 9.6
+      lineHeight: 1.35
+
+  - elementId: step-1-criteria-box
+    elementType: shape
+    bounds: [50, 300, 175, 88]
+    shapeName: rect
+    fill: { type: solid, color: "$white" }
+    border: { style: solid, width: 0.75, color: "$grayBorder" }
+
+  - elementId: step-1-criteria-text
+    elementType: text
+    bounds: [56, 306, 163, 76]
+    content:
+      text: "<p><strong>准出标准：</strong><br/>在 10 秒内确认是「外部光纤断裂」还是「内部设备/线缆问题」，避免盲目处理。</p>"
+      fontSize: 9.2
+      color: "$grayText"
+      lineHeight: 1.3
+
+  - elementId: arrow-step-1-2
+    elementType: line
+    bounds: [238, 230, 28, 20]
+    viewBox: [28, 20]
+    points: "0,10 26,10"
+    border: { style: solid, width: 2, color: "$primary" }
+    arrow: [null, triangle]
+
+  - elementId: step-2-box
+    elementType: shape
+    bounds: [268, 110, 195, 290]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: step-2-badge
+    elementType: shape
+    bounds: [282, 122, 60, 22]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: step-2-badge-text
+    elementType: text
+    bounds: [282, 122, 60, 22]
+    content:
+      text: "步骤 02"
+      style: "$badge"
+      fontSize: 10
+      align: [center, middle]
+      wrap: false
+
+  - elementId: step-2-icon
+    elementType: icon
+    bounds: [418, 122, 22, 22]
+    iconName: "fas:plug"
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: step-2-title
+    elementType: text
+    bounds: [282, 150, 168, 22]
+    content:
+      text: "<p><strong>二查网线 (物理)</strong></p>"
+      fontSize: 12.5
+      color: "$primaryDeep"
+
+  - elementId: step-2-content
+    elementType: text
+    bounds: [282, 174, 168, 116]
+    content:
+      text: |
+        <p><strong>标准操作：</strong><br/>拔下光猫 LAN 到路由 WAN 口网线，重新按紧直至清脆卡扣声。</p>
+        <p><strong>判定基准：</strong><br/>• 必须确认插在 WAN 口而非 LAN 口；<br/>• 观察 WAN 口小灯是否恢复闪烁；<br/>• 若仍不亮换备用网线测试。</p>
+      style: "$body"
+      fontSize: 9.6
+      lineHeight: 1.35
+
+  - elementId: step-2-criteria-box
+    elementType: shape
+    bounds: [278, 300, 175, 88]
+    shapeName: rect
+    fill: { type: solid, color: "$white" }
+    border: { style: solid, width: 0.75, color: "$grayBorder" }
+
+  - elementId: step-2-criteria-text
+    elementType: text
+    bounds: [284, 306, 163, 76]
+    content:
+      text: "<p><strong>准出标准：</strong><br/>确认物理层 8 根铜线触点接触优良，排除 46% 常见的网线松脱致障隐患。</p>"
+      fontSize: 9.2
+      color: "$grayText"
+      lineHeight: 1.3
+
+  - elementId: arrow-step-2-3
+    elementType: line
+    bounds: [466, 230, 28, 20]
+    viewBox: [28, 20]
+    points: "0,10 26,10"
+    border: { style: solid, width: 2, color: "$primary" }
+    arrow: [null, triangle]
+
+  - elementId: step-3-box
+    elementType: shape
+    bounds: [496, 110, 195, 290]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: step-3-badge
+    elementType: shape
+    bounds: [510, 122, 60, 22]
+    shapeName: rect
+    fill: { type: solid, color: "$cyan" }
+
+  - elementId: step-3-badge-text
+    elementType: text
+    bounds: [510, 122, 60, 22]
+    content:
+      text: "步骤 03"
+      style: "$badge"
+      fontSize: 10
+      align: [center, middle]
+      wrap: false
+
+  - elementId: step-3-icon
+    elementType: icon
+    bounds: [646, 122, 22, 22]
+    iconName: "fas:mobile-screen"
+    fill: { type: solid, color: "$cyan" }
+
+  - elementId: step-3-title
+    elementType: text
+    bounds: [510, 150, 168, 22]
+    content:
+      text: "<p><strong>三查终端 (交叉)</strong></p>"
+      fontSize: 12.5
+      color: "$primaryDeep"
+
+  - elementId: step-3-content
+    elementType: text
+    bounds: [510, 174, 168, 116]
+    content:
+      text: |
+        <p><strong>标准操作：</strong><br/>使用第二台手机或电脑连接同个 Wi-Fi 访问网页。</p>
+        <p><strong>判定基准：</strong><br/>• 若仅单台打不开 ➔ 终端私密 MAC 异常或 DNS 错误，忽略网络重连；<br/>• 若所有终端均断网 ➔ 确认局域网或路由死锁，进第 4 步。</p>
+      style: "$body"
+      fontSize: 9.6
+      lineHeight: 1.35
+
+  - elementId: step-3-criteria-box
+    elementType: shape
+    bounds: [506, 300, 175, 88]
+    shapeName: rect
+    fill: { type: solid, color: "$white" }
+    border: { style: solid, width: 0.75, color: "$grayBorder" }
+
+  - elementId: step-3-criteria-text
+    elementType: text
+    bounds: [512, 306, 163, 76]
+    content:
+      text: "<p><strong>准出标准：</strong><br/>通过横向设备交叉验证，准确分离「单机软件层故障」与「网络基础设施故障」。</p>"
+      fontSize: 9.2
+      color: "$grayText"
+      lineHeight: 1.3
+
+  - elementId: arrow-step-3-4
+    elementType: line
+    bounds: [694, 230, 28, 20]
+    viewBox: [28, 20]
+    points: "0,10 26,10"
+    border: { style: solid, width: 2, color: "$primary" }
+    arrow: [null, triangle]
+
+  - elementId: step-4-box
+    elementType: shape
+    bounds: [724, 110, 196, 290]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: step-4-badge
+    elementType: shape
+    bounds: [738, 122, 60, 22]
+    shapeName: rect
+    fill: { type: solid, color: "$primaryDeep" }
+
+  - elementId: step-4-badge-text
+    elementType: text
+    bounds: [738, 122, 60, 22]
+    content:
+      text: "步骤 04"
+      style: "$badge"
+      fontSize: 10
+      align: [center, middle]
+      wrap: false
+
+  - elementId: step-4-icon
+    elementType: icon
+    bounds: [876, 122, 22, 22]
+    iconName: "fas:rotate-right"
+    fill: { type: solid, color: "$primaryDeep" }
+
+  - elementId: step-4-title
+    elementType: text
+    bounds: [738, 150, 170, 22]
+    content:
+      text: "<p><strong>四序贯重启 (恢复)</strong></p>"
+      fontSize: 12.5
+      color: "$primaryDeep"
+
+  - elementId: step-4-content
+    elementType: text
+    bounds: [738, 174, 170, 116]
+    content:
+      text: |
+        <p><strong>标准操作：</strong><br/>严格遵循「先拔光猫、再拔路由、等待30秒、先开光猫、后开路由」时序。</p>
+        <p><strong>判定基准：</strong><br/>• 切断电源使滤波电容彻底放电；<br/>• 待光猫 PON 稳定常绿后，再插路由器电源；<br/>• 释放锁死会话与旧租约。</p>
+      style: "$body"
+      fontSize: 9.6
+      lineHeight: 1.35
+
+  - elementId: step-4-criteria-box
+    elementType: shape
+    bounds: [734, 300, 176, 88]
+    shapeName: rect
+    fill: { type: solid, color: "$white" }
+    border: { style: solid, width: 0.75, color: "$grayBorder" }
+
+  - elementId: step-4-criteria-text
+    elementType: text
+    bounds: [740, 306, 164, 76]
+    content:
+      text: "<p><strong>准出标准：</strong><br/>设备以全新状态完成 PPPoE 拨号与 DHCP 分发，自愈 95% 以上的系统级假死。</p>"
+      fontSize: 9.2
+      color: "$grayText"
+      lineHeight: 1.3
+
+  - elementId: warning-banner
+    elementType: shape
+    bounds: [40, 414, 880, 52]
+    shapeName: rect
+    fill: { type: solid, color: "$lightBlue" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: warning-icon
+    elementType: icon
+    bounds: [54, 428, 22, 22]
+    iconName: "fas:triangle-exclamation"
+    fill: { type: solid, color: "$warning" }
+
+  - elementId: warning-text
+    elementType: text
+    bounds: [86, 424, 820, 36]
+    content:
+      text: "<p><strong>⚠️ 操作高压红线：排障全程严禁捅刺 Reset 复位小孔！</strong>Reset 会将路由器内部宽带账号密码清零并还原默认出厂 Wi-Fi，将一次简单的线路接触不良转变为必须依赖运维师傅上门重配的灾难性事故。</p>"
+      fontSize: 10.5
+      color: "$ink"
+      lineHeight: 1.35
+
+  - elementId: bottom-source-line
+    elementType: text
+    bounds: [40, 508, 800, 18]
+    content:
+      text: "作业指引：宽带网络服务工程师标准化现场排障操作规范 (SOP 2024 版)"
+      style: "$caption"
+
+  - elementId: bottom-page-number
+    elementType: text
+    bounds: [870, 508, 50, 18]
+    content:
+      text: "05"
+      style: "$caption"
+      align: [right, top]

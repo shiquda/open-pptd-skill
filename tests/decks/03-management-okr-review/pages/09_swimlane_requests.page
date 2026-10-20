@@ -1,0 +1,510 @@
+pageType: content
+background: { type: solid, color: "$bg" }
+notes: |
+  【第 9 页·管委会演讲备注】
+  最后一张胶片，我们不讲套话，直接进入工期倒排与决策求援环节。
+  
+  请各位领导审视上方的《责任人 × 截止日甘特执行泳道图》：
+  整个 Q4 的成败系于一条红色虚线——“11 月 15 日核心死线门禁”。
+  三大部门在这条死线前必须完成交割：
+  1. 产品研发部（李维）：11/15 前正式发版混合云蓝图 V2，中间件标准化接口封装完毕；
+  2. 交付中心（张立）：架构师特战队必须在 11/15 前拿下金融大客的第一阶段验收单；
+  3. 客户成功 CSM（陈静）：11/20 前完成 100% 高管一对一走访，完成动摇客户锁定。
+  
+  为了保证这条时间线不崩溃，管理层向经管会正式提请两项关键支持：
+  第一项：批准 240 万元原厂交付特批预算。
+  用于定向采买 6 个人月的资深外部中间件专家。延误后果是极其严重的：若 10/25 批不下来，这 4 个大客的终验就会拖到明年 1 月，导致 Q4 直接损失 320 万确认收入！
+  
+  第二项：授权 15% 续约防御性商务抵扣政策。
+  授权周明团队在面对降价 30% 的竞对时，以维保折让锁定客户 3 年长协。若 10 月底不出台，2 家动摇客户将在 11 月启动竞品招标，面临 380 万流失风险。
+  
+  以上两项提请经管会今天予以表决！谢谢各位！
+elements:
+  # Top Header Menu & Navigation
+  - elementId: nav-line-1
+    elementType: line
+    bounds: [50, 26, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-2
+    elementType: line
+    bounds: [50, 31, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-3
+    elementType: line
+    bounds: [50, 36, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-section-tag
+    elementType: text
+    bounds: [74, 25, 480, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$muted"
+      text: "08 里程碑与求援 · 责任人泳道与管理决策申请 (示例公司)"
+
+  - elementId: nav-report-title
+    elementType: text
+    bounds: [660, 25, 250, 16]
+    content:
+      align: [right, middle]
+      fontSize: 10
+      color: "$muted"
+      text: "云枢网络 2026 Q3 经营复盘"
+
+  - elementId: header-divider
+    elementType: line
+    bounds: [50, 46, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Slide Takeaway Title & Subtitle
+  - elementId: page9-title
+    elementType: text
+    bounds: [50, 54, 860, 24]
+    content:
+      fontFamily: "MiSans"
+      fontSize: 17
+      bold: true
+      color: "$ink"
+      text: "11 月 15 日前完成 4 大交付堵点消减，提请管委会批准 240 万原厂交付特批预算"
+
+  - elementId: page9-subtitle
+    elementType: text
+    bounds: [50, 78, 860, 16]
+    content:
+      fontSize: 10.5
+      color: "$muted"
+      text: "甘特执行泳道与决策支持：明确工期依赖、延误后果与决策门禁，拒绝泛泛形式主义收尾"
+
+  # ================= TOP SWIMLANE / GANTT TIMELINE (y: 98 ~ 308) =================
+  - elementId: swimlane-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 98, 860, 210]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [3000]
+
+  # Timeline Date Headers
+  - elementId: tl-header-dept
+    elementType: text
+    bounds: [60, 106, 140, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$muted"
+      text: "责任部门 / 负责人"
+
+  - elementId: tl-header-w43
+    elementType: text
+    bounds: [220, 106, 140, 18]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+      text: "W43 (10/25) 启动门禁"
+
+  - elementId: tl-header-w46
+    elementType: text
+    bounds: [390, 106, 140, 18]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$statusRed"
+      text: "W46 (11/15) 核心死线"
+
+  - elementId: tl-header-w49
+    elementType: text
+    bounds: [560, 106, 140, 18]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+      text: "W49 (12/05) 联调切流"
+
+  - elementId: tl-header-w52
+    elementType: text
+    bounds: [730, 106, 140, 18]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+      text: "W52 (12/25) 财年关门"
+
+  - elementId: tl-top-divider
+    elementType: line
+    bounds: [60, 126, 840, 1]
+    points: "0,0.5 840,0.5"
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+
+  # Hard Gate Line at 11/15 (x = 445)
+  - elementId: hard-gate-line
+    elementType: line
+    bounds: [445, 126, 1, 172]
+    points: "0.5,0 0.5,172"
+    border: { style: dash, width: 1.5, color: "$statusRed" }
+
+  # --- Swimlane 1: Product R&D ---
+  - elementId: lane1-label
+    elementType: text
+    bounds: [60, 138, 140, 36]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+      text: "【产研部】CPO 李维<br/><span style=\"color:#6B625D;font-weight:normal\">底层标准化与解耦</span>"
+
+  - elementId: lane1-bar1
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [220, 142, 210, 26]
+    fill: { type: solid, color: "$accentLight" }
+    border: { style: solid, width: 0.8, color: "$accent" }
+    adjustments: [6000]
+
+  - elementId: lane1-bar1-text
+    elementType: text
+    bounds: [224, 146, 202, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$ink"
+      text: "混合云部署蓝图 V2 封装"
+
+  - elementId: lane1-diamond
+    elementType: shape
+    shapeName: "diamond"
+    bounds: [437, 147, 16, 16]
+    fill: { type: solid, color: "$accent" }
+
+  - elementId: lane1-arrow1
+    elementType: line
+    bounds: [455, 155, 45, 1]
+    points: "0,0.5 45,0.5"
+    arrow: [null, "triangle"]
+    border: { style: solid, width: 1.2, color: "$accentDeep" }
+
+  - elementId: lane1-bar2
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [505, 142, 335, 26]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [6000]
+
+  - elementId: lane1-bar2-text
+    elementType: text
+    bounds: [512, 146, 320, 18]
+    content:
+      fontSize: 9
+      color: "$inkSecondary"
+      text: "通用中间件与接口下沉至全量 KA 运行分支"
+
+  - elementId: lane1-divider
+    elementType: line
+    bounds: [60, 178, 840, 1]
+    points: "0,0.5 840,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  # --- Swimlane 2: Delivery Center ---
+  - elementId: lane2-label
+    elementType: text
+    bounds: [60, 190, 140, 36]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+      text: "【交付中心】VP 张立<br/><span style=\"color:#6B625D;font-weight:normal\">现场特战队消减堵点</span>"
+
+  - elementId: lane2-bar1
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [220, 194, 210, 26]
+    fill: { type: solid, color: "$statusRedBg" }
+    border: { style: solid, width: 0.8, color: "$statusRedBorder" }
+    adjustments: [6000]
+
+  - elementId: lane2-bar1-text
+    elementType: text
+    bounds: [224, 198, 202, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$statusRed"
+      text: "外部架构师进驻金融现场"
+
+  - elementId: lane2-diamond
+    elementType: shape
+    shapeName: "diamond"
+    bounds: [437, 199, 16, 16]
+    fill: { type: solid, color: "$statusRed" }
+
+  - elementId: lane2-arrow1
+    elementType: line
+    bounds: [455, 207, 45, 1]
+    points: "0,0.5 45,0.5"
+    arrow: [null, "triangle"]
+    border: { style: solid, width: 1.2, color: "$statusRed" }
+
+  - elementId: lane2-bar2
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [505, 194, 240, 26]
+    fill: { type: solid, color: "$statusGreenBg" }
+    border: { style: solid, width: 0.8, color: "$statusGreenBorder" }
+    adjustments: [6000]
+
+  - elementId: lane2-bar2-text
+    elementType: text
+    bounds: [512, 198, 226, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$statusGreen"
+      text: "制造受限版切流 & 4大项目终验"
+
+  - elementId: lane2-diamond2
+    elementType: shape
+    shapeName: "diamond"
+    bounds: [752, 199, 16, 16]
+    fill: { type: solid, color: "$statusGreen" }
+
+  - elementId: lane2-arrow2
+    elementType: line
+    bounds: [772, 207, 50, 1]
+    points: "0,0.5 50,0.5"
+    arrow: [null, "triangle"]
+    border: { style: solid, width: 1.2, color: "$statusGreen" }
+
+  - elementId: lane2-divider
+    elementType: line
+    bounds: [60, 230, 840, 1]
+    points: "0,0.5 840,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  # --- Swimlane 3: CSM Customer Success ---
+  - elementId: lane3-label
+    elementType: text
+    bounds: [60, 242, 140, 36]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+      text: "【CSM 续约部】陈静<br/><span style=\"color:#6B625D;font-weight:normal\">KA 续约与高管赞助</span>"
+
+  - elementId: lane3-bar1
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [220, 246, 260, 26]
+    fill: { type: solid, color: "$statusAmberBg" }
+    border: { style: solid, width: 0.8, color: "$statusAmberBorder" }
+    adjustments: [6000]
+
+  - elementId: lane3-bar1-text
+    elementType: text
+    bounds: [224, 250, 252, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$statusAmber"
+      text: "高管走访覆盖 100% KA 动摇大客"
+
+  - elementId: lane3-diamond
+    elementType: shape
+    shapeName: "diamond"
+    bounds: [487, 251, 16, 16]
+    fill: { type: solid, color: "$statusAmber" }
+
+  - elementId: lane3-arrow1
+    elementType: line
+    bounds: [505, 259, 45, 1]
+    points: "0,0.5 45,0.5"
+    arrow: [null, "triangle"]
+    border: { style: solid, width: 1.2, color: "$statusAmber" }
+
+  - elementId: lane3-bar2
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [555, 246, 285, 26]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [6000]
+
+  - elementId: lane3-bar2-text
+    elementType: text
+    bounds: [562, 250, 270, 18]
+    content:
+      fontSize: 9
+      color: "$inkSecondary"
+      text: "锁定 3 年长协，保底 NRR 回弹至 104%"
+
+  # ================= BOTTOM TWO MANAGEMENT DECISION REQUEST CARDS =================
+  # Request 1: Delivery Budget Approval
+  - elementId: req1-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 318, 420, 172]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: req1-header-bar
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 318, 420, 28]
+    fill: { type: solid, color: "$accentLight" }
+    adjustments: [0]
+
+  - elementId: req1-header-title
+    elementType: text
+    bounds: [62, 323, 280, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+      text: "提请决策 01：批准 240 万元交付外包特批预算"
+
+  - elementId: req1-deadline-badge
+    elementType: text
+    bounds: [340, 323, 120, 18]
+    content:
+      align: [right, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$statusRed"
+      text: "决策时限: 10/25 前"
+
+  - elementId: req1-body
+    elementType: text
+    bounds: [62, 352, 396, 54]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• <b>用途说明：</b>定向采购生态伙伴 6 个人月资深中间件架构师，全封闭解决 4 大阻滞项目的本地 Oracle 与容器跨网安全联调。<br/>• <b>对应责任人：</b>VP 交付 (张立) ｜ 承诺终验并确认 120 万元 ARR。"
+
+  - elementId: req1-consequence-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [58, 410, 404, 72]
+    fill: { type: solid, color: "$statusRedBg" }
+    border: { style: solid, width: 0.8, color: "$statusRedBorder" }
+    adjustments: [3000]
+
+  - elementId: req1-consequence-title
+    elementType: text
+    bounds: [68, 414, 384, 16]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$statusRed"
+      text: "【延误后果 (Consequence of Delay)】"
+
+  - elementId: req1-consequence-text
+    elementType: text
+    bounds: [68, 432, 384, 46]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: "若 10/25 前未完成预算审批，现场专家无法如期进场，金融与制造大客终验必将顺延至 2027 年 1 月，导致 Q4 至少 320 万元 ARR 无法在年内核算，直接引发全年底线目标失守！"
+
+  # Request 2: Commercial Defensive Policy
+  - elementId: req2-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [490, 318, 420, 172]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: req2-header-bar
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [490, 318, 420, 28]
+    fill: { type: solid, color: "$tableHeaderBg" }
+    adjustments: [0]
+
+  - elementId: req2-header-title
+    elementType: text
+    bounds: [502, 323, 280, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+      text: "提请决策 02：授权大客续约防御性商务折让权限"
+
+  - elementId: req2-deadline-badge
+    elementType: text
+    bounds: [780, 323, 120, 18]
+    content:
+      align: [right, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$statusRed"
+      text: "决策时限: 10/28 前"
+
+  - elementId: req2-body
+    elementType: text
+    bounds: [502, 352, 396, 54]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• <b>权限说明：</b>遭遇低价一体机竞对恶性竞争时，授权销售与 CSM 团队以最高 15% 维保折让置换客户 3 年期锁定合同。<br/>• <b>对应责任人：</b>SVP 销售 (周明) ｜ 承诺保底 3,800 万元 ARR 底线。"
+
+  - elementId: req2-consequence-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [498, 410, 404, 72]
+    fill: { type: solid, color: "$statusRedBg" }
+    border: { style: solid, width: 0.8, color: "$statusRedBorder" }
+    adjustments: [3000]
+
+  - elementId: req2-consequence-title
+    elementType: text
+    bounds: [508, 414, 384, 16]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$statusRed"
+      text: "【延误后果 (Consequence of Delay)】"
+
+  - elementId: req2-consequence-text
+    elementType: text
+    bounds: [508, 432, 384, 46]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: "若无法在 10 月底前向 2 家动摇客户签发防御性方案，客户将在 11 月上旬启动竞品替换公开招标，将直接导致 380 万元续约合同永久流失至竞对，重创行业声誉！"
+
+  # Footer
+  - elementId: footer-divider
+    elementType: line
+    bounds: [50, 498, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 506, 680, 16]
+    content:
+      style: "$footer"
+      text: "审批通道：集团经管会第 24 次常务审议事项 · 报告编制：总裁办与 CFO 办公室 (示例公司/假设口径)"
+
+  - elementId: footer-page-num
+    elementType: text
+    bounds: [850, 506, 60, 16]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      bold: true
+      color: "$ink"
+      text: "09 / 09"

@@ -1,0 +1,209 @@
+pageType: content
+background:
+  type: solid
+  color: "$white"
+notes: "恭喜大家完成了家庭网络排障实操课的全部学习！良好的网络维护习惯能够预防绝大多数意外断网。课后请大家落实四件小事：一是把被关在铁皮弱电箱里的路由器请出来，移到客厅居中通风的位置；二是找张便利贴，把路由器的后台管理密码和宽带账号贴在机身底部；三是每月末给设备安排一次断电重启，释放缓存；四是检查一下家里的入户光纤有没有打死结。祝大家都能拥有畅快、稳定的数字家庭生活！"
+elements:
+  - elementId: top-rule
+    elementType: shape
+    bounds: [40, 20, 880, 2]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: nav-section
+    elementType: text
+    bounds: [40, 28, 260, 18]
+    content:
+      text: "阶段六 / 总结迁移 (TRANSFER & SUMMARY)"
+      fontSize: 9.5
+      bold: true
+      color: "$primaryDeep"
+      letterSpacing: 1.0
+
+  - elementId: running-head
+    elementType: text
+    bounds: [680, 28, 240, 18]
+    content:
+      text: "家庭网络排障实操课 · 行动指南"
+      fontSize: 9.5
+      color: "$grayLight"
+      align: [right, top]
+
+  - elementId: page-title
+    elementType: text
+    bounds: [40, 48, 880, 28]
+    content:
+      text: "建立家庭网络健康维护习惯：定期巡检与规范布线清单"
+      style: "$title"
+
+  - elementId: page-subtitle
+    elementType: text
+    bounds: [40, 78, 880, 20]
+    content:
+      text: "知识迁移与行动巩固 · 科学预防断网胜于事后盲目排查（课后四项微行动）"
+      style: "$subtitle"
+
+  - elementId: habit-1-box
+    elementType: shape
+    bounds: [40, 110, 420, 160]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: habit-1-icon
+    elementType: icon
+    bounds: [56, 124, 24, 24]
+    iconName: "fas:signal"
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: habit-1-title
+    elementType: text
+    bounds: [90, 124, 350, 24]
+    content:
+      text: "<p><strong>01 物理摆放：居中开阔，远离遮挡与同频干扰</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: habit-1-desc
+    elementType: text
+    bounds: [56, 156, 388, 100]
+    content:
+      text: |
+        <p>• <strong>避免金属屏蔽：</strong>路由器绝不可放置在金属弱电箱或密闭抽屉内，金属箱体会削弱 80% 以上无线射频信号；</p>
+        <p>• <strong>黄金高度：</strong>放置在全屋几何中心位置，离地 1 米至 1.5 米桌面，减少地面反弹吸收；</p>
+        <p>• <strong>避开干扰源：</strong>与微波炉、无线电话底座、鱼缸及承重实心墙保持 1 米以上净距。</p>
+      style: "$body"
+      fontSize: 9.6
+      lineHeight: 1.35
+
+  - elementId: habit-2-box
+    elementType: shape
+    bounds: [500, 110, 420, 160]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: habit-2-icon
+    elementType: icon
+    bounds: [516, 124, 24, 24]
+    iconName: "fas:list-check"
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: habit-2-title
+    elementType: text
+    bounds: [550, 124, 350, 24]
+    content:
+      text: "<p><strong>02 铭文备忘：标签化管理关键参数与管理账号</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: habit-2-desc
+    elementType: text
+    bounds: [516, 156, 388, 100]
+    content:
+      text: |
+        <p>• <strong>底部张贴便签：</strong>使用不干胶便签将路由器管理 IP (192.168.1.1)、管理后台密码抄录在路由器机身底部；</p>
+        <p>• <strong>记录宽带账号：</strong>抄写运营商分配的宽带账号 (如 0755xxxx@163.gd) 与服务密码，报修时无需四处翻找合同；</p>
+        <p>• <strong>区分无线频段：</strong>建议将 2.4G 与 5G Wi-Fi 命名分开，智能家居连接 2.4G，手机电脑直连高速 5G。</p>
+      style: "$body"
+      fontSize: 9.6
+      lineHeight: 1.35
+
+  - elementId: habit-3-box
+    elementType: shape
+    bounds: [40, 286, 420, 160]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: habit-3-icon
+    elementType: icon
+    bounds: [56, 300, 24, 24]
+    iconName: "fas:rotate-right"
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: habit-3-title
+    elementType: text
+    bounds: [90, 300, 350, 24]
+    content:
+      text: "<p><strong>03 定期维护：每月末序贯冷重启释放死锁缓存</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: habit-3-desc
+    elementType: text
+    bounds: [56, 332, 388, 100]
+    content:
+      text: |
+        <p>• <strong>清空内存碎片：</strong>家用路由器长期开机运转，系统连接跟踪表 (NAT conntrack) 易积累无效死锁垃圾；</p>
+        <p>• <strong>标准时序：</strong>建议每月最后一个周末，先拔掉光猫与路由电源，静置 30 秒后依次通电；</p>
+        <p>• <strong>定时重启功能：</strong>多数新型路由器管理后台支持「每周自动定时重启」，可设置在凌晨 3:00 自动执行。</p>
+      style: "$body"
+      fontSize: 9.6
+      lineHeight: 1.35
+
+  - elementId: habit-4-box
+    elementType: shape
+    bounds: [500, 286, 420, 160]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: habit-4-icon
+    elementType: icon
+    bounds: [516, 300, 24, 24]
+    iconName: "fas:shield-halved"
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: habit-4-title
+    elementType: text
+    bounds: [550, 300, 350, 24]
+    content:
+      text: "<p><strong>04 光纤保护：圆弧弯曲，严防直角死折与挤压</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: habit-4-desc
+    elementType: text
+    bounds: [516, 332, 388, 100]
+    content:
+      text: |
+        <p>• <strong>认识脆弱纤芯：</strong>入户黄色光纤核心为石英玻璃拉丝，直径仅 9 微米，脆性极高；</p>
+        <p>• <strong>弯曲半径限制：</strong>走线弯折处必须保持圆弧状，弯曲半径大于 30mm（大约一枚一元硬币直径），绝不可打直角折角；</p>
+        <p>• <strong>杜绝机械重压：</strong>扫地打扫卫生时注意切勿用拖把大力拉扯，更不要用桌脚或重物直接压在光纤上。</p>
+      style: "$body"
+      fontSize: 9.6
+      lineHeight: 1.35
+
+  - elementId: summary-hotline-box
+    elementType: shape
+    bounds: [40, 458, 880, 36]
+    shapeName: rect
+    fill: { type: solid, color: "$lightBlue" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: summary-hotline-text
+    elementType: text
+    bounds: [50, 464, 860, 24]
+    content:
+      text: "三大电信运营商报修专线：中国电信 10000 ｜ 中国联通 10010 ｜ 中国移动 10086 ｜ 报障时主动说明 LOS/PON 灯色可缩短 50% 派单沟通时间"
+      fontSize: 10
+      bold: true
+      color: "$primaryDeep"
+      align: [center, middle]
+      wrap: false
+
+  - elementId: bottom-source-line
+    elementType: text
+    bounds: [40, 508, 800, 18]
+    content:
+      text: "课程结语：掌握科学排障思维，建立健康用网习惯 · 家庭网络排障实操课完结"
+      style: "$caption"
+
+  - elementId: bottom-page-number
+    elementType: text
+    bounds: [870, 508, 50, 18]
+    content:
+      text: "10"
+      style: "$caption"
+      align: [right, top]

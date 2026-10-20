@@ -1,0 +1,46 @@
+version: v2
+title: "Urban Heat Island Microclimate Dynamics"
+size: [960, 540]
+theme:
+  colors:
+    darkBg: "#0B0F19"
+    cardDark: "#131C2E"
+    cardDarkBorder: "#1E293B"
+    textWhite: "#F8FAFC"
+    textMuted: "#94A3B8"
+    hotOrange: "#F97316"
+    deepRed: "#EF4444"
+    cyanCool: "#38BDF8"
+    greenCool: "#10B981"
+    borderMuted: "#334155"
+  textStyles:
+    title:
+      fontFamily: "Liter"
+      fontSize: 16
+      bold: true
+      color: "$textWhite"
+    subtitle:
+      fontFamily: "Liter"
+      fontSize: 10
+      bold: true
+      color: "$hotOrange"
+    body:
+      fontFamily: "Liter"
+      fontSize: 9
+      color: "$textMuted"
+    badge:
+      fontFamily: "Liter"
+      fontSize: 8.5
+      bold: true
+      color: "$textWhite"
+    code:
+      fontFamily: "Liter"
+      fontSize: 8
+      color: "$cyanCool"
+    footer:
+      fontFamily: "Liter"
+      fontSize: 7.5
+      color: "$textMuted"
+pages:
+  - pages/01_surface_vs_air.page
+  - pages/02_drivers_and_experiment.page

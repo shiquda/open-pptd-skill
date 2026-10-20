@@ -1,0 +1,82 @@
+version: v2
+title: 全球储能电池（BESS）产业链格局与中国厂商机会
+size: [960, 540]
+theme:
+  colors:
+    dark: "#041C2C"
+    primary: "#2151FF"
+    secondary: "#00A9F4"
+    accentNavy: "#282C70"
+    panelBg: "#F4F5F7"
+    tint: "#EEF2FF"
+    border: "#D1D5DB"
+    borderLight: "#E5E7EB"
+    text: "#000000"
+    textMuted: "#64748B"
+    textSub: "#334155"
+    positive: "#10B981"
+    negative: "#E4536C"
+    white: "#FFFFFF"
+    accentLight: "#99C4FF"
+  textStyles:
+    coverTitle:
+      fontFamily: "思源宋体"
+      fontSize: 26
+      bold: true
+      color: "$dark"
+      lineHeight: 1.25
+    coverSubtitle:
+      fontFamily: "MiSans"
+      fontSize: 13
+      color: "$textSub"
+      lineHeight: 1.35
+    slideTitle:
+      fontFamily: "思源宋体"
+      fontSize: 16.5
+      bold: true
+      color: "$dark"
+      lineHeight: 1.25
+    subtitle:
+      fontFamily: "MiSans"
+      fontSize: 10
+      color: "$textMuted"
+      lineHeight: 1.3
+    body:
+      fontFamily: "MiSans"
+      fontSize: 10.5
+      color: "$text"
+      lineHeight: 1.4
+    bodySmall:
+      fontFamily: "MiSans"
+      fontSize: 9.5
+      color: "$textSub"
+      lineHeight: 1.35
+    footnote:
+      fontFamily: "MiSans"
+      fontSize: 8
+      color: "$textMuted"
+  tableStyles:
+    dueDiligence:
+      firstRowStyle:
+        fill: { type: solid, color: "$dark" }
+        color: "$white"
+        bold: true
+        fontSize: 9.5
+      bodyStyles:
+        - { fill: { type: solid, color: "$white" } }
+        - { fill: { type: solid, color: "$panelBg" } }
+      cellStyle:
+        fontSize: 9
+        color: "$dark"
+        fontFamily: "MiSans"
+pages:
+  - pages/01_cover.page
+  - pages/02_agenda_exec_summary.page
+  - pages/03_global_market_demand.page
+  - pages/04_value_chain_topology.page
+  - pages/05_cell_spec_evolution.page
+  - pages/06_tier1_cell_comparison.page
+  - pages/07_cost_breakdown_lcos.page
+  - pages/08_regional_barriers_tariffs.page
+  - pages/09_investment_quadrant_matrix.page
+  - pages/10_ic_decision_recommendations.page

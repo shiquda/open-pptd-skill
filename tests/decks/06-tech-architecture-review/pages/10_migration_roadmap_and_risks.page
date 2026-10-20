@@ -1,0 +1,303 @@
+background: { type: solid, color: "$paper" }
+notes: |
+  本页是演进路线的收尾决议页，涵盖四阶段灰度实施路径、自动回滚红线与残留风险应对。
+  迁移不搞一刀切，而是分为“基础设施准备 → 影子流量双写 → 5%到20%小流量灰度 → 全量多活”四个严格把控的阶段。
+  为了防范生产事故，SRE 制定了严格的自动化回滚红线：
+  只要 DTS 同步滞后超过 3 秒，或者发现哪怕 1 笔资金对账不一致，网关立即自动熔断切流。
+  针对跨单元转账悬挂与跨库 Join 风险，也均已制定自动化拦截与冲正 SOP。
+  架构委员会在此完成生产演进就绪评审，签署通过 Phase 1 筹备决议。
+elements:
+  # Header
+  - elementId: sec-tag
+    elementType: text
+    bounds: [45, 24, 400, 14]
+    content:
+      text: "10 / 实施路径与残留风险 | ROADMAP, RISKS & NEXT STEPS"
+      fontSize: 8.5
+      bold: true
+      color: "$active"
+
+  - elementId: main-title
+    elementType: text
+    bounds: [45, 38, 870, 26]
+    content:
+      text: "分四阶段推进生产切流，设立确定性回滚阈值与跨单元对账兜底措施"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+
+  - elementId: header-line
+    elementType: line
+    bounds: [45, 68, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # ==========================================
+  # Top Half: 4-Phase Migration Roadmap
+  # ==========================================
+  # Phase 1
+  - elementId: p1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [45, 78, 210, 168]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  - elementId: p1-tag
+    elementType: text
+    bounds: [55, 84, 190, 16]
+    content:
+      text: "阶段一：基础设施与专线就绪"
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+
+  - elementId: p1-time
+    elementType: text
+    bounds: [55, 100, 190, 14]
+    content:
+      text: "时间窗口: 2026-11 (Week 1~4)"
+      fontSize: 7.5
+      color: "$muted"
+
+  - elementId: p1-body
+    elementType: text
+    bounds: [55, 118, 190, 120]
+    content:
+      text: |
+        • 沪深 20Gbps 物理专线拉通，实测 RTT ≤ 36.8ms，抖动 < 2.5ms。
+        • DTS 数据复制引擎压测，吞吐支撑 50,000 TPS 峰值吞吐。
+        • 【准出闸口】: 专线 72 小时丢包率恒为 0，Binlog 积压 ≤ 100ms。
+      fontSize: 7.8
+      lineHeight: 1.25
+      color: "$ink"
+
+  # Phase 2
+  - elementId: p2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [265, 78, 210, 168]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  - elementId: p2-tag
+    elementType: text
+    bounds: [275, 84, 190, 16]
+    content:
+      text: "阶段二：影子流量双写验证"
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+
+  - elementId: p2-time
+    elementType: text
+    bounds: [275, 100, 190, 14]
+    content:
+      text: "时间窗口: 2026-12 (Week 5~8)"
+      fontSize: 7.5
+      color: "$muted"
+
+  - elementId: p2-body
+    elementType: text
+    bounds: [275, 118, 190, 120]
+    content:
+      text: |
+        • 生产 100% 流量在上海执行，网关异步镜像全量请求至深圳单元。
+        • 深圳进行影子执行并启动每日离线数据全量对账。
+        • 【准出闸口】: 连续 14 天数据校验不一致记录数保持 0 笔。
+      fontSize: 7.8
+      lineHeight: 1.25
+      color: "$ink"
+
+  # Phase 3
+  - elementId: p3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [485, 78, 210, 168]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  - elementId: p3-tag
+    elementType: text
+    bounds: [495, 84, 190, 16]
+    content:
+      text: "阶段三：小流量灰度 (5%→20%)"
+      fontSize: 8.5
+      bold: true
+      color: "$brand"
+
+  - elementId: p3-time
+    elementType: text
+    bounds: [495, 100, 190, 14]
+    content:
+      text: "时间窗口: 2027-01 (Week 9~12)"
+      fontSize: 7.5
+      color: "$brand"
+
+  - elementId: p3-body
+    elementType: text
+    bounds: [495, 118, 190, 120]
+    content:
+      text: |
+        • 按 UID 尾号切流 5% 真实写流量至深圳单元，平稳观察 7 天。
+        • 扩增至 20% 流量（UID 尾号 00~19），检验跨单元转账补偿。
+        • 【准出闸口】: 灰度单元 P99 稳定在 45ms 以内，无故障回滚。
+      fontSize: 7.8
+      lineHeight: 1.25
+      color: "$ink"
+
+  # Phase 4
+  - elementId: p4-box
+    elementType: shape
+    shapeName: rect
+    bounds: [705, 78, 210, 168]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$active" }
+
+  - elementId: p4-tag
+    elementType: text
+    bounds: [715, 84, 190, 16]
+    content:
+      text: "阶段四：全量多活与自动接管"
+      fontSize: 8.5
+      bold: true
+      color: "$active"
+
+  - elementId: p4-time
+    elementType: text
+    bounds: [715, 100, 190, 14]
+    content:
+      text: "时间窗口: 2027-02 (Week 13+)"
+      fontSize: 7.5
+      color: "$active"
+
+  - elementId: p4-body
+    elementType: text
+    bounds: [715, 118, 190, 120]
+    content:
+      text: |
+        • 核心交易 50%/50% 均衡打散至上海与深圳各单元。
+        • 正式启用 Raft Quorum 租约防脑裂与秒级自动化容灾接管。
+        • 【准出闸口】: 生产断网演练达成 RPO=0 与 RTO<30s 目标。
+      fontSize: 7.8
+      lineHeight: 1.25
+      color: "$ink"
+
+  # Middle Horizontal Divider
+  - elementId: mid-div
+    elementType: line
+    bounds: [45, 256, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # ==========================================
+  # Bottom Left: Rollback Triggers
+  # ==========================================
+  - elementId: rollback-title
+    elementType: text
+    bounds: [45, 268, 415, 18]
+    content:
+      text: "确定性自动回滚与熔断红线 (Automated Rollback Triggers)"
+      fontSize: 9.5
+      bold: true
+      color: "$critical"
+
+  - elementId: rollback-content
+    elementType: text
+    bounds: [45, 290, 415, 195]
+    content:
+      text: |
+        1. 数据同步滞后熔断触发：
+        • 跨地域 DTS 复制延迟持续超过 3,000ms 且持续时间达到 10 秒，网关自动停止向新单元派发写流量，强制回滚至单单元写入模式。
+        
+        2. 资金流水对账不一致硬熔断：
+        • 实时账务巡检服务一旦比对发现 ≥1 笔在途交易数据金额不符或状态悬挂，立即向调度中心发出阻断指令，一键回滚分片路由规则。
+        
+        3. 接入网关错误率告警降级：
+        • 单元 Ingress 网关 5xx 错误率超过 0.05% 或 P99 延迟超过 100ms 持续 1 分钟，自动将该单元流量热切回对等单元。
+      fontSize: 8.2
+      lineHeight: 1.35
+      color: "$ink"
+
+  # Vertical Separator
+  - elementId: btm-v-sep
+    elementType: line
+    bounds: [475, 268, 1, 225]
+    points: "0,0 0,225"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # ==========================================
+  # Bottom Right: Residual Risks & Verdict
+  # ==========================================
+  - elementId: risk-title
+    elementType: text
+    bounds: [495, 268, 420, 18]
+    content:
+      text: "残留风险防控对策与评审决议 (Residual Risks & Verdict)"
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+
+  - elementId: risk-content
+    elementType: text
+    bounds: [495, 290, 420, 130]
+    content:
+      text: |
+        1. 风险一：跨单元资产转账在专线中断时发生悬挂挂账
+        • 应对措施：部署独立 TCC 补偿对账服务，每 30 秒执行自动对账冲正与防悬挂挂账补单。
+        
+        2. 风险二：业务开发后续新增微服务时不慎引入跨分片关联查询
+        • 应对措施：在 CI/CD 流水线中引入 SQL AST 静态扫描门禁，强制拦截任何跨 UID 分片的物理 Join。
+      fontSize: 8.2
+      lineHeight: 1.35
+      color: "$ink"
+
+  # Architecture Board Sign-off Box
+  - elementId: sign-box
+    elementType: shape
+    shapeName: rect
+    bounds: [495, 424, 420, 68]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 1, color: "$sync" }
+
+  - elementId: sign-title
+    elementType: text
+    bounds: [505, 430, 400, 16]
+    content:
+      text: "【基础架构技术委员会 · 评审决议】"
+      fontSize: 8.5
+      bold: true
+      color: "$sync"
+
+  - elementId: sign-desc
+    elementType: text
+    bounds: [505, 448, 400, 38]
+    content:
+      text: "经委员会综合审议，一致同意通过 v2.4-rc3 单元化异地多活方案。\n准予立项进入 Phase 1 专线与基础设施建设阶段，计划于 2027-Q1 完成生产终验。"
+      fontSize: 8
+      lineHeight: 1.3
+      color: "$ink"
+
+  # Footer
+  - elementId: footer-line
+    elementType: line
+    bounds: [45, 510, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  - elementId: footer-meta
+    elementType: text
+    bounds: [45, 516, 500, 16]
+    content:
+      text: "交易核心多活架构评审 | 实施路径与残留风险 | 2026-10-20"
+      fontSize: 8.5
+      color: "$muted"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [840, 516, 75, 16]
+    content:
+      text: "PAGE 10 / 10"
+      fontSize: 8.5
+      color: "$muted"
+      align: [right, top]

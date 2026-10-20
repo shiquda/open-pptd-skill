@@ -1,0 +1,123 @@
+pageType: content
+background:
+  type: solid
+  color: "$white"
+notes: "这一页是本套实操课最重要的随身交付成果——家庭网络应急排障速查表。我们把家庭中最常遇到的四类典型故障进行了表格化梳理。大家可以把这张表截图存进手机，或者打印出来贴在弱电箱内侧。遇到断网时，直接对照前两列的现象与指示灯状态，就能立刻锁定问题行，按照第三列的规范动作进行操作。只要不是第二行的光猫LOS红灯，都不需要师傅上门，自己就能在5分钟内搞定。"
+elements:
+  - elementId: top-rule
+    elementType: shape
+    bounds: [40, 20, 880, 2]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: nav-section
+    elementType: text
+    bounds: [40, 28, 260, 18]
+    content:
+      text: "阶段六 / 知识迁移 (TRANSFER)"
+      fontSize: 9.5
+      bold: true
+      color: "$primaryDeep"
+      letterSpacing: 1.0
+
+  - elementId: running-head
+    elementType: text
+    bounds: [680, 28, 240, 18]
+    content:
+      text: "家庭网络排障实操课 · 随身工具卡"
+      fontSize: 9.5
+      color: "$grayLight"
+      align: [right, top]
+
+  - elementId: page-title
+    elementType: text
+    bounds: [40, 48, 880, 28]
+    content:
+      text: "家庭网络应急排障速查表：故障现象、排查动作与求助指引"
+      style: "$title"
+
+  - elementId: page-subtitle
+    elementType: text
+    bounds: [40, 78, 880, 20]
+    content:
+      text: "随身作业指导工具（Job-Aid）· 遇到断网照表索骥，5 分钟内完成科学自查与处置"
+      style: "$subtitle"
+
+  - elementId: job-aid-table
+    elementType: table
+    bounds: [40, 112, 880, 310]
+    columnWidths: [0.22, 0.22, 0.42, 0.14]
+    rowHeights: [0.18, 0.20, 0.21, 0.21, 0.20]
+    style: "$jobAidTable"
+    rows:
+      - - text: "<p><strong>故障典型现象</strong></p>"
+          align: [center, middle]
+        - text: "<p><strong>指示灯关键线索</strong></p>"
+          align: [center, middle]
+        - text: "<p><strong>优先自查与处置动作 (5分钟内)</strong></p>"
+          align: [center, middle]
+        - text: "<p><strong>是否报修</strong></p>"
+          align: [center, middle]
+
+      - - text: "<p><strong>仅单台手机/电脑打不开网页</strong><br/>其他家人设备上网完全正常</p>"
+          align: [left, middle]
+        - text: "<p>光猫与路由器所有指示灯<br/><strong>均显示常亮或闪烁绿色</strong></p>"
+          align: [left, middle]
+        - text: "<p>1. 在手机设置中点击「忽略此 Wi-Fi」后重新输密连接；<br/>2. 关闭「私密 Wi-Fi 地址 / 随机 MAC」选项；<br/>3. 单独重启该手机无线网卡。</p>"
+          align: [left, middle]
+        - text: "<p><strong>否</strong><br/>(终端级设置)</p>"
+          align: [center, middle]
+          color: "$primaryDeep"
+
+      - - text: "<p><strong>全家所有设备断网</strong><br/>电视、手机、电脑均无网络信号</p>"
+          align: [left, middle]
+        - text: "<p>光猫 <span style=\"color:#EA4335;\"><strong>LOS 亮红灯或闪烁</strong></span><br/>PON 灯完全熄灭</p>"
+          align: [left, middle]
+        - text: "<p>1. 检查入户黄色细皮线光纤是否有直角死折或被重物压住；<br/>2. 严禁拔出光纤头肉眼直视（防不可见激光伤眼）；<br/>3. 确认为外部断光，直接致电运营商派单。</p>"
+          align: [left, middle]
+        - text: "<p><span style=\"color:#EA4335;\"><strong>是</strong></span><br/>(致电运营商)</p>"
+          align: [center, middle]
+
+      - - text: "<p><strong>微信能收发文字</strong><br/>但图片转圈、网页与短视频无法载入</p>"
+          align: [left, middle]
+        - text: "<p>光猫正常绿灯<br/>路由器 WAN 绿灯闪烁正常</p>"
+          align: [left, middle]
+        - text: "<p>1. 判定为运营商局部 DNS 缓存污染或解析故障；<br/>2. 在手机网络配置中将 DNS 手动修改为公共纯净 DNS：<br/><strong>223.5.5.5</strong> (阿里) 或 <strong>119.29.29.29</strong> (腾讯)。</p>"
+          align: [left, middle]
+        - text: "<p><strong>否</strong><br/>(修改DNS自愈)</p>"
+          align: [center, middle]
+          color: "$primaryDeep"
+
+      - - text: "<p><strong>网络频繁卡顿掉线</strong><br/>重启后短暂恢复正常，半小时后又掉</p>"
+          align: [left, middle]
+        - text: "<p>路由器小灯正常<br/>但<strong>设备机身表面显著发烫</strong></p>"
+          align: [left, middle]
+        - text: "<p>1. 移开路由器上方覆盖的防尘布、书本及杂物；<br/>2. 严禁将路由器闷在密闭弱电铁箱中，移至通风高处；<br/>3. 用软毛刷清理底部与侧面散热孔灰尘。</p>"
+          align: [left, middle]
+        - text: "<p><strong>否</strong><br/>(改善通风散热)</p>"
+          align: [center, middle]
+          color: "$primaryDeep"
+
+  - elementId: table-caption
+    elementType: text
+    bounds: [40, 436, 880, 52]
+    content:
+      text: "<p><strong>📋 随身应用指引：</strong>可将本页表格截屏保存在手机微信收藏夹，或打印张贴于入户弱电箱门后。日常断网时请先对照第 2 列指示灯，只有命中第 2 行（LOS 红灯）时才需拨打客服电话；其余 3 类故障均可在 5 分钟内通过自主操作完全自愈。</p>"
+      fontSize: 10.2
+      color: "$grayText"
+      lineHeight: 1.35
+
+  - elementId: bottom-source-line
+    elementType: text
+    bounds: [40, 508, 800, 18]
+    content:
+      text: "编制依据：电信运营商客户自助服务 SOP 与工信部《家庭网络常见故障排除指南》(2024版)"
+      style: "$caption"
+
+  - elementId: bottom-page-number
+    elementType: text
+    bounds: [870, 508, 50, 18]
+    content:
+      text: "09"
+      style: "$caption"
+      align: [right, top]

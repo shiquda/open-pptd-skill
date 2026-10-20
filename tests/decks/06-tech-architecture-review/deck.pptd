@@ -1,0 +1,71 @@
+version: v2
+title: "核心交易系统异地多活容灾架构演进评审"
+size: [960, 540]
+theme:
+  colors:
+    paper: "#FFFFFF"
+    ink: "#1E242B"
+    muted: "#5C6470"
+    hairline: "#CBD5E0"
+    surface: "#F8FAFC"
+    surfaceMuted: "#EEF2F6"
+    brand: "#92400E"
+    active: "#C2410C"
+    critical: "#BE123C"
+    sync: "#0F766E"
+    tagBg: "#F1F5F9"
+    borderDark: "#94A3B8"
+  textStyles:
+    title:
+      fontFamily: "MiSans"
+      fontSize: 18
+      bold: true
+      color: "$ink"
+    subtitle:
+      fontFamily: "MiSans"
+      fontSize: 11
+      color: "$muted"
+    body:
+      fontFamily: "MiSans"
+      fontSize: 10
+      color: "$ink"
+    caption:
+      fontFamily: "MiSans"
+      fontSize: 8.5
+      color: "$muted"
+    code:
+      fontFamily: "MiSans"
+      fontSize: 9.5
+      color: "$ink"
+  tableStyles:
+    engineering:
+      cellStyle:
+        fontFamily: "MiSans"
+        fontSize: 8.5
+        color: "$ink"
+        border: { style: solid, width: 0.5, color: "$hairline" }
+      firstRowStyle:
+        fontFamily: "MiSans"
+        fontSize: 9
+        bold: true
+        color: "$ink"
+        fill: { type: solid, color: "$surfaceMuted" }
+        border: { style: solid, width: 0.75, color: "$borderDark" }
+      lastRowStyle:
+        fontFamily: "MiSans"
+        fontSize: 8.5
+        bold: true
+        color: "$ink"
+        fill: { type: solid, color: "$surface" }
+        border: { style: solid, width: 1, color: "$active" }
+pages:
+  - pages/01_decision_summary.page
+  - pages/02_goals_and_constraints.page
+  - pages/03_incident_causality_timeline.page
+  - pages/04_alternatives_tradeoff_matrix.page
+  - pages/05_target_architecture_blueprint.page
+  - pages/06_unitized_state_machine.page
+  - pages/07_sequence_interaction.page
+  - pages/08_routing_config_probe.page
+  - pages/09_performance_metrics_quantiles.page
+  - pages/10_migration_roadmap_and_risks.page

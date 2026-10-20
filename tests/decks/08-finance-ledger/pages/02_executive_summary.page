@@ -1,0 +1,190 @@
+pageType: content
+background:
+  type: solid
+  color: "$bgDark"
+notes: |
+  本页汇总中报执行摘要：
+  第一，盈利端毛利剪刀差持续走阔，高附加值产品线放量推动毛利率升至32.8%；
+  第二，资产负债端负债率降至43.5%，应付账款与预收款项等无息负债占总负债比重超62%，显示产业链主导地位；
+  第三，现金流端内生造血充裕，自由现金流净流入4.90亿元，为后续产线智能化改造奠定资金储备。
+elements:
+  # Header eyebrow
+  - elementId: s2-eyebrow
+    elementType: text
+    bounds: [52, 35, 400, 18]
+    content:
+      text: "<p>EXECUTIVE SUMMARY · FINANCIAL DIAGNOSIS</p>"
+      style: "$coverMasthead"
+
+  # Slide title
+  - elementId: s2-title
+    elementType: text
+    bounds: [52, 55, 856, 28]
+    content:
+      text: "<p>三张表核心指标协同向好，营运资本优化释放充裕自由现金流</p>"
+      style: "$slideTitleDark"
+
+  # Subtitle
+  - elementId: s2-subtitle
+    elementType: text
+    bounds: [52, 85, 856, 20]
+    content:
+      text: "<p>口径说明：示例公司2026年中期财务报表穿透 | 数据基础：合并报表口径（示例数据） | 编制单位：人民币亿元</p>"
+      style: "$subtitleDark"
+
+  # Divider line
+  - elementId: s2-top-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 110, 856, 1]
+    fill:
+      type: solid
+      color: "$darkDivider"
+  - elementId: s2-num-01
+    elementType: text
+    bounds: [52, 125, 46, 40]
+    content:
+      text: "<p>01</p>"
+      fontSize: 26
+      bold: true
+      color: "$supportingGray"
+  - elementId: s2-text-01
+    elementType: text
+    bounds: [105, 126, 480, 80]
+    content:
+      text: "<p><strong>营收与毛利剪刀差走阔，高端产品放量驱动综合毛利率升至 32.8%</strong></p><p>2026年上半年营业收入同比增长14.2%至48.65亿元，营业成本增速为11.8%，毛利剪刀差达+2.4pct；研发转化效率提升推动高附加值系列出货占比达41.5%，综合毛利率同比提升1.4个百分点。</p>"
+      style: "$bodyTextDark"
+
+  # Item 02
+  - elementId: s2-num-02
+    elementType: text
+    bounds: [52, 225, 46, 40]
+    content:
+      text: "<p>02</p>"
+      fontSize: 26
+      bold: true
+      color: "$supportingGray"
+  - elementId: s2-text-02
+    elementType: text
+    bounds: [105, 226, 480, 80]
+    content:
+      text: "<p><strong>资产负债率收敛至 43.5%，无息商业信用负债显现产业链主导地位</strong></p><p>负债总额控制在45.85亿元，较期初下降2.1个百分点。有息负债仅14.20亿元，其余超65%为应付票据、应付账款及合同负债，企业对上下游占资能力优异，利息支出同比减少16.4%。</p>"
+      style: "$bodyTextDark"
+
+  # Item 03
+  - elementId: s2-num-03
+    elementType: text
+    bounds: [52, 325, 46, 40]
+    content:
+      text: "<p>03</p>"
+      fontSize: 26
+      bold: true
+      color: "$supportingGray"
+  - elementId: s2-text-03
+    elementType: text
+    bounds: [105, 326, 480, 80]
+    content:
+      text: "<p><strong>经营活动净现金流 8.15 亿元创同期新高，净现比达 1.20 倍内生造血充沛</strong></p><p>销售商品提供劳务收到的现金占营业收入比例为104.5%，营运资金周转高效；扣除资本开支3.25亿元后自由现金流达4.90亿元，现金短债比2.45倍，流动性安全垫极其厚实。</p>"
+      style: "$bodyTextDark"
+
+  # Vertical rail separator
+  - elementId: s2-rail-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [610, 120, 1, 305]
+    fill:
+      type: solid
+      color: "$darkDivider"
+  - elementId: s2-kpi-1-val
+    elementType: text
+    bounds: [635, 125, 270, 30]
+    content:
+      text: "<p><strong>43.5%</strong> <span style=\"font-size: 10pt; color: #A7A7A7;\">较上年 -2.1pct</span></p>"
+      fontSize: 20
+      bold: true
+      color: "#FFFFFF"
+  - elementId: s2-kpi-1-lbl
+    elementType: text
+    bounds: [635, 155, 270, 22]
+    content:
+      text: "<p>资产负债率 · 资本结构稳健收敛</p>"
+      fontSize: 8.5
+      color: "$supportingGray"
+
+  - elementId: s2-kpi-2-val
+    elementType: text
+    bounds: [635, 195, 270, 32]
+    content:
+      text: "<p><strong>16.8%</strong></p>"
+      style: "$kpiValueGold"
+  - elementId: s2-kpi-2-lbl
+    elementType: text
+    bounds: [635, 227, 270, 22]
+    content:
+      text: "<p>加权平均净资产收益率 · 股东回报优良 (年化)</p>"
+      fontSize: 8.5
+      color: "$primaryGold"
+
+  - elementId: s2-kpi-3-val
+    elementType: text
+    bounds: [635, 265, 270, 30]
+    content:
+      text: "<p><strong>4.90</strong> <span style=\"font-size: 11pt;\">亿元</span></p>"
+      fontSize: 20
+      bold: true
+      color: "#FFFFFF"
+  - elementId: s2-kpi-3-lbl
+    elementType: text
+    bounds: [635, 295, 270, 22]
+    content:
+      text: "<p>自由现金流 (FCF) · 覆盖资本开支后净额</p>"
+      fontSize: 8.5
+      color: "$supportingGray"
+
+  - elementId: s2-kpi-4-val
+    elementType: text
+    bounds: [635, 335, 270, 30]
+    content:
+      text: "<p><strong>2.45x</strong> <span style=\"font-size: 10pt; color: #A7A7A7;\">安全阈值 > 1.20x</span></p>"
+      fontSize: 20
+      bold: true
+      color: "#FFFFFF"
+  - elementId: s2-kpi-4-lbl
+    elementType: text
+    bounds: [635, 365, 270, 22]
+    content:
+      text: "<p>非受限货币资金 / 短期有息债务 · 偿债极佳</p>"
+      fontSize: 8.5
+      color: "$supportingGray"
+
+  # Bottom Verdict Band
+  - elementId: s2-verdict-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 440, 856, 36]
+    fill:
+      type: solid
+      color: "#202020"
+  - elementId: s2-verdict-text
+    elementType: text
+    bounds: [68, 448, 824, 20]
+    content:
+      text: "<p><strong>投研定性结论：</strong>资产负债表处于内生稳健扩张期，利润含金量高，现金储备足以完全对冲潜在宏观波动并支持中长期投资。</p>"
+      fontSize: 9.0
+      color: "#FFFFFF"
+
+  # Footer
+  - elementId: s2-footer-source
+    elementType: text
+    bounds: [52, 505, 600, 18]
+    content:
+      text: "<p>数据来源：示例公司财务账本数据库 · 示例数据测算口径 | 会计准则：CAS-30</p>"
+      style: "$footnote"
+  - elementId: s2-footer-page
+    elementType: text
+    bounds: [850, 505, 58, 18]
+    content:
+      text: "<p>2 / 9</p>"
+      fontSize: 8.0
+      color: "$footnoteGray"
+      align: [right, middle]

@@ -1,0 +1,222 @@
+pageType: content
+notes: |
+  第七页重点解构大储系统的成本下降路径与LCOS敏感性。
+  左侧图表显示了电池级碳酸锂现货价格与国内2小时储能系统EPC中标均价的强相关性走势：
+  1. 2022年底碳酸锂暴涨至56.5万元/吨峰值时，储能系统EPC单价攀升至1.65元/Wh高位；
+  2. 随着上游锂矿及锂盐产能大规模集中释放，2024Q3碳酸锂现货价格击穿8万元/吨，企稳于7-10万元/吨理性区间；
+  3. 受此驱动，2024年国内大储EPC集采中标价一路从年初的0.8元/Wh下探，到2024年三季度正式跌破0.60元/Wh关口，最低甚至出现0.53-0.56元/Wh的激进报价。
+  右侧从成本解构与LCOS度电成本敏感性测算可见：
+  电芯已降至0.31元/Wh，占整体EPC的53%；在当前7.5万元锂价基准下，配备12000次长循环电芯后，大储全生命周期度电成本（LCOS）已降至0.248元/kWh。
+  这意味着在许多风光资源丰富省份，光伏+储能的平价度电成本已低于当地燃煤标杆基准电价，为储能打开了万亿级的真实自发商业需求。
+elements:
+  # Navigation Bar (Active: Section 3)
+  - elementId: nav-s1
+    elementType: text
+    bounds: [40, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">01 市场容量与装机</span></p>"
+  - elementId: nav-s2
+    elementType: text
+    bounds: [180, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">02 产业链与技术</span></p>"
+  - elementId: nav-s3
+    elementType: text
+    bounds: [320, 18, 125, 16]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9pt;\">03 竞争格局与成本</span></strong></p>"
+  - elementId: nav-s4
+    elementType: text
+    bounds: [460, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">04 政策壁垒与投资</span></p>"
+  - elementId: nav-tag
+    elementType: text
+    bounds: [700, 18, 220, 16]
+    content:
+      text: "<p style=\"text-align: right;\"><span style=\"color: #2151FF; font-weight: bold; font-size: 8.5pt;\">INVESTMENT COMMITTEE REPORT</span></p>"
+      letterSpacing: 0.8
+  - elementId: nav-active-indicator
+    elementType: shape
+    shapeName: rect
+    bounds: [320, 35, 125, 2]
+    fill: { type: solid, color: "$primary" }
+
+  # Slide Title & Subtitle
+  - elementId: slide-title
+    elementType: text
+    bounds: [40, 42, 880, 26]
+    content:
+      style: "$slideTitle"
+      text: "<p>碳酸锂企稳于7–10万元/吨区间，2024年大储EPC中标价击穿0.60元/Wh临界点</p>"
+
+  - elementId: slide-subtitle
+    elementType: text
+    bounds: [40, 69, 880, 16]
+    content:
+      style: "$subtitle"
+      text: "<p>成本解构与敏感性模型：系统EPC成本构成拆解、碳酸锂弹性测试及全生命周期度电成本（LCOS）测算</p>"
+
+  - elementId: slide-top-divider
+    elementType: line
+    bounds: [40, 89, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Left Evidence Area: Dual-axis Cost Chart
+  - elementId: chart-bess-cost
+    elementType: image
+    bounds: [40, 98, 510, 398]
+    src: "assets/bess_cost_curve_and_lithium.png"
+    fit: { mode: contain }
+  # Right Side Area: Cost Breakdown & LCOS Matrix
+  - elementId: right-cost-box
+    elementType: shape
+    shapeName: rect
+    bounds: [565, 98, 355, 398]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: right-cost-header
+    elementType: text
+    bounds: [578, 108, 330, 20]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 10.5pt;\">2024Q3 2小时大储EPC成本解构 (元/Wh)</span></strong></p>"
+
+  - elementId: right-cost-items
+    elementType: text
+    bounds: [578, 132, 330, 130]
+    content:
+      text: |
+        <p><span style="color: #041C2C; font-weight: bold;">• 储能电芯 (Cell)：</span><span style="color: #2151FF; font-weight: bold;">0.31 元/Wh</span><span style="color: #64748B;">（占比 53.4%）</span></p>
+        <p style="margin-top: 4px;"><span style="color: #041C2C; font-weight: bold;">• 储能变流器 (PCS)：</span><span style="color: #2151FF; font-weight: bold;">0.07 元/Wh</span><span style="color: #64748B;">（占比 12.1%）</span></p>
+        <p style="margin-top: 4px;"><span style="color: #041C2C; font-weight: bold;">• 温控/消防/BMS：</span><span style="color: #2151FF; font-weight: bold;">0.08 元/Wh</span><span style="color: #64748B;">（占比 13.8%）</span></p>
+        <p style="margin-top: 4px;"><span style="color: #041C2C; font-weight: bold;">• 集成结构与辅材：</span><span style="color: #2151FF; font-weight: bold;">0.05 元/Wh</span><span style="color: #64748B;">（占比 8.6%）</span></p>
+        <p style="margin-top: 4px;"><span style="color: #041C2C; font-weight: bold;">• 施工安装及电网接入：</span><span style="color: #2151FF; font-weight: bold;">0.07 元/Wh</span><span style="color: #64748B;">（占比 12.1%）</span></p>
+        <p style="margin-top: 6px; padding-top: 4px; border-top: 1px solid #CBD5E1;"><strong><span style="color: #041C2C;">2小时大储系统EPC中标基准：0.58 元/Wh (含税)</span></strong></p>
+      fontSize: 8.5
+      lineHeight: 1.35
+
+  - elementId: right-lcos-subhead
+    elementType: text
+    bounds: [578, 272, 330, 20]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9.5pt;\">碳酸锂价格与LCOS度电成本敏感性测算模型</span></strong></p>"
+
+  # Mini Native Table for LCOS Sensitivity
+  - elementId: table-lcos-matrix
+    elementType: table
+    bounds: [578, 296, 330, 125]
+    columnWidths: [0.34, 0.33, 0.33]
+    rowHeights: [0.20, 0.20, 0.20, 0.20, 0.20]
+    rows:
+      # Header
+      - - text: "<p style=\"text-align: left;\"><strong>碳酸锂 (万元/吨)</strong></p>"
+          align: [left, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: right;\"><strong>系统EPC (元/Wh)</strong></p>"
+          align: [right, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: right;\"><strong>测算LCOS (元/kWh)</strong></p>"
+          align: [right, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+
+      # Row 1
+      - - text: "<p>5.0 万元/吨</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>0.52 元/Wh</p>"
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>0.235 元/kWh</p>"
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Row 2 (Current Baseline Highlight)
+      - - text: "<p><strong>7.5 万元/吨 (当前)</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$primary" }, null, { style: solid, width: 0.5, color: "$primary" }, null]
+        - text: "<p><strong>0.56 元/Wh</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$primary" }, null, { style: solid, width: 0.5, color: "$primary" }, null]
+        - text: "<p><strong>0.248 元/kWh</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$primary" }, null, { style: solid, width: 0.5, color: "$primary" }, null]
+
+      # Row 3
+      - - text: "<p>10.0 万元/吨</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>0.62 元/Wh</p>"
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>0.262 元/kWh</p>"
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Row 4
+      - - text: "<p>15.0 万元/吨</p>"
+          align: [left, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>0.75 元/Wh</p>"
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>0.295 元/kWh</p>"
+          align: [right, middle]
+          fontSize: 8
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+  - elementId: right-cost-takeaway
+    elementType: text
+    bounds: [578, 428, 330, 60]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF; font-size: 8.5pt;">度电平价经济性结论：</span></strong></p>
+        <p style="margin-top: 2px; color: #334155; font-size: 8pt; line-height: 1.35;">按0.248元/kWh的LCOS与当地燃煤标杆电价对比，新疆、内蒙古等高弃风弃光区域储能已具备完全脱离补贴的内生商业化自负盈亏能力。</p>
+
+  # Bottom hairline and footer
+  - elementId: slide-bottom-line
+    elementType: line
+    bounds: [40, 508, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: slide-foot-src
+    elementType: text
+    bounds: [40, 514, 740, 16]
+    content:
+      style: "$footnote"
+      text: "<p>数据来源：上海有色网(SMM)、中关村储能产业技术联盟(CNESA)、索比储能网2024Q3大储中标统计  |  LCOS测算假设：100MW/200MWh、10000次循环、DOD 90%、WACC 6%</p>"
+
+  - elementId: slide-foot-page
+    elementType: text
+    bounds: [820, 514, 100, 16]
+    content:
+      style: "$footnote"
+      text: "<p style=\"text-align: right;\"><strong><span style=\"color: #041C2C;\">07</span></strong> / 10</p>"

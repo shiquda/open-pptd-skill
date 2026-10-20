@@ -1,0 +1,257 @@
+pageType: content
+notes: |
+  High-temperature superconductor (HTS) bottleneck slide. Details the physics and economics of REBCO superconducting tape. Explains that because fusion power density scales as B to the 4th power, 20T magnets allow a 40-fold volume reduction over ITER. However, a single commercial pilot plant requires 5,000 to 10,000 km of 12mm tape—equivalent to the entire current global annual manufacturing capacity. Evaluates cost reduction targets ($100/m down to <$30/m) and fast-neutron irradiation degradation.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "05 · SUPPLY-CHAIN BOTTLENECKS"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Commercial Tokamak Deployment Demands a 20-Fold Expansion in Global REBCO Superconductor Tape"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Supply constraints, critical current performance (Jc), tape yield economics, and manufacturing scale-up requirements"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Panel 1: Physics Leverage
+  - elementId: p1-bg
+    elementType: shape
+    bounds: [50, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: p1-header
+    elementType: shape
+    bounds: [50, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: p1-title
+    elementType: text
+    bounds: [58, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "1. HIGH-FIELD PHYSICS LEVERAGE"
+
+  - elementId: p1-content
+    elementType: text
+    bounds: [58, 142, 260, 216]
+    content:
+      fontSize: 8.3
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Power Density Law:</b> \( P_{\mathrm{fusion}} \propto \beta^2 B^4 V \)</p>
+        <p>Doubling the magnetic field on plasma axis increases volumetric fusion power density by <b>16-fold</b>, allowing core plasma volume to shrink by ~40× vs ITER for equivalent output.</p>
+        <p><br><b>2nd-Generation REBCO Tape:</b></p>
+        <p>Rare-Earth Barium Copper Oxide (YBCO/GdBCO) deposited as a 1 µm epitaxial film on 50 µm Hastelloy substrate.</p>
+        <p><br><b>Thermal Advantage:</b></p>
+        <p>Operates stably at 20 Kelvin (gaseous Helium cooling) under &gt;20 Tesla, bypassing the expensive 4.2 K liquid Helium cooling required by legacy Nb₃Sn coils.</p>
+
+  # Panel 2: Capacity Gap
+  - elementId: p2-bg
+    elementType: shape
+    bounds: [342, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: p2-header
+    elementType: shape
+    bounds: [342, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: p2-title
+    elementType: text
+    bounds: [350, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "2. GLOBAL MANUFACTURING DEFICIT"
+
+  - elementId: p2-content
+    elementType: text
+    bounds: [350, 142, 260, 216]
+    content:
+      fontSize: 8.3
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Current Global Production (2024–2025):</b></p>
+        <p>~3,500–5,000 km/year (12mm equivalent width) across major suppliers (Fujikura, SuperPower, THEVA, Shanghai Superconductor).</p>
+        <p><br><b>Per-Reactor Requirement:</b></p>
+        <p>• SPARC test device: ~300 km tape</p>
+        <p>• CFS ARC / Commercial Pilot: ~5,000–8,000 km tape</p>
+        <p><b>A single commercial pilot plant absorbs the entire global annual output of HTS tape.</b></p>
+        <p><br><b>Fleet Scale-Up Barrier:</b></p>
+        <p>Building 50 commercial reactors by 2040 requires &gt;250,000 km/year—demanding a <b>50-fold industrial manufacturing expansion</b>.</p>
+
+  # Panel 3: Economics & Degradation
+  - elementId: p3-bg
+    elementType: shape
+    bounds: [634, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: p3-header
+    elementType: shape
+    bounds: [634, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: p3-title
+    elementType: text
+    bounds: [642, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "3. COST CURVE & NEUTRON DAMAGE"
+
+  - elementId: p3-content
+    elementType: text
+    bounds: [642, 142, 260, 216]
+    content:
+      fontSize: 8.3
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Price Deflation Trajectory:</b></p>
+        <p>• Current: ~$100–140 / meter (12mm)</p>
+        <p>• Pilot Target: ~$50–60 / meter (2028)</p>
+        <p>• Commercial NOAK Target: <b>&lt;$25–30 / meter</b></p>
+        <p>Tape cost must fall by 75% for magnet capital costs to drop below $1,200/kW electrical.</p>
+        <p><br><b>Fast Neutron Vulnerability:</b></p>
+        <p>Fast neutron flux degrades REBCO critical current \( J_c \) after fluences of \( \sim 10^{22}\,\mathrm{n/m}^2 \).</p>
+        <p>Requires ~60–80 cm tungsten/borated water radiation shielding, limiting minimum tokamak inner core radius.</p>
+
+  # Watch Indicators Band
+  - elementId: watch-bg
+    elementType: shape
+    bounds: [50, 384, 860, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: watch-accent
+    elementType: shape
+    bounds: [50, 384, 4, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: watch-label
+    elementType: text
+    bounds: [64, 398, 118, 46]
+    content:
+      fontSize: 7.5
+      bold: true
+      color: "$titleNavy"
+      lineHeight: 1.3
+      text: |
+        <p>WATCH INDICATORS</p>
+        <p>2026–2030</p>
+
+  - elementId: watch-1
+    elementType: text
+    bounds: [190, 398, 250, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Global REBCO output (km/yr)</b></p>
+        <p>~3,500–5,000 km/yr today vs ~5,000 km per pilot plant</p>
+
+  - elementId: watch-2
+    elementType: text
+    bounds: [450, 398, 240, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Tape unit price ($/m)</b></p>
+        <p>Magnet capex only deflates if tape falls ~75% from today</p>
+
+  - elementId: watch-3
+    elementType: text
+    bounds: [700, 398, 210, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Jc under neutron fluence</b></p>
+        <p>Degradation reported beyond ~10²² n/m²; drives shielding thickness</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Supply Chain Takeaway:</b> REBCO tape is the semiconductor wafer of magnetic fusion; commercial deployment is gated on achieving 20× tape volume expansion and &lt;$30/m pricing."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: Superconductor Science and Technology (IOP); CFS / MIT PSFC technical reports (2021–2024); industry manufacturer disclosures."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 09 / 16"

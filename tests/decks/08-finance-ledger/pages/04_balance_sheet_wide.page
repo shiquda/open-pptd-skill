@@ -1,0 +1,257 @@
+pageType: content
+background:
+  type: solid
+  color: "$bgWhite"
+notes: |
+  本页为资产负债表结构穿透与宽表压力测试（8列×10行）：
+  1. 资产总额突破百亿规模（105.40亿元，同比+9.9%）；
+  2. 流动资产占资产总额达61.8%，其中货币资金充裕达26.80亿元，抗风险缓冲厚实；
+  3. 资产负债率由45.6%收敛至43.5%，无息商业负债占比高，整体财务杠杆处于行业极其安全分位。
+elements:
+  # Thin black top rule signature
+  - elementId: s4-top-rule
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 28, 856, 2]
+    fill:
+      type: solid
+      color: "$inkBlack"
+  - elementId: s4-title
+    elementType: text
+    bounds: [52, 42, 856, 26]
+    content:
+      text: "<p>资产总额突破百亿且负债结构优化，高流动性储备夯实中长期资本开支底座</p>"
+      style: "$slideTitle"
+
+  # Subtitle
+  - elementId: s4-subtitle
+    elementType: text
+    bounds: [52, 70, 856, 18]
+    content:
+      text: "<p>合并资产负债表结构明细账本（8列×10行宽表压力测试，单位：亿元，会计准则：CAS-30） | 口径：示例数据</p>"
+      style: "$subtitle"
+
+  # Light divider
+  - elementId: s4-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 94, 856, 1]
+    fill:
+      type: solid
+      color: "$hairline"
+  - elementId: s4-table-balance-wide
+    elementType: table
+    bounds: [52, 108, 856, 325]
+    columnWidths: [0.17, 0.17, 0.11, 0.11, 0.12, 0.10, 0.11, 0.11]
+    rowHeights: [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10]
+    style: "$ledgerWide"
+    rows:
+      # Row 0: Merged Header row
+      - - text: "报表分部与细分会计科目"
+          colSpan: 2
+          align: [center, middle]
+        - text: "历史与当期账面余额 (亿元)"
+          colSpan: 3
+          align: [center, middle]
+        - text: "资产占比"
+          align: [center, middle]
+        - text: "同比变动"
+          align: [center, middle]
+        - text: "口径核算说明"
+          align: [center, middle]
+
+      # Row 1: 流动资产 category (rowSpan: 4) + Row 1 content
+      - - text: "流动资产合计\n(65.10亿元 · 占比61.8%)"
+          rowSpan: 4
+          align: [center, middle]
+          bold: true
+          fill: {type: solid, color: "$panelGray"}
+        - text: "货币资金 (非受限)"
+        - text: "16.50"
+          align: [right, middle]
+        - text: "21.20"
+          align: [right, middle]
+        - text: "26.80"
+          align: [right, middle]
+          bold: true
+        - text: "25.4%"
+          align: [right, middle]
+        - text: "+26.4%"
+          align: [right, middle]
+        - text: "高流动性储备"
+          align: [center, middle]
+
+      # Row 2: (col 0 covered)
+      - - text: "应收票据及应收账款"
+        - text: "14.80"
+          align: [right, middle]
+        - text: "17.50"
+          align: [right, middle]
+        - text: "18.20"
+          align: [right, middle]
+        - text: "17.3%"
+          align: [right, middle]
+        - text: "+4.0%"
+          align: [right, middle]
+        - text: "账龄1年内>95%"
+          align: [center, middle]
+
+      # Row 3: (col 0 covered)
+      - - text: "存货 (在途及产成品)"
+        - text: "12.30"
+          align: [right, middle]
+        - text: "14.10"
+          align: [right, middle]
+        - text: "15.60"
+          align: [right, middle]
+        - text: "14.8%"
+          align: [right, middle]
+        - text: "+10.6%"
+          align: [right, middle]
+        - text: "跌价准备充分"
+          align: [center, middle]
+
+      # Row 4: (col 0 covered)
+      - - text: "其他流动资产及预付款"
+        - text: "3.20"
+          align: [right, middle]
+        - text: "4.00"
+          align: [right, middle]
+        - text: "4.50"
+          align: [right, middle]
+        - text: "4.3%"
+          align: [right, middle]
+        - text: "+12.5%"
+          align: [right, middle]
+        - text: "进项税留抵"
+          align: [center, middle]
+
+      # Row 5: 非流动资产 category (rowSpan: 3) + Row 5 content
+      - - text: "非流动资产合计\n(40.30亿元 · 占比38.2%)"
+          rowSpan: 3
+          align: [center, middle]
+          bold: true
+          fill: {type: solid, color: "$panelGray"}
+        - text: "固定资产及在建工程"
+        - text: "28.50"
+          align: [right, middle]
+        - text: "32.00"
+          align: [right, middle]
+        - text: "33.40"
+          align: [right, middle]
+        - text: "31.7%"
+          align: [right, middle]
+        - text: "+4.4%"
+          align: [right, middle]
+        - text: "自动化基地投产"
+          align: [center, middle]
+
+      # Row 6: (col 0 covered)
+      - - text: "无形资产与开发支出"
+        - text: "5.40"
+          align: [right, middle]
+        - text: "6.20"
+          align: [right, middle]
+        - text: "6.90"
+          align: [right, middle]
+        - text: "6.5%"
+          align: [right, middle]
+        - text: "+11.3%"
+          align: [right, middle]
+        - text: "核心专利群入账"
+          align: [center, middle]
+
+      # Row 7: (col 0 covered)
+      - - text: "长期股权投资及其他"
+        - text: "0.80"
+          align: [right, middle]
+        - text: "0.90"
+          align: [right, middle]
+        - text: "0.00"
+          align: [right, middle]
+        - text: "0.0%"
+          align: [right, middle]
+        - text: "-100.0%"
+          align: [right, middle]
+        - text: "长期待摊已结转"
+          align: [center, middle]
+
+      # Row 8: 资产总计 (colSpan: 2)
+      - - text: "资产总计 (总规模基准)"
+          colSpan: 2
+          align: [left, middle]
+          bold: true
+          color: "$primaryGold"
+        - text: "81.50"
+          align: [right, middle]
+          bold: true
+        - text: "95.90"
+          align: [right, middle]
+          bold: true
+        - text: "105.40"
+          align: [right, middle]
+          bold: true
+          color: "$primaryGold"
+        - text: "100.0%"
+          align: [right, middle]
+          bold: true
+        - text: "+9.9%"
+          align: [right, middle]
+          bold: true
+        - text: "跨越百亿量级"
+          align: [center, middle]
+          bold: true
+
+      # Row 9: 负债及杠杆率指标 (colSpan: 2)
+      - - text: "负债总额及资本结构指标"
+          colSpan: 2
+          align: [left, middle]
+          bold: true
+        - text: "38.50"
+          align: [right, middle]
+        - text: "43.70"
+          align: [right, middle]
+        - text: "45.85"
+          align: [right, middle]
+          bold: true
+        - text: "43.5%"
+          align: [right, middle]
+          bold: true
+        - text: "-2.1pct"
+          align: [right, middle]
+          bold: true
+        - text: "资产负债率去化"
+          align: [center, middle]
+          bold: true
+
+  # Bottom Verdict Band
+  - elementId: s4-verdict-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 448, 856, 32]
+    fill:
+      type: solid
+      color: "$panelGray"
+  - elementId: s4-verdict-text
+    elementType: text
+    bounds: [68, 455, 824, 20]
+    content:
+      text: "<p><strong>资产负债表诊断：</strong>资产结构呈现强流动性特征，货币资金充裕度远超短期负债，百亿级底盘兼具防守韧性与资本扩张弹性。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+
+  # Footer
+  - elementId: s4-footer-source
+    elementType: text
+    bounds: [52, 505, 600, 18]
+    content:
+      text: "<p>数据来源：示例公司财务账本数据库 · 示例数据 | 报表标准：CAS-30 | 审计状态：未经审计中期数</p>"
+      style: "$footnote"
+  - elementId: s4-footer-page
+    elementType: text
+    bounds: [850, 505, 58, 18]
+    content:
+      text: "<p>4 / 9</p>"
+      fontSize: 8.0
+      color: "$footnoteGray"
+      align: [right, middle]

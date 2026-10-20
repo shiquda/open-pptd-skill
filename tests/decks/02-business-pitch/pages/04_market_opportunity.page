@@ -1,0 +1,212 @@
+pageType: content
+notes: "这是我们的市场空间机会页。东南亚冷链市场正迎来戴维斯双击：一方面生鲜电商 GMV 保持近 30% 复合增长，另一方面各国政府强制要求食品药品全程冷链温控。我们测算到 2028 年，仅冷链物流软件与 IoT 订阅服务 TAM 就达 18.4 亿美元。更关键的是，我们帮助客户把 32% 的损耗降下来，省下的钱远超软件费用，ROI 极其显著。"
+elements:
+  # Navigation / Chapter locator
+  - elementId: nav-chapter
+    elementType: text
+    bounds: [50, 24, 400, 20]
+    content:
+      style: "$chapter"
+      text: "03 市场机遇 | MARKET OPPORTUNITY"
+
+  - elementId: nav-line
+    elementType: line
+    bounds: [50, 48, 860, 1]
+    viewBox: [860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 1, color: "$primary"}
+
+  # Assertion Title & Subtitle
+  - elementId: title
+    elementType: text
+    bounds: [50, 58, 860, 32]
+    content:
+      style: "$title"
+      text: "2028 年东南亚生鲜冷链 SaaS 可触达市场达 18.4 亿美元，年复合增速 29.4%"
+
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 92, 860, 20]
+    content:
+      style: "$subtitle"
+      text: "生鲜电商爆发、跨境冷运基建打通与监管强制合规三轮驱动，重构东盟冷链数字化市场空间"
+
+  # BIG-NUMBER HERO SECTION (Poster-level type contrast)
+  # Hero Stat 1 Container with Shadow (Exercising hero shadow + gradient fill)
+  - elementId: hero-box-1
+    elementType: shape
+    bounds: [50, 126, 265, 140]
+    shapeName: rect
+    fill:
+      type: gradient
+      gradientType: linear
+      angle: 90
+      stops:
+        - {position: 0, color: "#F0FAF4"}
+        - {position: 1, color: "#E0F4E8"}
+    border: {style: solid, width: 1.5, color: "$primary"}
+    shadow:
+      blur: 10
+      color: "#00000028"
+      offset: [2, 4]
+
+  - elementId: hero-num-1
+    elementType: text
+    bounds: [65, 136, 235, 52]
+    content:
+      fontSize: 42
+      bold: true
+      color: "$primary"
+      text: "$18.4B"
+
+  - elementId: hero-label-1
+    elementType: text
+    bounds: [65, 192, 235, 64]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$primary"
+      lineHeight: 1.35
+      text: "2028E 东南亚冷链 SaaS 与 IoT TAM<br/><span style=\"color:#565656;font-weight:normal;\">复合年增长率达 <b>29.4%</b>，增长势头强劲</span>"
+
+  # Hero Stat 2 Container
+  - elementId: hero-box-2
+    elementType: shape
+    bounds: [345, 126, 265, 140]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1.5, color: "$accent"}
+
+  - elementId: hero-num-2
+    elementType: text
+    bounds: [360, 136, 235, 52]
+    content:
+      fontSize: 42
+      bold: true
+      color: "$accent"
+      text: "32.0%"
+
+  - elementId: hero-label-2
+    elementType: text
+    bounds: [360, 192, 235, 64]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$primary"
+      lineHeight: 1.35
+      text: "行业当前平均损耗率极值<br/><span style=\"color:#565656;font-weight:normal;\">SaaS 介入后直降至 <b>13% 以下</b>，释放巨额纯利</span>"
+
+  # Hero Stat 3 Container (with Star5 adjustment)
+  - elementId: hero-box-3
+    elementType: shape
+    bounds: [640, 126, 270, 140]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1.5, color: "$primary"}
+
+  # Star5 badge (exercising star5 + adjustments)
+  - elementId: hero-star-badge
+    elementType: shape
+    bounds: [865, 135, 32, 32]
+    shapeName: star5
+    adjustments: [25000, 105146, 110557]
+    fill: {type: solid, color: "$olive"}
+
+  - elementId: hero-num-3
+    elementType: text
+    bounds: [655, 136, 210, 52]
+    content:
+      fontSize: 42
+      bold: true
+      color: "$primary"
+      text: "4.2x"
+
+  - elementId: hero-label-3
+    elementType: text
+    bounds: [655, 192, 245, 64]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$primary"
+      lineHeight: 1.35
+      text: "联网温控车队 5 年扩容倍数<br/><span style=\"color:#565656;font-weight:normal;\">从 2023 年 4.8 万辆飙升至 2028 年 <b>20 万辆+</b></span>"
+
+  # Market Drivers Breakdown (3 Parallel Columns)
+  - elementId: driver-1-title
+    elementType: text
+    bounds: [50, 286, 265, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "驱动力一：生鲜电商爆发"
+
+  - elementId: driver-1-text
+    elementType: text
+    bounds: [50, 310, 265, 96]
+    content:
+      style: "$body"
+      text: "GrabMart、Shopee Supermarket 与 TikTok Shop 推动东盟生鲜电商 GMV 从 2023 年 <b>72 亿美元</b> 激增至 2028 年 <b>240 亿美元</b>，年增 28.5%，对全程温控履约提出硬性要求。"
+
+  - elementId: driver-2-title
+    elementType: text
+    bounds: [345, 286, 265, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "驱动力二：泛亚跨境走廊贯通"
+
+  - elementId: driver-2-text
+    elementType: text
+    bounds: [345, 310, 265, 96]
+    content:
+      style: "$body"
+      text: "中老铁路冷链专列常态化运营、泛亚跨境公路海关互通，以及印尼群岛滚装轮渡航线扩充，推动东盟内部跨境果蔬生鲜调拨量年化激增 <b>34%</b>。"
+
+  - elementId: driver-3-title
+    elementType: text
+    bounds: [640, 286, 270, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "驱动力三：强监管合规倒逼"
+
+  - elementId: driver-3-text
+    elementType: text
+    bounds: [640, 310, 270, 96]
+    content:
+      style: "$body"
+      text: "印尼食品药品管理局 (BPOM) 与越南食品安全法相继出台强制性温控溯源法令，明确规定疫苗、生物制剂及乳制品运输必须具备全程数字温度存证记录。"
+
+  # Bottom Synthesis Bar
+  - elementId: so-what-bar
+    elementType: shape
+    bounds: [50, 424, 860, 44]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1, color: "$primary"}
+
+  - elementId: so-what-text
+    elementType: text
+    bounds: [65, 428, 830, 34]
+    content:
+      style: "$synthesis"
+      text: "增长红利总结：东南亚冷链正在经历‘从无到有、从手工到数字’的跨越式迭代，未来 3 年是奠定行业标准与争夺运力生态入口的决胜期。"
+
+  # Fixed Footer
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 498, 600, 18]
+    content:
+      style: "$caption"
+      text: "数据来源：Google, Temasek & Bain e-Conomy SEA 2023, Frost & Sullivan 2023, Statista 2023"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [810, 498, 100, 18]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "04 / 10"

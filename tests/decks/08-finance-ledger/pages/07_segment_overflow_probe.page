@@ -1,0 +1,169 @@
+pageType: content
+background:
+  type: solid
+  color: "$bgWhite"
+notes: |
+  本页为细分业务分部盈利与资本占用穿透明细账本（边界极限测试探针页）：
+  1. 涵盖工业智能化装备、高精传感组件、数字化工业软件及技术运维四大分部；
+  2. 装备与传感两大支柱分部贡献超85%毛利额，分部资本回报率（ROIC）均超18%；
+  3. 软件与运维分部处于培育扩张期，轻资产高现金流特征显著，资本占用极低。
+elements:
+  # Thin black top rule signature
+  - elementId: s7-top-rule
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 24, 856, 2]
+    fill:
+      type: solid
+      color: "$inkBlack"
+  - elementId: s7-title
+    elementType: text
+    bounds: [52, 36, 856, 26]
+    content:
+      text: "<p>细分业务线分部盈利与资本占用账簿明细穿透</p>"
+      style: "$slideTitle"
+
+  # Subtitle
+  - elementId: s7-subtitle
+    elementType: text
+    bounds: [52, 64, 856, 18]
+    content:
+      text: "<p>各分部营业收入、营业利润、资产占用与资本回报率明细账本（边界容量极限探测页，单位：亿元） | 口径：示例数据</p>"
+      style: "$subtitle"
+
+  # Light divider
+  - elementId: s7-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 86, 856, 1]
+    fill:
+      type: solid
+      color: "$hairline"
+  - elementId: s7-table-overflow-probe
+    elementType: table
+    bounds: [52, 96, 856, 388]
+    columnWidths: [0.18, 0.14, 0.14, 0.14, 0.16, 0.24]
+    rowHeights: [0.12, 0.15, 0.15, 0.14, 0.14, 0.15, 0.15]
+    style: "$ledgerDefault"
+    rows:
+      # Header
+      - - text: "业务分部板块"
+          align: [left, middle]
+        - text: "分部营业收入"
+          align: [right, middle]
+        - text: "分部营业成本"
+          align: [right, middle]
+        - text: "分部营业利润"
+          align: [right, middle]
+        - text: "资本占用 (投入资本)"
+          align: [right, middle]
+        - text: "经营特征与资本回报率 (ROIC) 综合研判"
+          align: [left, middle]
+
+      # Row 1: 工业智能化装备
+      - - text: "工业智能化装备\n(第一核心支柱)"
+          bold: true
+        - text: "26.40"
+          align: [right, middle]
+        - text: "17.15"
+          align: [right, middle]
+        - text: "4.85"
+          align: [right, middle]
+          bold: true
+        - text: "38.20"
+          align: [right, middle]
+        - text: "毛利率35.0%，年化ROIC达19.2%；受益于高端自动化改造订单放量，在手订单覆盖倍数达1.8倍产线容量。"
+          align: [left, middle]
+
+      # Row 2: 高精传感组件
+      - - text: "高精传感组件\n(高毛利驱动源)"
+          bold: true
+        - text: "12.80"
+          align: [right, middle]
+        - text: "7.80"
+          align: [right, middle]
+        - text: "2.65"
+          align: [right, middle]
+          bold: true
+        - text: "16.40"
+          align: [right, middle]
+        - text: "毛利率39.1%，新一代车规级传感器出货同比增45%；自研芯片导入降低单台BOM成本，回报率维持高位。"
+          align: [left, middle]
+
+      # Row 3: 数字化工业软件
+      - - text: "数字化工业软件\n(高粘性战略级)"
+          bold: true
+        - text: "5.60"
+          align: [right, middle]
+        - text: "2.85"
+          align: [right, middle]
+        - text: "1.15"
+          align: [right, middle]
+        - text: "4.50"
+          align: [right, middle]
+        - text: "SaaS订阅留存率达92%，边际交付成本趋近于零；轻资产高周转模式助力提升全集团整体资本周转效率。"
+          align: [left, middle]
+
+      # Row 4: 技术运维与综合服务
+      - - text: "技术运维服务\n(周期防御压舱)"
+          bold: true
+        - text: "3.85"
+          align: [right, middle]
+        - text: "2.40"
+          align: [right, middle]
+        - text: "0.65"
+          align: [right, middle]
+        - text: "2.10"
+          align: [right, middle]
+        - text: "维保合同续约率96%，提供稳定逆周期现金流；备品备件库销比保持在合理安全库存区间。"
+          align: [left, middle]
+
+      # Row 5: 内部抵销及总部费用
+      - - text: "抵销与总部管理\n(公用中枢分摊)"
+        - text: "0.00"
+          align: [right, middle]
+        - text: "2.50"
+          align: [right, middle]
+        - text: "-1.45"
+          align: [right, middle]
+        - text: "4.20"
+          align: [right, middle]
+        - text: "研发中枢与集团职能费用归集，包含未分摊知识产权资产、中央研究院中试基地及统一部署信息系统。"
+          align: [left, middle]
+
+      # Row 6: 合计汇总
+      - - text: "合并报表汇总"
+          bold: true
+          color: "$primaryGold"
+        - text: "48.65"
+          align: [right, middle]
+          bold: true
+        - text: "32.70"
+          align: [right, middle]
+          bold: true
+        - text: "7.85"
+          align: [right, middle]
+          bold: true
+          color: "$primaryGold"
+        - text: "65.40"
+          align: [right, middle]
+          bold: true
+        - text: "全集团综合ROIC为18.4%，资本配置效率处于行业前10%分位，各板块协同效应全面显现。"
+          align: [left, middle]
+          bold: true
+
+  # Footer (compact position at bottom margin 498)
+  - elementId: s7-footer-source
+    elementType: text
+    bounds: [52, 502, 600, 18]
+    content:
+      text: "<p>数据来源：示例公司财务账本数据库 · 示例数据 | 报表标准：CAS-35（分部报告准则）</p>"
+      style: "$footnote"
+  - elementId: s7-footer-page
+    elementType: text
+    bounds: [850, 502, 58, 18]
+    content:
+      text: "<p>7 / 9</p>"
+      fontSize: 8.0
+      color: "$footnoteGray"
+      align: [right, middle]

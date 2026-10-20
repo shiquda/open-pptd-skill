@@ -1,0 +1,20 @@
+# Style Brief — 30°N ROASTERY (北纬三十度烘焙)
+- Scenario and audience: Brand showcase / Annual Brand Book (示例品牌·虚构); designed for specialty coffee roasters, green coffee traders, café founders, and design-minded connoisseurs.
+- Output scenario and canvas: 16:9 widescreen poster canvas, `1280x720` px.
+- Core message in one sentence: 30°N explores the cold, slow-ripening terroir frontier of high-latitude specialty coffee, blending Swiss modernist rigor with artisanal roasting science.
+- Chosen visual grammar: Klein-blue Swiss Poster (`reference/slides_categories/brand-creative.md`, Section 3.1).
+- Primary visual focus: Extreme typography hierarchy (120pt / 116pt display type), strict 12-column grid alignment, asymmetric white/blue spatial tension, and high-contrast monochrome texture imagery.
+- Poster-level visual move: Full-bleed high-contrast textures anchored against deep Klein blue solid fields (`#0038B8`) and warm paper white (`#F7F5EF`); heavy structural rules (2-4px) vs hairline dividers (0.5-1px); navigation star motif (`star8`) and custom SVG latitude wave path.
+- Visual DNA:
+  - Background: Warm modernist paper white `#F7F5EF` (approx. 70-80% of typical spreads).
+  - Main Text: Ink near-black `#101010`.
+  - Accent & Color Surface: International Klein Blue `#0038B8`, Midnight Indigo `#0A194E` (gradient stop), Ochre `#C68A4C` (accent point).
+  - Gridlines: Modernist architectural gray `#D8D7D2`.
+- Primary visual medium: Locally generated high-contrast monochrome organic textures, macro photography of beans/fermentation tanks, and high-precision scientific vector/matplotlib charts.
+- Reading order and composition: Strict left alignment across a 12-column modular grid (64px margins, 96px column steps). Asymmetric column groupings (3:7, 4:8, 2:10). Fixed top-left section marker and fixed bottom provenance bar.
+- Chinese and English fonts:
+  - Display English: `Arial Black` / `Arial` (heavy, condensed, tight line-height 0.85-0.9, letterSpacing -2 to +5).
+  - Chinese Headlines & Body: `PingFang SC` / `MiSans` (clean sans-serif heiti, high legibility).
+- Image treatment: High-contrast monochrome with deliberate grain; custom geometric path clipping (`cropShape: {shapeName: custom}`); proportional cropping (`crop`); `cover` and `contain` fits.
+- Prohibitions strictly enforced: No card walls, no rounded-corner containers for layout, no AI blue-purple gradients, no glowing outlines, no decorative filler boxes, no unsourced figures.
+- Grounding: Brand story and craft metrics internally consistent; all external industry figures carry verifiable sources (SCA 2023, ICO 2023, Yunnan Meteorological Bureau 2023); explicitly labeled as `示例品牌（虚构）`.

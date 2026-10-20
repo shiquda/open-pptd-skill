@@ -1,0 +1,157 @@
+pageType: content
+background:
+  type: solid
+  color: "$white"
+notes: "本页确立了整个学习的动机与退出标准。我们先通过左侧的真实故障根因统计打破传统认知：有46%的断网只是网线松动，26%是设备缓存死机，真正需要电信师傅上门熔接光纤的只有16%。如果盲目按下Reset复位键，原本简单插拔即可解决的问题会瞬间升级为账号丢失故障。右侧清晰列出了本次学习的闭环路径与达成的三项核心能力。"
+elements:
+  - elementId: top-rule
+    elementType: shape
+    bounds: [40, 20, 880, 2]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: nav-section
+    elementType: text
+    bounds: [40, 28, 260, 18]
+    content:
+      text: "阶段一 / 学习定位 (ORIENTATION)"
+      fontSize: 9.5
+      bold: true
+      color: "$primaryDeep"
+      letterSpacing: 1.0
+
+  - elementId: running-head
+    elementType: text
+    bounds: [680, 28, 240, 18]
+    content:
+      text: "家庭网络排障实操课 · 认知建构"
+      fontSize: 9.5
+      color: "$grayLight"
+      align: [right, top]
+
+  - elementId: page-title
+    elementType: text
+    bounds: [40, 48, 880, 28]
+    content:
+      text: "掌握四步排障模型，可独立排除 80% 的日常家庭断网故障"
+      style: "$title"
+
+  - elementId: page-subtitle
+    elementType: text
+    bounds: [40, 78, 880, 20]
+    content:
+      text: "学习路径与退出能力对齐：以科学因果排查替代盲目捅 Reset 和乱拔线缆"
+      style: "$subtitle"
+
+  - elementId: left-col-title
+    elementType: text
+    bounds: [40, 108, 420, 22]
+    content:
+      text: "<p><strong>打破误区：多数断网仅为物理层松脱或临时锁死</strong></p>"
+      fontSize: 12.5
+      color: "$primaryDeep"
+
+  - elementId: left-col-desc
+    elementType: text
+    bounds: [40, 134, 420, 52]
+    content:
+      text: "<p>家庭用户遇断网常急于按压 Reset 复位键，导致 PPPoE 认证账号丢失、无线名称重置。真实统计表明，近半数故障仅为水晶头松动，四分之一为路由器死锁，无需上门维修即可现场恢复。</p>"
+      style: "$body"
+      fontSize: 10.5
+      lineHeight: 1.35
+
+  - elementId: chart-img
+    elementType: image
+    bounds: [40, 192, 420, 260]
+    src: "assets/fault_distribution.png"
+    fit: { mode: contain }
+
+  - elementId: col-divider
+    elementType: line
+    bounds: [480, 108, 2, 344]
+    viewBox: [2, 344]
+    points: "1,0 1,344"
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: right-col-title
+    elementType: text
+    bounds: [500, 108, 420, 22]
+    content:
+      text: "<p><strong>实操学习闭环与退出能力目标</strong></p>"
+      fontSize: 12.5
+      color: "$primaryDeep"
+
+  - elementId: path-step-1
+    elementType: text
+    bounds: [500, 134, 420, 36]
+    content:
+      text: "<p><strong>01 拓扑认知</strong> ➔ 厘清终端-路由-光猫-局端四层边界，建立内网与外网概念</p>"
+      style: "$body"
+      fontSize: 10.5
+
+  - elementId: path-step-2
+    elementType: text
+    bounds: [500, 172, 420, 36]
+    content:
+      text: "<p><strong>02 识灯判障</strong> ➔ 解码 LOS/PON/WAN 核心硬件指示灯状态，10秒定位物理通断</p>"
+      style: "$body"
+      fontSize: 10.5
+
+  - elementId: path-step-3
+    elementType: text
+    bounds: [500, 210, 420, 36]
+    content:
+      text: "<p><strong>03 流程示范</strong> ➔ 执行「查灯-查线-查端-序贯重启」四步法，杜绝随意乱拔乱按</p>"
+      style: "$body"
+      fontSize: 10.5
+
+  - elementId: path-step-4
+    elementType: text
+    bounds: [500, 248, 420, 36]
+    content:
+      text: "<p><strong>04 演练迁移</strong> ➔ 独立诊断客厅电视断网案例，并带走可打印应急速查清单</p>"
+      style: "$body"
+      fontSize: 10.5
+
+  - elementId: capability-box
+    elementType: shape
+    bounds: [500, 296, 420, 156]
+    shapeName: rect
+    fill: { type: solid, color: "$lightBlue" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: capability-box-title
+    elementType: text
+    bounds: [516, 308, 388, 22]
+    content:
+      text: "【达标交付】三项可观测退出能力 (Exit Capabilities)"
+      fontSize: 11.5
+      bold: true
+      color: "$primaryDeep"
+
+  - elementId: capability-box-content
+    elementType: text
+    bounds: [516, 334, 388, 108]
+    content:
+      text: |
+        <p>• <strong>看灯定界：</strong>能根据光猫 LOS/PON 灯色在 10 秒内说出光纤是否中断；</p>
+        <p>• <strong>准确定位：</strong>能指认路由器 WAN 口与 LAN 口用途，准确排查物理接线；</p>
+        <p>• <strong>规范自愈：</strong>掌握序贯冷启动时序，并在断网时不误按 Reset 孔。</p>
+      style: "$body"
+      fontSize: 10.2
+      lineHeight: 1.4
+
+  - elementId: bottom-source-line
+    elementType: text
+    bounds: [40, 508, 800, 18]
+    content:
+      text: "数据来源：中国信息通信研究院《家庭宽带网络业务体验白皮书》(2023) 与全国宽带售后工单统计整理"
+      style: "$caption"
+
+  - elementId: bottom-page-number
+    elementType: text
+    bounds: [870, 508, 50, 18]
+    content:
+      text: "02"
+      style: "$caption"
+      align: [right, top]

@@ -1,0 +1,264 @@
+pageType: content
+background: { type: solid, color: "$paper" }
+notes: |
+  Slide 5: The Component Mass Plane: From Neutron Stars to 100+ M_sun Black Holes.
+  - Explores the two-dimensional component mass distribution (m1 vs m2) across four decades in mass.
+  - Highlights the lower mass gap between 2.1 and 5.0 M_sun: traditional X-ray binary surveys observed an apparent desert, but GWTC-2 (GW190814 with m2=2.59 M_sun) and O4 (GW230529 with m1~3.6 M_sun) demonstrate compact objects populate this boundary.
+  - Highlights the upper Pair-Instability Supernova (PISN) mass gap between 65 and 120 M_sun: standard stellar core collapse cannot produce black holes in this range due to pair production; GW190521 (85 + 66 M_sun) represents a definitive gap-crossing event requiring hierarchical mergers.
+  - Explains the equal-mass diagonal line m1 = m2 and the physical boundary m2 <= m1.
+elements:
+  # Left Rail
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [14, 24, 142, 484]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [18, 30, 134, 84]
+    src: "assets/thumb_detectors.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [18, 122, 134, 84]
+    src: "assets/thumb_timeline.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-3
+    elementType: image
+    bounds: [18, 214, 134, 84]
+    src: "assets/thumb_catalog.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-4
+    elementType: image
+    bounds: [18, 306, 134, 84]
+    src: "assets/thumb_mass.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-divider
+    elementType: line
+    bounds: [168, 24, 1, 484]
+    points: "0,0 0,484"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Header
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 24, 475, 34]
+    content:
+      style: "$title"
+      text: "Mass Spectrum Spans Four Decades Across the Gaps"
+
+  - elementId: slide-category
+    elementType: text
+    bounds: [660, 27, 260, 18]
+    content:
+      style: "$category"
+      align: [right, middle]
+      text: "04 · MASS PLANE"
+
+  - elementId: header-rule
+    elementType: line
+    bounds: [185, 58, 735, 1]
+    points: "0,0 735,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Center Area: Mass Plane Matplotlib Plot
+  - elementId: chart-mass
+    elementType: image
+    bounds: [185, 70, 420, 235]
+    src: "assets/mass_plane.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Epistemology Distinction Box
+  - elementId: dist-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 315, 420, 125]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: dist-txt
+    elementType: text
+    bounds: [193, 321, 404, 113]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>[Catalog Fact]</b> Clean NS cluster near 1.4 M☉; heavy BHs up to 85 M☉ detected; secondary of GW190814 at 2.59 M☉.<br/>
+        <b>[Visualization Choice]</b> Logarithmic axes with shaded exclusion \( m_2 > m_1 \) and highlighted yellow/orange gap bands.<br/>
+        <b>[Physical Interpretation]</b> PISN instability leaves a forbidden gap at 65–120 M☉; GW190521 requires dynamical hierarchical mergers.<br/>
+        <b>[Open Question]</b> Is the lower mass gap truly empty in nature, or do supernova engines smoothly bridge NSs and BHs?
+
+  # Right Sidebar
+  - elementId: side-1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 75, 295, 110]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-1-icon
+    elementType: icon
+    iconName: "fas:circle-nodes"
+    bounds: [637, 85, 15, 15]
+    fill: { type: solid, color: "$amber" }
+
+  - elementId: side-1-head
+    elementType: text
+    bounds: [658, 85, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "LOWER MASS GAP"
+
+  - elementId: side-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 103, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-1-formula
+    elementType: text
+    bounds: [642, 107, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: |
+        \( 2.1\text{ M}_{\text{sun}} \le M_{\text{remnant}} \le 5.0\text{ M}_{\text{sun}} \)
+
+  - elementId: side-1-desc
+    elementType: text
+    bounds: [637, 134, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Boundary between the maximum neutron star mass (TOV limit) and the lightest black hole. GW190814 (2.6 M☉) directly challenged supernova fallback models."
+
+  - elementId: side-2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 195, 295, 118]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-2-icon
+    elementType: icon
+    iconName: "fas:burst"
+    bounds: [637, 205, 15, 15]
+    fill: { type: solid, color: "$accent" }
+
+  - elementId: side-2-head
+    elementType: text
+    bounds: [658, 205, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "PISN FORBIDDEN GAP"
+
+  - elementId: side-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 223, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-2-formula
+    elementType: text
+    bounds: [642, 227, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$accent"
+      text: |
+        \( \gamma < 4/3 \Rightarrow \text{Total disruption at } 65-120\text{ M}_{\text{sun}} \)
+
+  - elementId: side-2-desc
+    elementType: text
+    bounds: [637, 254, 271, 52]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "In massive stellar cores, thermal photons convert to electron-positron pairs, triggering catastrophic collapse and thermonuclear detonation with zero remnant left."
+
+  - elementId: side-3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 323, 295, 108]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-3-icon
+    elementType: icon
+    iconName: "fas:diagram-project"
+    bounds: [637, 333, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-3-head
+    elementType: text
+    bounds: [658, 333, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "HIERARCHICAL MERGERS"
+
+  - elementId: side-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 351, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-3-formula
+    elementType: text
+    bounds: [642, 355, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$primary"
+      text: |
+        \( 1\text{g} + 1\text{g} \to 2\text{g remnant } (m \approx 142\text{ M}_{\text{sun}}, a \approx 0.72) \)
+
+  - elementId: side-3-desc
+    elementType: text
+    bounds: [637, 382, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Dense star clusters retain first-generation merger remnants in deep gravitational potentials, which pair again and collide to form second-generation (2g) black holes."
+
+  # Takeaway Line
+  - elementId: footer-takeaway
+    elementType: text
+    bounds: [185, 456, 735, 24]
+    content:
+      style: "$takeaway"
+      text: "<b>Takeaway</b> · <b>Gravitational waves shatter the theoretical mass gaps established by electromagnetic astronomy.</b>"
+
+  # Sources Line
+  - elementId: footer-sources
+    elementType: text
+    bounds: [185, 490, 680, 20]
+    content:
+      style: "$footer"
+      text: "Sources: LVK Collaboration, GWTC-3 Population, PRX 13, 011048; Abbott et al., ApJL 896, L44 (2020); PRL 125, 101102"
+
+  # Page Number
+  - elementId: footer-page
+    elementType: text
+    bounds: [875, 490, 45, 20]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      text: "5"

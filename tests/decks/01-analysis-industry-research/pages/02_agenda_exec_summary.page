@@ -1,0 +1,191 @@
+pageType: content
+notes: |
+  在展开具体分章节论述前，本页呈现报告的叙事主线与四大执行摘要。
+  左侧分为四大章节：市场规模、产业链与技术、竞争格局与成本、以及地缘壁垒与决策建议。
+  右侧提炼了投委会最关心的四大核心研判结论：
+  第一，需求端：全球新能源并网消纳瓶颈显现，配储与独立储能刚性需求爆发，2024-2030复合增速近28%；
+  第二，供给端：314Ah与5MWh集装箱正在以极快速度替代280Ah旧规格，产能结构性分化，缺乏良品率掌控的中小厂出局；
+  第三，价格端：国内低价内卷导致毛利见底，海外欧美大储市场毛利率高出15-20个百分点，出海成为必答题；
+  第四，投资准则：重点锁定具备海外长期项目可融资性背书与本地化服务能力的标的。
+elements:
+  # Header
+  - elementId: agenda-title
+    elementType: text
+    bounds: [40, 32, 460, 32]
+    content:
+      style: "$slideTitle"
+      text: "<p>研究框架与核心执行摘要</p>"
+      fontSize: 18
+
+  - elementId: agenda-subtitle
+    elementType: text
+    bounds: [40, 66, 460, 20]
+    content:
+      style: "$subtitle"
+      text: "<p>研判逻辑链条：从全球宏观装机需求 ➔ 产业链价值传导 ➔ 竞争成本比较 ➔ 投委会行动指引</p>"
+
+  - elementId: agenda-divider
+    elementType: line
+    bounds: [40, 90, 460, 1]
+    points: "0,0 460,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Left Section Blocks (Agenda)
+  # Section 1
+  - elementId: agenda-s1
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 105, 460, 85]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: agenda-s1-num
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 105, 36, 85]
+    fill: { type: solid, color: "$dark" }
+  - elementId: agenda-s1-num-txt
+    elementType: text
+    bounds: [40, 132, 36, 30]
+    content:
+      text: "<p style=\"text-align: center;\"><strong><span style=\"color: #FFFFFF; font-size: 13pt;\">01</span></strong></p>"
+  - elementId: agenda-s1-txt
+    elementType: text
+    bounds: [88, 115, 400, 68]
+    content:
+      text: |
+        <p><strong><span style="color: #041C2C; font-size: 11pt;">全球需求与装机空间：电网侧驱动万亿储能赛道</span></strong><span style="color: #2151FF; font-weight: bold; margin-left: 10px;"> [P.03]</span></p>
+        <p style="margin-top: 5px; color: #475569; font-size: 9.5pt; line-height: 1.35;">拆解中国、北美、欧洲及新兴市场装机增长逻辑；量化独立储能容量补偿机制与IRA税收抵免政策对IRR的拉动效应。</p>
+
+  # Section 2
+  - elementId: agenda-s2
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 202, 460, 85]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: agenda-s2-num
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 202, 36, 85]
+    fill: { type: solid, color: "$dark" }
+  - elementId: agenda-s2-num-txt
+    elementType: text
+    bounds: [40, 229, 36, 30]
+    content:
+      text: "<p style=\"text-align: center;\"><strong><span style=\"color: #FFFFFF; font-size: 13pt;\">02</span></strong></p>"
+  - elementId: agenda-s2-txt
+    elementType: text
+    bounds: [88, 212, 400, 68]
+    content:
+      text: |
+        <p><strong><span style="color: #041C2C; font-size: 11pt;">产业链全景拓扑与电芯规格迭代路径</span></strong><span style="color: #2151FF; font-weight: bold; margin-left: 10px;"> [P.04–05]</span></p>
+        <p style="margin-top: 5px; color: #475569; font-size: 9.5pt; line-height: 1.35;">解构上游材料、电芯、PCS、温控至系统集成的成本结构；梳理280Ah向314Ah+5MWh集装箱系统升级的技术代际与安全门槛。</p>
+
+  # Section 3
+  - elementId: agenda-s3
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 299, 460, 85]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: agenda-s3-num
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 299, 36, 85]
+    fill: { type: solid, color: "$dark" }
+  - elementId: agenda-s3-num-txt
+    elementType: text
+    bounds: [40, 326, 36, 30]
+    content:
+      text: "<p style=\"text-align: center;\"><strong><span style=\"color: #FFFFFF; font-size: 13pt;\">03</span></strong></p>"
+  - elementId: agenda-s3-txt
+    elementType: text
+    bounds: [88, 309, 400, 68]
+    content:
+      text: |
+        <p><strong><span style="color: #041C2C; font-size: 11pt;">头部电芯横向对比与LCOS度电成本模型</span></strong><span style="color: #2151FF; font-weight: bold; margin-left: 10px;"> [P.06–07]</span></p>
+        <p style="margin-top: 5px; color: #475569; font-size: 9.5pt; line-height: 1.35;">多维横评全球主要电芯厂商出货、循环寿命与可融资性；构建碳酸锂现货价格与系统EPC及LCOS度电成本的敏感性测算模型。</p>
+
+  # Section 4
+  - elementId: agenda-s4
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 396, 460, 85]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: agenda-s4-num
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 396, 36, 85]
+    fill: { type: solid, color: "$dark" }
+  - elementId: agenda-s4-num-txt
+    elementType: text
+    bounds: [40, 423, 36, 30]
+    content:
+      text: "<p style=\"text-align: center;\"><strong><span style=\"color: #FFFFFF; font-size: 13pt;\">04</span></strong></p>"
+  - elementId: agenda-s4-txt
+    elementType: text
+    bounds: [88, 406, 400, 68]
+    content:
+      text: |
+        <p><strong><span style="color: #041C2C; font-size: 11pt;">地缘准入壁垒与投资决策矩阵</span></strong><span style="color: #2151FF; font-weight: bold; margin-left: 10px;"> [P.08–10]</span></p>
+        <p style="margin-top: 5px; color: #475569; font-size: 9.5pt; line-height: 1.35;">评估北美301关税及欧洲新电池法案对中国企业的准入限制；输出2×2投资标的筛选矩阵与投委会决策核查红线。</p>
+
+  # Right Side Panel: Executive Summary (Signature Due Diligence Panel)
+  - elementId: exec-panel-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [525, 32, 395, 450]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: exec-panel-header
+    elementType: shape
+    shapeName: rect
+    bounds: [525, 32, 395, 34]
+    fill: { type: solid, color: "$dark" }
+
+  - elementId: exec-panel-header-txt
+    elementType: text
+    bounds: [535, 40, 375, 20]
+    content:
+      text: "<p><span style=\"color: #FFFFFF; font-weight: bold; font-size: 10.5pt;\">投委会执行研判结论 (EXECUTIVE SUMMARY)</span></p>"
+      letterSpacing: 0.8
+
+  - elementId: exec-panel-body
+    elementType: text
+    bounds: [540, 78, 365, 390]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">1. 需求端高度确定</span></strong><span style="color: #041C2C; font-weight: bold;">：2024E新增装机165GWh，高增长确定</span></p>
+        <p style="margin-top: 4px; color: #334155; font-size: 9pt; line-height: 1.4;">全球复合增速近28%，中国容量电价落地、美国ITC税优叠加欧洲负电价套利，储能从政策强配迈向市场化经济性驱动新周期。</p>
+
+        <p style="margin-top: 14px;"><strong><span style="color: #2151FF;">2. 供给端代际切换</span></strong><span style="color: #041C2C; font-weight: bold;">：314Ah与5MWh加速淘汰旧规格</span></p>
+        <p style="margin-top: 4px; color: #334155; font-size: 9pt; line-height: 1.4;">314Ah电芯实现单仓容量增34%、占地省30%，已成为主流大储招标基准。尾部厂商受困于良品率与长循环寿命衰减，出清加速。</p>
+
+        <p style="margin-top: 14px;"><strong><span style="color: #2151FF;">3. 价格击穿倒逼出海</span></strong><span style="color: #041C2C; font-weight: bold;">：国内内卷严重，海外维持溢价</span></p>
+        <p style="margin-top: 4px; color: #334155; font-size: 9pt; line-height: 1.4;">国内系统EPC降至0.56元/Wh临界点，纯集成商毛利趋近于零；而海外项目享有30-50%价格溢价，是国内龙头获取超额回报的关键阵地。</p>
+
+        <p style="margin-top: 14px;"><strong><span style="color: #2151FF;">4. 投资筛选三大铁律</span></strong><span style="color: #041C2C; font-weight: bold;">：看资质、看自研、看海外交付</span></p>
+        <p style="margin-top: 4px; color: #334155; font-size: 9pt; line-height: 1.4;">重点配置具备BNEF Tier-1可融资性背书、电芯/PCS核心技术自研、以及成熟海外售后运维网络的行业隐形冠军与全栈领跑者。</p>
+
+  # Bottom hairline and footer
+  - elementId: agenda-bottom-line
+    elementType: line
+    bounds: [40, 508, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: agenda-foot-src
+    elementType: text
+    bounds: [40, 514, 740, 16]
+    content:
+      style: "$footnote"
+      text: "<p>数据来源：BNEF, CNESA, InfoLink Consulting, 各公司公开年报与公告  |  投资研判基准：2024Q3</p>"
+
+  - elementId: agenda-foot-page
+    elementType: text
+    bounds: [820, 514, 100, 16]
+    content:
+      style: "$footnote"
+      text: "<p style=\"text-align: right;\"><strong><span style=\"color: #041C2C;\">02</span></strong> / 10</p>"

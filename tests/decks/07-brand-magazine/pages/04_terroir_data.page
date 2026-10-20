@@ -1,0 +1,181 @@
+pageType: content
+background:
+  type: solid
+  color: "$paper"
+notes: "演讲者备注：第四页是全书的核心理化数据页。重点解析生豆蔗糖含量与SCA杯测分数随海拔提升的强相关性。左侧以116pt超大数字强调88.5+的卓越杯测门槛，右侧以6:4不对称比例排布无头渲染的高精科学图表，展示真实科学实验数据支持的技术壁垒。"
+elements:
+  # Fixed top-left section marker
+  - elementId: section-marker
+    elementType: shape
+    bounds: [64, 32, 6, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$klein"
+
+  - elementId: section-num
+    elementType: text
+    bounds: [78, 30, 520, 28]
+    content:
+      style: "$sectionNum"
+      text: "04 // TERROIR DATA & PHYSIOCHEMICAL CORRELATION"
+
+  - elementId: top-meta-right
+    elementType: text
+    bounds: [768, 32, 448, 24]
+    content:
+      style: "$meta"
+      align: [right, middle]
+      text: "30°N ROASTERY // SCIENTIFIC AUDIT // 示例品牌（虚构）"
+
+  - elementId: top-divider
+    elementType: line
+    bounds: [64, 68, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  # Heavy rule above headline
+  - elementId: headline-rule
+    elementType: line
+    bounds: [64, 95, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 3
+      color: "$ink"
+
+  - elementId: page-headline
+    elementType: text
+    bounds: [64, 110, 1152, 45]
+    content:
+      style: "$headline"
+      text: "海拔跃迁驱动蔗糖密度与杯测芳香复杂度的非线性激增"
+
+  # Left 4 columns (x: 64, w: 384): Giant numeral + takeaway
+  - elementId: big-score
+    elementType: text
+    bounds: [64, 160, 384, 125]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 116
+      bold: true
+      color: "$klein"
+      lineHeight: 0.85
+      letterSpacing: -3
+      wrap: false
+      text: "88.5+"
+
+  - elementId: score-label
+    elementType: text
+    bounds: [64, 290, 384, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 13
+      bold: true
+      color: "$ink"
+      letterSpacing: 2
+      text: "SCA CUPPING BENCHMARK // MASL > 1,900M"
+
+  - elementId: score-thesis
+    elementType: text
+    bounds: [64, 325, 384, 120]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 14
+      lineHeight: 1.6
+      color: "$ink"
+      text: |
+        <p><strong>冷凉环境的糖分积累奇迹</strong>：</p>
+        <p style="margin-top:6px;">当种植海拔突破1,800米并在2,000-2,200米带沉淀时，生豆内可溶性糖分干基质量比从低海拔的5.1%陡升至9.8%。高密度蔗糖在烘焙阶段构筑了极其厚实的梅纳多糖骨架，支撑起88分以上的卓越风味层级。</p>
+
+  # Shape with gradient fill (Klein blue to Navy)
+  - elementId: gradient-accent-bar
+    elementType: shape
+    bounds: [64, 460, 384, 10]
+    shapeName: rect
+    fill:
+      type: gradient
+      gradientType: linear
+      angle: 90
+      stops:
+        - position: 0
+          color: "#0038B8"
+        - position: 1
+          color: "#0A194E"
+
+  # Recurring motif: star8 mark
+  - elementId: data-motif-star
+    elementType: shape
+    bounds: [64, 490, 32, 32]
+    shapeName: star8
+    adjustments: [37500]
+    fill:
+      type: solid
+      color: "$ochre"
+
+  - elementId: data-metrics-callout
+    elementType: text
+    bounds: [108, 485, 340, 130]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 12
+      lineHeight: 1.55
+      color: "$muted"
+      text: |
+        <p>• <strong>蔗糖相对激增量</strong>：相比1200m平原增幅达 <span style="color:$ink; font-weight:bold;">+92.1%</span></p>
+        <p>• <strong>绿原酸分解比率</strong>：低温成熟使涩感同分异构体减少 34%</p>
+        <p>• <strong>样本批次</strong>：连续三年共计120组定点杯测样本</p>
+
+  # Right 8 columns (x: 480, w: 736): Simplified matplotlib chart
+  - elementId: chart-image
+    elementType: image
+    bounds: [480, 160, 736, 450]
+    src: "assets/altitude_chart.png"
+    fit:
+      mode: contain
+    border:
+      style: solid
+      width: 1
+      color: "$ink"
+
+  - elementId: chart-caption
+    elementType: text
+    bounds: [480, 612, 736, 32]
+    content:
+      style: "$caption"
+      text: "FIGURE 04.1 // 云南高海拔特选微批次蔗糖累积与杯测总分双轴回归图 // 数据源：SCA 2023 & 云南省农科院热区生态所"
+
+  # Baseline metadata & source
+  - elementId: bottom-divider
+    elementType: line
+    bounds: [64, 650, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  - elementId: bottom-info
+    elementType: text
+    bounds: [64, 665, 1152, 24]
+    content:
+      style: "$footer"
+      text: "PAGE 04 // 30°N BRAND BOOK // BIOCHEMICAL RESEARCH // 示例品牌（虚构） // STATISTICAL LAB AUDIT 2023"
+
+animations:
+  - elementId: big-score
+    effect: fade-in
+    trigger: onClick
+    durationMs: 400
+  - elementId: chart-image
+    effect: fade-in
+    trigger: afterPrevious
+    durationMs: 500
+  - elementId: gradient-accent-bar
+    effect: wipe-in
+    direction: right
+    trigger: withPrevious
+    durationMs: 400

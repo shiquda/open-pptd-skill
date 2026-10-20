@@ -1,0 +1,231 @@
+pageType: final
+background:
+  type: solid
+  color: "$paper"
+notes: "演讲者备注：第九页为品牌年刊的封底与出版版权页（Colophon）。严格遵循克莱因蓝瑞士海报的视觉回环原则（Closing the Loop），重新引入封面的巨幅克莱因蓝色块与110pt极限制版大字，同时完整列出字体、纸张、调色盘、摄影与基准测试版权说明，正式为全书收官。"
+elements:
+  # Right color surface: Klein blue full-height field (echoing cover)
+  - elementId: blue-colophon-surface
+    elementType: shape
+    bounds: [832, 0, 448, 720]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$klein"
+
+  # Top meta hairline
+  - elementId: top-line
+    elementType: line
+    bounds: [64, 56, 736, 0]
+    points: "0,0 736,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  # Top meta information
+  - elementId: top-meta
+    elementType: text
+    bounds: [64, 32, 736, 20]
+    content:
+      style: "$meta"
+      text: "COLOPHON & IMPRINT // 30°N ROASTERY ANNUAL 2024 // 示例品牌（虚构）"
+
+  # Heavy rule above giant closing title
+  - elementId: title-heavy-line
+    elementType: line
+    bounds: [64, 120, 736, 0]
+    points: "0,0 736,0"
+    border:
+      style: solid
+      width: 3
+      color: "$ink"
+
+  # Giant closing title: 110pt 30°N
+  - elementId: colophon-giant-title
+    elementType: text
+    bounds: [64, 135, 680, 120]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 110
+      bold: true
+      color: "$ink"
+      lineHeight: 0.85
+      letterSpacing: -2
+      wrap: false
+      text: "30°N"
+
+  - elementId: closing-subhead
+    elementType: text
+    bounds: [64, 265, 720, 35]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 22
+      bold: true
+      color: "$klein"
+      letterSpacing: 3
+      text: "THE NORTHERN LATITUDE EXPERIMENT"
+
+  # Recurring motif star
+  - elementId: colophon-star
+    elementType: shape
+    bounds: [740, 135, 56, 56]
+    shapeName: star8
+    adjustments: [37500]
+    fill:
+      type: solid
+      color: "$klein"
+
+  # Colophon specifications (3 technical columns on white ground)
+  # Col 1: Typography
+  - elementId: spec-col1-title
+    elementType: text
+    bounds: [64, 320, 220, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 12
+      bold: true
+      color: "$ink"
+      letterSpacing: 1
+      text: "01 // TYPOGRAPHY"
+
+  - elementId: spec-col1-body
+    elementType: text
+    bounds: [64, 350, 220, 120]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 12
+      lineHeight: 1.55
+      color: "$muted"
+      text: |
+        <p>• Display: <strong>Arial Black</strong></p>
+        <p>• Editorial: <strong>Arial Regular</strong></p>
+        <p>• CJK Text: <strong>PingFang SC / MiSans</strong></p>
+        <p>• Leading Compression: 0.85</p>
+
+  # Col 2: Palette
+  - elementId: spec-col2-title
+    elementType: text
+    bounds: [312, 320, 220, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 12
+      bold: true
+      color: "$ink"
+      letterSpacing: 1
+      text: "02 // CHROMATICS"
+
+  - elementId: spec-col2-body
+    elementType: text
+    bounds: [312, 350, 220, 120]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 12
+      lineHeight: 1.55
+      color: "$muted"
+      text: |
+        <p>• Paper White: <strong>#F7F5EF</strong></p>
+        <p>• Deep Ink: <strong>#101010</strong></p>
+        <p>• Klein Blue: <strong>#0038B8</strong></p>
+        <p>• Midnight Navy: <strong>#0A194E</strong></p>
+
+  # Col 3: Print & Material
+  - elementId: spec-col3-title
+    elementType: text
+    bounds: [560, 320, 220, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 12
+      bold: true
+      color: "$ink"
+      letterSpacing: 1
+      text: "03 // PRINT & STOCK"
+
+  - elementId: spec-col3-body
+    elementType: text
+    bounds: [560, 350, 220, 120]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 12
+      lineHeight: 1.55
+      color: "$muted"
+      text: |
+        <p>• Cover Stock: Munken Lynx 300g</p>
+        <p>• Inner Stock: Munken Pure 150g</p>
+        <p>• Print Run: 1,000 Hand-numbered</p>
+        <p>• Binding: Swiss Exposed Spine</p>
+
+  # Colophon disclaimer & legal box (unboxed, line-separated)
+  - elementId: legal-line
+    elementType: line
+    bounds: [64, 485, 736, 0]
+    points: "0,0 736,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  - elementId: legal-text
+    elementType: text
+    bounds: [64, 500, 736, 130]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 12
+      lineHeight: 1.6
+      color: "$muted"
+      text: |
+        <p><strong>法律声明与基准测试归属说明（示例品牌·虚构）</strong>：</p>
+        <p>「北纬三十度烘焙」（30°N ROASTERY）为开源文稿系统 open-pptd / pptd 编译器端到端极限压力测试之专用虚构品牌样本。本手册所引述之咖啡农林物理、生化发酵与热动力学数据模型均经过严谨同行文献审定（SCA 2023 / ICO 2023 / 云南省气象局 2023）；任何与具体现实商业实体之偶合纯属巧合。</p>
+
+  # Bottom rule and footer
+  - elementId: bottom-line
+    elementType: line
+    bounds: [64, 650, 736, 0]
+    points: "0,0 736,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  - elementId: bottom-meta
+    elementType: text
+    bounds: [64, 665, 736, 24]
+    content:
+      style: "$footer"
+      text: "FOLIO 09 // 30°N BRAND BOOK // CLOSING IMPRINT // VERIFIED PPTD RENDER 2024"
+
+  # Right side text on Klein Blue surface: Manifesto reprise & Stamp
+  - elementId: right-blue-manifesto
+    elementType: text
+    bounds: [880, 140, 350, 320]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 18
+      bold: true
+      color: "$white"
+      lineHeight: 1.6
+      text: |
+        <p style="font-size:32px; font-family:'Arial Black'; line-height:1.1;">END OF<br/>VOLUME 01.</p>
+        <p style="margin-top:24px;">时间不是产量的敌人，<br/>而是风味的雕刻刀。</p>
+        <p style="margin-top:16px; font-size:14px; font-weight:normal; line-height:1.6; color:#D8D7D2;">在北纬30度的严寒极境，每一颗慢熟咖啡豆都是大地与耐心共同写就的答卷。</p>
+
+  - elementId: right-blue-seal
+    elementType: shape
+    bounds: [880, 500, 96, 96]
+    shapeName: star8
+    adjustments: [37500]
+    fill:
+      type: solid
+      color: "$white"
+
+  - elementId: right-blue-seal-label
+    elementType: text
+    bounds: [990, 520, 240, 60]
+    content:
+      fontFamily: "Arial"
+      fontSize: 11
+      bold: true
+      color: "$white"
+      letterSpacing: 2
+      lineHeight: 1.4
+      text: "OFFICIAL SEAL // 30°N ROASTERY\nVERIFIED EDITION 2024"

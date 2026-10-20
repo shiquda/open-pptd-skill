@@ -1,0 +1,379 @@
+pageType: content
+background: { type: solid, color: "$paper" }
+notes: |
+  Slide 3: Nearly a Decade of Observing: Run Timeline O1 to O4b.
+  - Reviews the four observing eras: O1 (2015-2016), O2 (2016-2017), O3 (2019-2020), and O4 (2023-2025).
+  - Details the instrumental upgrades at each commissioning gate: laser power increases (20W to 70W), monolithic silica suspension fiber upgrades, frequency-independent squeezing (2-3 dB), and 300 m filter cavities for frequency-dependent squeezing.
+  - Highlights sensitivity evolution: Binary Neutron Star (BNS) range expanded from 70 Mpc in O1 to 160 Mpc in O4.
+  - Explains the cubic volume scaling law: search volume scales as range cubed, yielding a ~12-fold increase in accessible cosmic volume.
+elements:
+  # Left Rail
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [14, 24, 142, 484]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [18, 30, 134, 84]
+    src: "assets/thumb_detectors.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [18, 122, 134, 84]
+    src: "assets/thumb_timeline.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-3
+    elementType: image
+    bounds: [18, 214, 134, 84]
+    src: "assets/thumb_catalog.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-4
+    elementType: image
+    bounds: [18, 306, 134, 84]
+    src: "assets/thumb_mass.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-divider
+    elementType: line
+    bounds: [168, 24, 1, 484]
+    points: "0,0 0,484"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Header
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 24, 475, 34]
+    content:
+      style: "$title"
+      text: "Tenfold Sensitivity Gain Across Four Observing Eras"
+
+  - elementId: slide-category
+    elementType: text
+    bounds: [660, 27, 260, 18]
+    content:
+      style: "$category"
+      align: [right, middle]
+      text: "02 · OBSERVING RUNS"
+
+  - elementId: header-rule
+    elementType: line
+    bounds: [185, 58, 735, 1]
+    points: "0,0 735,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Center Area: Timeline Graphic
+  - elementId: timeline-title
+    elementType: text
+    bounds: [185, 70, 420, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "Observing Eras & Sensitivity Upgrades (2015 – 2025)"
+
+  # Era 1: O1
+  - elementId: era-o1-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 95, 95, 66]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1.5, color: "$muted" }
+
+  - elementId: era-o1-txt
+    elementType: text
+    bounds: [188, 98, 89, 60]
+    content:
+      fontSize: 8
+      lineHeight: 1.2
+      color: "$ink"
+      text: "<b>O1 Run</b>\n2015.09 – 2016.01\nRange: <b>~70 Mpc</b>\n3 events (GW150914)"
+
+  # Gate 1
+  - elementId: gate-1-arrow
+    elementType: line
+    bounds: [280, 125, 14, 1]
+    points: "0,0 14,0"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$teal" }
+
+  # Era 2: O2
+  - elementId: era-o2-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [295, 95, 95, 66]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1.5, color: "$muted" }
+
+  - elementId: era-o2-txt
+    elementType: text
+    bounds: [298, 98, 89, 60]
+    content:
+      fontSize: 8
+      lineHeight: 1.2
+      color: "$ink"
+      text: "<b>O2 Run</b>\n2016.11 – 2017.08\nRange: <b>~80–100 Mpc</b>\nVirgo joins (GW170817)"
+
+  # Gate 2
+  - elementId: gate-2-arrow
+    elementType: line
+    bounds: [390, 125, 14, 1]
+    points: "0,0 14,0"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$teal" }
+
+  # Era 3: O3
+  - elementId: era-o3-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [405, 95, 95, 66]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1.5, color: "$primary" }
+
+  - elementId: era-o3-txt
+    elementType: text
+    bounds: [408, 98, 89, 60]
+    content:
+      fontSize: 8
+      lineHeight: 1.2
+      color: "$ink"
+      text: "<b>O3 Run (a/b)</b>\n2019.04 – 2020.03\nRange: <b>110–140 Mpc</b>\n79 new candidates"
+
+  # Gate 3
+  - elementId: gate-3-arrow
+    elementType: line
+    bounds: [500, 125, 14, 1]
+    points: "0,0 14,0"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$teal" }
+
+  # Era 4: O4
+  - elementId: era-o4-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [515, 95, 90, 66]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1.5, color: "$teal" }
+
+  - elementId: era-o4-txt
+    elementType: text
+    bounds: [518, 98, 84, 60]
+    content:
+      fontSize: 8
+      lineHeight: 1.2
+      color: "$ink"
+      text: "<b>O4 Run (a/b)</b>\n2023.05 – 2025.02\nRange: <b>150–165 Mpc</b>\n~300 public alerts"
+
+  # Commissioning Gates Details Table/List
+  - elementId: gates-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 170, 420, 160]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: gates-txt
+    elementType: text
+    bounds: [195, 178, 400, 145]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$ink"
+      text: |
+        <b>Key Commissioning Upgrades Across Gates:</b><br/>
+        • <b>Gate 1 (O1 → O2)</b>: Laser power increased from 20 W to 40 W; monolithic fused-silica suspensions replaced steel wires, attenuating thermal suspension noise.<br/>
+        • <b>Gate 2 (O2 → O3)</b>: Introduction of frequency-independent squeezed vacuum states (2–3 dB), directly lowering high-frequency photon shot noise.<br/>
+        • <b>Gate 3 (O3 → O4)</b>: 300 m optical filter cavities deployed at Hanford and Livingston for frequency-dependent squeezing (4.6–6.1 dB); laser power increased to 70 W; high-reflectivity mirror coatings to lower Brownian noise.
+
+  # Volume Scaling Box
+  - elementId: vol-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 345, 420, 90]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: vol-txt
+    elementType: text
+    bounds: [195, 350, 400, 85]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>Cosmic Volume Scaling Law:</b><br/>
+        Detection volume scales as the cube of the BNS horizon:
+        <p>\( V_{\text{search}} \propto R_{\text{BNS}}^3 \Rightarrow (160/70)^3 \approx 11.9 \times \text{ cosmic volume increase} \)</p>
+        Every 20% gain in strain sensitivity nearly doubles the observed event rate.
+
+  # Right Sidebar
+  - elementId: side-1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 75, 295, 110]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-1-icon
+    elementType: icon
+    iconName: "fas:compress"
+    bounds: [637, 85, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-1-head
+    elementType: text
+    bounds: [658, 85, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "QUANTUM SQUEEZING"
+
+  - elementId: side-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 103, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-1-formula
+    elementType: text
+    bounds: [642, 107, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: |
+        \( \Delta X_1 \Delta X_2 \ge \hbar/4 \to 6.1\text{ dB shot noise reduction} \)
+
+  - elementId: side-1-desc
+    elementType: text
+    bounds: [637, 134, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Injecting non-classical squeezed vacuum states decreases uncertainty in the phase quadrature without requiring dangerous circulating optical laser powers."
+
+  - elementId: side-2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 195, 295, 118]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-2-icon
+    elementType: icon
+    iconName: "fas:arrows-rotate"
+    bounds: [637, 205, 15, 15]
+    fill: { type: solid, color: "$teal" }
+
+  - elementId: side-2-head
+    elementType: text
+    bounds: [658, 205, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "300 M FILTER CAVITY"
+
+  - elementId: side-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 223, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-2-formula
+    elementType: text
+    bounds: [642, 227, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$teal"
+      text: |
+        \( \text{Cavity rotation: } f_{\text{rot}} \approx 50\text{ Hz transition} \)
+
+  - elementId: side-2-desc
+    elementType: text
+    bounds: [637, 254, 271, 52]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Rotates the squeezed ellipse by 90° below 50 Hz, mitigating radiation pressure noise at low frequencies while reducing photon shot noise at high frequencies."
+
+  - elementId: side-3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 323, 295, 108]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-3-icon
+    elementType: icon
+    iconName: "fas:chart-line"
+    bounds: [637, 333, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-3-head
+    elementType: text
+    bounds: [658, 333, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "AUTOMATED ALERT LATENCY"
+
+  - elementId: side-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 351, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-3-formula
+    elementType: text
+    bounds: [642, 355, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$primary"
+      text: |
+        \( \text{Median public alert delay: } < 30\text{ seconds} \)
+
+  - elementId: side-3-desc
+    elementType: text
+    bounds: [637, 382, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Machine-learning classifiers and Kafka streaming publish open public notices in seconds, triggering immediate global multi-messenger follow-ups."
+
+  # Takeaway Line
+  - elementId: footer-takeaway
+    elementType: text
+    bounds: [185, 456, 735, 24]
+    content:
+      style: "$takeaway"
+      text: "<b>Takeaway</b> · <b>Quantum engineering and 300 m filter cavities expanded the observable cosmic volume by 12-fold.</b>"
+
+  # Sources Line
+  - elementId: footer-sources
+    elementType: text
+    bounds: [185, 490, 680, 20]
+    content:
+      style: "$footer"
+      text: "Sources: LVK Run Summary, Abbott et al., PRX 13, 041039 (2023), arXiv:2311.10246 · notes/timeline.md"
+
+  # Page Number
+  - elementId: footer-page
+    elementType: text
+    bounds: [875, 490, 45, 20]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      text: "3"

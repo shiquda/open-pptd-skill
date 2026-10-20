@@ -1,0 +1,384 @@
+pageType: content
+background: { type: solid, color: "$paper" }
+notes: |
+  Slide 11: The Next Gravitational Wave Era: From Ground Upgrades to Space Observatories.
+  - Summarizes the three-stage roadmap for the next two decades of gravitational-wave astrophysics:
+    1. Near-term terrestrial upgrades (2026-2029): Advanced LIGO A+ and Advanced Virgo post-O4, incorporating heavy test masses, higher laser power, and balanced filter cavity squeezing to reach BNS ranges of ~250-300 Mpc.
+    2. Third-generation (3G) ground observatories (2035+): Cosmic Explorer (USA, 40 km L-shaped surface arms) and Einstein Telescope (Europe, 10 km subterranean equilateral triangle with cryogenic optics). Will achieve redshift reach z > 10, detecting every stellar-mass black hole merger in the observable universe (~10^5 events/year).
+    3. Space-borne millihertz observatory (2035+): ESA/NASA LISA (2.5 million km arm laser interferometer in heliocentric orbit), probing supermassive black hole mergers (10^5 to 10^7 M_sun) and extreme mass-ratio inspirals (EMRIs).
+  - Concludes with the ultimate takeaway: gravitational-wave astronomy will map compact object coalescences across all of cosmic time back to the first stars.
+elements:
+  # Left Rail
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [14, 24, 142, 484]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [18, 30, 134, 84]
+    src: "assets/thumb_detectors.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [18, 122, 134, 84]
+    src: "assets/thumb_timeline.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-3
+    elementType: image
+    bounds: [18, 214, 134, 84]
+    src: "assets/thumb_catalog.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-4
+    elementType: image
+    bounds: [18, 306, 134, 84]
+    src: "assets/thumb_mass.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-divider
+    elementType: line
+    bounds: [168, 24, 1, 484]
+    points: "0,0 0,484"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Header
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 24, 475, 34]
+    content:
+      style: "$title"
+      text: "Next-Gen Observatories Will Probe the Edge of the Universe"
+
+  - elementId: slide-category
+    elementType: text
+    bounds: [660, 27, 260, 18]
+    content:
+      style: "$category"
+      align: [right, middle]
+      text: "10 · FUTURE HORIZONS"
+
+  - elementId: header-rule
+    elementType: line
+    bounds: [185, 58, 735, 1]
+    points: "0,0 735,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Center Area: 3-Era Roadmap Columns (Built with structured vector panels)
+  - elementId: road-title
+    elementType: text
+    bounds: [185, 70, 420, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "The Three-Stage Roadmap to Full Cosmic Gravitational Coverage:"
+
+  # Era 1: A+ Upgrade
+  - elementId: col-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 92, 134, 230]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$muted" }
+
+  - elementId: col-1-txt
+    elementType: text
+    bounds: [190, 98, 124, 218]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>Stage 1: A+ / O5</b><br/>
+        <span style="color: #64748B;">2026 – 2029</span><br/><br/>
+        • <b>Architecture:</b> Advanced LIGO A+ & AdV+ Phase II.<br/>
+        • <b>Tech:</b> Balanced filter cavity squeezing, low-loss mirror coatings, 100 kg test masses.<br/>
+        • <b>BNS Range:</b> ~250–300 Mpc.<br/>
+        • <b>Rate:</b> ~1–3 detections daily.
+
+  # Era 2: 3G Ground
+  - elementId: col-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [328, 92, 134, 230]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1.5, color: "$primary" }
+
+  - elementId: col-2-txt
+    elementType: text
+    bounds: [333, 98, 124, 218]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>Stage 2: 3G Ground</b><br/>
+        <span style="color: #1E40AF; font-weight: bold;">2035+ Facilities</span><br/><br/>
+        • <b>Cosmic Explorer:</b> 40 km L-arms (USA).<br/>
+        • <b>Einstein Telescope:</b> 10 km triangle, underground cryogenic (Europe).<br/>
+        • <b>Horizon:</b> \( z > 10 \).<br/>
+        • <b>Rate:</b> \( \sim 10^5\text{ events/yr} \) (all stellar BBHs in universe).
+
+  # Era 3: Space LISA
+  - elementId: col-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [471, 92, 134, 230]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1.5, color: "$teal" }
+
+  - elementId: col-3-txt
+    elementType: text
+    bounds: [476, 98, 124, 218]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>Stage 3: Space LISA</b><br/>
+        <span style="color: #0D9488; font-weight: bold;">2035+ Mission</span><br/><br/>
+        • <b>Architecture:</b> 2.5 million km arm triangle in solar orbit.<br/>
+        • <b>Band:</b> 0.1 mHz – 0.1 Hz.<br/>
+        • <b>Targets:</b> Supermassive black holes (10⁵–10⁷ M☉), EMRIs, Galactic white dwarfs.
+
+  # Summary KPI Row
+  - elementId: kpi-box-1
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 332, 134, 60]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: kpi-txt-1
+    elementType: text
+    bounds: [190, 338, 124, 48]
+    content:
+      align: [center, middle]
+      fontSize: 14
+      bold: true
+      color: "$ink"
+      text: "~390 Events\n<span style=\"font-size: 8pt; color: #64748B; font-weight: normal;\">GWTC-5 Benchmark</span>"
+
+  - elementId: kpi-box-2
+    elementType: shape
+    shapeName: rect
+    bounds: [328, 332, 134, 60]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: kpi-txt-2
+    elementType: text
+    bounds: [333, 338, 124, 48]
+    content:
+      align: [center, middle]
+      fontSize: 14
+      bold: true
+      color: "$primary"
+      text: "z > 10 Reach\n<span style=\"font-size: 8pt; color: #64748B; font-weight: normal;\">Cosmic Dawn Horizon</span>"
+
+  - elementId: kpi-box-3
+    elementType: shape
+    shapeName: rect
+    bounds: [471, 332, 134, 60]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: kpi-txt-3
+    elementType: text
+    bounds: [476, 338, 124, 48]
+    content:
+      align: [center, middle]
+      fontSize: 14
+      bold: true
+      color: "$teal"
+      text: "10⁵ / Year\n<span style=\"font-size: 8pt; color: #64748B; font-weight: normal;\">3G Annual Census</span>"
+
+  # Final Horizon Callout
+  - elementId: final-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 400, 420, 42]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: final-txt
+    elementType: text
+    bounds: [193, 404, 404, 34]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>Cosmic Synthesis:</b> The transition from O1 to 3G and LISA represents a transition from discovering isolated astrophysical curiosities to charting the complete gravitational history of the universe.
+
+  # Right Sidebar
+  - elementId: side-1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 75, 295, 110]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-1-icon
+    elementType: icon
+    iconName: "fas:infinity"
+    bounds: [637, 85, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-1-head
+    elementType: text
+    bounds: [658, 85, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "COSMIC DAWN"
+
+  - elementId: side-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 103, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-1-formula
+    elementType: text
+    bounds: [642, 107, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: |
+        \( z > 10 \Rightarrow \text{Observing Population III stellar remnants} \)
+
+  - elementId: side-1-desc
+    elementType: text
+    bounds: [637, 134, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Third-generation instruments will detect binary black holes born from the earliest primordial stars in the universe, probing cosmic reionization."
+
+  - elementId: side-2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 195, 295, 118]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-2-icon
+    elementType: icon
+    iconName: "fas:satellite"
+    bounds: [637, 205, 15, 15]
+    fill: { type: solid, color: "$teal" }
+
+  - elementId: side-2-head
+    elementType: text
+    bounds: [658, 205, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "LISA MILLIHERTZ BAND"
+
+  - elementId: side-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 223, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-2-formula
+    elementType: text
+    bounds: [642, 227, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$teal"
+      text: |
+        \( 2.5\times 10^6\text{ km arms}, \quad f \sim 10^{-4}-10^{-1}\text{ Hz} \)
+
+  - elementId: side-2-desc
+    elementType: text
+    bounds: [637, 254, 271, 52]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Free from seismic earth motion, LISA will track inspiraling binaries for months before merger and detect supermassive black holes across galaxy collisions."
+
+  - elementId: side-3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 323, 295, 108]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-3-icon
+    elementType: icon
+    iconName: "fas:circle-question"
+    bounds: [637, 333, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-3-head
+    elementType: text
+    bounds: [658, 333, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "NO-HAIR THEOREM TESTS"
+
+  - elementId: side-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 351, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-3-formula
+    elementType: text
+    bounds: [642, 355, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$primary"
+      text: |
+        \( \omega_{220}, \tau_{220} \text{ and overtones } \to \text{test general relativity} \)
+
+  - elementId: side-3-desc
+    elementType: text
+    bounds: [637, 382, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "High-SNR ringdown quasinormal modes will measure black hole horizon properties with >99.9% precision, searching for quantum deviations or horizon echoes."
+
+  # Takeaway Line
+  - elementId: footer-takeaway
+    elementType: text
+    bounds: [185, 456, 735, 24]
+    content:
+      style: "$takeaway"
+      text: "<b>Takeaway</b> · <b>Within two decades, gravitational-wave astronomy will map every compact merger in cosmic history.</b>"
+
+  # Sources Line
+  - elementId: footer-sources
+    elementType: text
+    bounds: [185, 490, 680, 20]
+    content:
+      style: "$footer"
+      text: "Sources: Reitze et al., BAAS 51, 035 (Cosmic Explorer); Punturo et al., CQG 27, 194002 (ET); Amaro-Seoane et al., LISA (2017)"
+
+  # Page Number
+  - elementId: footer-page
+    elementType: text
+    bounds: [875, 490, 45, 20]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      text: "11"

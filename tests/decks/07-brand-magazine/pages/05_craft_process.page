@@ -1,0 +1,248 @@
+pageType: content
+background:
+  type: solid
+  color: "$paper"
+notes: "演讲者备注：第五页介绍「北纬三十度」独家研发的120小时恒温厌氧发酵与冷休克工艺。左侧图像应用了多边形几何路径裁切（cropShape: custom）、阴影渲染与水平翻转（flip），呈现发酵不锈钢微压反应釜的工业美感；右侧分四个标准工序阐明控温控酸的科学标准。"
+elements:
+  # Fixed top-left section marker
+  - elementId: section-marker
+    elementType: shape
+    bounds: [64, 32, 6, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$klein"
+
+  - elementId: section-num
+    elementType: text
+    bounds: [78, 32, 400, 24]
+    content:
+      style: "$sectionNum"
+      text: "05 // CRAFT PROTOCOL & FERMENTATION CONTROL"
+
+  - elementId: top-meta-right
+    elementType: text
+    bounds: [600, 32, 616, 24]
+    content:
+      style: "$meta"
+      align: [right, middle]
+      text: "30°N ROASTERY // STANDARD OPERATING PROCEDURE // 示例品牌（虚构）"
+
+  - elementId: top-divider
+    elementType: line
+    bounds: [64, 68, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  # Heavy rule above headline
+  - elementId: headline-rule
+    elementType: line
+    bounds: [64, 95, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 3
+      color: "$ink"
+
+  - elementId: page-headline
+    elementType: text
+    bounds: [64, 110, 1152, 45]
+    content:
+      style: "$headline"
+      text: "120小时恒温厌氧发酵：以精准理化阈值驯服野生酵母"
+
+  # Left 5 columns (x: 64, w: 440): Image with shadow, flip, and border
+  - elementId: craft-specimen-img
+    elementType: image
+    bounds: [64, 175, 420, 420]
+    src: "assets/fermentation_tank.jpg"
+    fit:
+      mode: cover
+    flip: [true, false]
+    border:
+      style: solid
+      width: 1.5
+      color: "$ink"
+    shadow:
+      blur: 16
+      color: "#00000030"
+      offset: [0, 8]
+
+  - elementId: craft-img-caption
+    elementType: text
+    bounds: [64, 608, 420, 36]
+    content:
+      style: "$caption"
+      text: "PLATE 05.1 // 密闭恒温厌氧微压反应釜（水平翻转与投影渲染）"
+
+  # Right 7 columns (x: 520, w: 696): Four progressive craft stages
+  # Stage 1
+  - elementId: stage-1-step
+    elementType: text
+    bounds: [520, 175, 120, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 14
+      bold: true
+      color: "$klein"
+      text: "PHASE 01"
+
+  - elementId: stage-1-title
+    elementType: text
+    bounds: [650, 175, 566, 25]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+      text: "红外光学多光谱色选（全熟度筛选）"
+
+  - elementId: stage-1-desc
+    elementType: text
+    bounds: [650, 205, 566, 65]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.5
+      color: "$ink"
+      text: "采收后2小时内进厂，通过近红外高光谱剔除青果与次熟果。仅保留果皮糖度高于24.0°Brix、瑕疵率低于0.3%的饱满紫红浆果。"
+
+  - elementId: stage-sep-1
+    elementType: line
+    bounds: [520, 280, 696, 0]
+    points: "0,0 696,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  # Stage 2
+  - elementId: stage-2-step
+    elementType: text
+    bounds: [520, 290, 120, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 14
+      bold: true
+      color: "$klein"
+      text: "PHASE 02"
+
+  - elementId: stage-2-title
+    elementType: text
+    bounds: [650, 290, 566, 25]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+      text: "高纯食品级氮气置换（绝对厌氧环境建立）"
+
+  - elementId: stage-2-desc
+    elementType: text
+    bounds: [650, 320, 566, 65]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.5
+      color: "$ink"
+      text: "入罐后进行三次压力排气与纯氮充注，使罐体内残余氧气浓度降至0.2%以下。彻底阻断醋酸菌与霉菌的好氧增殖，为乳酸菌与高品质酵母菌提供纯净底质。"
+
+  - elementId: stage-sep-2
+    elementType: line
+    bounds: [520, 395, 696, 0]
+    points: "0,0 696,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  # Stage 3
+  - elementId: stage-3-step
+    elementType: text
+    bounds: [520, 405, 120, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 14
+      bold: true
+      color: "$klein"
+      text: "PHASE 03"
+
+  - elementId: stage-3-title
+    elementType: text
+    bounds: [650, 405, 566, 25]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+      text: "14.5°C低温恒温长程发酵（120小时监控）"
+
+  - elementId: stage-3-desc
+    elementType: text
+    bounds: [650, 435, 566, 65]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.5
+      color: "$ink"
+      text: "水循环套管恒温14.5°C，实时探针监测pH值与气体释出量。发酵终点严格锁定在pH 3.82，锁定白桃与覆盆子等关键芳香酯类的最高聚合态。"
+
+  - elementId: stage-sep-3
+    elementType: line
+    bounds: [520, 510, 696, 0]
+    points: "0,0 696,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  # Stage 4
+  - elementId: stage-4-step
+    elementType: text
+    bounds: [520, 520, 120, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 14
+      bold: true
+      color: "$klein"
+      text: "PHASE 04"
+
+  - elementId: stage-4-title
+    elementType: text
+    bounds: [650, 520, 566, 25]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+      text: "冰水冷休克终止发酵与棚架慢速脱水"
+
+  - elementId: stage-4-desc
+    elementType: text
+    bounds: [650, 550, 566, 65]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.5
+      color: "$ink"
+      text: "4°C雪山融水循环淋洗，快速终止菌群活性以避免过度发酵。随后移入双层通风遮阳棚，在24天慢速脱水中将含水率平稳降至10.5%。"
+
+  # Baseline metadata & source
+  - elementId: bottom-divider
+    elementType: line
+    bounds: [64, 650, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  - elementId: bottom-info
+    elementType: text
+    bounds: [64, 665, 1152, 24]
+    content:
+      style: "$footer"
+      text: "PAGE 05 // 30°N BRAND BOOK // BIOCHEMICAL PROCESSING PROTOCOL // 示例品牌（虚构） // FERMENTATION LOG FY2024"

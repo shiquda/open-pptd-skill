@@ -1,0 +1,274 @@
+pageType: content
+background: { type: solid, color: "$bg" }
+notes: |
+  【第 4 页·管委会演讲备注】
+  第 4 页是经管会最重要的财务归因审计表。我们要向管理层严格证明：这 200 万元的缺口，没有一分钱是含糊不清的无解释尾差。
+  
+  请看表格逐行拆解：
+  第一行：KA 交付延期是最大的拖累项，计划认收 620 万，实际仅认收 500 万，形成 -120 万元缺口，占总缺口的 60%。责任直接归属交付中心；
+  第二行：竞对价格战拦截。在制造业大客户中，我们被降价 30% 的竞品偷袭，丢了一家大客户并被迫让利，造成 -80 万元缺口，占 40%。责任归属大客户销售一部；
+  第三行：渠道生态拓展滞后，华东伙伴认证延误，造成 -70 万元缺口；
+  第四行：值得肯定的是 PLG 中小客自增购，实际完成 350 万，超额对冲了 +70 万元，刚好抵消了渠道的迟滞。
+  
+  因此，最终净影响是：-120万（交付） + -80万（竞对） + -70万（渠道） + 70万（SMB） = 严格闭环的 -200 万元。
+  责任清晰，Q4 弥补路径明确：交付中心必须通过特战队在 11/15 前抢回 120 万认收，销售部出台防御性策略保底 80 万。
+elements:
+  # Top Header Menu & Navigation
+  - elementId: nav-line-1
+    elementType: line
+    bounds: [50, 26, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-2
+    elementType: line
+    bounds: [50, 31, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-3
+    elementType: line
+    bounds: [50, 36, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-section-tag
+    elementType: text
+    bounds: [74, 25, 480, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$muted"
+      text: "03 收入缺口归因拆解 · 差异定量分析表 (示例公司)"
+
+  - elementId: nav-report-title
+    elementType: text
+    bounds: [660, 25, 250, 16]
+    content:
+      align: [right, middle]
+      fontSize: 10
+      color: "$muted"
+      text: "云枢网络 2026 Q3 经营复盘"
+
+  - elementId: header-divider
+    elementType: line
+    bounds: [50, 46, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Slide Takeaway Title & Subtitle
+  - elementId: page4-title
+    elementType: text
+    bounds: [50, 54, 860, 24]
+    content:
+      fontFamily: "MiSans"
+      fontSize: 17
+      bold: true
+      color: "$ink"
+      text: "Q3 收入目标缺口 200 万元归因：KA 交付延期与竞品价格战各占 60% 与 40%"
+
+  - elementId: page4-subtitle
+    elementType: text
+    bounds: [50, 78, 860, 16]
+    content:
+      fontSize: 10.5
+      color: "$muted"
+      text: "财务定量归因模型：将 200 万缺口刚性分解至具体动因、责任部门与弥补路径，不留无解释尾差"
+
+  # ================= VARIANCE ATTRIBUTION TABLE =================
+  - elementId: variance-attribution-tbl
+    elementType: table
+    bounds: [50, 102, 860, 276]
+    columnWidths: [0.14, 0.28, 0.11, 0.11, 0.12, 0.12, 0.12]
+    rowHeights: [0.14, 0.12, 0.15, 0.15, 0.15, 0.15, 0.14]
+    style: "$varianceTable"
+    rows:
+      # --- Row 0: Table Header Row 1 ---
+      - - text: "<p><strong>归因维度</strong></p>"
+          rowSpan: 2
+          align: [center, middle]
+        - text: "<p><strong>核心动因明细与影响路径</strong></p>"
+          rowSpan: 2
+          align: [center, middle]
+        - text: "<p><strong>Q3 财务影响额 (万元)</strong></p>"
+          colSpan: 3
+          align: [center, middle]
+        - text: "<p><strong>责任归属</strong></p>"
+          rowSpan: 2
+          align: [center, middle]
+        - text: "<p><strong>管控状态</strong></p>"
+          rowSpan: 2
+          align: [center, middle]
+
+      # --- Row 1: Subheader for financial columns ---
+      - - text: "<p>计划目标</p>"
+          fill: { type: solid, color: "$tableHeaderBg" }
+          bold: true
+          fontSize: 9.5
+          align: [center, middle]
+        - text: "<p>实际发生</p>"
+          fill: { type: solid, color: "$tableHeaderBg" }
+          bold: true
+          fontSize: 9.5
+          align: [center, middle]
+        - text: "<p>差异额 (占比)</p>"
+          fill: { type: solid, color: "$tableHeaderBg" }
+          bold: true
+          fontSize: 9.5
+          align: [center, middle]
+
+      # --- Row 2: Data Row 1 (KA Delivery Delay) ---
+      - - text: "<p><strong>KA 交付延期</strong></p>"
+          align: [center, middle]
+        - text: "<p>3 个私有化大客定制项目未达终验，认收递延</p>"
+          align: [left, middle]
+        - text: "<p>620.0</p>"
+          align: [right, middle]
+        - text: "<p>500.0</p>"
+          align: [right, middle]
+        - text: "<p><span style=\"color:#B83A2C\"><strong>-120.0 (60%)</strong></span></p>"
+          align: [right, middle]
+        - text: "<p>交付中心</p>"
+          align: [center, middle]
+        - text: "<p><span style=\"color:#B83A2C\"><strong>🔴 严重延期</strong></span></p>"
+          align: [center, middle]
+
+      # --- Row 3: Data Row 2 (Competitor Price War) ---
+      - - text: "<p><strong>竞对价格战</strong></p>"
+          align: [center, middle]
+        - text: "<p>制造业 1 家 KA 客户因竞品降价 30% 拦截流失</p>"
+          align: [left, middle]
+        - text: "<p>480.0</p>"
+          align: [right, middle]
+        - text: "<p>400.0</p>"
+          align: [right, middle]
+        - text: "<p><span style=\"color:#B83A2C\"><strong>-80.0 (40%)</strong></span></p>"
+          align: [right, middle]
+        - text: "<p>大客销售一部</p>"
+          align: [center, middle]
+        - text: "<p><span style=\"color:#B83A2C\"><strong>🔴 竞对流失</strong></span></p>"
+          align: [center, middle]
+
+      # --- Row 4: Data Row 3 (Channel Resale Delay) ---
+      - - text: "<p><strong>渠道拓展迟滞</strong></p>"
+          align: [center, middle]
+        - text: "<p>华东 2 家集成伙伴认证考核延误，联合方案延期</p>"
+          align: [left, middle]
+        - text: "<p>320.0</p>"
+          align: [right, middle]
+        - text: "<p>250.0</p>"
+          align: [right, middle]
+        - text: "<p><span style=\"color:#D97706\"><strong>-70.0 (35%)</strong></span></p>"
+          align: [right, middle]
+        - text: "<p>生态拓展部</p>"
+          align: [center, middle]
+        - text: "<p><span style=\"color:#D97706\"><strong>🟡 进度迟滞</strong></span></p>"
+          align: [center, middle]
+
+      # --- Row 5: Data Row 4 (SMB Product Expansion Overachievement) ---
+      - - text: "<p><strong>中小客超额对冲</strong></p>"
+          align: [center, middle]
+        - text: "<p>PLG 自动化增购超预期，公有云纯 SaaS 席位扩容</p>"
+          align: [left, middle]
+        - text: "<p>280.0</p>"
+          align: [right, middle]
+        - text: "<p>350.0</p>"
+          align: [right, middle]
+        - text: "<p><span style=\"color:#2D6A4F\"><strong>+70.0 (+35%)</strong></span></p>"
+          align: [right, middle]
+        - text: "<p>PLG 增长组</p>"
+          align: [center, middle]
+        - text: "<p><span style=\"color:#2D6A4F\"><strong>🟢 超额对冲</strong></span></p>"
+          align: [center, middle]
+
+      # --- Row 6: Summary Row (Total / Last Row) ---
+      - - text: "<p><strong>净影响汇总 (Total)</strong></p>"
+          colSpan: 2
+          align: [center, middle]
+        - text: "<p><strong>3,480.0</strong></p>"
+          align: [right, middle]
+        - text: "<p><strong>3,280.0</strong></p>"
+          align: [right, middle]
+        - text: "<p><span style=\"color:#D97706\"><strong>-200.0 (100%)</strong></span></p>"
+          align: [right, middle]
+        - text: "<p><strong>经营管理会</strong></p>"
+          align: [center, middle]
+        - text: "<p><span style=\"color:#D97706\"><strong>🟡 综合预警</strong></span></p>"
+          align: [center, middle]
+
+  # ================= BOTTOM ACTION CALLOUT PANELS =================
+  - elementId: action-panel-left-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 392, 420, 96]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: action-panel-left-title
+    elementType: text
+    bounds: [66, 402, 388, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+      text: "【管理追责与责任认定 (Responsibility Audit)】"
+
+  - elementId: action-panel-left-desc
+    elementType: text
+    bounds: [66, 422, 388, 58]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• <b>交付中心承担 60% 主责：</b>非客户方违约，系内部技术方案反复推倒导致的阶段验收延期。<br/>• <b>销售部承担 40% 竞对失察责任：</b>未能提前预警竞品低价一体机攻势，导致关键 KA 防御失守。"
+
+  - elementId: action-panel-right-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [490, 392, 420, 96]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: action-panel-right-title
+    elementType: text
+    bounds: [506, 402, 388, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+      text: "【Q4 刚性闭环弥补路径 (Mitigation Path)】"
+
+  - elementId: action-panel-right-desc
+    elementType: text
+    bounds: [506, 422, 388, 58]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• <b>交付抢单：</b>成立原厂专家特战队，11/15 前闭环延期项目阶段初验，确保在 Q4 确认 120 万收入。<br/>• <b>商务防御：</b>管委会授权阶梯折让授权，针对动摇大客给予 15% 维保置换抵扣，锁定续约。"
+
+  # Footer
+  - elementId: footer-divider
+    elementType: line
+    bounds: [50, 498, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 506, 680, 16]
+    content:
+      style: "$footer"
+      text: "核算基准：GAAP 收入确认准则与内部权责发生制管理会计报表 (示例公司/假设口径)"
+
+  - elementId: footer-page-num
+    elementType: text
+    bounds: [850, 506, 60, 16]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      bold: true
+      color: "$ink"
+      text: "04 / 09"

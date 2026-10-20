@@ -1,0 +1,418 @@
+pageType: content
+background: { type: solid, color: "$bg" }
+notes: |
+  【第 8 页·管委会演讲备注】
+  第 8 页是公司管理层向董事会立下的军令状——《2026 Q4 战略 OKR 承诺矩阵》。
+  
+  经管会的原则非常明确：OKR 是承诺，不是愿望；每个 KR 必须对应具体高管责任人、完成时限以及量化产出。
+  
+  三项核心战略目标：
+  O1：坚决守住 3,950 万 ARR 的全年底线。
+  由销售 SVP 周明挂帅，拆解为 2,150 万新客新签与 1,800 万存量增购。同时周明团队与管委会签订对赌协议，若未能达到 3,800 万保底线，全员取消 Q4 超额分红。
+  
+  O2：全力打赢 18 家 KA 续约保卫战，把 NRR 强力拉回 104% 以上。
+  由客户成功 CSM 总监陈静负责，我们将在 11/20 前推行“集团高管一对一赞助机制”，由 CEO、COO 和各位 VP 直接认领动摇客户，确保净流失额控制在 100 万以内。
+  
+  O3：彻底根治交付瓶颈，交付周期从 84 天压缩至 65 天以内。
+  由交付 VP 张立与 CPO 李维联合负责。11/15 前发布混合云标准蓝图 V2，从源头消减 70% 定制开发；交付突击队全封闭攻坚，12/15 前必须完成 4 大阻塞项目的最终验收。
+elements:
+  # Top Header Menu & Navigation
+  - elementId: nav-line-1
+    elementType: line
+    bounds: [50, 26, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-2
+    elementType: line
+    bounds: [50, 31, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-3
+    elementType: line
+    bounds: [50, 36, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-section-tag
+    elementType: text
+    bounds: [74, 25, 480, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$muted"
+      text: "07 战略目标与承诺 · Q4 核心 OKR 矩阵 (示例公司)"
+
+  - elementId: nav-report-title
+    elementType: text
+    bounds: [660, 25, 250, 16]
+    content:
+      align: [right, middle]
+      fontSize: 10
+      color: "$muted"
+      text: "云枢网络 2026 Q3 经营复盘"
+
+  - elementId: header-divider
+    elementType: line
+    bounds: [50, 46, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Slide Takeaway Title & Subtitle
+  - elementId: page8-title
+    elementType: text
+    bounds: [50, 54, 860, 24]
+    content:
+      fontFamily: "MiSans"
+      fontSize: 17
+      bold: true
+      color: "$ink"
+      text: "Q4 承诺达成 3,950 万 ARR：设立 KA 交付专班，保底 NRR 回弹至 104%"
+
+  - elementId: page8-subtitle
+    elementType: text
+    bounds: [50, 78, 860, 16]
+    content:
+      fontSize: 10.5
+      color: "$muted"
+      text: "OKR 责任承诺矩阵：锁定第一责任人、截止时间点与量化交付产出，建立刚性对赌机制"
+
+  # ================= COLUMN 1: OBJECTIVE 1 (REVENUE TARGET) =================
+  - elementId: o1-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 98, 274, 390]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: o1-header-bar
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 98, 274, 40]
+    fill: { type: solid, color: "$accent" }
+    adjustments: [0]
+
+  - elementId: o1-header-text
+    elementType: text
+    bounds: [64, 104, 246, 28]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "O1: 坚决守住 Q4 ARR 收入大盘底线<br/>(承诺目标: 3,950 万元)"
+
+  - elementId: o1-owner-line
+    elementType: text
+    bounds: [64, 144, 246, 16]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$muted"
+      text: "第一责任人：SVP 销售 (周明) ｜ 达标红线: 3,800万"
+
+  - elementId: o1-divider1
+    elementType: line
+    bounds: [64, 164, 246, 1]
+    points: "0,0.5 246,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  # KR 1.1
+  - elementId: kr11-title
+    elementType: text
+    bounds: [64, 172, 246, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "KR 1.1: 新增客户签约 ARR ≥ 2,150 万元"
+
+  - elementId: kr11-desc
+    elementType: text
+    bounds: [64, 190, 246, 44]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• 重点转化 3 个 300 万级制造业与能源行业成熟商机；<br/>• 严格执行 POC 准入门禁，控制售前成本沉没。"
+
+  # KR 1.2
+  - elementId: kr12-title
+    elementType: text
+    bounds: [64, 240, 246, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "KR 1.2: 存量扩容与交叉销售认收 ≥ 1,800 万元"
+
+  - elementId: kr12-desc
+    elementType: text
+    bounds: [64, 258, 246, 44]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• 协助交付中心推动 4 个在建项目终验，释放 540 万受阻应收；<br/>• 面向 420 家 SMB 推出 AI 协同组件增购包。"
+
+  # Commitment Box
+  - elementId: o1-commit-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [60, 314, 254, 162]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: o1-commit-title
+    elementType: text
+    bounds: [70, 322, 234, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$accentDeep"
+      text: "【刚性考核与对赌约束】"
+
+  - elementId: o1-commit-desc
+    elementType: text
+    bounds: [70, 342, 234, 124]
+    content:
+      fontSize: 9
+      lineHeight: 1.36
+      color: "$inkSecondary"
+      text: "<b>对赌军令状：</b><br/>• 销售体系与经管会立下刚性对赌：若 Q4 最终实际 ARR 未能达到 3,800 万元保底底线，销售管理层主动放弃全季度超额绩效奖金；<br/>• 考核权重：新拓回款 40%，老客留存 40%，交付认收 20%。"
+
+  # ================= COLUMN 2: OBJECTIVE 2 (RETENTION DEFENSE) =================
+  - elementId: o2-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [343, 98, 274, 390]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: o2-header-bar
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [343, 98, 274, 40]
+    fill: { type: solid, color: "$statusGreenBg" }
+    adjustments: [0]
+
+  - elementId: o2-header-text
+    elementType: text
+    bounds: [357, 104, 246, 28]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$statusGreen"
+      text: "O2: 全力打赢 18 家 KA 客户保卫战<br/>(保底目标: 核心 NRR 回弹至 104%)"
+
+  - elementId: o2-owner-line
+    elementType: text
+    bounds: [357, 144, 246, 16]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$muted"
+      text: "第一责任人：CSM 总监 (陈静) ｜ 兜底: 零大客流失"
+
+  - elementId: o2-divider1
+    elementType: line
+    bounds: [357, 164, 246, 1]
+    points: "0,0.5 246,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  # KR 2.1
+  - elementId: kr21-title
+    elementType: text
+    bounds: [357, 172, 246, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "KR 2.1: 500 万级 18 家大客零流失与成功挽留"
+
+  - elementId: kr21-desc
+    elementType: text
+    bounds: [357, 190, 246, 44]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• 针对 2 家动摇客户提供阶梯维保抵扣协议，保底续约率；<br/>• 建立每周客户健康度雷达巡检，异常预警提前 30 天介入。"
+
+  # KR 2.2
+  - elementId: kr22-title
+    elementType: text
+    bounds: [357, 240, 246, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "KR 2.2: 实施集团高管 1 对 1 赞助机制 (Sponsorship)"
+
+  - elementId: kr22-desc
+    elementType: text
+    bounds: [357, 258, 246, 44]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• CEO/COO 与各位 VP 认领全部 18 家 KA 客户高层对接；<br/>• 11/20 前完成 100% 客户高管现场走访与年度战略签约。"
+
+  # Commitment Box
+  - elementId: o2-commit-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [353, 314, 254, 162]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: o2-commit-title
+    elementType: text
+    bounds: [363, 322, 234, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusGreen"
+      text: "【刚性考核与防御红线】"
+
+  - elementId: o2-commit-desc
+    elementType: text
+    bounds: [363, 342, 234, 124]
+    content:
+      fontSize: 9
+      lineHeight: 1.36
+      color: "$inkSecondary"
+      text: "<b>防御红线：</b><br/>• Q4 设定大客户流失金额上限 ≤100 万元；任何 500 万级客户若发生未报备流失，CSM 团队一票否决；<br/>• 设立防御基金：允许最高以 15% 维保费用折让置换 3 年期锁定合同。"
+
+  # ================= COLUMN 3: OBJECTIVE 3 (DELIVERY BOTTLENECK) =================
+  - elementId: o3-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [636, 98, 274, 390]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: o3-header-bar
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [636, 98, 274, 40]
+    fill: { type: solid, color: "$tableHeaderBg" }
+    adjustments: [0]
+
+  - elementId: o3-header-text
+    elementType: text
+    bounds: [650, 104, 246, 28]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "O3: 攻克交付瓶颈与混合云标准化<br/>(保底目标: 交付周期压缩至 ≤65 天)"
+
+  - elementId: o3-owner-line
+    elementType: text
+    bounds: [650, 144, 246, 16]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$muted"
+      text: "第一责任人：VP 交付 (张立) ｜ 联席：CPO (李维)"
+
+  - elementId: o3-divider1
+    elementType: line
+    bounds: [650, 164, 246, 1]
+    points: "0,0.5 246,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  # KR 3.1
+  - elementId: kr31-title
+    elementType: text
+    bounds: [650, 172, 246, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "KR 3.1: 发布混合云标准化蓝图 (BluePrint V2)"
+
+  - elementId: kr31-desc
+    elementType: text
+    bounds: [650, 190, 246, 44]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• 11/15 前封装标准部署镜像与统一数据接口层；<br/>• 严禁非标私有化定制，将二次开发工期压缩 70% 以上。"
+
+  # KR 3.2
+  - elementId: kr32-title
+    elementType: text
+    bounds: [650, 240, 246, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "KR 3.2: 交付突击队消减 4 个重度阻塞项目"
+
+  - elementId: kr32-desc
+    elementType: text
+    bounds: [650, 258, 246, 44]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• 抽调 6 名资深系统架构师驻场金融与制造项目；<br/>• 12/15 前全部拿到客户最终验收签字单，完成闭环。"
+
+  # Commitment Box
+  - elementId: o3-commit-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [646, 314, 254, 162]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: o3-commit-title
+    elementType: text
+    bounds: [656, 322, 234, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "【流程门禁与准入铁律】"
+
+  - elementId: o3-commit-desc
+    elementType: text
+    bounds: [656, 342, 234, 124]
+    content:
+      fontSize: 9
+      lineHeight: 1.36
+      color: "$inkSecondary"
+      text: "<b>铁律门禁：</b><br/>• 交付前置审核：新项目合同必须通过技术可行性评审，无标准接口的定制需求必须经过 CPO 特批；<br/>• 阻塞项目未清零的交付组，严禁承接新的实施合同，彻底刹住无序扩张。"
+
+  # Footer
+  - elementId: footer-divider
+    elementType: line
+    bounds: [50, 498, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 506, 680, 16]
+    content:
+      style: "$footer"
+      text: "考核基准：集团经管会 2026 Q4 高管经营责任书 · 密级：内部考核核心机密 (示例公司/假设口径)"
+
+  - elementId: footer-page-num
+    elementType: text
+    bounds: [850, 506, 60, 16]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      bold: true
+      color: "$ink"
+      text: "08 / 09"

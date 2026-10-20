@@ -1,0 +1,130 @@
+pageType: cover
+background:
+  type: solid
+  color: "$dark"
+notes: "各位投资人好，我是 ColdSync 极鲜智链的创始人。今天向大家汇报我们面向东南亚万亿生鲜冷链的数字化物流 SaaS 平台 A 轮融资计划。东南亚生鲜电商与现代食品零售正以超 25% 年增速爆发，然而极度薄弱的冷链基建与严重割裂的传统运力，导致每年超过 30% 的食品在运输途中腐烂变质。ColdSync 以轻量化 IoT + 智能路由编排切入，打造东盟首个全链路温控数字中枢。"
+elements:
+  # Background accent panels
+  - elementId: cover-accent-1
+    elementType: shape
+    bounds: [0, 0, 960, 12]
+    shapeName: rect
+    fill: {type: solid, color: "$accent"}
+
+  - elementId: cover-mint-overlay
+    elementType: shape
+    bounds: [580, 0, 380, 540]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+    opacity: 0.35
+
+  - elementId: cover-mint-strip
+    elementType: shape
+    bounds: [540, 120, 16, 300]
+    shapeName: rect
+    fill: {type: solid, color: "$mint"}
+    opacity: 0.8
+
+  # Logo Custom Vector Mark (Hexagonal Snowflake & Network node)
+  - elementId: brand-logo-mark
+    elementType: shape
+    bounds: [60, 75, 48, 48]
+    shapeName: custom
+    viewBox: [100, 100]
+    path: "M50,4 L92,28 L92,72 L50,96 L8,72 L8,28 Z M50,22 L74,36 L74,64 L50,78 L26,64 L26,36 Z"
+    fill: {type: solid, color: "$accent"}
+    rotation: 15
+
+  - elementId: brand-logo-text
+    elementType: text
+    bounds: [120, 84, 300, 32]
+    content:
+      fontSize: 18
+      bold: true
+      color: "$white"
+      text: "ColdSync 极鲜智链"
+
+  - elementId: brand-tagline
+    elementType: text
+    bounds: [60, 145, 140, 26]
+    fill: {type: solid, color: "$primary"}
+    content:
+      fontSize: 10
+      bold: true
+      color: "$mint"
+      align: [center, middle]
+      text: "SERIES A PITCH"
+
+  # Main Hero Title
+  - elementId: cover-title
+    elementType: text
+    bounds: [60, 185, 600, 90]
+    content:
+      fontSize: 32
+      bold: true
+      color: "$white"
+      lineHeight: 1.25
+      text: "赋能东南亚万亿冷链的<br/>数字化物流协同引擎"
+
+  # Divider Line
+  - elementId: cover-divider
+    elementType: line
+    bounds: [60, 290, 480, 2]
+    viewBox: [480, 2]
+    points: "0,1 480,1"
+    border: {style: solid, width: 2, color: "$accent"}
+
+  # Subtitle
+  - elementId: cover-subtitle
+    elementType: text
+    bounds: [60, 310, 560, 48]
+    content:
+      fontSize: 13.5
+      color: "$mint"
+      lineHeight: 1.45
+      text: "A 轮融资商业计划书 · 拟募资 1,500 万美元<br/>打造覆盖东盟全境的端到端温控 IoT 与运力调度 SaaS 平台"
+
+  # Metadata & Presenter
+  - elementId: cover-meta
+    elementType: text
+    bounds: [60, 420, 480, 40]
+    content:
+      fontSize: 11
+      color: "#A2CDB5"
+      lineHeight: 1.4
+      text: "汇报人：创始人兼 CEO · 联合创始人兼 CTO<br/>2024 年 Q3 · 新加坡 / 雅加达 / 胡志明市"
+
+  # Right side feature highlight card
+  - elementId: cover-right-kpi-bg
+    elementType: shape
+    bounds: [640, 160, 260, 240]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+    border: {style: solid, width: 1.5, color: "$accent"}
+
+  - elementId: cover-right-kpi-title
+    elementType: text
+    bounds: [660, 180, 220, 26]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$accent"
+      text: "核心运营与技术概览"
+
+  - elementId: cover-right-kpi-content
+    elementType: text
+    bounds: [660, 215, 220, 165]
+    content:
+      fontSize: 10.5
+      color: "$white"
+      lineHeight: 1.55
+      text: "• 联网冷藏车队：12,000+ 辆 (印尼第一)<br/>• 监测冷库容量：180,000+ m³<br/>• 全程断链预警时效：低于 6 分钟<br/>• 客户货损下降：平均 -58%<br/>• 年化净留存率 (NDR)：138%"
+
+  # Footnote
+  - elementId: cover-footnote
+    elementType: text
+    bounds: [60, 495, 840, 20]
+    content:
+      fontSize: 8.5
+      color: "#6D9780"
+      text: "注：ColdSync 极鲜智链为路演测试示例企业；行业宏观数据来自 Frost & Sullivan, GCCA 及联合国粮农组织 (FAO) 权威报告。"

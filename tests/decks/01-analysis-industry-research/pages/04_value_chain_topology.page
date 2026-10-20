@@ -1,0 +1,351 @@
+pageType: content
+notes: |
+  第四页聚焦储能全产业链拓扑与各环节成本占比、毛利率中枢。
+  从上游原材料到中游核心部件，再到下游集成与终端运营，产业链呈现出明显的“微笑曲线”毛利分化特征：
+  1. 储能电芯（Cell）占据系统BOM成本的50%-55%，是决定储能系统循环寿命、能量转换效率与本征安全的核心。由于国内电芯产能供给充足，电芯环节正经历激烈价格战，综合毛利率落在15%-22%；
+  2. 储能变流器（PCS）占据系统成本的12%-15%，技术壁垒极高，涉及电网调度、构网型控制算法以及高压IGBT拓扑，海外毛利率高达30%-35%，是产业链中最具防御性的环节；
+  3. BMS与温控热管理占据7%-9%，随着314Ah大容量电芯普及，液冷温控渗透率飙升，温控龙头享有25%左右的稳定毛利率；
+  4. 下游系统集成环节两极分化极其严重：国内纯外购组装的EPC毛利已被压缩至5%-8%，面临巨大亏损压力；而具备海外本土电网认证、可融资性背书与长期O&M售后运维能力的全球集成龙头，综合毛利率依然维持在25%以上。
+elements:
+  # Navigation Bar (Active: Section 2)
+  - elementId: nav-s1
+    elementType: text
+    bounds: [40, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">01 市场容量与装机</span></p>"
+  - elementId: nav-s2
+    elementType: text
+    bounds: [180, 18, 125, 16]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9pt;\">02 产业链与技术</span></strong></p>"
+  - elementId: nav-s3
+    elementType: text
+    bounds: [320, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">03 竞争格局与成本</span></p>"
+  - elementId: nav-s4
+    elementType: text
+    bounds: [460, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">04 政策壁垒与投资</span></p>"
+  - elementId: nav-tag
+    elementType: text
+    bounds: [700, 18, 220, 16]
+    content:
+      text: "<p style=\"text-align: right;\"><span style=\"color: #2151FF; font-weight: bold; font-size: 8.5pt;\">INVESTMENT COMMITTEE REPORT</span></p>"
+      letterSpacing: 0.8
+  - elementId: nav-active-indicator
+    elementType: shape
+    shapeName: rect
+    bounds: [180, 35, 125, 2]
+    fill: { type: solid, color: "$primary" }
+
+  # Slide Title & Subtitle
+  - elementId: slide-title
+    elementType: text
+    bounds: [40, 42, 880, 26]
+    content:
+      style: "$slideTitle"
+      text: "<p>电芯与PCS占据超65%系统成本，海外系统集成与售后网络构筑最终盈利护城河</p>"
+
+  - elementId: slide-subtitle
+    elementType: text
+    bounds: [40, 69, 880, 16]
+    content:
+      style: "$subtitle"
+      text: "<p>产业链全景拓扑：上游矿料 ➔ 中游四大核心部件 ➔ 下游系统交付；展示成本占比、竞争要素与毛利微笑曲线</p>"
+
+  - elementId: slide-top-divider
+    elementType: line
+    bounds: [40, 89, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Top Pipeline: 4 Stages with Hexagon shapes and stealth-arrow connectors
+  - elementId: pipe-stage-1
+    elementType: shape
+    shapeName: hexagon
+    bounds: [40, 98, 160, 32]
+    adjustments: [20000, 115470]
+    fill: { type: solid, color: "$dark" }
+  - elementId: pipe-stage-1-txt
+    elementType: text
+    bounds: [40, 105, 160, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #FFFFFF; font-weight: bold; font-size: 9pt;\">01 上游矿产材料</span></p>"
+
+  - elementId: pipe-arrow-1
+    elementType: line
+    bounds: [204, 114, 30, 2]
+    points: "0,0 30,0"
+    arrow: [null, "stealth"]
+    border: { style: solid, width: 1.5, color: "$primary" }
+
+  - elementId: pipe-stage-2
+    elementType: shape
+    shapeName: hexagon
+    bounds: [238, 98, 190, 32]
+    adjustments: [18000, 115470]
+    fill: { type: solid, color: "$dark" }
+  - elementId: pipe-stage-2-txt
+    elementType: text
+    bounds: [238, 105, 190, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #FFFFFF; font-weight: bold; font-size: 9pt;\">02 中游四大核心部件</span></p>"
+
+  - elementId: pipe-arrow-2
+    elementType: line
+    bounds: [432, 114, 30, 2]
+    points: "0,0 30,0"
+    arrow: [null, "stealth"]
+    border: { style: solid, width: 1.5, color: "$primary" }
+
+  - elementId: pipe-stage-3
+    elementType: shape
+    shapeName: hexagon
+    bounds: [466, 98, 200, 32]
+    adjustments: [18000, 115470]
+    fill: { type: solid, color: "$dark" }
+  - elementId: pipe-stage-3-txt
+    elementType: text
+    bounds: [466, 105, 200, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #FFFFFF; font-weight: bold; font-size: 9pt;\">03 下游系统集成与交付</span></p>"
+
+  - elementId: pipe-arrow-3
+    elementType: line
+    bounds: [670, 114, 30, 2]
+    points: "0,0 30,0"
+    arrow: [null, "stealth"]
+    border: { style: solid, width: 1.5, color: "$primary" }
+
+  - elementId: pipe-stage-4
+    elementType: shape
+    shapeName: hexagon
+    bounds: [704, 98, 216, 32]
+    adjustments: [18000, 115470]
+    fill: { type: solid, color: "$dark" }
+  - elementId: pipe-stage-4-txt
+    elementType: text
+    bounds: [704, 105, 216, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #FFFFFF; font-weight: bold; font-size: 9pt;\">04 终端电网运维服务</span></p>"
+
+  # 4 Component Framework Boxes (fine borders + dark navy label bars; no rounded cards)
+  # Box 1: Cell
+  - elementId: comp-box-1
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 142, 210, 150]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: comp-bar-1
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 142, 210, 24]
+    fill: { type: solid, color: "$accentNavy" }
+  - elementId: comp-bar-1-txt
+    elementType: text
+    bounds: [48, 146, 194, 16]
+    content:
+      text: "<p><span style=\"color: #FFFFFF; font-weight: bold; font-size: 8.5pt;\">储能电芯 (BESS Cell)</span></p>"
+  - elementId: comp-desc-1
+    elementType: text
+    bounds: [48, 172, 194, 110]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">成本占比：50% – 55%</span></strong></p>
+        <p><strong><span style="color: #041C2C;">毛利中枢：15% – 22%</span></strong></p>
+        <p style="margin-top: 6px; color: #334155;"><strong>核心壁垒：</strong>循环寿命（&gt;10000次）、安全热失控抑制、大电芯一致性。</p>
+        <p style="margin-top: 6px; color: #334155;"><strong>代表企业：</strong>宁德时代、亿纬锂能、海辰储能、瑞浦兰钧。</p>
+      fontSize: 8.5
+      lineHeightPx: 14
+
+  # Box 2: PCS
+  - elementId: comp-box-2
+    elementType: shape
+    shapeName: rect
+    bounds: [263, 142, 210, 150]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: comp-bar-2
+    elementType: shape
+    shapeName: rect
+    bounds: [263, 142, 210, 24]
+    fill: { type: solid, color: "$accentNavy" }
+  - elementId: comp-bar-2-txt
+    elementType: text
+    bounds: [271, 146, 194, 16]
+    content:
+      text: "<p><span style=\"color: #FFFFFF; font-weight: bold; font-size: 8.5pt;\">储能变流器 (PCS)</span></p>"
+  - elementId: comp-desc-2
+    elementType: text
+    bounds: [271, 172, 194, 110]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">成本占比：12% – 15%</span></strong></p>
+        <p><strong><span style="color: #041C2C;">毛利中枢：25% – 35%</span></strong></p>
+        <p style="margin-top: 6px; color: #334155;"><strong>核心壁垒：</strong>电网并网认证（IEEE/UL）、构网型算法（Grid-forming）、拓扑控制。</p>
+        <p style="margin-top: 6px; color: #334155;"><strong>代表企业：</strong>阳光电源、上能电气、盛弘股份、科华数据。</p>
+      fontSize: 8.5
+      lineHeightPx: 14
+
+  # Box 3: BMS & Thermal
+  - elementId: comp-box-3
+    elementType: shape
+    shapeName: rect
+    bounds: [487, 142, 210, 150]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: comp-bar-3
+    elementType: shape
+    shapeName: rect
+    bounds: [487, 142, 210, 24]
+    fill: { type: solid, color: "$accentNavy" }
+  - elementId: comp-bar-3-txt
+    elementType: text
+    bounds: [495, 146, 194, 16]
+    content:
+      text: "<p><span style=\"color: #FFFFFF; font-weight: bold; font-size: 8.5pt;\">BMS与液冷温控 (Thermal)</span></p>"
+  - elementId: comp-desc-3
+    elementType: text
+    bounds: [495, 172, 194, 110]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">成本占比：7% – 9%</span></strong></p>
+        <p><strong><span style="color: #041C2C;">毛利中枢：22% – 28%</span></strong></p>
+        <p style="margin-top: 6px; color: #334155;"><strong>核心壁垒：</strong>温差控制（≤2.5℃）、泵组寿命、主动均衡BMS算法与消防联动。</p>
+        <p style="margin-top: 6px; color: #334155;"><strong>代表企业：</strong>英维克、同飞股份、高澜股份、高特电子。</p>
+      fontSize: 8.5
+      lineHeightPx: 14
+
+  # Box 4: System Integration
+  - elementId: comp-box-4
+    elementType: shape
+    shapeName: rect
+    bounds: [710, 142, 210, 150]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: comp-bar-4
+    elementType: shape
+    shapeName: rect
+    bounds: [710, 142, 210, 24]
+    fill: { type: solid, color: "$accentNavy" }
+  - elementId: comp-bar-4-txt
+    elementType: text
+    bounds: [718, 146, 194, 16]
+    content:
+      text: "<p><span style=\"color: #FFFFFF; font-weight: bold; font-size: 8.5pt;\">系统集成与EPC (Integration)</span></p>"
+  - elementId: comp-desc-4
+    elementType: text
+    bounds: [718, 172, 194, 110]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">成本占比：20% – 25%</span></strong></p>
+        <p><strong><span style="color: #041C2C;">毛利中枢：10% – 26%</span></strong></p>
+        <p style="margin-top: 6px; color: #334155;"><strong>核心壁垒：</strong>海外Tier-1可融资性背书、电网建模、全周期质保能力。</p>
+        <p style="margin-top: 6px; color: #334155;"><strong>代表企业：</strong>阳光电源、特斯拉(Megapack)、Fluence、海博思创。</p>
+      fontSize: 8.5
+      lineHeightPx: 14
+
+  # Driver-tree connectors: relative coordinates "0,0 0,dy" with triangle arrowheads
+  - elementId: conn-tree-1
+    elementType: line
+    bounds: [145, 292, 2, 20]
+    points: "0,0 0,20"
+    arrow: [null, "triangle"]
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: conn-tree-2
+    elementType: line
+    bounds: [368, 292, 2, 20]
+    points: "0,0 0,20"
+    arrow: [null, "triangle"]
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: conn-tree-3
+    elementType: line
+    bounds: [592, 292, 2, 20]
+    points: "0,0 0,20"
+    arrow: [null, "triangle"]
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: conn-tree-4
+    elementType: line
+    bounds: [815, 292, 2, 20]
+    points: "0,0 0,20"
+    arrow: [null, "triangle"]
+    border: { style: solid, width: 1, color: "$primary" }
+
+  # Smile Curve Banner (multi-point polyline; curve: round used to bypass the cubicBezTo compiler defect)
+  - elementId: smile-curve-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 315, 880, 178]
+    fill: { type: solid, color: "$tint" }
+    border: { style: solid, width: 0.8, color: "$primary" }
+
+  - elementId: smile-curve-title
+    elementType: text
+    bounds: [52, 322, 856, 18]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9.5pt;\">储能产业链“毛利微笑曲线”与价值传导模型（Margin Smile Curve）</span></strong></p>"
+
+  - elementId: smile-bezier
+    elementType: line
+    bounds: [70, 366, 820, 92]
+    viewBox: [820, 92]
+    points: "0,62 200,76 410,8 620,84 820,22"
+    curve: round
+    border: { style: solid, width: 2, color: "$primary" }
+
+  - elementId: smile-label-3
+    elementType: text
+    bounds: [430, 346, 200, 18]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #041C2C; font-weight: bold; font-size: 8pt;\">PCS变流器 (30-35% 峰值)</span></p>"
+
+  - elementId: smile-label-1
+    elementType: text
+    bounds: [50, 464, 170, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #64748B; font-size: 8pt;\">原材料加工 (10-15%)</span></p>"
+
+  - elementId: smile-label-2
+    elementType: text
+    bounds: [240, 464, 180, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #2151FF; font-weight: bold; font-size: 8pt;\">电芯制造 (15-20%)</span></p>"
+
+  - elementId: smile-label-4
+    elementType: text
+    bounds: [580, 464, 160, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #E4536C; font-weight: bold; font-size: 8pt;\">国内纯代工EPC (5-8%)</span></p>"
+
+  - elementId: smile-label-5
+    elementType: text
+    bounds: [750, 464, 165, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #2151FF; font-weight: bold; font-size: 8pt;\">海外全栈交付 (25-30%)</span></p>"
+
+  # Bottom hairline and footer
+  - elementId: slide-bottom-line
+    elementType: line
+    bounds: [40, 508, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: slide-foot-src
+    elementType: text
+    bounds: [40, 514, 740, 16]
+    content:
+      style: "$footnote"
+      text: "<p>数据来源：各上市公司2023年报/2024半年报、InfoLink Consulting、中关村储能产业技术联盟(CNESA)</p>"
+
+  - elementId: slide-foot-page
+    elementType: text
+    bounds: [820, 514, 100, 16]
+    content:
+      style: "$footnote"
+      text: "<p style=\"text-align: right;\"><strong><span style=\"color: #041C2C;\">04</span></strong> / 10</p>"

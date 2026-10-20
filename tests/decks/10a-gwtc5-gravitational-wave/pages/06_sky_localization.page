@@ -1,0 +1,263 @@
+pageType: content
+background: { type: solid, color: "$paper" }
+notes: |
+  Slide 6: Sky Localization & Triangulation: Pointing Telescopes in the Sky.
+  - Explains the geometrical principles of gravitational-wave sky localization: time-of-flight differences between detector pairs constrain the source direction to an annulus on the celestial sphere.
+  - Compares 2-detector baseline vs 3-detector and 4-detector networks: 2 detectors (Hanford-Livingston) produce degenerate arcs of ~600 deg^2 (like GW150914); adding Virgo narrows the region to ~28 deg^2 (like GW170817), while adding KAGRA pinpoints targets to ~10 deg^2.
+  - Discusses pipeline latencies: BAYESTAR produces rapid HEALPix probability maps in under 5 seconds for robotic telescope pointing, while full coherent Bayesian Markov Chain Monte Carlo (LALInference / Bilby) runs offline.
+elements:
+  # Left Rail
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [14, 24, 142, 484]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [18, 30, 134, 84]
+    src: "assets/thumb_detectors.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [18, 122, 134, 84]
+    src: "assets/thumb_timeline.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-3
+    elementType: image
+    bounds: [18, 214, 134, 84]
+    src: "assets/thumb_catalog.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-4
+    elementType: image
+    bounds: [18, 306, 134, 84]
+    src: "assets/thumb_mass.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-divider
+    elementType: line
+    bounds: [168, 24, 1, 484]
+    points: "0,0 0,484"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Header
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 24, 475, 34]
+    content:
+      style: "$title"
+      text: "Triangulation Shrinks Sky Error Boxes by 95%"
+
+  - elementId: slide-category
+    elementType: text
+    bounds: [660, 27, 260, 18]
+    content:
+      style: "$category"
+      align: [right, middle]
+      text: "05 · SKY LOCALIZATION"
+
+  - elementId: header-rule
+    elementType: line
+    bounds: [185, 58, 735, 1]
+    points: "0,0 735,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Center Area: Sky Map Matplotlib Plot
+  - elementId: chart-sky
+    elementType: image
+    bounds: [185, 70, 420, 235]
+    src: "assets/sky_localization.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Epistemology Distinction Box
+  - elementId: dist-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 315, 420, 125]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: dist-txt
+    elementType: text
+    bounds: [193, 321, 404, 113]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>[Catalog Fact]</b> GW150914 (2 det) error area \( \approx 600\text{ deg}^2 \); GW170817 (3 det) error area \( \approx 28\text{ deg}^2 \).<br/>
+        <b>[Visualization Choice]</b> Mollweide celestial projection displaying 90% credible areas with multi-color network comparison.<br/>
+        <b>[Physical Interpretation]</b> Geometric time delays \( \Delta t = \vec{D}\cdot\vec{n}/c \) define rings; 3 non-collinear baselines pinpoint position.<br/>
+        <b>[Open Question]</b> Automated prompt alerts for sub-minute multi-messenger optical triggering before kilonova peak fades.
+
+  # Right Sidebar
+  - elementId: side-1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 75, 295, 110]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-1-icon
+    elementType: icon
+    iconName: "fas:location-crosshairs"
+    bounds: [637, 85, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-1-head
+    elementType: text
+    bounds: [658, 85, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "TIMING DELAYS"
+
+  - elementId: side-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 103, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-1-formula
+    elementType: text
+    bounds: [642, 107, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: |
+        \( \Delta t_{12} = (\vec{r}_1 - \vec{r}_2) \cdot \hat{n} / c \)
+
+  - elementId: side-1-desc
+    elementType: text
+    bounds: [637, 134, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Arrival time differences across continental baselines yield hyperbolic rings on the sky. Intersections of two rings resolve source locations down to narrow bananas."
+
+  - elementId: side-2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 195, 295, 118]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-2-icon
+    elementType: icon
+    iconName: "fas:bolt"
+    bounds: [637, 205, 15, 15]
+    fill: { type: solid, color: "$teal" }
+
+  - elementId: side-2-head
+    elementType: text
+    bounds: [658, 205, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "BAYESTAR RAPID MAPS"
+
+  - elementId: side-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 223, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-2-formula
+    elementType: text
+    bounds: [642, 227, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$teal"
+      text: |
+        \( \text{Full sky posterior generated in } < 5\text{ seconds} \)
+
+  - elementId: side-2-desc
+    elementType: text
+    bounds: [637, 254, 271, 52]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Analytic likelihood evaluation on HEALPix grids replaces days of MCMC sampling, publishing 3D distance-resolved skymaps while the event is still fresh."
+
+  - elementId: side-3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 323, 295, 108]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-3-icon
+    elementType: icon
+    iconName: "fas:binoculars"
+    bounds: [637, 333, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-3-head
+    elementType: text
+    bounds: [658, 333, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "TELESCOPIC TARGETING"
+
+  - elementId: side-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 351, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-3-formula
+    elementType: text
+    bounds: [642, 355, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$primary"
+      text: |
+        \( \Omega_{90} \le 30\text{ deg}^2 \Rightarrow \text{Targetable by survey cameras} \)
+
+  - elementId: side-3-desc
+    elementType: text
+    bounds: [637, 382, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Wide-field survey instruments (ZTF, DECam, Rubin LSST) tile the probability contour within hours, discovering optical transients like AT2017gfo."
+
+  # Takeaway Line
+  - elementId: footer-takeaway
+    elementType: text
+    bounds: [185, 456, 735, 24]
+    content:
+      style: "$takeaway"
+      text: "<b>Takeaway</b> · <b>A third global baseline reduces sky search areas by 95%, enabling robotic telescope follow-up.</b>"
+
+  # Sources Line
+  - elementId: footer-sources
+    elementType: text
+    bounds: [185, 490, 680, 20]
+    content:
+      style: "$footer"
+      text: "Sources: Singer & Price, PRD 93, 024013; Abbott et al., ApJL 848, L12 (2017) · notes/localization.md"
+
+  # Page Number
+  - elementId: footer-page
+    elementType: text
+    bounds: [875, 490, 45, 20]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      text: "6"

@@ -1,0 +1,174 @@
+pageType: content
+background:
+  type: solid
+  color: "$paper"
+notes: "演讲者备注：第七页是杯测风味雷达与感官品鉴矩阵。图文并茂展示了北纬30度微批次所展现出的高山冷凉风味特征——极其纯净的茉莉花香、佛手柑酸质与如丝绸般的红茶余韵。下方辅以严谨的原生PowerPoint数据表格，对比三大主打单品批次的理化与感官评分。"
+elements:
+  # Fixed top-left section marker
+  - elementId: section-marker
+    elementType: shape
+    bounds: [64, 32, 6, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$klein"
+
+  - elementId: section-num
+    elementType: text
+    bounds: [78, 32, 400, 24]
+    content:
+      style: "$sectionNum"
+      text: "07 // SENSORY FLAVOR MATRIX & CUPPING AUDIT"
+
+  - elementId: top-meta-right
+    elementType: text
+    bounds: [768, 32, 448, 24]
+    content:
+      style: "$meta"
+      align: [right, middle]
+      text: "30°N ROASTERY // FLAVOR LAB REPORT // 示例品牌（虚构）"
+
+  - elementId: top-divider
+    elementType: line
+    bounds: [64, 68, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  # Heavy rule above headline
+  - elementId: headline-rule
+    elementType: line
+    bounds: [64, 95, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 3
+      color: "$ink"
+
+  - elementId: page-headline
+    elementType: text
+    bounds: [64, 110, 1152, 45]
+    content:
+      style: "$headline"
+      text: "纯净度与多重芳香层次：高海拔冷凉风味的感官实证"
+
+  # Left 5 columns (x: 64, w: 460): Polar sensory radar chart (fit: contain)
+  - elementId: sensory-radar-img
+    elementType: image
+    bounds: [64, 165, 460, 340]
+    src: "assets/sensory_wheel.png"
+    fit:
+      mode: contain
+    border:
+      style: solid
+      width: 1
+      color: "$ink"
+
+  # Tilted certification seal on top of chart (+3 degrees rotation)
+  - elementId: cert-seal
+    elementType: shape
+    bounds: [420, 155, 80, 80]
+    shapeName: star16
+    adjustments: [37500]
+    rotation: 3
+    fill:
+      type: solid
+      color: "$ochre"
+
+  - elementId: cert-seal-text
+    elementType: text
+    bounds: [420, 180, 80, 30]
+    rotation: 3
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 10
+      bold: true
+      color: "$white"
+      align: [center, middle]
+      letterSpacing: 1
+      text: "Q-GRADER\n89.2 PTS"
+
+  - elementId: sensory-caption
+    elementType: text
+    bounds: [64, 515, 460, 36]
+    content:
+      style: "$caption"
+      text: "CHART 07.1 // CQI认证Q-Grader杯测风味雷达图 // 盲测样本：2024春季首发微批次"
+
+  # Right 7 columns (x: 550, w: 666): Sensory descriptors and Native Table
+  - elementId: descriptors-lead
+    elementType: text
+    bounds: [550, 165, 666, 60]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 14
+      lineHeight: 1.55
+      color: "$ink"
+      text: |
+        <p><strong>杯测特征解析（SCA 89.2分）</strong>：</p>
+        <p style="margin-top:4px;">干香散发清澈茉莉花与佛手柑皮油香；破渣时涌现明亮白桃与多汁覆盆子风味；啜吸触感如天鹅绒般丝滑，伴随悠长的高山红茶余韵与清冽的冰川矿物感。</p>
+
+  # Native Table comparing 3 Micro-Lots
+  - elementId: cupping-table
+    elementType: table
+    bounds: [550, 245, 666, 260]
+    columnWidths: [0.26, 0.15, 0.43, 0.16]
+    rowHeights: [0.22, 0.26, 0.26, 0.26]
+    rows:
+      - - fill: {type: solid, color: "$klein"}
+          text: "<p style=\"text-align:left; color:#ffffff;\"><strong>微批次名称与品种</strong></p>"
+        - fill: {type: solid, color: "$klein"}
+          text: "<p style=\"text-align:center; color:#ffffff;\"><strong>标定海拔</strong></p>"
+        - fill: {type: solid, color: "$klein"}
+          text: "<p style=\"text-align:left; color:#ffffff;\"><strong>主要杯测风味特征</strong></p>"
+        - fill: {type: solid, color: "$klein"}
+          text: "<p style=\"text-align:center; color:#ffffff;\"><strong>SCA评分</strong></p>"
+      - - fill: {type: solid, color: "#FFFFFF"}
+          text: "<p><strong>保山高海拔铁比卡</strong><br/><span style=\"font-size:11px; color:#55514A;\">Typica / 120h厌氧蜜处理</span></p>"
+        - fill: {type: solid, color: "#FFFFFF"}
+          text: "<p style=\"text-align:center;\">1,880m</p>"
+        - fill: {type: solid, color: "#FFFFFF"}
+          text: "<p>茉莉花、佛手柑、白桃、红茶余韵</p>"
+        - fill: {type: solid, color: "#FFFFFF"}
+          text: "<p style=\"text-align:center; color:#0038B8;\"><strong>89.2</strong></p>"
+      - - fill: {type: solid, color: "#F0EFE9"}
+          text: "<p><strong>金沙江峡谷极限选种</strong><br/><span style=\"font-size:11px; color:#55514A;\">Bourbon / 双重厌氧日晒</span></p>"
+        - fill: {type: solid, color: "#F0EFE9"}
+          text: "<p style=\"text-align:center;\">2,180m</p>"
+        - fill: {type: solid, color: "#F0EFE9"}
+          text: "<p>黑加仑、接骨木花、清甜甘蔗汁</p>"
+        - fill: {type: solid, color: "#F0EFE9"}
+          text: "<p style=\"text-align:center; color:#0038B8;\"><strong>88.7</strong></p>"
+      - - fill: {type: solid, color: "#FFFFFF"}
+          text: "<p><strong>昔归高山冷萃配方</strong><br/><span style=\"font-size:11px; color:#55514A;\">Catimor 7963 / 水洗精选</span></p>"
+        - fill: {type: solid, color: "#FFFFFF"}
+          text: "<p style=\"text-align:center;\">1,750m</p>"
+        - fill: {type: solid, color: "#FFFFFF"}
+          text: "<p>烤杏仁、可可碎、焦糖布丁</p>"
+        - fill: {type: solid, color: "#FFFFFF"}
+          text: "<p style=\"text-align:center; color:#0038B8;\"><strong>86.5</strong></p>"
+  - elementId: table-note
+    elementType: text
+    bounds: [550, 515, 666, 36]
+    content:
+      style: "$caption"
+      text: "TABLE 07.1 // 2024年度核心微批次杯测理化指标横向对比表 // 杯测遵循SCA标准环境（水温93°C，TDS 125ppm）"
+
+  # Baseline metadata & source
+  - elementId: bottom-divider
+    elementType: line
+    bounds: [64, 650, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  - elementId: bottom-info
+    elementType: text
+    bounds: [64, 665, 1152, 24]
+    content:
+      style: "$footer"
+      text: "PAGE 07 // 30°N BRAND BOOK // CUPPING PROTOCOL // 示例品牌（虚构） // SCA SENSORY STANDARD 2023"

@@ -1,0 +1,174 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+notes: |
+  第五部分进入严谨的理论复杂度推导。
+  许多稀疏算法虽然提出了稀疏拓扑，但由于路由开销本身过大，导致整体复杂度并未真正降阶。
+  由式 6.1 可见，DLR-Attn 的总计算量严格由三部分构成：降维投影、路由搜索以及局部精确注意力。
+  通过对分块簇数 B 求偏导并令其为零（式 6.2），我们解析求解出了最优分块阶数 B^* 严格与根号 N 成正比。
+  将最优 B^* 代回总算力模型，最终严密证明了在维持全局感知的前提下，总计算复杂度可从 O(N^2) 严格压降至 O(N^1.5)。
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 30, 600, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$primary"
+      letterSpacing: 1.2
+      text: 05 · THEORETICAL COMPLEXITY DERIVATION
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 48, 860, 36]
+    content:
+      fontSize: 17
+      bold: true
+      color: "$fg"
+      text: 理论证明：最优分块阶数 \( B^* = \Theta(\sqrt{N}) \) 下计算复杂度降至 \( O(N^{1.5}) \)
+  # Top dividing line
+  - elementId: div-top
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 86, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: deriv-label
+    elementType: text
+    bounds: [50, 98, 440, 20]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$primary"
+      text: 整体算力成本目标函数与最优化解析推导 (Proof of Theorem 1)
+
+  # Equation array using split (compiles to <m:eqArr>)
+  - elementId: formula-split
+    elementType: text
+    bounds: [50, 118, 440, 95]
+    content:
+      fontSize: 13
+      align: [center, middle]
+      text: |
+        <p>\( \begin{split} C_{\mathrm{total}}(N, B) &= C_{\mathrm{proj}} + C_{\mathrm{router}} + C_{\mathrm{attn}} \\ &= N \cdot m + N \cdot B \cdot m + N \cdot \left( \frac{k N}{B} \right) \cdot d_k \end{split} \)</p>
+
+  - elementId: num-61
+    elementType: text
+    bounds: [340, 214, 150, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$gray"
+      align: [right, middle]
+      text: (式 6.1)
+
+  # Derivative and stationary point
+  - elementId: formula-stationary
+    elementType: text
+    bounds: [50, 236, 440, 80]
+    content:
+      fontSize: 13
+      align: [center, middle]
+      text: |
+        <p>\( \frac{\partial C_{\mathrm{total}}}{\partial B} = N \cdot m - \frac{k N^2 d_k}{B^2} = 0 \Rightarrow B^* = \sqrt{\frac{k \cdot d_k}{m} \cdot N} \)</p>
+
+  - elementId: num-62
+    elementType: text
+    bounds: [340, 318, 150, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$gray"
+      align: [right, middle]
+      text: (式 6.2)
+
+  # Optimal complexity with nth-root and product
+  - elementId: formula-optimal
+    elementType: text
+    bounds: [50, 340, 440, 80]
+    content:
+      fontSize: 13
+      align: [center, middle]
+      text: |
+        <p>\( C_{\mathrm{optimal}}(N) = 2 N \sqrt{k \cdot m \cdot d_k \cdot N} + N \cdot m = O\left( N \sqrt{N} \right) \)</p>
+
+  - elementId: num-63
+    elementType: text
+    bounds: [340, 422, 150, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$gray"
+      align: [right, middle]
+      text: (式 6.3)
+
+  - elementId: deriv-notes
+    elementType: text
+    bounds: [50, 444, 440, 44]
+    content:
+      fontSize: 11
+      lineHeight: 1.4
+      color: "$gray"
+      text: |
+        <p><strong>定理 1 结论：</strong>当分块簇数选取满足 \( B^* = \Theta(\sqrt{N}) \) 时，整体动态注意力在保证全局候选块全向可达性的前提下，实现 \( O(N^{1.5}) \) 紧确渐近复杂度，彻底突破二次方屏障。</p>
+
+  # Right Column: Matplotlib Complexity Scaling Chart
+  - elementId: comp-chart-img
+    elementType: image
+    bounds: [535, 102, 375, 230]
+    src: assets/complexity_curves.png
+    fit:
+      mode: contain
+
+  - elementId: comp-chart-caption
+    elementType: text
+    bounds: [535, 336, 375, 42]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.3
+      color: "$gray"
+      text: |
+        <p><strong>图 6.1: 序列长度对归一化计算量（FLOPs）的缩放曲线对比</strong>。在 \( N \ge 4\mathrm{K} \) 区域，DLR-Attn 展现出优于 \( O(N^2) \) 的阶数级算力节约。</p>
+
+  - elementId: comp-callout
+    elementType: shape
+    shapeName: rect
+    bounds: [535, 386, 375, 92]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$ruleColor"
+
+  - elementId: comp-callout-text
+    elementType: text
+    bounds: [550, 396, 345, 72]
+    content:
+      fontSize: 11
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">● 交叉点分析（Crossover Point）：</span>在硬件实测中，由于降维投影引入常数项，临界交叉长度为 \( N \approx 2048 \)。当 \( N > 4096 \) 后，算法级降阶收益完全覆盖路由开销。</p>
+
+  # Footer dividing line
+  - elementId: div-bottom
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 498, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: footer-nav
+    elementType: text
+    bounds: [50, 506, 860, 20]
+    content:
+      fontSize: 10
+      color: "$gray"
+      text: |
+        <p>面向长上下文推理的稀疏注意力机制 · 博士学位论文答辩 <span style="float:right;">§5 理论推导 ｜ 06 / 10</span></p>

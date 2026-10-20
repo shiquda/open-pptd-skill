@@ -1,0 +1,136 @@
+pageType: content
+notes: |
+  第三页进入第一章节：全球储能需求与装机空间预测。
+  从左侧图表清晰可见，2020年至2023年全球新增装机由11GWh迅猛攀升至102GWh，完成了历史性的百吉瓦时跨越。
+  展望未来，2024年预计达到165GWh，到2030年将突破720GWh，年均复合增速高达27.8%。
+  右侧从三大区域结构进行拆解：
+  第一，中国市场：2024年预计装机78GWh，贡献全球近一半增量。核心驱动力是新能源强制配储向独立共享储能转型，多地容量电价补偿机制逐步确立，提高了电站运营商业性；
+  第二，北美市场：2024年预计装机48GWh，ITC税收抵免将Standalone Storage纳入扶持范围，抵免额度达30%-50%，项目投资IRR稳定在12%-16%，具备极强的开发商吸引力；
+  第三，欧洲与新兴市场：由于可再生能源间歇性渗透率极高，日前现货市场负电价频现，驱动套利型独立大储激增；同时中东沙漠绿电与澳洲煤电退役释放吉瓦级大单。
+  对投资决策而言：全球大储是确定性最高的成长赛道，海外高溢价市场是维系龙头30%毛利率的核心支柱。
+elements:
+  # Navigation Bar (Active: Section 1)
+  - elementId: nav-s1
+    elementType: text
+    bounds: [40, 18, 125, 16]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9pt;\">01 市场容量与装机</span></strong></p>"
+  - elementId: nav-s2
+    elementType: text
+    bounds: [180, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">02 产业链与技术</span></p>"
+  - elementId: nav-s3
+    elementType: text
+    bounds: [320, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">03 竞争格局与成本</span></p>"
+  - elementId: nav-s4
+    elementType: text
+    bounds: [460, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">04 政策壁垒与投资</span></p>"
+  - elementId: nav-tag
+    elementType: text
+    bounds: [700, 18, 220, 16]
+    content:
+      text: "<p style=\"text-align: right;\"><span style=\"color: #2151FF; font-weight: bold; font-size: 8.5pt;\">INVESTMENT COMMITTEE REPORT</span></p>"
+      letterSpacing: 0.8
+  - elementId: nav-active-indicator
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 35, 125, 2]
+    fill: { type: solid, color: "$primary" }
+
+  # Slide Title & Subtitle
+  - elementId: slide-title
+    elementType: text
+    bounds: [40, 42, 880, 26]
+    content:
+      style: "$slideTitle"
+      text: "<p>2024–2030年全球储能新增装机CAGR达27.8%，中美欧三极驱动万亿级赛道爆发</p>"
+
+  - elementId: slide-subtitle
+    elementType: text
+    bounds: [40, 69, 880, 16]
+    content:
+      style: "$subtitle"
+      text: "<p>统计口径：全球表前电网侧、工商业与户用电化学储能新增装机合计（GWh）；数据源自BNEF与CNESA产业数据库</p>"
+
+  - elementId: slide-top-divider
+    elementType: line
+    bounds: [40, 89, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Left Evidence Area: Chart Image
+  - elementId: chart-global-additions
+    elementType: image
+    bounds: [40, 98, 540, 398]
+    src: "assets/global_bess_additions.png"
+    fit: { mode: contain }
+  # Right Judgment Panel
+  - elementId: right-panel-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [595, 98, 325, 398]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: right-panel-header
+    elementType: text
+    bounds: [610, 110, 295, 22]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 11pt;\">区域需求拆解与增长驱动机制</span></strong></p>"
+      letterSpacing: 0.5
+
+  - elementId: right-panel-content
+    elementType: text
+    bounds: [610, 138, 295, 260]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">1. 中国 (47%份额)</span></strong><span style="color: #041C2C; font-weight: bold;">：独立大储与容量电价</span></p>
+        <p style="margin-top: 3px; color: #334155; font-size: 9pt; line-height: 1.4;">2024E新增预计达78 GWh。国家发改委出台容量电价机制，山东、山西等省电力现货市场铺开，商业模式逐步摆脱纯政策强配低利用率困境。</p>
+
+        <p style="margin-top: 10px;"><strong><span style="color: #2151FF;">2. 北美 (29%份额)</span></strong><span style="color: #041C2C; font-weight: bold;">：IRA税优与互联并网刚需</span></p>
+        <p style="margin-top: 3px; color: #334155; font-size: 9pt; line-height: 1.4;">2024E新增预计达48 GWh。独立储能纳入30%-50% ITC投资税收抵免，大储IRR维持12%-16%；PJM与CAISO电网排队拥堵加速储能替代调频。</p>
+
+        <p style="margin-top: 10px;"><strong><span style="color: #2151FF;">3. 欧洲及中东新兴市场 (24%份额)</span></strong></p>
+        <p style="margin-top: 3px; color: #334155; font-size: 9pt; line-height: 1.4;">欧洲现货市场负电价常态化激发套利活力；中东（沙特NEOM/阿联酋）与澳大利亚百万千瓦级大单放量，中国一线设备商已实现成套直供。</p>
+      lineHeight: 1.35
+
+  - elementId: right-panel-synthesis
+    elementType: shape
+    shapeName: rect
+    bounds: [605, 410, 305, 75]
+    fill: { type: solid, color: "$tint" }
+    border: { style: solid, width: 0.8, color: "$primary" }
+
+  - elementId: right-panel-synthesis-txt
+    elementType: text
+    bounds: [613, 416, 289, 63]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF; font-size: 9pt;">投委会判断 (Takeaway)：</span></strong></p>
+        <p style="margin-top: 3px; color: #041C2C; font-size: 8.5pt; line-height: 1.35;">全球大储需求进入放量拐点，欧美海外市场毛利率高出国内15-20pcts，出海交付与渠道布局能力是决定标的估值溢价的核心胜负手。</p>
+
+  # Bottom hairline and footer
+  - elementId: slide-bottom-line
+    elementType: line
+    bounds: [40, 508, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: slide-foot-src
+    elementType: text
+    bounds: [40, 514, 740, 16]
+    content:
+      style: "$footnote"
+      text: "<p>数据来源：BNEF 2024 H1 Energy Storage Outlook, CNESA全球储能数据库2024  |  统计口径：电化学储能新增装机（GWh）</p>"
+
+  - elementId: slide-foot-page
+    elementType: text
+    bounds: [820, 514, 100, 16]
+    content:
+      style: "$footnote"
+      text: "<p style=\"text-align: right;\"><strong><span style=\"color: #041C2C;\">03</span></strong> / 10</p>"

@@ -1,0 +1,254 @@
+pageType: content
+background:
+  type: solid
+  color: "$white"
+notes: "本页建立家庭网络的核心拓扑认知。在绝大多数家庭中，数据都是按照这四层结构线性流动的。请重点看第二层和第三层之间的蓝色虚线，这就是局域网与外网的分水岭。光猫 LAN 口连接路由器 WAN 口这一根网线，就是家庭内外数据交换的唯一咽喉。只要这根线松了，整个家庭的所有无线和有线设备就会同时断网。掌握了这一层关系，就能立刻通过多设备交叉测试来定位故障区域。"
+elements:
+  - elementId: top-rule
+    elementType: shape
+    bounds: [40, 20, 880, 2]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: nav-section
+    elementType: text
+    bounds: [40, 28, 260, 18]
+    content:
+      text: "阶段二 / 概念建构 (COMPREHENSION)"
+      fontSize: 9.5
+      bold: true
+      color: "$primaryDeep"
+      letterSpacing: 1.0
+
+  - elementId: running-head
+    elementType: text
+    bounds: [680, 28, 240, 18]
+    content:
+      text: "家庭网络排障实操课 · 拓扑定界"
+      fontSize: 9.5
+      color: "$grayLight"
+      align: [right, top]
+
+  - elementId: page-title
+    elementType: text
+    bounds: [40, 48, 880, 28]
+    content:
+      text: "识别家庭组网四层结构：故障定界先分清「局域网」与「外网」"
+      style: "$title"
+
+  - elementId: page-subtitle
+    elementType: text
+    bounds: [40, 78, 880, 20]
+    content:
+      text: "物理拓扑决定数据流向：终端 ➔ 局域网分发 ➔ 光电转换 ➔ 运营商局端"
+      style: "$subtitle"
+
+  - elementId: vertical-label
+    elementType: text
+    bounds: [40, 120, 24, 280]
+    content:
+      text: "网络分层定界基准轴"
+      fontSize: 11
+      bold: true
+      color: "$primary"
+      textDirection: vertical
+      align: [center, middle]
+      letterSpacing: 2.0
+
+  - elementId: layer-1-box
+    elementType: shape
+    bounds: [76, 120, 180, 280]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: layer-1-icon
+    elementType: icon
+    bounds: [96, 136, 32, 32]
+    iconName: "fas:laptop"
+    fill: { type: solid, color: "$primaryDeep" }
+
+  - elementId: layer-1-title
+    elementType: text
+    bounds: [96, 178, 140, 22]
+    content:
+      text: "<p><strong>01 终端接入层</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: layer-1-desc
+    elementType: text
+    bounds: [96, 204, 140, 180]
+    content:
+      text: |
+        <p><strong>载体设备：</strong><br/>手机、笔记本、平板、智能电视、摄像头</p>
+        <p><strong>核心职责：</strong><br/>发起 HTTP/DNS 请求，接收私网 IP 地址 (192.168.x.x)</p>
+        <p><strong>典型故障：</strong><br/>单机 Wi-Fi 假死、IP 冲突、私密 MAC 地址异常</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: arrow-1-2
+    elementType: line
+    bounds: [258, 240, 26, 20]
+    viewBox: [26, 20]
+    points: "0,10 24,10"
+    border: { style: solid, width: 2, color: "$primary" }
+    arrow: [null, triangle]
+
+  - elementId: layer-2-box
+    elementType: shape
+    bounds: [286, 120, 180, 280]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: layer-2-icon
+    elementType: icon
+    bounds: [306, 136, 32, 32]
+    iconName: "fas:wifi"
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: layer-2-title
+    elementType: text
+    bounds: [306, 178, 140, 22]
+    content:
+      text: "<p><strong>02 无线路由层</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: layer-2-desc
+    elementType: text
+    bounds: [306, 204, 140, 180]
+    content:
+      text: |
+        <p><strong>载体设备：</strong><br/>无线路由器、Mesh 子母路由、网络交换机</p>
+        <p><strong>核心职责：</strong><br/>NAT 路由转发、DHCP 租约分配、局域网安全隔离</p>
+        <p><strong>典型故障：</strong><br/>WAN 口线缆松动、路由固件死锁、DHCP 租约耗尽</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: demarcation-line
+    elementType: line
+    bounds: [480, 110, 2, 300]
+    viewBox: [2, 300]
+    points: "1,0 1,300"
+    border: { style: dash, width: 1.5, color: "$primary" }
+
+  - elementId: demarcation-tag
+    elementType: text
+    bounds: [425, 412, 112, 20]
+    content:
+      text: "【内外网分界线】"
+      fontSize: 9.5
+      bold: true
+      color: "$primaryDeep"
+      align: [center, top]
+      wrap: false
+
+  - elementId: arrow-2-3
+    elementType: line
+    bounds: [468, 240, 26, 20]
+    viewBox: [26, 20]
+    points: "0,10 24,10"
+    border: { style: solid, width: 2, color: "$primary" }
+    arrow: [null, triangle]
+
+  - elementId: layer-3-box
+    elementType: shape
+    bounds: [496, 120, 180, 280]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: layer-3-icon
+    elementType: icon
+    bounds: [516, 136, 32, 32]
+    iconName: "fas:server"
+    fill: { type: solid, color: "$cyan" }
+
+  - elementId: layer-3-title
+    elementType: text
+    bounds: [516, 178, 140, 22]
+    content:
+      text: "<p><strong>03 调制解调层</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: layer-3-desc
+    elementType: text
+    bounds: [516, 204, 140, 180]
+    content:
+      text: |
+        <p><strong>载体设备：</strong><br/>运营商光纤猫 (ONT / 光调制解调器)</p>
+        <p><strong>核心职责：</strong><br/>光电信号转换、PPPoE 宽带接入认证、VLAN 打标</p>
+        <p><strong>典型故障：</strong><br/>LOS 红灯光衰超标、PON 闪烁认证失败、宽带欠费</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: arrow-3-4
+    elementType: line
+    bounds: [678, 240, 26, 20]
+    viewBox: [26, 20]
+    points: "0,10 24,10"
+    border: { style: solid, width: 2, color: "$primary" }
+    arrow: [null, triangle]
+
+  - elementId: layer-4-box
+    elementType: shape
+    bounds: [706, 120, 214, 280]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: layer-4-icon
+    elementType: icon
+    bounds: [726, 136, 32, 32]
+    iconName: "fas:network-wired"
+    fill: { type: solid, color: "$grayText" }
+
+  - elementId: layer-4-title
+    elementType: text
+    bounds: [726, 178, 174, 22]
+    content:
+      text: "<p><strong>04 运营商局端</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: layer-4-desc
+    elementType: text
+    bounds: [726, 204, 174, 180]
+    content:
+      text: |
+        <p><strong>载体设备：</strong><br/>电信/移动/联通机房 OLT、城域网 BAS 路由器</p>
+        <p><strong>核心职责：</strong><br/>公网 IP 路由出口、主干 DNS 解析、流量计费审计</p>
+        <p><strong>典型故障：</strong><br/>区域主干缆线施工挖断、局端设备割接升级、DNS 污染</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: topology-summary
+    elementType: text
+    bounds: [76, 440, 844, 45]
+    content:
+      text: "<p><strong>定界金标准：</strong>以蓝色虚线为界——若仅单台手机上不去网，问题在 <strong>第 1 层</strong>；若全家 Wi-Fi 满格但无网且路由 WAN 橙灯，问题在 <strong>第 2 层与第 3 层连线</strong>；若光猫 LOS 红灯闪烁，问题在 <strong>第 3 层与第 4 层光路</strong>。</p>"
+      fontSize: 10.5
+      color: "$ink"
+      lineHeight: 1.35
+
+  - elementId: bottom-source-line
+    elementType: text
+    bounds: [40, 508, 800, 18]
+    content:
+      text: "参考标准：IEEE 802.3以太网协议、IEEE 802.11无线局域网协议与 ITU-T G.984 GPON 架构标准"
+      style: "$caption"
+
+  - elementId: bottom-page-number
+    elementType: text
+    bounds: [870, 508, 50, 18]
+    content:
+      text: "03"
+      style: "$caption"
+      align: [right, top]

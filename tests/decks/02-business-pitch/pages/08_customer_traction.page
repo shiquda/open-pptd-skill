@@ -1,0 +1,171 @@
+pageType: content
+notes: "真实的客户数据是最好的证据。在印尼前三的生鲜连锁 PT FreshMart 案例中，我们为其 320 辆冷藏车和 8 座冷库部署了系统。仅仅运行两个季度，原本高达 31% 的果蔬海鲜损耗腰斩至 13.2%，每年直接挽回近 180 万美元的真金白银。客户上线至今零流失，并将合同一口气续签三年。"
+elements:
+  # Navigation / Chapter locator
+  - elementId: nav-chapter
+    elementType: text
+    bounds: [50, 24, 400, 20]
+    content:
+      style: "$chapter"
+      text: "06 客户验证 | COMMERCIAL PROOF"
+
+  - elementId: nav-line
+    elementType: line
+    bounds: [50, 48, 860, 1]
+    viewBox: [860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 1, color: "$primary"}
+
+  # Assertion Title & Subtitle
+  - elementId: title
+    elementType: text
+    bounds: [50, 58, 860, 32]
+    content:
+      style: "$title"
+      text: "标杆生鲜巨头印尼与越南落地验证：货损率直降 58%、冷车空驶率下降 22%"
+
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 92, 860, 20]
+    content:
+      style: "$subtitle"
+      text: "标杆案例：印尼头部生鲜连锁 PT FreshMart 与跨国冷链承运商 320 辆车队实测成效"
+
+  # Left Column: Case Study Data & Outcomes (w: 400)
+  - elementId: case-header-box
+    elementType: shape
+    bounds: [50, 126, 400, 42]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+
+  - elementId: case-header-txt
+    elementType: text
+    bounds: [60, 134, 380, 26]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$white"
+      text: "客户档案：PT FreshMart (印尼前三大生鲜连锁超市)"
+
+  - elementId: case-meta-txt
+    elementType: text
+    bounds: [50, 172, 400, 48]
+    content:
+      style: "$body"
+      text: "<b>• 部署规模</b>：320 辆干线与城配冷藏车 + 8 座省际枢纽冷库<br/><b>• 运营范围</b>：大雅加达都市圈、万隆、泗水及跨巴厘岛干线"
+
+  # 3 Metrics Before vs After (Structured horizontal comparisons)
+  - elementId: metric-kpi-1
+    elementType: text
+    bounds: [50, 224, 400, 44]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>• 易腐果蔬损耗率</b>：上线前 <b>31.4%</b> → 上线后 <b>13.2%</b> (<b>-58.0%</b>)<br/><span style=\"color:#03522C;font-size:10px;\">年化直接减少变质损耗约 <b>180 万美元</b></span>"
+
+  - elementId: metric-kpi-2
+    elementType: text
+    bounds: [50, 274, 400, 44]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>• 异常断链响应时效</b>：上线前 <b>4.2 小时</b> → 上线后 <b>6 分钟</b><br/><span style=\"color:#03522C;font-size:10px;\">AI 异常侦测提前预警，现场干预处置成功率达 <b>94.5%</b></span>"
+
+  - elementId: metric-kpi-3
+    elementType: text
+    bounds: [50, 324, 400, 44]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>• 冷链车辆综合空驶率</b>：上线前 <b>34.0%</b> → 上线后 <b>26.5%</b> (<b>-22.1%</b>)<br/><span style=\"color:#03522C;font-size:10px;\">动态双向配载提升单车月均出勤里程 <b>18.5%</b></span>"
+
+  # Customer Endorsement Quote (exercising opacity: 0.85)
+  - elementId: case-quote-box
+    elementType: shape
+    bounds: [50, 374, 400, 44]
+    shapeName: rect
+    fill: {type: solid, color: "$mint"}
+    opacity: 0.85
+    border: {style: solid, width: 1, color: "$accent"}
+
+  - elementId: case-quote-txt
+    elementType: text
+    bounds: [58, 378, 384, 36]
+    content:
+      fontSize: 9.5
+      italic: true
+      color: "$primary"
+      lineHeight: 1.35
+      text: "“ColdSync 让原本无法追踪的跨岛跳运完全透明化，每年为我们挽回数百吨生鲜损耗。” —— PT FreshMart 物流副总裁"
+
+  # Right Column: Matplotlib Telematics Dashboard (w: 440)
+  - elementId: proof-dashboard-img
+    elementType: image
+    bounds: [470, 122, 440, 280]
+    src: assets/fleet_iot_dashboard.png
+    crop: {left: 0.0, right: 0.0, top: 0.0, bottom: 0.0}
+    fit: {mode: cover}
+    border: {style: solid, width: 1, color: "#E0E0E0"}
+
+  - elementId: dashboard-caption
+    elementType: text
+    bounds: [470, 403, 440, 18]
+    content:
+      fontSize: 8.5
+      color: "$muted"
+      text: "实测图表：雅加达-万隆 180km 跨岛路段车厢温度曲线与 AI 预警成功规避损耗案例"
+
+  # Bottom Synthesis Bar
+  - elementId: so-what-bar
+    elementType: shape
+    bounds: [50, 428, 860, 42]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1, color: "$primary"}
+
+  - elementId: so-what-text
+    elementType: text
+    bounds: [65, 432, 830, 32]
+    content:
+      style: "$synthesis"
+      text: "商业验证总结：标杆客户上线 12 个月流失率为 0%，并主动转介绍 6 家供应链上下游承运商，形成了强大的口啤扩张飞轮。"
+
+  # Fixed Footer
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 498, 600, 18]
+    content:
+      style: "$caption"
+      text: "客户案例与运营成效：PT FreshMart 实测运营数据对比 (示例数据)"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [810, 498, 100, 18]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "08 / 10"
+
+# ANIMATIONS ORCHESTRATION (Page 2 of 2 with animations)
+# Exercising zoom-in, wipe-in, afterPrevious, float-in with easing & direction
+animations:
+  - elementId: case-header-box
+    effect: zoom-in
+    trigger: onClick
+  - elementId: case-header-txt
+    effect: zoom-in
+    trigger: withPrevious
+  - elementId: metric-kpi-1
+    effect: wipe-in
+    trigger: afterPrevious
+  - elementId: metric-kpi-2
+    effect: wipe-in
+    trigger: afterPrevious
+  - elementId: metric-kpi-3
+    effect: wipe-in
+    trigger: afterPrevious
+  - elementId: proof-dashboard-img
+    effect: float-in
+    direction: up
+    easing: ease-out
+    trigger: onClick

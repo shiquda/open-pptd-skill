@@ -1,0 +1,218 @@
+pageType: content
+notes: "第一页投资概要直击三大核心投资亮点：第一，市场风口。东南亚 6.8 亿人口红利与生鲜电商爆发式增长，与极端落后的冷链基建形成巨大供需落差；第二，产品破局。传统冷链改造成本高达数万美元，ColdSync 通过轻量即插即用 IoT 与 SaaS 订阅，把客户数字化门槛降低 80%；第三，单位经济模型强劲，已验证单车 ARR $860 与高粘性净留存。"
+elements:
+  # Navigation / Chapter locator
+  - elementId: nav-chapter
+    elementType: text
+    bounds: [50, 24, 400, 20]
+    content:
+      style: "$chapter"
+      text: "01 战略概要 | EXECUTIVE SUMMARY"
+
+  - elementId: nav-line
+    elementType: line
+    bounds: [50, 48, 860, 1]
+    viewBox: [860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 1, color: "$primary"}
+
+  # Assertion Title & Subtitle
+  - elementId: title
+    elementType: text
+    bounds: [50, 58, 860, 32]
+    content:
+      style: "$title"
+      text: "东南亚生鲜电商爆发遭遇冷链断层，数字 SaaS 释放重度结构性红利"
+
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 92, 860, 20]
+    content:
+      style: "$subtitle"
+      text: "核心投资逻辑：万亿级生鲜流通市场 + 32% 结构性损耗痛点 + 轻量 IoT 云原生中枢，构建高粘性双边网络壁垒"
+
+  # 3 Structured Investment Pillars (Separated by clean rules, not card walls)
+  # Pillar 1
+  - elementId: p1-badge
+    elementType: shape
+    bounds: [50, 126, 30, 26]
+    shapeName: pentagon
+    adjustments: [105146, 110557]
+    fill: {type: solid, color: "$primary"}
+
+  - elementId: p1-badge-txt
+    elementType: text
+    bounds: [50, 126, 30, 26]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$white"
+      align: [center, middle]
+      text: "01"
+
+  - elementId: p1-heading
+    elementType: text
+    bounds: [90, 128, 200, 24]
+    content:
+      fontSize: 13
+      bold: true
+      color: "$primary"
+      text: "供需断层带来黄金切入期"
+
+  - elementId: p1-body
+    elementType: text
+    bounds: [50, 160, 270, 130]
+    content:
+      style: "$body"
+      text: "• <b>万亿流通红利</b>：东盟生鲜冷链市场规模达 61 亿美元，复合增速 13.1%，生鲜电商年增 28.5%<br/>• <b>冷库极端短缺</b>：人均冷库仅 0.028 m³（欧美的 1/12），90% 运力为中小游击车队<br/>• <b>货损吞噬利润</b>：流通损耗高达 32%，传统粗放运营无法支撑现代零售品控要求"
+
+  - elementId: p1-callout
+    elementType: text
+    bounds: [50, 300, 270, 48]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      fontSize: 10
+      color: "$primary"
+      bold: true
+      lineHeight: 1.35
+      align: [left, middle]
+      text: " 战略判断：冷链是东南亚现代零售最后一块未数字化的重度刚需基础设施。"
+
+  # Chevron Connector 1 -> 2 (exercising chevron + adjustments + flip)
+  - elementId: chevron-flow-1
+    elementType: shape
+    bounds: [330, 220, 18, 32]
+    shapeName: chevron
+    adjustments: [35000]
+    fill: {type: solid, color: "$accent"}
+
+  # Pillar 2
+  - elementId: p2-badge
+    elementType: shape
+    bounds: [360, 126, 30, 26]
+    shapeName: pentagon
+    adjustments: [105146, 110557]
+    fill: {type: solid, color: "$primary"}
+
+  - elementId: p2-badge-txt
+    elementType: text
+    bounds: [360, 126, 30, 26]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$white"
+      align: [center, middle]
+      text: "02"
+
+  - elementId: p2-heading
+    elementType: text
+    bounds: [400, 128, 200, 24]
+    content:
+      fontSize: 13
+      bold: true
+      color: "$primary"
+      text: "轻量 IoT + 智能路由壁垒"
+
+  - elementId: p2-body
+    elementType: text
+    bounds: [360, 160, 270, 130]
+    content:
+      style: "$body"
+      text: "• <b>即插即用硬件</b>：首创免布线 LoRa/BLE 传感器，部署成本较传统改装降低 80%<br/>• <b>海岛弱网专利</b>：攻克印尼群岛渡轮跳运场景弱网缓存与断点重传算法<br/>• <b>智能温控大脑</b>：多温区拼车动态路由模型，全程分钟级断链预警与纠偏"
+
+  - elementId: p2-callout
+    elementType: text
+    bounds: [360, 300, 270, 48]
+    fill: {type: solid, color: "$mint"}
+    content:
+      fontSize: 10
+      color: "$primary"
+      bold: true
+      lineHeight: 1.35
+      align: [left, middle]
+      text: " 产品优势：把原本需要百万级改造的重资产工程，变成人人可用的即开即用云服务。"
+
+  # Chevron Connector 2 -> 3
+  - elementId: chevron-flow-2
+    elementType: shape
+    bounds: [640, 220, 18, 32]
+    shapeName: chevron
+    adjustments: [35000]
+    fill: {type: solid, color: "$accent"}
+
+  # Pillar 3
+  - elementId: p3-badge
+    elementType: shape
+    bounds: [670, 126, 30, 26]
+    shapeName: pentagon
+    adjustments: [105146, 110557]
+    fill: {type: solid, color: "$primary"}
+
+  - elementId: p3-badge-txt
+    elementType: text
+    bounds: [670, 126, 30, 26]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$white"
+      align: [center, middle]
+      text: "03"
+
+  - elementId: p3-heading
+    elementType: text
+    bounds: [710, 128, 200, 24]
+    content:
+      fontSize: 13
+      bold: true
+      color: "$primary"
+      text: "高粘性单车商业模型"
+
+  - elementId: p3-body
+    elementType: text
+    bounds: [670, 160, 240, 130]
+    content:
+      style: "$body"
+      text: "• <b>单位经济强劲</b>：单车年均 ARR 达 $860，企业级客户 NDR 高达 138%<br/>• <b>双边网络效应</b>：货主端黏住车队，车队端引入更多货盘，获客成本逐年下降 35%<br/>• <b>标杆规模验证</b>：已在印尼覆盖超 1.2 万辆冷藏车，年化营收突破 620 万美元"
+
+  - elementId: p3-callout
+    elementType: text
+    bounds: [670, 300, 240, 48]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      fontSize: 10
+      color: "$primary"
+      bold: true
+      lineHeight: 1.35
+      align: [left, middle]
+      text: " 财务表现：LTV/CAC 达 5.2x，单车回本周期仅 5.8 个月，具备极高资本效率。"
+
+  # Synthesis bottom bar (Pine Green signature component)
+  - elementId: so-what-bar
+    elementType: shape
+    bounds: [50, 420, 860, 46]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1, color: "$primary"}
+
+  - elementId: so-what-text
+    elementType: text
+    bounds: [65, 425, 830, 36]
+    content:
+      style: "$synthesis"
+      text: "执行层结论：ColdSync 不做重资产运力持有者，而是以轻量数字 SaaS 整合分散运力，既规避了重资产折旧风险，又享有双边网络效应与极高毛利。"
+
+  # Fixed Footer (Source & Page number)
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 498, 600, 18]
+    content:
+      style: "$caption"
+      text: "数据来源：Frost & Sullivan 2023, GCCA 2023 | 运营与财务数据为 ColdSync 示例数据"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [810, 498, 100, 18]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "02 / 10"

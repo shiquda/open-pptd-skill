@@ -1,0 +1,239 @@
+pageType: content
+background:
+  type: solid
+  color: "$bgWhite"
+notes: |
+  本页重点分析合并利润表核心科目演进：
+  1. 营业收入48.65亿元，在宏观承压背景下实现14.2%的两位数增长；
+  2. 研发费用同比增长18.2%至3.45亿元，研发费用率达到7.09%，技术转化驱动高毛利产品占比提升；
+  3. 期间费用率呈现经营杠杆效应，销售管理费用增速低于营收增速，实现归母净利润+18.5%的高质量增长。
+elements:
+  # Thin black top rule signature
+  - elementId: s3-top-rule
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 28, 856, 2]
+    fill:
+      type: solid
+      color: "$inkBlack"
+  - elementId: s3-title
+    elementType: text
+    bounds: [52, 42, 856, 26]
+    content:
+      text: "<p>营业收入稳健增长且毛利率保持韧性，研发投入驱动产品结构升级</p>"
+      style: "$slideTitle"
+
+  # Subtitle
+  - elementId: s3-subtitle
+    elementType: text
+    bounds: [52, 70, 856, 18]
+    content:
+      text: "<p>合并利润表结构穿透：2024A-2026H1 核心收支演化趋势（单位：亿元，会计准则：CAS-30） | 口径：示例数据</p>"
+      style: "$subtitle"
+
+  # Light divider
+  - elementId: s3-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 94, 856, 1]
+    fill:
+      type: solid
+      color: "$hairline"
+  - elementId: s3-table-income
+    elementType: table
+    bounds: [52, 108, 560, 315]
+    columnWidths: [0.28, 0.17, 0.17, 0.18, 0.20]
+    rowHeights: [0.16, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12]
+    style: "$ledgerDefault"
+    rows:
+      - - text: "会计科目"
+          align: [left, middle]
+        - text: "2024A"
+          align: [right, middle]
+        - text: "2025A"
+          align: [right, middle]
+        - text: "2026H1"
+          align: [right, middle]
+        - text: "同比变动 (YoY)"
+          align: [right, middle]
+      - - text: "一、营业总收入"
+        - text: "82.50"
+          align: [right, middle]
+        - text: "96.30"
+          align: [right, middle]
+        - text: "48.65"
+          align: [right, middle]
+          bold: true
+        - text: "+14.2%"
+          align: [right, middle]
+      - - text: "　减：营业成本"
+        - text: "56.50"
+          align: [right, middle]
+        - text: "65.00"
+          align: [right, middle]
+        - text: "32.70"
+          align: [right, middle]
+        - text: "+11.8%"
+          align: [right, middle]
+      - - text: "　　　税金及附加"
+        - text: "0.65"
+          align: [right, middle]
+        - text: "0.78"
+          align: [right, middle]
+        - text: "0.42"
+          align: [right, middle]
+        - text: "+10.5%"
+          align: [right, middle]
+      - - text: "　　　销售及管理费用"
+        - text: "8.20"
+          align: [right, middle]
+        - text: "9.50"
+          align: [right, middle]
+        - text: "4.85"
+          align: [right, middle]
+        - text: "+8.8%"
+          align: [right, middle]
+      - - text: "　　　研发费用"
+        - text: "4.80"
+          align: [right, middle]
+        - text: "6.20"
+          align: [right, middle]
+        - text: "3.45"
+          align: [right, middle]
+          bold: true
+        - text: "+18.2%"
+          align: [right, middle]
+      - - text: "二、营业利润"
+        - text: "11.20"
+          align: [right, middle]
+        - text: "13.80"
+          align: [right, middle]
+        - text: "7.85"
+          align: [right, middle]
+          bold: true
+        - text: "+17.5%"
+          align: [right, middle]
+      - - text: "三、归属于母公司净利润"
+        - text: "9.80"
+          align: [right, middle]
+        - text: "11.90"
+          align: [right, middle]
+        - text: "6.82"
+          align: [right, middle]
+          bold: true
+          color: "$primaryGold"
+        - text: "+18.5%"
+          align: [right, middle]
+          bold: true
+
+  # Right side commentary column
+  - elementId: s3-side-box
+    elementType: shape
+    shapeName: rect
+    bounds: [632, 108, 276, 315]
+    fill:
+      type: solid
+      color: "$panelGray"
+
+  # Right callout header
+  - elementId: s3-side-header
+    elementType: text
+    bounds: [648, 120, 244, 26]
+    content:
+      text: "<p><strong>利润表结构性观察要点</strong></p>"
+      fontSize: 11
+      bold: true
+      color: "$inkBlack"
+
+  # Gold capsule threshold
+  - elementId: s3-side-capsule
+    elementType: shape
+    shapeName: roundRect
+    adjustments: [0.5]
+    bounds: [648, 150, 160, 24]
+    fill:
+      type: solid
+      color: "$primaryGold"
+  - elementId: s3-side-capsule-text
+    elementType: text
+    bounds: [648, 153, 160, 18]
+    content:
+      text: "<p><strong>综合毛利率 32.8% (+1.4pct)</strong></p>"
+      fontSize: 8.0
+      bold: true
+      color: "$inkBlack"
+      align: [center, middle]
+
+  # Commentary bullet points
+  - elementId: s3-side-p1
+    elementType: text
+    bounds: [648, 186, 244, 66]
+    content:
+      text: "<p><strong>1. 量价齐升与产品结构升级：</strong></p><p>核心工业级系列出货同比增长9.5%，高端定制产品综合单价提高4.3%，推升毛利剪刀差达+2.4pct，有效消化部分原材料扰动。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  - elementId: s3-side-divider1
+    elementType: shape
+    shapeName: rect
+    bounds: [648, 256, 244, 1]
+    fill:
+      type: solid
+      color: "$lightGray"
+  - elementId: s3-side-p2
+    elementType: text
+    bounds: [648, 266, 244, 66]
+    content:
+      text: "<p><strong>2. 研发强度提升与转化效能：</strong></p><p>上半年研发费用率提高至7.09%，技术人员薪酬与试验耗材支出增加；期内新增发明专利34项，高毛利新系列产品贡献超41.5%新增营收。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  - elementId: s3-side-divider2
+    elementType: shape
+    shapeName: rect
+    bounds: [648, 336, 244, 1]
+    fill:
+      type: solid
+      color: "$lightGray"
+  - elementId: s3-side-p3
+    elementType: text
+    bounds: [648, 346, 244, 66]
+    content:
+      text: "<p><strong>3. 规模经济摊薄期间费用率：</strong></p><p>销管费用率合计9.97%，同比压降0.49pct，供应链集约化管理与数字化办公系统释放运营效率，带动净利率稳中有升至14.0%。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  # Bottom Verdict Band
+  - elementId: s3-verdict-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 442, 856, 34]
+    fill:
+      type: solid
+      color: "$panelGray"
+  - elementId: s3-verdict-text
+    elementType: text
+    bounds: [68, 450, 824, 20]
+    content:
+      text: "<p><strong>损益诊断判语：</strong>毛利剪刀差持续走阔证实经营护城河牢固，费用管控与高研发转化形成良性飞轮，为全年度盈利奠定坚实基础。</p>"
+      fontSize: 9.0
+      color: "$charcoal"
+
+  # Footer
+  - elementId: s3-footer-source
+    elementType: text
+    bounds: [52, 505, 600, 18]
+    content:
+      text: "<p>数据来源：示例公司财务账本数据库 · 示例数据 | 报表标准：CAS-30 | 审计状态：未经审计中期数</p>"
+      style: "$footnote"
+  - elementId: s3-footer-page
+    elementType: text
+    bounds: [850, 505, 58, 18]
+    content:
+      text: "<p>3 / 9</p>"
+      fontSize: 8.0
+      color: "$footnoteGray"
+      align: [right, middle]

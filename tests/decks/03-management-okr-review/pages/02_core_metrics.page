@@ -1,0 +1,452 @@
+pageType: content
+background: { type: solid, color: "$bg" }
+notes: |
+  【第 2 页·管委会演讲备注】
+  深入分析核心大盘指标，整体呈“冰火两重天”格局：
+  
+  左侧看 ARR 净增底线：
+  实际完成 3,280 万，缺口 200 万。细拆结构会发现极其关键的事实——我们的新拓客能力完全合格，新客签了 1,820 万，达成率 101.1%；
+  真正的雷在右侧——存量客户增购与交付认收只完成了 1,460 万（达成率仅 86.9%）。
+  
+  右侧三项诊断：
+  1. 金额续费率 NRR 跌到 102.4%，跌破了 108% 的安全红线。这不是全盘恶化，而是头部 18 家大客户中出现了缩容和流失；
+  2. CAC 回本周期恶化到 17.5 个月，超标 3.5 个月。根因在于大客户从线索到签约的周期被拖长到 132 天，销售售前技术团队在现场做无偿 POC 定制，吞噬了销售人效；
+  3. 唯一超预期的亮点是现金流：净流入 860 万，达成率 172%，证明预收全款与 50% 首付机制行之有效，账面现金充足，有足够的战略资金来解决交付短板。
+elements:
+  # Top Header Menu & Navigation
+  - elementId: nav-line-1
+    elementType: line
+    bounds: [50, 26, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-2
+    elementType: line
+    bounds: [50, 31, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-3
+    elementType: line
+    bounds: [50, 36, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-section-tag
+    elementType: text
+    bounds: [74, 25, 480, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$muted"
+      text: "01 核心经营大盘复盘 · 目标差距与动因诊断 (示例公司)"
+
+  - elementId: nav-report-title
+    elementType: text
+    bounds: [660, 25, 250, 16]
+    content:
+      align: [right, middle]
+      fontSize: 10
+      color: "$muted"
+      text: "云枢网络 2026 Q3 经营复盘"
+
+  - elementId: header-divider
+    elementType: line
+    bounds: [50, 46, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Slide Takeaway Title & Subtitle
+  - elementId: page2-title
+    elementType: text
+    bounds: [50, 54, 860, 24]
+    content:
+      fontFamily: "MiSans"
+      fontSize: 17
+      bold: true
+      color: "$ink"
+      text: "Q3 ARR 净增 3,280 万元达成目标 94.2%，KA 延期与流失为主要拖累项"
+
+  - elementId: page2-subtitle
+    elementType: text
+    bounds: [50, 78, 860, 16]
+    content:
+      fontSize: 10.5
+      color: "$muted"
+      text: "核心大盘四维诊断：现金流表现强劲（+860万），但存量 NRR（102.4%）与获客 CAC（17.5个月）跌入红灯警戒区间"
+
+  # ================= LEFT HERO COLUMN (Width: 320) =================
+  - elementId: hero-card-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 98, 320, 390]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: hero-header-bar
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 98, 320, 36]
+    fill: { type: solid, color: "$accent" }
+    adjustments: [0]
+
+  - elementId: hero-header-text
+    elementType: text
+    bounds: [62, 107, 296, 20]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "核心战略目标 · Q3 ARR 净增完成度"
+
+  # Status Pill
+  - elementId: hero-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [65, 144, 120, 22]
+    fill: { type: solid, color: "$statusAmberBg" }
+    border: { style: solid, width: 0.8, color: "$statusAmberBorder" }
+    adjustments: [15000]
+
+  - elementId: hero-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [74, 150, 10, 10]
+    fill: { type: solid, color: "$statusAmber" }
+
+  - elementId: hero-status-label
+    elementType: text
+    bounds: [88, 146, 90, 18]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$statusAmber"
+      text: "预警 · 关注"
+
+  - elementId: hero-big-num
+    elementType: text
+    bounds: [65, 172, 290, 38]
+    content:
+      fontSize: 30
+      bold: true
+      color: "$ink"
+      text: "3,280 万元"
+
+  - elementId: hero-target-line
+    elementType: text
+    bounds: [65, 212, 290, 20]
+    content:
+      fontSize: 10.5
+      color: "$muted"
+      text: "目标：<b>3,480 万元</b> ｜ 达成率：<b>94.2%</b> (缺口 -200 万)"
+
+  - elementId: hero-inner-divider
+    elementType: line
+    bounds: [65, 238, 290, 1]
+    points: "0,0.5 290,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  # Structural Sub-breakdown
+  - elementId: hero-sub1-title
+    elementType: text
+    bounds: [65, 248, 290, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "1. 新拓客认收 (New Logos)：1,820 万元"
+
+  - elementId: hero-sub1-desc
+    elementType: text
+    bounds: [65, 266, 290, 26]
+    content:
+      fontSize: 9
+      lineHeight: 1.3
+      color: "$muted"
+      text: "目标 1,800 万，达成率 <b>101.1% 🟢</b>；标准 SaaS 新拓势头强劲，中小制造与泛互行业签单稳定。"
+
+  - elementId: hero-sub2-title
+    elementType: text
+    bounds: [65, 300, 290, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "2. 存量客增购 (Expansion)：1,460 万元"
+
+  - elementId: hero-sub2-desc
+    elementType: text
+    bounds: [65, 318, 290, 26]
+    content:
+      fontSize: 9
+      lineHeight: 1.3
+      color: "$muted"
+      text: "目标 1,680 万，达成率 <b>86.9% 🔴</b>；KA 交付验收受阻导致二期模块认收延期，形成 220 万缺口。"
+
+  - elementId: hero-takeaway-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [65, 356, 290, 118]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [6000]
+
+  - elementId: hero-takeaway-text
+    elementType: text
+    bounds: [75, 364, 270, 102]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.38
+      color: "$inkSecondary"
+      text: "<b>【管理层决断】</b><br/>前端获客已验证标准产品市场竞争力；核心矛盾已转移至<b>后端交付履约</b>。若不能在 Q4 解决大客户定制化验收堵点，积压订单将无法转化为合规 ARR，持续拖累来年扩张。"
+
+  # ================= RIGHT 3 STACKED METRIC STRIPS (Width: 520) =================
+  # --- Strip 1: NRR Retention ---
+  - elementId: strip1-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [390, 98, 520, 118]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: strip1-name
+    elementType: text
+    bounds: [406, 108, 220, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "核心金额续费率 (NRR / NDR)"
+
+  - elementId: strip1-def
+    elementType: text
+    bounds: [406, 126, 320, 14]
+    content:
+      fontSize: 9
+      color: "$muted"
+      text: "定义：期初存量客户在期末的 ARR 留存比（含增购、缩容与流失）"
+
+  - elementId: strip1-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [786, 108, 110, 22]
+    fill: { type: solid, color: "$statusRedBg" }
+    border: { style: solid, width: 0.8, color: "$statusRedBorder" }
+    adjustments: [15000]
+
+  - elementId: strip1-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [796, 114, 10, 10]
+    fill: { type: solid, color: "$statusRed" }
+
+  - elementId: strip1-status-text
+    elementType: text
+    bounds: [810, 110, 80, 18]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$statusRed"
+      text: "风险 · 阻滞"
+
+  - elementId: strip1-num
+    elementType: text
+    bounds: [406, 144, 130, 26]
+    content:
+      fontSize: 22
+      bold: true
+      color: "$ink"
+      text: "102.4%"
+
+  - elementId: strip1-target
+    elementType: text
+    bounds: [540, 148, 180, 18]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      text: "目标: <b>108.0%</b> (偏离 -5.6pct)"
+
+  - elementId: strip1-so-what
+    elementType: text
+    bounds: [406, 172, 490, 36]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>动因诊断：</b>中小客 NRR 达 116% 形成正向飞轮，但 500 万级 KA 客户续约滑坡至 96.2%，2 家大客户缩容、1 家流失给低价竞品，流失净额达 620 万元。"
+
+  # --- Strip 2: CAC Payback ---
+  - elementId: strip2-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [390, 234, 520, 118]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: strip2-name
+    elementType: text
+    bounds: [406, 244, 220, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "获客成本回本周期 (CAC Payback)"
+
+  - elementId: strip2-def
+    elementType: text
+    bounds: [406, 262, 320, 14]
+    content:
+      fontSize: 9
+      color: "$muted"
+      text: "定义：通过毛利回收单个新增客户全部 S&M 销售获客开支所需月数"
+
+  - elementId: strip2-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [786, 244, 110, 22]
+    fill: { type: solid, color: "$statusRedBg" }
+    border: { style: solid, width: 0.8, color: "$statusRedBorder" }
+    adjustments: [15000]
+
+  - elementId: strip2-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [796, 250, 10, 10]
+    fill: { type: solid, color: "$statusRed" }
+
+  - elementId: strip2-status-text
+    elementType: text
+    bounds: [810, 246, 80, 18]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$statusRed"
+      text: "风险 · 超标"
+
+  - elementId: strip2-num
+    elementType: text
+    bounds: [406, 280, 130, 26]
+    content:
+      fontSize: 22
+      bold: true
+      color: "$ink"
+      text: "17.5 个月"
+
+  - elementId: strip2-target
+    elementType: text
+    bounds: [540, 284, 180, 18]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      text: "健康上限: <b>≤14.0 个月</b> (劣化 +3.5m)"
+
+  - elementId: strip2-so-what
+    elementType: text
+    bounds: [406, 308, 490, 36]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>动因诊断：</b>KA 销售全流程拉长至 132 天，技术支持与无偿 POC 原型验证使售前阶段开支激增 48%，严重摊薄前线销售人效，急需建立 POC 准入收费门禁。"
+
+  # --- Strip 3: Net Operating Cash Flow ---
+  - elementId: strip3-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [390, 370, 520, 118]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: strip3-name
+    elementType: text
+    bounds: [406, 380, 220, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "经营性净现金流 (Operating Cash Flow)"
+
+  - elementId: strip3-def
+    elementType: text
+    bounds: [406, 398, 320, 14]
+    content:
+      fontSize: 9
+      color: "$muted"
+      text: "定义：主营业务销售商品及提供服务收到的现金扣除营运开销后的净额"
+
+  - elementId: strip3-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [786, 380, 110, 22]
+    fill: { type: solid, color: "$statusGreenBg" }
+    border: { style: solid, width: 0.8, color: "$statusGreenBorder" }
+    adjustments: [15000]
+
+  - elementId: strip3-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [796, 386, 10, 10]
+    fill: { type: solid, color: "$statusGreen" }
+
+  - elementId: strip3-status-text
+    elementType: text
+    bounds: [810, 382, 80, 18]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$statusGreen"
+      text: "正常 · 优良"
+
+  - elementId: strip3-num
+    elementType: text
+    bounds: [406, 416, 130, 26]
+    content:
+      fontSize: 22
+      bold: true
+      color: "$ink"
+      text: "+860 万元"
+
+  - elementId: strip3-target
+    elementType: text
+    bounds: [540, 420, 180, 18]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      text: "目标: <b>+500 万元</b> (达成率 172.0%)"
+
+  - elementId: strip3-so-what
+    elementType: text
+    bounds: [406, 444, 490, 36]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>动因诊断：</b>推行中小客年付预收全款与 KA 签约首付 50% 阶梯激励，回款周期缩短 12 天，账面可用现金充裕，为 Q4 建立交付特战队提供资金保障。"
+
+  # Footer
+  - elementId: footer-divider
+    elementType: line
+    bounds: [50, 498, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 506, 680, 16]
+    content:
+      style: "$footer"
+      text: "口径说明：ARR 统计剔除一次性硬件及非经常性咨询收入 · 数据来源：云枢网络财务经管系统 (示例公司/假设口径)"
+
+  - elementId: footer-page-num
+    elementType: text
+    bounds: [850, 506, 60, 16]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      bold: true
+      color: "$ink"
+      text: "02 / 09"

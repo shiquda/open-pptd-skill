@@ -1,0 +1,52 @@
+version: v2
+size: [960, 540]
+theme:
+  colors:
+    bg: "#FFFFFF"
+    fg: "#000000"
+    primary: "#009682"
+    secondary: "#68BCE0"
+    gray: "#868686"
+    lightGray: "#F7F7F4"
+    ruleColor: "#E2E5E8"
+    accentAmber: "#F0A81D"
+    accentRed: "#B51E00"
+  fonts:
+    title: "MiSans"
+    body: "MiSans"
+    code: "JetBrains Mono"
+  tableStyles:
+    booktabs:
+      cellStyle:
+        border:
+          - { style: solid, width: 1, color: "#FFFFFF" }
+          - { style: solid, width: 1, color: "#FFFFFF" }
+          - { style: solid, width: 1, color: "#FFFFFF" }
+          - { style: solid, width: 1, color: "#FFFFFF" }
+        fontSize: 10
+        align: [center, middle]
+      firstRowStyle:
+        border:
+          - { style: solid, width: 2, color: "#000000" }
+          - { style: solid, width: 1, color: "#FFFFFF" }
+          - { style: solid, width: 1, color: "#000000" }
+          - { style: solid, width: 1, color: "#FFFFFF" }
+        bold: true
+        fontSize: 10.5
+      lastRowStyle:
+        border:
+          - { style: solid, width: 1, color: "#FFFFFF" }
+          - { style: solid, width: 1, color: "#FFFFFF" }
+          - { style: solid, width: 2, color: "#000000" }
+          - { style: solid, width: 1, color: "#FFFFFF" }
+pages:
+  - pages/01_cover.page
+  - pages/02_background.page
+  - pages/03_evidence_gap.page
+  - pages/04_research_question.page
+  - pages/05_method.page
+  - pages/06_derivation.page
+  - pages/07_empirical_evidence.page
+  - pages/08_ablations.page
+  - pages/09_limitations.page
+  - pages/10_conclusion_references.page

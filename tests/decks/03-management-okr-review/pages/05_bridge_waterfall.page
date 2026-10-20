@@ -1,0 +1,478 @@
+pageType: content
+background: { type: solid, color: "$bg" }
+notes: |
+  【第 5 页·管委会演讲备注】
+  第 5 页是整个汇报的核心视觉桥梁——从 3,480 万目标到 3,280 万实际的 ARR 瀑布桥接图。
+  
+  请各位领导顺着连线看这条动能演变路径：
+  1. 最左侧是我们的基准目标：3,480 万元；
+  2. 随后是两项正向引擎——新客签单贡献了 +280 万（+8.0%），中小客自增购贡献了 +140 万（+4.0%），将我们的潜在动能一度推升至 3,900 万元的高位；
+  3. 但是，紧接着两记重拳砸了下来：
+     第一记也是最痛的一记，是 KA 交付延误认收，直接吞噬了 -380 万元（-10.9%），占全部负向侵蚀的 61%；
+     第二记是竞品打价格战导致大客户流失与缩单，又带走了 -240 万元（-6.9%）；
+  4. 最终两相抵扣，净值落在了最右侧的金色立柱：实际 ARR 3,280 万元。
+  
+  这张桥接图给管理层的最大启示是：
+  我们的市场需求与产品拓新没有萎缩，公司并不是在打一场防守衰退战。只要把那根绿色的“交付卡脖子”杠杆撬动，把延缓认收的 380 万抢救回来，Q4 冲刺 3,950 万就拥有坚实的底盘支撑！
+elements:
+  # Top Header Menu & Navigation
+  - elementId: nav-line-1
+    elementType: line
+    bounds: [50, 26, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-2
+    elementType: line
+    bounds: [50, 31, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-3
+    elementType: line
+    bounds: [50, 36, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-section-tag
+    elementType: text
+    bounds: [74, 25, 480, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$muted"
+      text: "04 差异桥接模型 · 动能瀑布拆解 (示例公司)"
+
+  - elementId: nav-report-title
+    elementType: text
+    bounds: [660, 25, 250, 16]
+    content:
+      align: [right, middle]
+      fontSize: 10
+      color: "$muted"
+      text: "云枢网络 2026 Q3 经营复盘"
+
+  - elementId: header-divider
+    elementType: line
+    bounds: [50, 46, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Slide Takeaway Title & Subtitle
+  - elementId: page5-title
+    elementType: text
+    bounds: [50, 54, 860, 24]
+    content:
+      fontFamily: "MiSans"
+      fontSize: 17
+      bold: true
+      color: "$ink"
+      text: "从目标 3,480 万到实际 3,280 万：新增订单拉动 +420 万，但 KA 缩单流失吞噬 620 万"
+
+  - elementId: page5-subtitle
+    elementType: text
+    bounds: [50, 78, 860, 16]
+    content:
+      fontSize: 10.5
+      color: "$muted"
+      text: "ARR 差异桥接瀑布：量化各项正向拉动与负向侵蚀，证实交付瓶颈（-380万）是决定大盘达标的第一因"
+
+  # ================= WATERFALL BRIDGE CANVAS (y: 98 ~ 368) =================
+  - elementId: bridge-canvas-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 98, 860, 268]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [3000]
+
+  # Background Reference Gridlines
+  - elementId: bridge-grid-3000
+    elementType: line
+    bounds: [55, 204, 850, 1]
+    points: "0,0.5 850,0.5"
+    border: { style: dot, width: 0.8, color: "$borderLight" }
+
+  - elementId: bridge-grid-2000
+    elementType: line
+    bounds: [55, 270, 850, 1]
+    points: "0,0.5 850,0.5"
+    border: { style: dot, width: 0.8, color: "$borderLight" }
+
+
+  # Baseline line at y = 336
+  - elementId: bridge-baseline
+    elementType: line
+    bounds: [55, 336, 850, 1]
+    points: "0,0.5 850,0.5"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # --- BAR 1: Q3 Target Base (x=68, w=108, y=160 to 336, h=176) ---
+  - elementId: bar1-shape
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [68, 160, 108, 176]
+    fill: { type: solid, color: "$faint" }
+    border: { style: solid, width: 1, color: "$muted" }
+    adjustments: [2000]
+
+  - elementId: bar1-tag
+    elementType: text
+    bounds: [68, 168, 108, 18]
+    content:
+      align: [center, middle]
+      fontSize: 10
+      bold: true
+      color: "$surface"
+      text: "Q3 目标基准"
+
+  - elementId: bar1-value
+    elementType: text
+    bounds: [68, 188, 108, 26]
+    content:
+      align: [center, middle]
+      fontSize: 18
+      bold: true
+      color: "$surface"
+      text: "3,480 万"
+
+  - elementId: bar1-label-bottom
+    elementType: text
+    bounds: [68, 340, 108, 20]
+    content:
+      align: [center, middle]
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "① 目标设定"
+
+  # Connector 1 -> 2
+  - elementId: conn-1-2
+    elementType: line
+    bounds: [176, 160, 44, 1]
+    points: "0,0.5 44,0.5"
+    border: { style: dash, width: 1, color: "$faint" }
+
+  # --- BAR 2: New Logos Floating (+280, x=220, w=108, y=130 to 160, h=30) ---
+  - elementId: bar2-shape
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [220, 130, 108, 30]
+    fill: { type: solid, color: "$statusGreen" }
+    border: { style: solid, width: 1, color: "$statusGreenBorder" }
+    adjustments: [2000]
+
+  - elementId: bar2-val-top
+    elementType: text
+    bounds: [220, 108, 108, 20]
+    content:
+      align: [center, middle]
+      fontSize: 11
+      bold: true
+      color: "$statusGreen"
+      text: "+280 万元"
+
+  - elementId: bar2-delta-tag
+    elementType: text
+    bounds: [220, 136, 108, 18]
+    content:
+      align: [center, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$surface"
+      text: "+8.0%"
+
+  - elementId: bar2-label-bottom
+    elementType: text
+    bounds: [220, 340, 108, 20]
+    content:
+      align: [center, middle]
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "② 新客新签"
+
+  # Connector 2 -> 3
+  - elementId: conn-2-3
+    elementType: line
+    bounds: [328, 130, 44, 1]
+    points: "0,0.5 44,0.5"
+    border: { style: dash, width: 1, color: "$faint" }
+
+  # --- BAR 3: SMB Expansion Floating (+140, x=372, w=108, y=114 to 130, h=16) ---
+  - elementId: bar3-shape
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [372, 114, 108, 16]
+    fill: { type: solid, color: "$statusGreen" }
+    border: { style: solid, width: 1, color: "$statusGreenBorder" }
+    adjustments: [2000]
+
+  - elementId: bar3-val-top
+    elementType: text
+    bounds: [356, 92, 140, 20]
+    content:
+      align: [center, middle]
+      fontSize: 10
+      bold: true
+      color: "$statusGreen"
+      text: "+140万 (峰值3,900万)"
+
+  - elementId: bar3-label-bottom
+    elementType: text
+    bounds: [372, 340, 108, 20]
+    content:
+      align: [center, middle]
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "③ 中小客自增购"
+
+  # Connector 3 -> 4
+  - elementId: conn-3-4
+    elementType: line
+    bounds: [480, 114, 44, 1]
+    points: "0,0.5 44,0.5"
+    border: { style: dash, width: 1, color: "$faint" }
+
+  # --- BAR 4: KA Delay Floating (-380, x=524, w=108, y=114 to 154, h=40) ---
+  - elementId: bar4-shape
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [524, 114, 108, 40]
+    fill: { type: solid, color: "$statusRed" }
+    border: { style: solid, width: 1, color: "$statusRedBorder" }
+    adjustments: [2000]
+
+  - elementId: bar4-val-top
+    elementType: text
+    bounds: [524, 92, 108, 20]
+    content:
+      align: [center, middle]
+      fontSize: 11
+      bold: true
+      color: "$statusRed"
+      text: "-380 万元"
+
+  - elementId: bar4-delta-tag
+    elementType: text
+    bounds: [524, 124, 108, 18]
+    content:
+      align: [center, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$surface"
+      text: "-10.9%"
+
+  - elementId: bar4-label-bottom
+    elementType: text
+    bounds: [524, 340, 108, 20]
+    content:
+      align: [center, middle]
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "④ KA 交付延期"
+
+  # Connector 4 -> 5
+  - elementId: conn-4-5
+    elementType: line
+    bounds: [632, 154, 44, 1]
+    points: "0,0.5 44,0.5"
+    border: { style: dash, width: 1, color: "$faint" }
+
+  # --- BAR 5: Competitor Churn Floating (-240, x=676, w=108, y=154 to 180, h=26) ---
+  - elementId: bar5-shape
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [676, 154, 108, 26]
+    fill: { type: solid, color: "$statusRed" }
+    border: { style: solid, width: 1, color: "$statusRedBorder" }
+    adjustments: [2000]
+
+  - elementId: bar5-val-top
+    elementType: text
+    bounds: [676, 132, 108, 20]
+    content:
+      align: [center, middle]
+      fontSize: 11
+      bold: true
+      color: "$statusRed"
+      text: "-240 万元"
+
+  - elementId: bar5-delta-tag
+    elementType: text
+    bounds: [676, 158, 108, 18]
+    content:
+      align: [center, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$surface"
+      text: "-6.9%"
+
+  - elementId: bar5-label-bottom
+    elementType: text
+    bounds: [676, 340, 108, 20]
+    content:
+      align: [center, middle]
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "⑤ 竞品降价流失"
+
+  # Connector 5 -> 6
+  - elementId: conn-5-6
+    elementType: line
+    bounds: [784, 180, 40, 1]
+    points: "0,0.5 40,0.5"
+    border: { style: dash, width: 1, color: "$faint" }
+
+  # --- BAR 6: Final Actual ARR (x=824, w=80, y=180 to 336, h=156) ---
+  - elementId: bar6-shape
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [824, 180, 80, 156]
+    fill: { type: solid, color: "$accent" }
+    border: { style: solid, width: 1.2, color: "$ink" }
+    adjustments: [2000]
+  - elementId: bar6-tag
+    elementType: text
+    bounds: [824, 190, 80, 18]
+    content:
+      align: [center, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+      text: "Q3 实际"
+
+  - elementId: bar6-value
+    elementType: text
+    bounds: [824, 212, 80, 24]
+    content:
+      align: [center, middle]
+      fontSize: 15
+      bold: true
+      color: "$ink"
+      text: "3,280万"
+
+  - elementId: bar6-rate
+    elementType: text
+    bounds: [824, 238, 80, 20]
+    content:
+      align: [center, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$statusAmber"
+      text: "达成 94.2%"
+
+  - elementId: bar6-label-bottom
+    elementType: text
+    bounds: [824, 340, 80, 20]
+    content:
+      align: [center, middle]
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "⑥ 实际达成"
+  # ================= BOTTOM 3 STRATEGIC TAKEAWAY CARDS =================
+  - elementId: bridge-card1-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 376, 274, 112]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: bridge-card1-title
+    elementType: text
+    bounds: [64, 386, 246, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$statusGreen"
+      text: "【正向引擎：+420 万新增动能】"
+
+  - elementId: bridge-card1-text
+    elementType: text
+    bounds: [64, 406, 246, 74]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "新拓获客（+280万）与 SMB 自增购（+140万）超预期，验证纯标准 SaaS 模块产品力已进入自增长区间，商业模式底层造血健康。"
+
+  - elementId: bridge-card2-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [343, 376, 274, 112]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: bridge-card2-title
+    elementType: text
+    bounds: [357, 386, 246, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$statusRed"
+      text: "【主要失血点：-380 万交付延误】"
+
+  - elementId: bridge-card2-text
+    elementType: text
+    bounds: [357, 406, 246, 74]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "交付认收延期占总负向侵蚀 61%，非需求萎缩，系内部实施效率与定制分支失控。Q4 通过专班封口抢回认收，是扭转大盘的最直接杠杆。"
+
+  - elementId: bridge-card3-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [636, 376, 274, 112]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: bridge-card3-title
+    elementType: text
+    bounds: [650, 386, 246, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$statusRed"
+      text: "【防守漏洞：-240 万竞对流失】"
+
+  - elementId: bridge-card3-text
+    elementType: text
+    bounds: [650, 406, 246, 74]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "腰部与大客户面对低价一体机竞对拦截，前线销售防守被动。需在 Q4 调整定价策略，推出维保置换与高管赞助计划，筑牢防守护城河。"
+
+  # Footer
+  - elementId: footer-divider
+    elementType: line
+    bounds: [50, 498, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 506, 680, 16]
+    content:
+      style: "$footer"
+      text: "分析方法：SaaS 核心动能桥接模型 (Driver Bridge) · 数据口径：管理会计权责发生制 (示例公司/假设口径)"
+
+  - elementId: footer-page-num
+    elementType: text
+    bounds: [850, 506, 60, 16]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      bold: true
+      color: "$ink"
+      text: "05 / 09"

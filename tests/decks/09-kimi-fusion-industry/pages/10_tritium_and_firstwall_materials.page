@@ -1,0 +1,222 @@
+pageType: content
+notes: |
+  Tritium and first-wall materials bottleneck slide. Analyzes the global civilian tritium supply cliff, pointing out that peak inventories (~25–30 kg in CANDU reactors) decay at 5.5% annually and will drop below 10 kg by 2035 as reactors retire. Proves that DT commercial plants must achieve TBR of 1.05 to 1.15. In parallel, evaluates 14.1 MeV neutron damage on first-wall steels (10–15 dpa/year), helium embrittlement, and the critical lack of an operational 14 MeV material irradiation test facility.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "05 · SUPPLY-CHAIN BOTTLENECKS"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Global Civil Tritium Inventory Exhausts by 2038; Commercial DT Fusion Must Close the Fuel Loop"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "The civil tritium inventory cliff, neutron economy physics, and radiation damage limits on first-wall plasma-facing components"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Panel 1: Tritium Breeding Loop
+  - elementId: p1-bg
+    elementType: shape
+    bounds: [50, 106, 420, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: p1-header
+    elementType: shape
+    bounds: [50, 106, 420, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: p1-title
+    elementType: text
+    bounds: [60, 111, 400, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "THE CIVIL TRITIUM CLIFF & BREEDING RATIO (TBR)"
+
+  - elementId: p1-content
+    elementType: text
+    bounds: [60, 142, 400, 216]
+    content:
+      fontSize: 8.2
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Civil Inventory Exhaustion Dynamics:</b></p>
+        <p>• Tritium decays radioactively with a half-life of 12.3 years (5.47% annual loss).</p>
+        <p>• Civilian supply depends exclusively on Canadian CANDU heavy water reactors (~25–30 kg peak inventory in 2025).</p>
+        <p>• CANDU fleet retirements begin 2028–2035; global civil inventory falls below 10 kg by 2035, while ITER alone requires ~12 kg for its test campaigns.</p>
+        <p><b>Mandatory TBR Target:</b> \( \mathrm{TBR} = \frac{\text{Tritium Bred}}{\text{Tritium Burned}} \ge 1.05 - 1.15 \)</p>
+        <p>A margin of +5% to +15% is required to offset radioactive decay, fuel processing losses, and core inventory buildup.</p>
+        <p><br><b>Blanket Chemistry &amp; Multipliers:</b></p>
+        <p>• ⁶Li + n → ⁴He + T + 4.78 MeV (thermal neutrons)</p>
+        <p>• ⁷Li + n → ⁴He + T + n' - 2.47 MeV (fast neutrons)</p>
+        <p>• Liquid Lithium-Lead (PbLi) or ceramic pebble beds (Li₄SiO₄) with Beryllium/Lead multipliers.</p>
+
+  # Panel 2: 14 MeV First-Wall Materials
+  - elementId: p2-bg
+    elementType: shape
+    bounds: [490, 106, 420, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: p2-header
+    elementType: shape
+    bounds: [490, 106, 420, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: p2-title
+    elementType: text
+    bounds: [500, 111, 400, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "FIRST-WALL 14.1 MeV NEUTRON EMBRITTLEMENT"
+
+  - elementId: p2-content
+    elementType: text
+    bounds: [500, 142, 400, 216]
+    content:
+      fontSize: 8.2
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>14.1 MeV Neutron Hardness vs Fission:</b></p>
+        <p>• Fission neutrons average 1–2 MeV; 14.1 MeV fusion neutrons exceed the threshold for nuclear transmutation reactions: \( (n, \alpha) \) and \( (n, p) \).</p>
+        <p>• Transmutation produces helium and hydrogen atoms trapped in the metallic crystal lattice, causing rapid void swelling, hardening, and grain boundary embrittlement.</p>
+        <p><br><b>Structural Damage Rates:</b></p>
+        <p>• First-wall steels endure <b>10–15 dpa/year</b> (displacements per atom) at 1–2 MW/m² neutron wall loading.</p>
+        <p>• Standard austenitic steels fail after &lt;10 dpa; commercial plants require materials enduring &gt;50–100 dpa.</p>
+        <p><br><b>Advanced Material Candidates &amp; Testing Void:</b></p>
+        <p>• Reduced Activation Ferritic-Martensitic (RAFM) steels (Eurofer97, CLF-1), Oxide Dispersion Strengthened (ODS) alloys, and SiC/SiC composites.</p>
+        <p>• <b>Testing Gap:</b> No high-flux 14 MeV neutron source exists worldwide. IFMIF-DONES in Spain is delayed to the 2030s, leaving material certification unhedged.</p>
+
+  # Watch Indicators Band
+  - elementId: watch-bg
+    elementType: shape
+    bounds: [50, 384, 860, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: watch-accent
+    elementType: shape
+    bounds: [50, 384, 4, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: watch-label
+    elementType: text
+    bounds: [64, 398, 118, 46]
+    content:
+      fontSize: 7.5
+      bold: true
+      color: "$titleNavy"
+      lineHeight: 1.3
+      text: |
+        <p>WATCH INDICATORS</p>
+        <p>2026–2030</p>
+
+  - elementId: watch-1
+    elementType: text
+    bounds: [190, 398, 250, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>TBR measured on hardware</b></p>
+        <p>Target 1.05–1.15; no integrated breeding loop has yet been operated</p>
+
+  - elementId: watch-2
+    elementType: text
+    bounds: [450, 398, 240, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>First-wall dose accumulated (dpa)</b></p>
+        <p>10–15 dpa/yr at 1–2 MW/m²; commercial designs need 50–100 dpa</p>
+
+  - elementId: watch-3
+    elementType: text
+    bounds: [700, 398, 210, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>14 MeV test facility online</b></p>
+        <p>IFMIF-DONES slip beyond the 2030s leaves alloy certification unhedged</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Nuclear Bottleneck Takeaway:</b> Without closed-loop breeding (TBR ≥ 1.05) proven on physical hardware, the DT fusion industry cannot fuel beyond 2–3 pilot plants."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: IAEA Nuclear Fusion Review (2023); UKAEA Materials Science Division; Fusion Engineering and Design (Elsevier)."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 10 / 16"

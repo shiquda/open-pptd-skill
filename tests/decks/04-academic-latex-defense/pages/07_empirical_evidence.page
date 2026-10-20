@@ -1,0 +1,190 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+notes: |
+  第六部分展示核心实证结果。我们在标准的 8 卡 NVIDIA H100 集群上，以 Llama-3-8B-Instruct 为骨干网络，在 128K 上下文长度下系统对比了各类方法。
+  由表 7.1 可见，本文提出的 DLR-Attn 实现了极具竞争力的表现：
+  在大海捞针（NIAH @128K）任务中，检索准确率达到 98.4%，几乎无损保留了稠密基准（99.8%）的长程捕获能力，而静态窗口的 StreamingLLM 则剧烈退化至 62.1%；
+  在推理效率方面，凭借 Triton 定制 Kernel 与低显存搬运，端到端生成吞吐由 275 tokens/s 提升至 1050 tokens/s（提速 3.82×），首字生成时间降低 60.4%。
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 30, 600, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$primary"
+      letterSpacing: 1.2
+      text: 06 · CORE EMPIRICAL EVIDENCE & BENCHMARK RESULTS
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 48, 860, 34]
+    content:
+      fontSize: 21
+      bold: true
+      color: "$fg"
+      text: 128K 序列检索准确率达 98.4%，推理端到端吞吐提升 3.82×
+
+  # Top dividing line
+  - elementId: div-top
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 86, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: result-table
+    elementType: table
+    bounds: [50, 100, 860, 220]
+    style: booktabs
+    columnWidths: [0.22, 0.22, 0.15, 0.14, 0.13, 0.14]
+    rowHeights: [0.17, 0.165, 0.165, 0.165, 0.165, 0.17]
+    rows:
+      - - text: "<p><strong>模型 / 对比方法</strong></p>"
+        - text: "<p><strong>稀疏拓扑与计算阶数</strong></p>"
+        - text: "<p><strong>NIAH 准确率</strong></p>"
+        - text: "<p><strong>LongBench 均分</strong></p>"
+        - text: "<p><strong>TTFT 首字延迟</strong></p>"
+        - text: "<p><strong>生成吞吐量</strong></p>"
+      - - text: "<p>Full Dense Attention</p>"
+        - text: '<p>全稠密 \( O(N^2) \)</p>'
+        - text: "<p>99.8%</p>"
+        - text: "<p>48.6</p>"
+        - text: "<p>1240 ms</p>"
+        - text: "<p>182 tok/s</p>"
+      - - text: "<p>FlashAttention-2</p>"
+        - text: '<p>算子级分块 \( O(N^2) \)</p>'
+        - text: "<p>99.8%</p>"
+        - text: "<p>48.6</p>"
+        - text: "<p>820 ms</p>"
+        - text: "<p>275 tok/s</p>"
+      - - text: "<p>StreamingLLM</p>"
+        - text: '<p>静态窗口 + Sink \( O(N) \)</p>'
+        - text: "<p style=\"color:#B51E00;\">62.1%</p>"
+        - text: "<p style=\"color:#B51E00;\">29.4</p>"
+        - text: "<p>310 ms</p>"
+        - text: "<p>690 tok/s</p>"
+      - - text: "<p>H2O (Heavy-Hitters)</p>"
+        - text: "<p>贪心累积缓存压缩</p>"
+        - text: "<p>92.4%</p>"
+        - text: "<p>42.1</p>"
+        - text: "<p>420 ms</p>"
+        - text: "<p>560 tok/s</p>"
+      - - text: "<p><span style=\"color:#009682; font-weight:bold;\">DLR-Attn (Ours)</span></p>"
+        - text: '<p><span style="color:#009682; font-weight:bold;">动态聚类路由 \( O(N^{1.5}) \)</span></p>'
+        - text: "<p><span style=\"color:#009682; font-weight:bold;\">98.4%</span></p>"
+        - text: "<p><span style=\"color:#009682; font-weight:bold;\">48.1</span></p>"
+        - text: "<p><span style=\"color:#009682; font-weight:bold;\">325 ms</span></p>"
+        - text: "<p><span style=\"color:#009682; font-weight:bold;\">1050 tok/s</span></p>"
+
+  # Booktabs mid rule (explicit: OOXML shared-edge resolution lets the body
+  # cell's white top border override the header's bottom border)
+  - elementId: table-midrule
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 137, 860, 1.5]
+    fill:
+      type: solid
+      color: "#000000"
+
+  # Table Caption & Experimental Details
+  - elementId: table-caption
+    elementType: text
+    bounds: [50, 326, 860, 42]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$gray"
+      text: |
+        <p><strong>表 7.1: 128K 序列推理性能对比基准测试</strong>。基座模型采用 Llama-3-8B-Instruct，硬件为 8×NVIDIA H100 80GB SXM5。基线数据引自公开文献测量值（Dao et al., 2022; Xiao et al., 2023; Zhang et al., 2023），本文 DLR-Attn 经 5 次独立推理测验取均值并校准方差。</p>
+
+  # 3 Quantitative Takeaway Cards
+  - elementId: card-1
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 376, 270, 106]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$ruleColor"
+
+  - elementId: card-1-text
+    elementType: text
+    bounds: [62, 386, 246, 86]
+    content:
+      fontSize: 11
+      lineHeight: 1.38
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-size:16pt; font-weight:bold;">98.4%</span> <span style="font-size:10pt; color:#868686;">(仅损耗 1.4%)</span></p>
+        <p><strong>高保真长程检索能力：</strong>突破静态稀疏方法截断缺陷，在 128K 大海捞针全深度区间保持近乎完全无损的跨段召回率。</p>
+
+  - elementId: card-2
+    elementType: shape
+    shapeName: rect
+    bounds: [345, 376, 270, 106]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$ruleColor"
+
+  - elementId: card-2-text
+    elementType: text
+    bounds: [357, 386, 246, 86]
+    content:
+      fontSize: 11
+      lineHeight: 1.38
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-size:16pt; font-weight:bold;">3.82×</span> <span style="font-size:10pt; color:#868686;">(1050 vs 275 tok/s)</span></p>
+        <p><strong>端到端吞吐量跃升：</strong>大幅削减全局点积算力并降低 72% 的 HBM 显存带宽搬运，显著改善高并发推理吞吐瓶颈。</p>
+
+  - elementId: card-3
+    elementType: shape
+    shapeName: rect
+    bounds: [640, 376, 270, 106]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$ruleColor"
+
+  - elementId: card-3-text
+    elementType: text
+    bounds: [652, 386, 246, 86]
+    content:
+      fontSize: 11
+      lineHeight: 1.38
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-size:16pt; font-weight:bold;">-60.4%</span> <span style="font-size:10pt; color:#868686;">(325 vs 820 ms)</span></p>
+        <p><strong>首字延迟大幅削减：</strong>首字响应阶段 Prefill 耗时有效压降，在交互式对话与超长文献即时问答中带来显著交互体验提升。</p>
+
+  # Footer dividing line
+  - elementId: div-bottom
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 498, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: footer-nav
+    elementType: text
+    bounds: [50, 506, 860, 20]
+    content:
+      fontSize: 10
+      color: "$gray"
+      text: |
+        <p>面向长上下文推理的稀疏注意力机制 · 博士学位论文答辩 <span style="float:right;">§6 核心实证 ｜ 07 / 10</span></p>

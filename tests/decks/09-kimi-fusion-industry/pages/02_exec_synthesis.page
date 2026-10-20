@@ -1,0 +1,290 @@
+pageType: content
+notes: |
+  Executive synthesis slide. Outlines the primary thesis of the briefing: controlled nuclear fusion has crossed the scientific threshold and entered an engineering industrialization phase. High-temperature superconductors (REBCO) enable compact high-field reactors, while private investment exceeding $7.1B accelerates iterative hardware cycles. However, commercialization is constrained by a triad of nuclear bottlenecks: tritium breeding, neutron materials damage, and HTS tape manufacturing volume.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "00 · EXECUTIVE SYNTHESIS & CORE THESIS"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Controlled Fusion Is Crossing the Engineering Threshold, Driven by HTS Magnets and Private Capital"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Structural transition from 70 years of plasma physics exploration to industrial subsystem scaling (2025–2040)"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Pillar 1 - Background Card
+  - elementId: col-1-bg
+    elementType: shape
+    bounds: [50, 106, 203, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Pillar 1 - Header Banner
+  - elementId: col-1-header
+    elementType: shape
+    bounds: [50, 106, 203, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: col-1-title
+    elementType: text
+    bounds: [58, 111, 187, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "1. SCIENTIFIC PROOF"
+
+  - elementId: col-1-body
+    elementType: text
+    bounds: [58, 142, 187, 216]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Target Gain Achieved:</b></p>
+        <p>• LLNL NIF achieved net energy ignition in Dec 2022 (3.15 MJ yield from 2.05 MJ laser energy, Q=1.54).</p>
+        <p>• EUROfusion JET logged a historic 69.3 MJ fusion energy pulse in Oct 2023, validating D-T plasma stability.</p>
+        <p><br><b>Paradigm Shift:</b></p>
+        <p>Core confinement physics has moved from theoretical uncertainty to quantifiable scaling laws. The remaining barrier is operational duty cycle and plant efficiency.</p>
+
+  # Pillar 2 - Background Card
+  - elementId: col-2-bg
+    elementType: shape
+    bounds: [269, 106, 203, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Pillar 2 - Header Banner
+  - elementId: col-2-header
+    elementType: shape
+    bounds: [269, 106, 203, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: col-2-title
+    elementType: text
+    bounds: [277, 111, 187, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "2. HTS INFLECTION"
+
+  - elementId: col-2-body
+    elementType: text
+    bounds: [277, 142, 187, 216]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>High-Field Magnet Leap:</b></p>
+        <p>• 2nd-gen REBCO high-temperature superconductors maintain high critical currents at 20 Tesla and 20 Kelvin.</p>
+        <p>• Fusion power density scales with B⁴; doubling on-axis field reduces required plasma volume by ~40× vs ITER.</p>
+        <p><br><b>Compact Geometry:</b></p>
+        <p>Enables 200–500 MW electrical pilot plants (e.g. CFS SPARC, Energy Singularity) at a fraction of traditional multi-billion civil costs.</p>
+
+  # Pillar 3 - Background Card
+  - elementId: col-3-bg
+    elementType: shape
+    bounds: [488, 106, 203, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Pillar 3 - Header Banner
+  - elementId: col-3-header
+    elementType: shape
+    bounds: [488, 106, 203, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: col-3-title
+    elementType: text
+    bounds: [496, 111, 187, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "3. PRIVATE CAPITAL"
+
+  - elementId: col-3-body
+    elementType: text
+    bounds: [496, 142, 187, 216]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>$7.1B+ Cumulative Raised:</b></p>
+        <p>• Private funding tracked by the FIA grew from $1.9B (2021) to $7.1B (2024) across 45+ global companies.</p>
+        <p>• Capital is highly concentrated: top 5 players hold >70% of total equity investment.</p>
+        <p><br><b>Venture Pace:</b></p>
+        <p>Replaces 20-year intergovernmental treaty cadence with agile 3-year hardware iteration sprints, forcing supply-chain industrialization.</p>
+
+  # Pillar 4 - Background Card
+  - elementId: col-4-bg
+    elementType: shape
+    bounds: [707, 106, 203, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Pillar 4 - Header Banner
+  - elementId: col-4-header
+    elementType: shape
+    bounds: [707, 106, 203, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: col-4-title
+    elementType: text
+    bounds: [715, 111, 187, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "4. CRITICAL PATH"
+
+  - elementId: col-4-body
+    elementType: text
+    bounds: [715, 142, 187, 216]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Nuclear Supply Triad:</b></p>
+        <p>• <b>Tritium Cliff:</b> Civil CANDU inventory drops below 10 kg by 2035; closed-loop breeding (TBR ≥ 1.05) is non-negotiable.</p>
+        <p>• <b>14 MeV Neutrons:</b> First-wall steels face 10–15 dpa/yr; requires advanced RAFM / ODS alloys.</p>
+        <p>• <b>HTS Scale-up:</b> Commercial rollout requires >20× current global REBCO tape manufacturing capacity.</p>
+
+  # Watch Indicators Band
+  - elementId: watch-bg
+    elementType: shape
+    bounds: [50, 384, 860, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: watch-accent
+    elementType: shape
+    bounds: [50, 384, 4, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: watch-label
+    elementType: text
+    bounds: [64, 398, 118, 46]
+    content:
+      fontSize: 7.5
+      bold: true
+      color: "$titleNavy"
+      lineHeight: 1.3
+      text: |
+        <p>WATCH INDICATORS</p>
+        <p>2026–2030</p>
+
+  - elementId: watch-1
+    elementType: text
+    bounds: [190, 398, 250, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>REBCO tape price ($/m)</b></p>
+        <p>$100–140/m today; commercial gate is &lt;$30/m</p>
+
+  - elementId: watch-2
+    elementType: text
+    bounds: [450, 398, 240, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Civil tritium inventory (kg)</b></p>
+        <p>~25 kg in 2025; &lt;10 kg by 2035 as CANDU retires</p>
+
+  - elementId: watch-3
+    elementType: text
+    bounds: [700, 398, 210, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Private capital ($B)</b></p>
+        <p>$7.12B cumulative (FIA, July 2024 survey)</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Executive Takeaway:</b> Fusion is no longer an unbounded science project; it is an industrial supply-chain race with commercial pilot gates targeting 2032–2038."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: Fusion Industry Association (2024 Global Report), LLNL NIF (2022), EUROfusion JET (2023), IAEA Nuclear Fusion Review."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 02 / 16"

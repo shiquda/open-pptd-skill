@@ -1,0 +1,269 @@
+pageType: content
+notes: "关于竞争格局。欧美巨头如 Project44、FourKites 适合欧美平原高速路网，面对东南亚的跳岛渡轮和弱网环境水土不服；而印尼本地的普货 TMS 缺乏冷链温控基因。ColdSync 在细分赛道深耕三年，拥有 1200 万公里真实路况数据与多国食品合规认证，构建了极强的‘算法+数据+双边网络’护城河。"
+elements:
+  # Navigation / Chapter locator
+  - elementId: nav-chapter
+    elementType: text
+    bounds: [50, 24, 400, 20]
+    content:
+      style: "$chapter"
+      text: "07 竞争壁垒 | COMPETITIVE MOAT"
+
+  - elementId: nav-line
+    elementType: line
+    bounds: [50, 48, 860, 1]
+    viewBox: [860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 1, color: "$primary"}
+
+  # Assertion Title & Subtitle
+  - elementId: title
+    elementType: text
+    bounds: [50, 58, 860, 32]
+    content:
+      style: "$title"
+      text: "面对传统本地 TMS 与欧美通用平台，以热带复杂路况算法构筑核心壁垒"
+
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 92, 860, 20]
+    content:
+      style: "$subtitle"
+      text: "二维定位矩阵：东南亚海岛弱网本地化适配能力 × 全程实时温控与智能调度深度"
+
+  # 2x2 COMPETITIVE MATRIX (w: 480, h: 280)
+  # Background Quadrants
+  - elementId: q-top-left
+    elementType: shape
+    bounds: [50, 130, 235, 135]
+    shapeName: rect
+    fill: {type: solid, color: "#F7FAF8"}
+    border: {style: solid, width: 0.5, color: "#D0D0D0"}
+
+  - elementId: q-top-right
+    elementType: shape
+    bounds: [285, 130, 245, 135]
+    shapeName: rect
+    fill: {type: solid, color: "$mint"}
+    border: {style: solid, width: 1.5, color: "$accent"}
+
+  - elementId: q-bot-left
+    elementType: shape
+    bounds: [50, 265, 235, 135]
+    shapeName: rect
+    fill: {type: solid, color: "#F1F1F1"}
+    border: {style: solid, width: 0.5, color: "#D0D0D0"}
+
+  - elementId: q-bot-right
+    elementType: shape
+    bounds: [285, 265, 245, 135]
+    shapeName: rect
+    fill: {type: solid, color: "#F7FAF8"}
+    border: {style: solid, width: 0.5, color: "#D0D0D0"}
+
+  # Matrix Axes
+  - elementId: matrix-axis-y
+    elementType: line
+    bounds: [285, 120, 1, 285]
+    viewBox: [1, 285]
+    points: "0,285 0,0"
+    arrow: [null, "triangle"]
+    border: {style: solid, width: 1.5, color: "$primary"}
+
+  - elementId: matrix-axis-x
+    elementType: line
+    bounds: [45, 265, 490, 1]
+    viewBox: [490, 1]
+    points: "0,0 490,0"
+    arrow: [null, "triangle"]
+    border: {style: solid, width: 1.5, color: "$primary"}
+
+  # Axis Labels
+  - elementId: axis-y-label
+    elementType: text
+    bounds: [220, 110, 150, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$primary"
+      align: [center, middle]
+      text: "全程冷链温控深度 ▲"
+
+  - elementId: axis-x-label
+    elementType: text
+    bounds: [390, 246, 140, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$primary"
+      align: [right, middle]
+      text: "东南亚本地化适配力 ▶"
+
+  # Quadrant 1: Top-Right (ColdSync - Leader)
+  - elementId: q1-title
+    elementType: text
+    bounds: [295, 136, 170, 22]
+    content:
+      fontSize: 13
+      bold: true
+      color: "$primary"
+      text: "★ ColdSync 极鲜智链"
+
+  # Rotated Badge (Exercising rotation: -8)
+  - elementId: q1-badge
+    elementType: shape
+    bounds: [445, 134, 75, 24]
+    shapeName: rect
+    fill: {type: solid, color: "$accent"}
+    rotation: -8
+
+  - elementId: q1-badge-txt
+    elementType: text
+    bounds: [445, 134, 75, 24]
+    rotation: -8
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      align: [center, middle]
+      text: "独占领跑象限"
+
+  - elementId: q1-desc
+    elementType: text
+    bounds: [295, 160, 225, 95]
+    content:
+      fontSize: 10
+      color: "$primary"
+      lineHeight: 1.4
+      text: "• 轻量 LoRa/BLE 即插即用<br/>• 印尼群岛海岛弱网专利算法<br/>• 分钟级断链预警与纠偏<br/>• 沉淀双边运力网络壁垒"
+
+  # Quadrant 2: Top-Left (Global Supply Chain Platforms)
+  - elementId: q2-title
+    elementType: text
+    bounds: [60, 136, 210, 22]
+    content:
+      fontSize: 11.5
+      bold: true
+      color: "$text"
+      text: "欧美平台 (FourKites / P44)"
+
+  - elementId: q2-desc
+    elementType: text
+    bounds: [60, 160, 215, 95]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      lineHeight: 1.4
+      text: "• 专注欧美干线高标准高速路网<br/>• 部署重、单车改造耗资数千美元<br/>• 无法适应东盟海岛弱网与渡轮"
+
+  # Quadrant 3: Bottom-Right (Local General Freight TMS)
+  - elementId: q3-title
+    elementType: text
+    bounds: [295, 274, 220, 22]
+    content:
+      fontSize: 11.5
+      bold: true
+      color: "$text"
+      text: "本地普货 TMS (Kargo / Waresix)"
+
+  - elementId: q3-desc
+    elementType: text
+    bounds: [295, 298, 225, 95]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      lineHeight: 1.4
+      text: "• 专注普货卡车撮合与运力匹配<br/>• 缺乏温度传感与冷机控制深度<br/>• 无法解决 32% 货损质控刚需"
+
+  # Quadrant 4: Bottom-Left (Legacy Manual / GPS)
+  - elementId: q4-title
+    elementType: text
+    bounds: [60, 274, 210, 22]
+    content:
+      fontSize: 11.5
+      bold: true
+      color: "$text"
+      text: "传统单点 GPS / 纸质抄表"
+
+  - elementId: q4-desc
+    elementType: text
+    bounds: [60, 298, 215, 95]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      lineHeight: 1.4
+      text: "• 仅定位无温控、数据严重孤岛<br/>• 依赖纸质手工打卡，易涂改<br/>• 事后发现化冻，无预警纠偏"
+
+  # Directional Arrow indicator (exercising flip: [true, false])
+  # Migration Vector towards ColdSync leader quadrant
+  - elementId: matrix-flow-indicator
+    elementType: shape
+    bounds: [248, 230, 36, 20]
+    shapeName: rightArrow
+    fill: {type: solid, color: "$accent"}
+    rotation: -40
+
+  # Right Column: 3 Moat Pillars (w: 360)
+  - elementId: moat-header
+    elementType: text
+    bounds: [550, 126, 360, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "ColdSync 三重核心护城河"
+
+  - elementId: moat-p1
+    elementType: text
+    bounds: [550, 154, 360, 75]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>1. 算法与数据壁垒</b><br/>独家累积东盟 <b>1,200 万公里</b> 真实岛屿路况与冷机工况数据，热带暴雨与极端温变预警准确率超 <b>96.5%</b>。"
+
+  - elementId: moat-p2
+    elementType: text
+    bounds: [550, 238, 360, 75]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>2. 双边网络与高替换成本</b><br/>货主端绑定品质生鲜商超，车队端整合 1.2 万辆活跃冷藏车；系统与企业 ERP 深绑，客户年流失率低于 <b>1.5%</b>。"
+
+  - elementId: moat-p3
+    elementType: text
+    bounds: [550, 322, 360, 75]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>3. 权威认证与政策准入壁垒</b><br/>获得印尼 BPOM 药品冷链数字化存证唯一试点单位，东盟 HACCP 冷链数字化标准起草成员单位。"
+
+  # Bottom Synthesis Bar
+  - elementId: so-what-bar
+    elementType: shape
+    bounds: [50, 428, 860, 42]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1, color: "$primary"}
+
+  - elementId: so-what-text
+    elementType: text
+    bounds: [65, 432, 830, 32]
+    content:
+      style: "$synthesis"
+      text: "防御性总结：ColdSync 在‘海岛本地化’与‘深度冷链技术’交汇处建立绝对壁垒，形成欧美巨头进不来、本地普货做不了的独占优势。"
+
+  # Fixed Footer
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 498, 600, 18]
+    content:
+      style: "$caption"
+      text: "竞争格局研判：ColdSync 战略分析部梳理 (示例数据)"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [810, 498, 100, 18]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "09 / 10"

@@ -1,0 +1,385 @@
+pageType: content
+background:
+  type: solid
+  color: "$posterBg"
+notes: |
+  本页为2025年中国新能源汽车销量与充电基础设施高视觉信息图单页看板（1080x1080）：
+  1. 宏观规模：全年新能源车交付突破1287.4万辆（同比+34.5%），渗透率达到46.8%；
+  2. 补能底座：充电基础设施累计达1352.6万台（同比+52.1%），其中公共充电桩达368.5万台，私桩突破984万台；
+  3. 车桩协同：全国车桩比优化至2.4:1，大功率超充站（≥250kW）占比激增至24.5%，构建起全球覆盖最深、利用效率最高的电动出行补能生态。
+elements:
+  # Header Masthead Eyebrow
+  - elementId: p-eyebrow
+    elementType: text
+    bounds: [48, 36, 600, 18]
+    content:
+      text: "<p>CHINA NEV &amp; CHARGING INFRASTRUCTURE ANNUAL REPORT 2025 · DATA INFOGRAPHIC</p>"
+      fontSize: 8.5
+      bold: true
+      color: "$accentGold"
+      letterSpacing: 1.5
+
+  # Header Conclusory Title
+  - elementId: p-title
+    elementType: text
+    bounds: [48, 56, 984, 52]
+    content:
+      text: "<p>2025年中国新能源汽车销量达 1,287 万辆，充电网络突破 1,352 万台迈向高质量协同</p>"
+      fontSize: 21
+      bold: true
+      color: "$textPrimary"
+      lineHeight: 1.25
+
+  # Header Subtitle
+  - elementId: p-subtitle
+    elementType: text
+    bounds: [48, 112, 984, 20]
+    content:
+      text: "<p>中汽协 (CAAM) · 乘联分会 (CPCA) · 中国充电联盟 (EVCIPA) 2025年度联合数据统计公报 | 编制：产业数据研究院</p>"
+      fontSize: 9.0
+      color: "$textSecondary"
+
+  # Top Divider
+  - elementId: p-header-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [48, 138, 984, 1]
+    fill:
+      type: solid
+      color: "$cardBorder"
+
+  # Hero KPI Panel 1: 销量核心 (Left, w: 480)
+  - elementId: p-kpi1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [48, 150, 480, 135]
+    fill:
+      type: solid
+      color: "$panelBg"
+    border:
+      style: solid
+      width: 1
+      color: "$cardBorder"
+
+  - elementId: p-kpi1-tag
+    elementType: text
+    bounds: [68, 162, 440, 18]
+    content:
+      text: "<p>ANNUAL NEV DELIVERIES · 2025年度新能源车总交付量</p>"
+      fontSize: 8.0
+      bold: true
+      color: "$textMuted"
+      letterSpacing: 1.0
+
+  - elementId: p-kpi1-num
+    elementType: text
+    bounds: [68, 182, 300, 52]
+    content:
+      text: "<p><strong>1,287.4</strong> <span style=\"font-size: 15pt; color: #F9FAFB;\">万辆</span></p>"
+      fontSize: 34
+      bold: true
+      color: "$accentGold"
+
+  - elementId: p-kpi1-sub
+    elementType: text
+    bounds: [68, 238, 440, 36]
+    content:
+      text: "<p>同比增速 <strong>+34.5%</strong> · 全年渗透率达 <strong>46.8%</strong> (较2024年提升+8.2pct)</p><p>纯电 (BEV) 占比 61.2% | 插混及增程 (PHEV/REEV) 占比 38.8%</p>"
+      fontSize: 8.5
+      color: "$textSecondary"
+      lineHeight: 1.35
+
+  # Hero KPI Panel 2: 充电桩核心 (Right, w: 480)
+  - elementId: p-kpi2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [552, 150, 480, 135]
+    fill:
+      type: solid
+      color: "$panelBg"
+    border:
+      style: solid
+      width: 1
+      color: "$cardBorder"
+
+  - elementId: p-kpi2-tag
+    elementType: text
+    bounds: [572, 162, 440, 18]
+    content:
+      text: "<p>CHARGING INFRASTRUCTURE · 全国充电桩累计保有量</p>"
+      fontSize: 8.0
+      bold: true
+      color: "$textMuted"
+      letterSpacing: 1.0
+
+  - elementId: p-kpi2-num
+    elementType: text
+    bounds: [572, 182, 300, 52]
+    content:
+      text: "<p><strong>1,352.6</strong> <span style=\"font-size: 15pt; color: #F9FAFB;\">万台</span></p>"
+      fontSize: 34
+      bold: true
+      color: "$accentGreen"
+
+  - elementId: p-kpi2-sub
+    elementType: text
+    bounds: [572, 238, 440, 36]
+    content:
+      text: "<p>同比增速 <strong>+52.1%</strong> · 车桩比优化至 <strong>2.4:1</strong> (处于全球领跑水平)</p><p>公共充电桩 <strong>368.5万台</strong> | 私人随车桩 <strong>984.1万台</strong></p>"
+      fontSize: 8.5
+      color: "$textSecondary"
+      lineHeight: 1.35
+
+  # Middle Row: Left Chart Panel (x: 48, w: 508, h: 400)
+  - elementId: p-chart-panel
+    elementType: shape
+    shapeName: rect
+    bounds: [48, 300, 508, 400]
+    fill:
+      type: solid
+      color: "$panelBg"
+    border:
+      style: solid
+      width: 1
+      color: "$cardBorder"
+
+  # Matplotlib Chart Image
+  - elementId: p-chart-img
+    elementType: image
+    src: assets/nev_network_chart.png
+    bounds: [58, 308, 488, 308]
+    fit:
+      mode: contain
+
+  # Chart Insight Footnote
+  - elementId: p-chart-desc
+    elementType: text
+    bounds: [68, 624, 468, 66]
+    content:
+      text: "<p><span style=\"color: #F9FAFB;\"><strong>月度趋势诊断：</strong></span>2025年呈现明显下半年加速特征，受以旧换新补贴加码拉动，9-12月月均突破130万辆，12月创151.9万辆单月历史峰值；公共充电桩月均新增7.5万台，补能网络扩容步频与销量增长高度同频。</p>"
+      fontSize: 8.5
+      color: "$textSecondary"
+      lineHeight: 1.4
+
+  # Middle Row: Right Table Panel (x: 572, w: 460, h: 400)
+  - elementId: p-table-panel
+    elementType: shape
+    shapeName: rect
+    bounds: [572, 300, 460, 400]
+    fill:
+      type: solid
+      color: "$panelBg"
+    border:
+      style: solid
+      width: 1
+      color: "$cardBorder"
+
+  - elementId: p-table-title
+    elementType: text
+    bounds: [588, 312, 428, 22]
+    content:
+      text: "<p><span style=\"color: #F9FAFB;\"><strong>2025年主流新能源品牌年度交付与补能生态结构</strong></span></p>"
+      fontSize: 10.0
+      color: "$textPrimary"
+
+  # Small Native Table (5 cols x 7 rows)
+  - elementId: p-table-oem
+    elementType: table
+    bounds: [588, 338, 428, 280]
+    columnWidths: [0.24, 0.20, 0.18, 0.18, 0.20]
+    rowHeights: [0.16, 0.14, 0.14, 0.14, 0.14, 0.14, 0.14]
+    style: "$posterTable"
+    rows:
+      - - text: "品牌/集团"
+          align: [left, middle]
+        - text: "交付量 (万辆)"
+          align: [right, middle]
+        - text: "同比增速"
+          align: [right, middle]
+        - text: "自建站生态"
+          align: [center, middle]
+        - text: "补能网络模式"
+          align: [center, middle]
+      - - text: "比亚迪 (BYD)"
+          bold: true
+          color: "$textPrimary"
+        - text: "427.2"
+          align: [right, middle]
+          bold: true
+        - text: "+41.2%"
+          align: [right, middle]
+        - text: "合作共建"
+          align: [center, middle]
+        - text: "双枪超充/高密"
+          align: [center, middle]
+      - - text: "吉利新能源"
+          bold: true
+          color: "$textPrimary"
+        - text: "87.5"
+          align: [right, middle]
+        - text: "+56.8%"
+          align: [right, middle]
+        - text: "极充2800座"
+          align: [center, middle]
+        - text: "800V高压超充"
+          align: [center, middle]
+      - - text: "特斯拉中国"
+          bold: true
+          color: "$textPrimary"
+        - text: "65.8"
+          align: [right, middle]
+        - text: "+8.4%"
+          align: [right, middle]
+        - text: "超充1900座"
+          align: [center, middle]
+        - text: "V3/V4专享网络"
+          align: [center, middle]
+      - - text: "长安自主新能"
+          bold: true
+          color: "$textPrimary"
+        - text: "72.3"
+          align: [right, middle]
+        - text: "+48.5%"
+          align: [right, middle]
+        - text: "换电/超充"
+          align: [center, middle]
+        - text: "换电生态联盟"
+          align: [center, middle]
+      - - text: "造车新势力群"
+          bold: true
+          color: "$textPrimary"
+        - text: "185.0"
+          align: [right, middle]
+        - text: "+38.0%"
+          align: [right, middle]
+        - text: "自建6500座"
+          align: [center, middle]
+        - text: "高速超充+换电"
+          align: [center, middle]
+      - - text: "行业全国合计"
+          bold: true
+          color: "$accentGold"
+        - text: "1,287.4"
+          align: [right, middle]
+          bold: true
+        - text: "+34.5%"
+          align: [right, middle]
+          bold: true
+        - text: "368.5万台"
+          align: [center, middle]
+          bold: true
+        - text: "多层次协同网络"
+          align: [center, middle]
+          bold: true
+
+  - elementId: p-table-subtext
+    elementType: text
+    bounds: [588, 626, 428, 64]
+    content:
+      text: "<p><span style=\"color: #F9FAFB;\"><strong>格局洞察：</strong></span>比亚迪年销突破420万辆稳居第一，吉利与长安依靠多品牌战略实现超50%高速增长；头部车企深度参与自建大功率超充与换电生态，车企自建站向社会开放共享成主流趋势。</p>"
+      fontSize: 8.5
+      color: "$textSecondary"
+      lineHeight: 1.35
+
+  # Lower Row: 3 Vector Analytical Panels (x: 48, 384, 720, w: 312, h: 285)
+  # Panel 1: 公共充电桩功率结构升级
+  - elementId: p-low1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [48, 715, 312, 285]
+    fill:
+      type: solid
+      color: "$panelBg"
+    border:
+      style: solid
+      width: 1
+      color: "$cardBorder"
+
+  - elementId: p-low1-title
+    elementType: text
+    bounds: [64, 728, 280, 22]
+    content:
+      text: "<p><span style=\"color: #F9FAFB;\"><strong>公共充电桩功率结构升级</strong></span></p>"
+      fontSize: 10.0
+
+  - elementId: p-low1-content
+    elementType: text
+    bounds: [64, 755, 280, 230]
+    content:
+      text: "<p><span style=\"color: #F59E0B;\"><strong>大功率超充 (≥250kW)：</strong></span><span style=\"color: #F9FAFB;\">90.2万台 (24.5%)</span></p><p style=\"color: #9CA3AF;\">同比增长 +112%，兆瓦级液冷超充在高速路网节点全面覆盖。</p><br/><p><span style=\"color: #10B981;\"><strong>直流快充 (60-180kW)：</strong></span><span style=\"color: #F9FAFB;\">145.8万台 (39.5%)</span></p><p style=\"color: #9CA3AF;\">城市公共补能主力，商圈、物流园高频周转站点基本饱和。</p><br/><p><span style=\"color: #9CA3AF;\"><strong>交流慢充 (≤7kW)：</strong></span><span style=\"color: #F9FAFB;\">132.5万台 (36.0%)</span></p><p style=\"color: #6B7280;\">园区及目的地慢充增量趋缓，存量逐步进行有序用电改造。</p>"
+      fontSize: 8.5
+      lineHeight: 1.35
+
+  # Panel 2: 省份渗透与网络密度 TOP 5
+  - elementId: p-low2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [384, 715, 312, 285]
+    fill:
+      type: solid
+      color: "$panelBg"
+    border:
+      style: solid
+      width: 1
+      color: "$cardBorder"
+
+  - elementId: p-low2-title
+    elementType: text
+    bounds: [400, 728, 280, 22]
+    content:
+      text: "<p><span style=\"color: #F9FAFB;\"><strong>省市公桩保有量与密度 TOP 5</strong></span></p>"
+      fontSize: 10.0
+
+  - elementId: p-low2-content
+    elementType: text
+    bounds: [400, 755, 280, 230]
+    content:
+      text: "<p><span style=\"color: #F9FAFB;\"><strong>1. 广东省：</strong></span>公桩 <span style=\"color: #10B981;\">68.2万台</span> · 车桩比 2.1:1</p><p style=\"color: #9CA3AF;\">珠三角形成全域1公里补能圈，高速充电保障领先。</p><br/><p><span style=\"color: #F9FAFB;\"><strong>2. 浙江省：</strong></span>公桩 <span style=\"color: #10B981;\">41.5万台</span> · 车桩比 2.2:1</p><p style=\"color: #9CA3AF;\">率先实现全省所有乡镇公共充电站 100% 全覆盖。</p><br/><p><span style=\"color: #F9FAFB;\"><strong>3. 江苏省：</strong></span>公桩 <span style=\"color: #10B981;\">38.6万台</span> · 车桩比 2.3:1</p><br/><p><span style=\"color: #F9FAFB;\"><strong>4. 上海市：</strong></span>公桩 <span style=\"color: #F59E0B;\">26.4万台</span> · 车桩比 1.9:1 (最高密)</p><br/><p><span style=\"color: #F9FAFB;\"><strong>5. 山东省：</strong></span>公桩 <span style=\"color: #10B981;\">24.8万台</span> · 车桩比 2.6:1</p>"
+      fontSize: 8.5
+      lineHeight: 1.35
+
+  # Panel 3: 车桩比演进与国际对比
+  - elementId: p-low3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [720, 715, 312, 285]
+    fill:
+      type: solid
+      color: "$panelBg"
+    border:
+      style: solid
+      width: 1
+      color: "$cardBorder"
+
+  - elementId: p-low3-title
+    elementType: text
+    bounds: [736, 728, 280, 22]
+    content:
+      text: "<p><span style=\"color: #F9FAFB;\"><strong>车桩比历史跨越与国际横向对比</strong></span></p>"
+      fontSize: 10.0
+
+  - elementId: p-low3-content
+    elementType: text
+    bounds: [736, 755, 280, 230]
+    content:
+      text: "<p><span style=\"color: #F9FAFB;\"><strong>中国车桩比演进历程：</strong></span></p><p style=\"color: #F59E0B;\">2020年 3.0:1 → 2022年 2.6:1 → <strong>2025年 2.4:1</strong></p><p style=\"color: #9CA3AF;\">5年内车桩比持续优化，满足千万级车辆新增补能负荷。</p><br/><p><span style=\"color: #F9FAFB;\"><strong>全球主要市场横向对比 (2025)：</strong></span></p><p style=\"color: #9CA3AF;\">• <span style=\"color: #10B981;\"><strong>中国：2.4:1</strong></span> (公私桩合计，公桩比约8.8:1)</p><p style=\"color: #9CA3AF;\">• <strong>欧洲平均：约 12.0:1</strong> (公共桩密度不足)</p><p style=\"color: #9CA3AF;\">• <strong>美国平均：约 15.2:1</strong> (以家庭慢充为主)</p><br/><p><span style=\"color: #F59E0B;\"><strong>战略结论：</strong></span>中国充电网建设已构筑全球绝对产业壁垒。</p>"
+      fontSize: 8.5
+      lineHeight: 1.35
+
+  # Bottom Footnote & Source Line
+  - elementId: p-footer-source
+    elementType: text
+    bounds: [48, 1018, 700, 28]
+    content:
+      text: "<p>数据来源：中国汽车工业协会 (CAAM)、乘用车市场信息联席分会 (CPCA)、中国电动汽车充电基础设施促进联盟 (EVCIPA) 2025年度统计数据快报。</p>"
+      fontSize: 8.0
+      color: "$textMuted"
+
+  - elementId: p-footer-ver
+    elementType: text
+    bounds: [780, 1018, 252, 28]
+    content:
+      text: "<p>发布周期：2026年1月 · 数据看板版本：v2.1</p>"
+      fontSize: 8.0
+      color: "$textMuted"
+      align: [right, top]

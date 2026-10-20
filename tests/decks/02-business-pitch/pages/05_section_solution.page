@@ -1,0 +1,167 @@
+pageType: chapter
+background:
+  type: image
+  src: assets/abstract_bg.png
+  fit: {mode: cover}
+  opacity: 0.88
+notes: "接下来进入第四部分，ColdSync 的解决方案与产品技术架构。传统巨头试图用买车建库的重资产模式解决问题，不仅重、慢，而且根本无法跨国扩张。ColdSync 采取完全不同的路径：我们不做资产所有者，而是做连接车、库、货、柜的云端智能编排中枢。"
+elements:
+  # Decorative Top Accent Bar
+  - elementId: div-top-bar
+    elementType: shape
+    bounds: [0, 0, 960, 8]
+    shapeName: rect
+    fill: {type: solid, color: "$accent"}
+
+  # Left Chapter Number Block
+  - elementId: div-num-box
+    elementType: shape
+    bounds: [70, 90, 80, 80]
+    shapeName: rect
+    fill: {type: solid, color: "$accent"}
+
+  - elementId: div-num-txt
+    elementType: text
+    bounds: [70, 90, 80, 80]
+    content:
+      fontSize: 48
+      bold: true
+      color: "$white"
+      align: [center, middle]
+      text: "04"
+
+  # Section Label
+  - elementId: div-chapter-label
+    elementType: text
+    bounds: [170, 105, 500, 24]
+    content:
+      fontSize: 13
+      bold: true
+      letterSpacing: 2
+      color: "$mint"
+      text: "SOLUTION & ARCHITECTURE"
+
+  - elementId: div-chapter-sub
+    elementType: text
+    bounds: [170, 135, 500, 24]
+    content:
+      fontSize: 14
+      bold: true
+      color: "$white"
+      text: "解决方案与产品技术架构"
+
+  # Core Manifesto Title (Emotional gear-shift)
+  - elementId: div-main-title
+    elementType: text
+    bounds: [70, 205, 820, 84]
+    content:
+      fontSize: 28
+      bold: true
+      color: "$white"
+      lineHeight: 1.3
+      text: "从重资产重灾区，到智能编排中枢：<br/>ColdSync 全链路冷链数字大脑"
+
+  # Divider Line
+  - elementId: div-divider
+    elementType: line
+    bounds: [70, 305, 820, 2]
+    viewBox: [820, 2]
+    points: "0,1 820,1"
+    border: {style: solid, width: 2, color: "$accent"}
+
+  # 3 Pillars Preview Columns
+  - elementId: p1-box
+    elementType: shape
+    bounds: [70, 335, 250, 120]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+    opacity: 0.75
+    border: {style: solid, width: 1, color: "$accent"}
+
+  - elementId: p1-title
+    elementType: text
+    bounds: [85, 345, 220, 24]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$accent"
+      text: "01 边缘感知硬件"
+
+  - elementId: p1-desc
+    elementType: text
+    bounds: [85, 372, 220, 75]
+    content:
+      fontSize: 10.5
+      color: "$white"
+      lineHeight: 1.45
+      text: "即插即用 LoRa/BLE 温湿振动传感器，无损贴装，5 分钟激活，弱网离线暂存。"
+
+  - elementId: p2-box
+    elementType: shape
+    bounds: [355, 335, 250, 120]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+    opacity: 0.75
+    border: {style: solid, width: 1, color: "$accent"}
+
+  - elementId: p2-title
+    elementType: text
+    bounds: [370, 345, 220, 24]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$accent"
+      text: "02 动态运筹引擎"
+
+  - elementId: p2-desc
+    elementType: text
+    bounds: [370, 372, 220, 75]
+    content:
+      fontSize: 10.5
+      color: "$white"
+      lineHeight: 1.45
+      text: "融合热带海岛天气、滚装渡轮班次与冷机功耗的动态多温区路由算法。"
+
+  - elementId: p3-box
+    elementType: shape
+    bounds: [640, 335, 250, 120]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+    opacity: 0.75
+    border: {style: solid, width: 1, color: "$accent"}
+
+  - elementId: p3-title
+    elementType: text
+    bounds: [655, 345, 220, 24]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$accent"
+      text: "03 三方履约协同"
+
+  - elementId: p3-desc
+    elementType: text
+    bounds: [655, 372, 220, 75]
+    content:
+      fontSize: 10.5
+      color: "$white"
+      lineHeight: 1.45
+      text: "打通货主、3PL 车队与末端商超的电子签收单 (e-POD) 与分钟级异常纠偏。"
+
+  # Footnote
+  - elementId: div-footer
+    elementType: text
+    bounds: [70, 498, 400, 18]
+    content:
+      fontSize: 9
+      color: "#88B89C"
+      text: "ColdSync Solution Architecture Framework"
+
+  - elementId: div-page
+    elementType: text
+    bounds: [810, 498, 80, 18]
+    content:
+      fontSize: 9
+      color: "#88B89C"
+      align: [right, middle]
+      text: "05 / 10"

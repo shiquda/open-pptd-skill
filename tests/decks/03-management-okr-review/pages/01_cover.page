@@ -1,0 +1,507 @@
+pageType: content
+background: { type: solid, color: "$bg" }
+notes: |
+  【第 1 页·管委会演讲备注】
+  各位管理层与董事会成员，今天向大家汇报《云枢网络 2026 Q3 经营复盘与 Q4 OKR 承诺》。
+  
+  首先看大盘 Verdict（总决断）：
+  Q3 我们取得了 3,280 万元的 ARR 净增，达成率 94.2%，毛利与经营净现金流表现亮眼，但两大核心指标——金额续费率 NRR（102.4% vs 目标 108%）与 KA 平均交付周期（84 天 vs 目标 60 天）亮起红灯。
+  
+  结构性分化极其明显：
+  1. 中小客（SMB）依靠纯云原生标准产品，PLG 自增购爆发，NRR 冲到 116.4%，带来正向现金流支撑；
+  2. 但贡献 42% 营收的 18 家 500 万级 KA 客户，深陷定制化私有云交付泥潭，出现 200 万认收延期和 1 家大客户流失。
+  
+  今天复盘不讲空话，核心回答三件事：
+  第一，200 万缺口究竟从哪里流失（归因与桥接）；
+  第二，交付战役为什么亮红灯（运营病灶）；
+  第三，Q4 锁定 3,950 万 ARR 底线，管委会需要批复哪些具体特批支持。
+elements:
+  # Top Header Menu & Navigation
+  - elementId: nav-line-1
+    elementType: line
+    bounds: [50, 26, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-2
+    elementType: line
+    bounds: [50, 31, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-3
+    elementType: line
+    bounds: [50, 36, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-org-tag
+    elementType: text
+    bounds: [74, 25, 480, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$muted"
+      text: "云枢网络科技 (CloudPivot SaaS · 示例公司) · 集团经营管理委员会"
+
+  - elementId: nav-period-tag
+    elementType: text
+    bounds: [660, 25, 250, 16]
+    content:
+      align: [right, middle]
+      fontSize: 10
+      color: "$muted"
+      text: "2026 Q3 复盘与 Q4 承诺 · 密级：内部决策参考"
+
+  - elementId: header-divider
+    elementType: line
+    bounds: [50, 48, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Slide Title
+  - elementId: cover-main-title
+    elementType: text
+    bounds: [50, 60, 860, 32]
+    content:
+      fontFamily: "MiSans"
+      fontSize: 22
+      bold: true
+      color: "$ink"
+      text: "2026 Q3 经营复盘与 Q4 战略 OKR 承诺"
+
+  # Single Most Critical Status Line (Executive Verdict Banner)
+  - elementId: verdict-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 98, 860, 56]
+    fill: { type: solid, color: "$accentLight" }
+    border: { style: solid, width: 1, color: "$accent" }
+    adjustments: [5000]
+
+  - elementId: verdict-accent-bar
+    elementType: shape
+    shapeName: "rect"
+    bounds: [50, 98, 6, 56]
+    fill: { type: solid, color: "$accent" }
+
+  - elementId: verdict-title
+    elementType: text
+    bounds: [68, 104, 825, 22]
+    content:
+      fontSize: 12.5
+      bold: true
+      color: "$ink"
+      text: "【经管会执行结论】Q3 核心 ARR 达成率 94.2%，KA 续约与交付承压触发黄灯预警，Q4 聚焦续约攻坚与交付提速"
+
+  - elementId: verdict-desc
+    elementType: text
+    bounds: [68, 128, 825, 20]
+    content:
+      fontSize: 10
+      color: "$muted"
+      text: "中小客靠标准产品自增购（NRR 116%），但 500 万级 KA 定制交付滞后导致认收缺口 200 万并流失 1 家，Q4 锁定 3,950 万保底目标"
+
+  # Traffic-Light Overview Subheader
+  - elementId: traffic-light-section-title
+    elementType: text
+    bounds: [50, 164, 500, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "核心经营指标红黄绿健康度总览 (Traffic-Light Health Overview · 示例/假设数据)"
+
+  # --- Card 1: ARR Net New (Yellow / Warning) ---
+  - elementId: card1-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 188, 162, 296]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [6000]
+
+  - elementId: card1-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [62, 200, 138, 24]
+    fill: { type: solid, color: "$statusAmberBg" }
+    border: { style: solid, width: 0.8, color: "$statusAmberBorder" }
+    adjustments: [15000]
+
+  - elementId: card1-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [72, 207, 10, 10]
+    fill: { type: solid, color: "$statusAmber" }
+
+  - elementId: card1-status-text
+    elementType: text
+    bounds: [88, 202, 104, 20]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusAmber"
+      text: "预警 · 关注"
+
+  - elementId: card1-metric-name
+    elementType: text
+    bounds: [62, 230, 138, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "ARR 净增总额"
+
+  - elementId: card1-big-number
+    elementType: text
+    bounds: [62, 248, 138, 28]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$ink"
+      text: "3,280 万"
+
+  - elementId: card1-target-delta
+    elementType: text
+    bounds: [62, 278, 138, 32]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.3
+      color: "$muted"
+      text: "目标: 3,480 万元<br/>达成率: <b>94.2%</b> (缺口-200万)"
+
+  - elementId: card1-divider
+    elementType: line
+    bounds: [62, 316, 138, 1]
+    points: "0,0.5 138,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: card1-driver-text
+    elementType: text
+    bounds: [62, 324, 138, 148]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>动因分析：</b><br/>新客签单 1,820 万达标 (101%)；但老客增购受阻于 KA 交付未验收，认收周期平均后移 28 天，造成 200 万缺口。"
+
+  # --- Card 2: NRR Retention (Red / Risk) ---
+  - elementId: card2-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [224, 188, 162, 296]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [6000]
+
+  - elementId: card2-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [236, 200, 138, 24]
+    fill: { type: solid, color: "$statusRedBg" }
+    border: { style: solid, width: 0.8, color: "$statusRedBorder" }
+    adjustments: [15000]
+
+  - elementId: card2-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [246, 207, 10, 10]
+    fill: { type: solid, color: "$statusRed" }
+
+  - elementId: card2-status-text
+    elementType: text
+    bounds: [262, 202, 104, 20]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusRed"
+      text: "风险 · 阻滞"
+
+  - elementId: card2-metric-name
+    elementType: text
+    bounds: [236, 230, 138, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "金额续费率 (NRR)"
+
+  - elementId: card2-big-number
+    elementType: text
+    bounds: [236, 248, 138, 28]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$ink"
+      text: "102.4%"
+
+  - elementId: card2-target-delta
+    elementType: text
+    bounds: [236, 278, 138, 32]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.3
+      color: "$muted"
+      text: "目标: 108.0%<br/>偏差: <b>-5.6pct</b> (跌破安全线)"
+
+  - elementId: card2-divider
+    elementType: line
+    bounds: [236, 316, 138, 1]
+    points: "0,0.5 138,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: card2-driver-text
+    elementType: text
+    bounds: [236, 324, 138, 148]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>动因分析：</b><br/>SMB 净留存 116% 超预期；但 500 万级 KA 客户续约率下滑至 96.2%，2 家大客户缩容、1 家流失给低价竞对。"
+
+  # --- Card 3: Gross Margin (Green / On Track) ---
+  - elementId: card3-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [398, 188, 162, 296]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [6000]
+
+  - elementId: card3-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [410, 200, 138, 24]
+    fill: { type: solid, color: "$statusGreenBg" }
+    border: { style: solid, width: 0.8, color: "$statusGreenBorder" }
+    adjustments: [15000]
+
+  - elementId: card3-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [420, 207, 10, 10]
+    fill: { type: solid, color: "$statusGreen" }
+
+  - elementId: card3-status-text
+    elementType: text
+    bounds: [436, 202, 104, 20]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusGreen"
+      text: "正常 · 超标"
+
+  - elementId: card3-metric-name
+    elementType: text
+    bounds: [410, 230, 138, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "综合毛利率"
+
+  - elementId: card3-big-number
+    elementType: text
+    bounds: [410, 248, 138, 28]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$ink"
+      text: "73.8%"
+
+  - elementId: card3-target-delta
+    elementType: text
+    bounds: [410, 278, 138, 32]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.3
+      color: "$muted"
+      text: "目标: 72.0%<br/>达成: <b>+1.8pct</b> (优于预期)"
+
+  - elementId: card3-divider
+    elementType: line
+    bounds: [410, 316, 138, 1]
+    points: "0,0.5 138,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: card3-driver-text
+    elementType: text
+    bounds: [410, 324, 138, 148]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>动因分析：</b><br/>公有云资源自动化调优使单客户服务器成本下降 14%，SMB 纯软件毛利 86% 抵消了 KA 现场驻场的人力成本摊薄。"
+
+  # --- Card 4: Delivery Cycle (Red / Delayed) ---
+  - elementId: card4-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [572, 188, 162, 296]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [6000]
+
+  - elementId: card4-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [584, 200, 138, 24]
+    fill: { type: solid, color: "$statusRedBg" }
+    border: { style: solid, width: 0.8, color: "$statusRedBorder" }
+    adjustments: [15000]
+
+  - elementId: card4-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [594, 207, 10, 10]
+    fill: { type: solid, color: "$statusRed" }
+
+  - elementId: card4-status-text
+    elementType: text
+    bounds: [610, 202, 104, 20]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusRed"
+      text: "风险 · 超期"
+
+  - elementId: card4-metric-name
+    elementType: text
+    bounds: [584, 230, 138, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "KA 交付周期"
+
+  - elementId: card4-big-number
+    elementType: text
+    bounds: [584, 248, 138, 28]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$ink"
+      text: "84 天"
+
+  - elementId: card4-target-delta
+    elementType: text
+    bounds: [584, 278, 138, 32]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.3
+      color: "$muted"
+      text: "目标: ≤60 天<br/>偏差: <b>超期 +24 天</b> (瓶颈爆发)"
+
+  - elementId: card4-divider
+    elementType: line
+    bounds: [584, 316, 138, 1]
+    points: "0,0.5 138,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: card4-driver-text
+    elementType: text
+    bounds: [584, 324, 138, 148]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>动因分析：</b><br/>私有化混合云缺乏标准镜像，MES 与旧版 ERP 接口联调返工率达 42%，现场驻场消耗超 300 人日，严重积压。"
+
+  # --- Card 5: Net Operating Cash Flow (Green / Strong) ---
+  - elementId: card5-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [746, 188, 164, 296]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [6000]
+
+  - elementId: card5-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [758, 200, 140, 24]
+    fill: { type: solid, color: "$statusGreenBg" }
+    border: { style: solid, width: 0.8, color: "$statusGreenBorder" }
+    adjustments: [15000]
+
+  - elementId: card5-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [768, 207, 10, 10]
+    fill: { type: solid, color: "$statusGreen" }
+
+  - elementId: card5-status-text
+    elementType: text
+    bounds: [784, 202, 104, 20]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusGreen"
+      text: "正常 · 优良"
+
+  - elementId: card5-metric-name
+    elementType: text
+    bounds: [758, 230, 140, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "经营净现金流"
+
+  - elementId: card5-big-number
+    elementType: text
+    bounds: [758, 248, 140, 28]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$ink"
+      text: "+860 万"
+
+  - elementId: card5-target-delta
+    elementType: text
+    bounds: [758, 278, 140, 32]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.3
+      color: "$muted"
+      text: "目标: +500 万元<br/>达成率: <b>172.0%</b> (现金充裕)"
+
+  - elementId: card5-divider
+    elementType: line
+    bounds: [758, 316, 140, 1]
+    points: "0,0.5 140,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: card5-driver-text
+    elementType: text
+    bounds: [758, 324, 140, 148]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>动因分析：</b><br/>强力推行中小客预收全款政策，配合 KA 签约首付 50% 阶梯折扣，经营活动回款周期缩短 12 天，资金储备充足。"
+
+  # Footer Divider & Notes
+  - elementId: footer-divider
+    elementType: line
+    bounds: [50, 498, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 506, 680, 16]
+    content:
+      style: "$footer"
+      text: "数据来源：云枢网络财务与运营分析中心 (示例公司/假设口径) · 统计周期：2026-07-01 至 2026-09-30"
+
+  - elementId: footer-page-num
+    elementType: text
+    bounds: [850, 506, 60, 16]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      bold: true
+      color: "$ink"
+      text: "01 / 09"

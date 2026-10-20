@@ -1,0 +1,223 @@
+pageType: final
+background:
+  type: solid
+  color: "$bgDark"
+notes: |
+  本页为投委会决议与投后财务监测哨卡：
+  1. 维持增持评级，认为当前估值充分反映宏观审慎预期，未完全计入盈利韧性与现金流红利；
+  2. 针对未来经营可能面临的边际扰动，设立三道明确的量化财务监测哨卡（回款天数、资本开支额度、毛利率底线）；
+  3. 一旦突破阈值，立即启动对应的预算管控与商务策略调整，确保资产负债表安全底线不可动摇。
+elements:
+  # Header eyebrow
+  - elementId: s9-eyebrow
+    elementType: text
+    bounds: [52, 32, 450, 18]
+    content:
+      text: "<p>INVESTMENT COMMITTEE DECISION · RISK MITIGATION</p>"
+      style: "$coverMasthead"
+
+  # Slide title
+  - elementId: s9-title
+    elementType: text
+    bounds: [52, 52, 856, 28]
+    content:
+      text: "<p>维持增持评级并设立资产负债表监测哨卡，重点跟踪应收账款周转与资本开支节奏</p>"
+      style: "$slideTitleDark"
+
+  # Subtitle
+  - elementId: s9-subtitle
+    elementType: text
+    bounds: [52, 82, 856, 20]
+    content:
+      text: "<p>投委会决议指令、量化预警阈值与动态应对方案 | 标的：示例公司（虚构上市标的 · 示例数据）</p>"
+      style: "$subtitleDark"
+
+  # Top divider
+  - elementId: s9-top-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 106, 856, 1]
+    fill:
+      type: solid
+      color: "$darkDivider"
+
+  # Card 1: 应收账款与回款质量监测
+  - elementId: s9-card1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 118, 856, 94]
+    fill:
+      type: solid
+      color: "#202020"
+    border:
+      style: solid
+      width: 1
+      color: "#303030"
+
+  - elementId: s9-card1-title
+    elementType: text
+    bounds: [72, 128, 220, 24]
+    content:
+      text: "<p><strong>哨卡 01 · 商业信用与回款质量</strong></p>"
+      fontSize: 10.5
+      bold: true
+      color: "#FFFFFF"
+
+  - elementId: s9-card1-capsule
+    elementType: shape
+    shapeName: roundRect
+    adjustments: [0.5]
+    bounds: [72, 156, 195, 22]
+    fill:
+      type: solid
+      color: "$primaryGold"
+  - elementId: s9-card1-capsule-text
+    elementType: text
+    bounds: [72, 158, 195, 18]
+    content:
+      text: "<p><strong>预警阈值: DSO > 75天 或 逾期率 > 3%</strong></p>"
+      fontSize: 7.5
+      bold: true
+      color: "$inkBlack"
+      align: [center, middle]
+
+  - elementId: s9-card1-desc
+    elementType: text
+    bounds: [285, 128, 600, 72]
+    content:
+      text: "<p><span style=\"color: #D6D6D6;\"><strong>当前状态 (2026H1)：</strong>应收账款周转天数65.4天，账龄1年以内比例95.2%，整体回款纪劳优良。</span></p><p><span style=\"color: #A7A7A7;\"><strong>触发应对措施：</strong>若DSO连续两月突破75天警戒线，立即收紧非核心客户商业信用额度，提高现汇及银行承兑汇票结算比例至70%以上，暂停逾期客户新增发货。</span></p>"
+      fontSize: 8.5
+      lineHeight: 1.35
+
+  # Card 2: 资本开支与自由现金流平衡
+  - elementId: s9-card2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 224, 856, 94]
+    fill:
+      type: solid
+      color: "#202020"
+    border:
+      style: solid
+      width: 1
+      color: "#303030"
+
+  - elementId: s9-card2-title
+    elementType: text
+    bounds: [72, 234, 220, 24]
+    content:
+      text: "<p><strong>哨卡 02 · 自由现金流与资本开支</strong></p>"
+      fontSize: 10.5
+      bold: true
+      color: "#FFFFFF"
+
+  - elementId: s9-card2-capsule
+    elementType: shape
+    shapeName: roundRect
+    adjustments: [0.5]
+    bounds: [72, 262, 195, 22]
+    fill:
+      type: solid
+      color: "$primaryGold"
+  - elementId: s9-card2-capsule-text
+    elementType: text
+    bounds: [72, 264, 195, 18]
+    content:
+      text: "<p><strong>预警阈值: 季度 Capex > 2.5亿 或 FCF &lt; 0</strong></p>"
+      fontSize: 7.5
+      bold: true
+      color: "$inkBlack"
+      align: [center, middle]
+
+  - elementId: s9-card2-desc
+    elementType: text
+    bounds: [285, 234, 600, 72]
+    content:
+      text: "<p><span style=\"color: #D6D6D6;\"><strong>当前状态 (2026H1)：</strong>半年度资本开支3.25亿元，单季均值1.63亿元，自由现金流净流入4.90亿元，现金储备极其充沛。</span></p><p><span style=\"color: #A7A7A7;\"><strong>触发应对措施：</strong>若单季Capex超限或自由现金流转负，暂停二期非关键产线智能化投资，执行分阶段节点验收付款，确保留存非受限资金不低于15亿元。</span></p>"
+      fontSize: 8.5
+      lineHeight: 1.35
+
+  # Card 3: 毛利率防线与成本传导
+  - elementId: s9-card3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 330, 856, 94]
+    fill:
+      type: solid
+      color: "#202020"
+    border:
+      style: solid
+      width: 1
+      color: "#303030"
+
+  - elementId: s9-card3-title
+    elementType: text
+    bounds: [72, 340, 220, 24]
+    content:
+      text: "<p><strong>哨卡 03 · 综合毛利率与成本传导</strong></p>"
+      fontSize: 10.5
+      bold: true
+      color: "#FFFFFF"
+
+  - elementId: s9-card3-capsule
+    elementType: shape
+    shapeName: roundRect
+    adjustments: [0.5]
+    bounds: [72, 368, 195, 22]
+    fill:
+      type: solid
+      color: "$copperBrown"
+  - elementId: s9-card3-capsule-text
+    elementType: text
+    bounds: [72, 370, 195, 18]
+    content:
+      text: "<p><strong>预警阈值: 综合毛利率 &lt; 30.5% (降超2pct)</strong></p>"
+      fontSize: 7.5
+      bold: true
+      color: "#FFFFFF"
+      align: [center, middle]
+
+  - elementId: s9-card3-desc
+    elementType: text
+    bounds: [285, 340, 600, 72]
+    content:
+      text: "<p><span style=\"color: #D6D6D6;\"><strong>当前状态 (2026H1)：</strong>综合毛利率32.8%（同比+1.4pct），高端产品销售占比提高带来强溢价能力。</span></p><p><span style=\"color: #A7A7A7;\"><strong>触发应对措施：</strong>若毛利率回落破30.5%，激活关键原材料大宗期货套保方案，锁定6个月用量成本，同时对下游头部客户启动价格联动上调磋商。</span></p>"
+      fontSize: 8.5
+      lineHeight: 1.35
+
+  # Bottom Decision Ask Band
+  - elementId: s9-verdict-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 436, 856, 42]
+    fill:
+      type: solid
+      color: "$inkBlack"
+    border:
+      style: solid
+      width: 1
+      color: "$primaryGold"
+  - elementId: s9-verdict-text
+    elementType: text
+    bounds: [68, 444, 824, 26]
+    content:
+      text: "<p><strong>投委会决议：一致通过维持“增持”评级（目标估值区间 2026E P/E 18.5x–21.0x）。</strong>授权投后管理团队建立三道哨卡月度监控机制，定期向投委会呈报资产负债表与现金流健康度审计备忘录。</p>"
+      fontSize: 8.5
+      color: "#FFFFFF"
+      lineHeight: 1.35
+
+  # Footer
+  - elementId: s9-footer-source
+    elementType: text
+    bounds: [52, 505, 600, 18]
+    content:
+      text: "<p>投研归档：投委会决议指令书第2026-H1-08号 · 示例数据</p>"
+      style: "$footnote"
+  - elementId: s9-footer-page
+    elementType: text
+    bounds: [850, 505, 58, 18]
+    content:
+      text: "<p>9 / 9</p>"
+      fontSize: 8.0
+      color: "$footnoteGray"
+      align: [right, middle]

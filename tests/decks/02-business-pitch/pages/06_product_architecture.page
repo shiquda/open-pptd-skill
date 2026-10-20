@@ -1,0 +1,247 @@
+pageType: content
+notes: "这是 ColdSync 的四层技术架构。最底层是我们在东南亚极端路况打磨出的低功耗感知硬件，支持印尼海岛无网络环境下的离线暂存与断点重传；中间层是核心调度引擎，我们把渡轮班次、热带暴雨天气与制冷机油耗数据全部纳入优化模型；最上层则提供极简的货主、车队与司机协同端，真正做到零培训 5 分钟上手。"
+elements:
+  # Navigation / Chapter locator
+  - elementId: nav-chapter
+    elementType: text
+    bounds: [50, 24, 400, 20]
+    content:
+      style: "$chapter"
+      text: "04 解决方案 | TECHNICAL ARCHITECTURE"
+
+  - elementId: nav-line
+    elementType: line
+    bounds: [50, 48, 860, 1]
+    viewBox: [860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 1, color: "$primary"}
+
+  # Assertion Title & Subtitle
+  - elementId: title
+    elementType: text
+    bounds: [50, 58, 860, 32]
+    content:
+      style: "$title"
+      text: "四层云边协同架构打通车、库、货、柜，实现冷链全程分钟级断链预警"
+
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 92, 860, 20]
+    content:
+      style: "$subtitle"
+      text: "专为东南亚热带跨岛复杂路况定制的轻量化端到端技术堆栈，数据完整率高达 99.98%"
+
+  # 4-LAYER TECHNICAL STACK ARCHITECTURE DIAGRAM
+  # Layer 4 (Top): Application Portal
+  - elementId: layer-4-badge
+    elementType: shape
+    bounds: [50, 126, 160, 62]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+
+  - elementId: layer-4-badge-txt
+    elementType: text
+    bounds: [55, 134, 150, 46]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$white"
+      align: [center, middle]
+      text: "应用协同层<br/><span style=\"font-size:9.5px;color:#B8EDBC;\">Application Portal</span>"
+
+  - elementId: layer-4-body
+    elementType: text
+    bounds: [220, 126, 640, 62]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>• 货主端控制台</b>：全温区可视化看板、冷链合规报告导出、承运商服务质量 (SLA) 评分<br/><b>• 车队调度大屏</b>：动态拼车调度、渡轮排班融合、司机温控违规报警中枢<br/><b>• 司机端 App / 小程序</b>：离线蓝牙温湿度即时读取、异常降温补救指引、电子签收 (e-POD)"
+
+  # Upward Telemetry Connector 3 -> 4
+  - elementId: conn-3-4
+    elementType: line
+    bounds: [130, 188, 1, 14]
+    viewBox: [1, 14]
+    points: "0,14 0,0"
+    arrow: [null, "stealth"]
+    border: {style: solid, width: 1.5, color: "$accent"}
+
+  # Layer 3: Cold Engine (Dynamic Routing & Dispatch)
+  - elementId: layer-3-badge
+    elementType: shape
+    bounds: [50, 202, 160, 62]
+    shapeName: rect
+    fill:
+      type: gradient
+      gradientType: linear
+      angle: 90
+      stops:
+        - {position: 0, color: "$primary"}
+        - {position: 1, color: "$accent"}
+
+  - elementId: layer-3-badge-txt
+    elementType: text
+    bounds: [55, 210, 150, 46]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$white"
+      align: [center, middle]
+      text: "云端运筹引擎<br/><span style=\"font-size:9.5px;color:#FFFFFF;\">Cold Engine Platform</span>"
+
+  - elementId: layer-3-body
+    elementType: text
+    bounds: [220, 202, 640, 62]
+    fill: {type: solid, color: "$mint"}
+    content:
+      style: "$body"
+      text: "<b>• 动态温控算法</b>：根据热带暴雨气象与路网拥堵预判温升趋势，提前 <b>20 分钟</b> 发出降温指令<br/><b>• 海岛跳运协同</b>：打通爪哇-苏门答腊-巴厘岛滚装渡轮时刻表，精准预测多式联运衔接时效<br/><b>• 冷机能耗优化</b>：结合生鲜货物品类（果蔬 vs 冻肉）匹配最优设定温度，降低综合油耗 <b>14.8%</b>"
+
+  # Upward Telemetry Connector 2 -> 3
+  - elementId: conn-2-3
+    elementType: line
+    bounds: [130, 264, 1, 14]
+    viewBox: [1, 14]
+    points: "0,14 0,0"
+    arrow: [null, "stealth"]
+    border: {style: solid, width: 1.5, color: "$accent"}
+
+  # Layer 2: Edge Gateway & Weak Network Sync
+  - elementId: layer-2-badge
+    elementType: shape
+    bounds: [50, 278, 160, 62]
+    shapeName: rect
+    fill: {type: solid, color: "$primary"}
+
+  - elementId: layer-2-badge-txt
+    elementType: text
+    bounds: [55, 286, 150, 46]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$white"
+      align: [center, middle]
+      text: "边缘网关与通信<br/><span style=\"font-size:9.5px;color:#B8EDBC;\">Edge Gateway</span>"
+
+  - elementId: layer-2-body
+    elementType: text
+    bounds: [220, 278, 640, 62]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>• 弱网离线存证</b>：车厢网关内置 16MB 闪存，海上渡轮断网期间可本地存储 <b>72 小时</b> 完整传感数据<br/><b>• 断点智能续传</b>：靠岸连上 4G/NB-IoT 蜂窝网络后 <b>30 秒内</b> 自动批量压缩加密同步至云端<br/><b>• 边缘本地报警</b>：本地声光报警器直连冷机控制器，发生急速温升时第一时间提醒随车司机"
+
+  # Upward Telemetry Connector 1 -> 2
+  - elementId: conn-1-2
+    elementType: line
+    bounds: [130, 340, 1, 14]
+    viewBox: [1, 14]
+    points: "0,14 0,0"
+    arrow: [null, "stealth"]
+    border: {style: solid, width: 1.5, color: "$accent"}
+
+  # Layer 1 (Bottom): Sensor & Physical IoT
+  - elementId: layer-1-badge
+    elementType: shape
+    bounds: [50, 354, 160, 62]
+    shapeName: rect
+    fill: {type: solid, color: "$dark"}
+
+  - elementId: layer-1-badge-txt
+    elementType: text
+    bounds: [55, 362, 150, 46]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$mint"
+      align: [center, middle]
+      text: "感知硬件与 IoT<br/><span style=\"font-size:9.5px;color:#A2CDB5;\">Sensors & Devices</span>"
+
+  - elementId: layer-1-body
+    elementType: text
+    bounds: [220, 354, 640, 62]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>• 免布线无线探头</b>：工业级 BLE 5.3 探头，测温精度 ±0.2°C，IP68 防水，3 年超长续航<br/><b>• 车厢门磁与电量传感器</b>：毫秒级监测开关门频次与时长，严防开门偷冷与偷油现象<br/><b>• 极速部署</b>：磁吸或强力 3M 胶 5 分钟无损完成单车加装，无需改动原车任何线路"
+
+  # Reverse Feedback Dispatch Indicator (Exercising flip: [false, true])
+  - elementId: reverse-dispatch-arrow
+    elementType: shape
+    bounds: [880, 240, 16, 36]
+    shapeName: upArrow
+    fill: {type: solid, color: "$accent"}
+    flip: [false, true]
+
+  - elementId: reverse-dispatch-label
+    elementType: text
+    bounds: [865, 200, 46, 36]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$primary"
+      align: [center, middle]
+      lineHeight: 1.2
+      text: "动态<br/>调度"
+  # Bottom Synthesis Bar
+  - elementId: so-what-bar
+    elementType: shape
+    bounds: [50, 428, 860, 42]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1, color: "$primary"}
+
+  - elementId: so-what-text
+    elementType: text
+    bounds: [65, 432, 830, 32]
+    content:
+      style: "$synthesis"
+      text: "核心技术壁垒：硬件极简降低进场门槛，算法极深筑牢运力网络；累计突破 1,200 万公里复杂岛屿路测验证。"
+
+  # Fixed Footer
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 498, 600, 18]
+    content:
+      style: "$caption"
+      text: "技术专利与系统指标：ColdSync 研发实验室测试基准 (示例数据)"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [810, 498, 100, 18]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "06 / 10"
+
+# ANIMATIONS ORCHESTRATION (Page 1 of 2 with animations)
+# Exercising fade-in, fly-in with direction, wipe-in, mixed onClick, withPrevious, afterPrevious
+animations:
+  - elementId: layer-1-badge
+    effect: fly-in
+    direction: up
+    trigger: onClick
+  - elementId: layer-1-body
+    effect: fly-in
+    direction: up
+    trigger: withPrevious
+  - elementId: layer-2-badge
+    effect: wipe-in
+    trigger: afterPrevious
+  - elementId: layer-2-body
+    effect: wipe-in
+    trigger: withPrevious
+  - elementId: layer-3-badge
+    effect: fly-in
+    direction: up
+    trigger: onClick
+  - elementId: layer-3-body
+    effect: fly-in
+    direction: up
+    trigger: withPrevious
+  - elementId: layer-4-badge
+    effect: fade-in
+    trigger: afterPrevious
+  - elementId: layer-4-body
+    effect: fade-in
+    trigger: withPrevious

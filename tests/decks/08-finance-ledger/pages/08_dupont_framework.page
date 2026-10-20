@@ -1,0 +1,374 @@
+pageType: content
+background:
+  type: solid
+  color: "$bgWhite"
+notes: |
+  本页采用经典杜邦分析体系（DuPont Analysis）对ROE进行三因子穿透：
+  1. 年化ROE达16.8%，较上年同期提振1.2个百分点；
+  2. 归因拆解表明：净利率由13.5%升至14.0%（主要驱动力），总资产周转率由0.43次提升至0.46次（次要驱动力）；
+  3. 权益乘数由1.84倍降至1.77倍，表明ROE的提升完全依靠运营效率与盈利质量驱动，而非通过放大杠杆实现，属于最高质量的价值创造模式。
+elements:
+  # Thin black top rule signature
+  - elementId: s8-top-rule
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 28, 856, 2]
+    fill:
+      type: solid
+      color: "$inkBlack"
+  - elementId: s8-title
+    elementType: text
+    bounds: [52, 42, 856, 26]
+    content:
+      text: "<p>净资产收益率归因显示周转率与利润率协同提振，权益乘数收敛降低杠杆风险</p>"
+      style: "$slideTitle"
+
+  # Subtitle
+  - elementId: s8-subtitle
+    elementType: text
+    bounds: [52, 70, 856, 18]
+    content:
+      text: "<p>杜邦分析三因子深度穿透：2026年半年度 ROE 驱动分解（可编辑矢量框架，单位：% / 次 / 倍） | 口径：示例数据</p>"
+      style: "$subtitle"
+
+  # Light divider
+  - elementId: s8-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 94, 856, 1]
+    fill:
+      type: solid
+      color: "$hairline"
+  - elementId: s8-box-roe
+    elementType: shape
+    shapeName: rect
+    bounds: [215, 115, 214, 56]
+    fill:
+      type: solid
+      color: "$inkBlack"
+  - elementId: s8-text-roe
+    elementType: text
+    bounds: [220, 122, 204, 44]
+    content:
+      text: "<p><span style=\"color: #A7A7A7; font-size: 8pt;\">核心股东回报目标</span></p><p><strong>加权平均 ROE: 16.8%</strong> <span style=\"color: #D6A000; font-size: 8.5pt;\">(年化)</span></p>"
+      fontSize: 10.5
+      bold: true
+      color: "#FFFFFF"
+      align: [center, middle]
+
+  # Connector from Root to Factor 1, Factor 2, Factor 3
+  - elementId: s8-conn-vert-root
+    elementType: line
+    bounds: [322, 171, 1, 24]
+    viewBox: [1, 24]
+    points: "0,0 0,24"
+    border:
+      style: solid
+      width: 1.5
+      color: "$inkBlack"
+  - elementId: s8-conn-horiz-bus
+    elementType: line
+    bounds: [136, 195, 372, 1]
+    viewBox: [372, 1]
+    points: "0,0 372,0"
+    border:
+      style: solid
+      width: 1.5
+      color: "$inkBlack"
+  - elementId: s8-conn-down-f1
+    elementType: line
+    bounds: [136, 195, 1, 20]
+    viewBox: [1, 20]
+    points: "0,0 0,20"
+    arrow: [null, triangle]
+    border:
+      style: solid
+      width: 1.5
+      color: "$inkBlack"
+  - elementId: s8-conn-down-f2
+    elementType: line
+    bounds: [322, 195, 1, 20]
+    viewBox: [1, 20]
+    points: "0,0 0,20"
+    arrow: [null, triangle]
+    border:
+      style: solid
+      width: 1.5
+      color: "$inkBlack"
+  - elementId: s8-conn-down-f3
+    elementType: line
+    bounds: [508, 195, 1, 20]
+    viewBox: [1, 20]
+    points: "0,0 0,20"
+    arrow: [null, triangle]
+    border:
+      style: solid
+      width: 1.5
+      color: "$inkBlack"
+  - elementId: s8-box-f1
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 215, 168, 64]
+    fill:
+      type: solid
+      color: "$panelGray"
+    border:
+      style: solid
+      width: 1
+      color: "$lightGray"
+  - elementId: s8-text-f1
+    elementType: text
+    bounds: [56, 222, 160, 52]
+    content:
+      text: "<p><span style=\"color: #606060; font-size: 8pt;\">盈利能力因子 (×)</span></p><p><strong>销售净利率: 14.0%</strong></p><p><span style=\"color: #0A0A0A; font-size: 7.5pt;\">同比 +0.5pct · 毛利剪刀差驱动</span></p>"
+      fontSize: 9.5
+      bold: true
+      color: "$inkBlack"
+      align: [center, middle]
+
+  # Factor 2 Box: 总资产周转率 (0.46x)
+  - elementId: s8-box-f2
+    elementType: shape
+    shapeName: rect
+    bounds: [238, 215, 168, 64]
+    fill:
+      type: solid
+      color: "$panelGray"
+    border:
+      style: solid
+      width: 1
+      color: "$lightGray"
+  - elementId: s8-text-f2
+    elementType: text
+    bounds: [242, 222, 160, 52]
+    content:
+      text: "<p><span style=\"color: #606060; font-size: 8pt;\">营运效率因子 (×)</span></p><p><strong>总资产周转率: 0.46x</strong></p><p><span style=\"color: #0A0A0A; font-size: 7.5pt;\">同比 +0.03x · 存货与回款提速</span></p>"
+      fontSize: 9.5
+      bold: true
+      color: "$inkBlack"
+      align: [center, middle]
+
+  # Factor 3 Box: 权益乘数 (1.77x)
+  - elementId: s8-box-f3
+    elementType: shape
+    shapeName: rect
+    bounds: [424, 215, 168, 64]
+    fill:
+      type: solid
+      color: "$panelGray"
+    border:
+      style: solid
+      width: 1
+      color: "$lightGray"
+  - elementId: s8-text-f3
+    elementType: text
+    bounds: [428, 222, 160, 52]
+    content:
+      text: "<p><span style=\"color: #606060; font-size: 8pt;\">财务杠杆因子 (=)</span></p><p><strong>权益乘数: 1.77x</strong></p><p><span style=\"color: #0A0A0A; font-size: 7.5pt;\">由 1.84x 收敛 · 主动压降负债</span></p>"
+      fontSize: 9.5
+      bold: true
+      color: "$inkBlack"
+      align: [center, middle]
+
+  # Level 2 Sub-branches
+  # Sub-branch 1 Connectors
+  - elementId: s8-conn-sub1
+    elementType: line
+    bounds: [136, 279, 1, 20]
+    viewBox: [1, 20]
+    points: "0,0 0,20"
+    arrow: [null, triangle]
+    border:
+      style: solid
+      width: 1
+      color: "$lightGray"
+  - elementId: s8-box-sub1
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 299, 168, 120]
+    fill:
+      type: solid
+      color: "$bgWhite"
+    border:
+      style: solid
+      width: 0.75
+      color: "$hairline"
+  - elementId: s8-text-sub1
+    elementType: text
+    bounds: [58, 305, 156, 108]
+    content:
+      text: "<p><strong>利润表穿透要点：</strong></p><p>• 归母净利: 6.82亿元 (+18.5%)</p><p>• 营业总收入: 48.65亿元 (+14.2%)</p><p>• 研发费用率: 7.09% (+0.25pct)</p><p>• 综合毛利率: 32.8% (+1.4pct)</p>"
+      fontSize: 8.0
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  # Sub-branch 2 Connectors
+  - elementId: s8-conn-sub2
+    elementType: line
+    bounds: [322, 279, 1, 20]
+    viewBox: [1, 20]
+    points: "0,0 0,20"
+    arrow: [null, triangle]
+    border:
+      style: solid
+      width: 1
+      color: "$lightGray"
+  - elementId: s8-box-sub2
+    elementType: shape
+    shapeName: rect
+    bounds: [238, 299, 168, 120]
+    fill:
+      type: solid
+      color: "$bgWhite"
+    border:
+      style: solid
+      width: 0.75
+      color: "$hairline"
+  - elementId: s8-text-sub2
+    elementType: text
+    bounds: [244, 305, 156, 108]
+    content:
+      text: "<p><strong>资产周转穿透要点：</strong></p><p>• 营业总收入: 48.65亿元</p><p>• 平均总资产: 100.65亿元</p><p>• 应收账款周转天数: 65.4天 (-4天)</p><p>• 存货周转天数: 81.2天 (-6天)</p>"
+      fontSize: 8.0
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  # Sub-branch 3 Connectors
+  - elementId: s8-conn-sub3
+    elementType: line
+    bounds: [508, 279, 1, 20]
+    viewBox: [1, 20]
+    points: "0,0 0,20"
+    arrow: [null, triangle]
+    border:
+      style: solid
+      width: 1
+      color: "$lightGray"
+  - elementId: s8-box-sub3
+    elementType: shape
+    shapeName: rect
+    bounds: [424, 299, 168, 120]
+    fill:
+      type: solid
+      color: "$bgWhite"
+    border:
+      style: solid
+      width: 0.75
+      color: "$hairline"
+  - elementId: s8-text-sub3
+    elementType: text
+    bounds: [430, 305, 156, 108]
+    content:
+      text: "<p><strong>资本结构穿透要点：</strong></p><p>• 期末总资产: 105.40亿元</p><p>• 归母净资产: 59.55亿元</p><p>• 资产负债率: 43.5% (-2.1pct)</p><p>• 有息负债比重: 30.9% (低位)</p>"
+      fontSize: 8.0
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  # Right Column: Dupont Insight Rail (x: 622 to 908, w: 286)
+  - elementId: s8-side-box
+    elementType: shape
+    shapeName: rect
+    bounds: [616, 115, 292, 304]
+    fill:
+      type: solid
+      color: "$panelGray"
+
+  - elementId: s8-side-title
+    elementType: text
+    bounds: [632, 126, 260, 24]
+    content:
+      text: "<p><strong>杜邦驱动核心洞察与质量研判</strong></p>"
+      fontSize: 10.5
+      bold: true
+      color: "$inkBlack"
+
+  - elementId: s8-side-gold-capsule
+    elementType: shape
+    shapeName: roundRect
+    adjustments: [0.5]
+    bounds: [632, 154, 185, 24]
+    fill:
+      type: solid
+      color: "$primaryGold"
+  - elementId: s8-side-gold-text
+    elementType: text
+    bounds: [632, 157, 185, 18]
+    content:
+      text: "<p><strong>内生效率驱动型 ROE (16.8%)</strong></p>"
+      fontSize: 8.0
+      bold: true
+      color: "$inkBlack"
+      align: [center, middle]
+
+  - elementId: s8-side-bullet1
+    elementType: text
+    bounds: [632, 188, 260, 68]
+    content:
+      text: "<p><strong>1. 告别传统杠杆驱动模式：</strong></p><p>权益乘数自2024年的1.88x稳步回落至1.77x，杠杆下行背景下ROE逆势扩张1.2pct，证实公司ROE提升完全依托产品附加值提升与资产精细化运营。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  - elementId: s8-side-divider1
+    elementType: shape
+    shapeName: rect
+    bounds: [632, 258, 260, 1]
+    fill:
+      type: solid
+      color: "$lightGray"
+  - elementId: s8-side-bullet2
+    elementType: text
+    bounds: [632, 268, 260, 68]
+    content:
+      text: "<p><strong>2. 营运资本周转双重加速：</strong></p><p>应收账款周转天数减少4天至65.4天，存货周转天数减少6天至81.2天，供应链两端占资周期缩短，年化资产周转率向1.0次逼近，运营效率进入行业第一梯队。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  - elementId: s8-side-divider2
+    elementType: shape
+    shapeName: rect
+    bounds: [632, 338, 260, 1]
+    fill:
+      type: solid
+      color: "$lightGray"
+  - elementId: s8-side-bullet3
+    elementType: text
+    bounds: [632, 348, 260, 66]
+    content:
+      text: "<p><strong>3. 未来ROE空间展望：</strong></p><p>伴随新增智能化产线达到满产状态，固定资产折旧边际效应改善，预计全年净利率具备进一步向14.5%攀升的潜力，全年ROE有望稳超17.0%。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  # Bottom Verdict Band
+  - elementId: s8-verdict-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 442, 856, 34]
+    fill:
+      type: solid
+      color: "$panelGray"
+  - elementId: s8-verdict-text
+    elementType: text
+    bounds: [68, 450, 824, 20]
+    content:
+      text: "<p><strong>杜邦诊断结论：</strong>ROE呈高含金量双轮驱动特征，盈利壁垒深厚叠加营运周转提速，去杠杆进程中实现资本回报率持续走高。</p>"
+      fontSize: 9.0
+      color: "$charcoal"
+
+  # Footer
+  - elementId: s8-footer-source
+    elementType: text
+    bounds: [52, 505, 600, 18]
+    content:
+      text: "<p>分析模型：杜邦分析归因系统 · 示例数据 | 报表标准：CAS-30</p>"
+      style: "$footnote"
+  - elementId: s8-footer-page
+    elementType: text
+    bounds: [850, 505, 58, 18]
+    content:
+      text: "<p>8 / 9</p>"
+      fontSize: 8.0
+      color: "$footnoteGray"
+      align: [right, middle]

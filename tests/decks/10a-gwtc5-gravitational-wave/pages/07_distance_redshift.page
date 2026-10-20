@@ -1,0 +1,264 @@
+pageType: content
+background: { type: solid, color: "$paper" }
+notes: |
+  Slide 7: Distance, Redshift, and Standard Sirens: Measuring Cosmic Expansion.
+  - Explains how gravitational-wave binary inspirals function as self-calibrating "standard sirens" (Schutz 1986): general relativity directly predicts the absolute strain amplitude from the observed chirp rate without requiring any astronomical distance ladder.
+  - Reviews the Hubble Constant tension: Planck cosmic microwave background (67.4 +/- 0.5 km/s/Mpc) vs SH0ES local Cepheid/SN Ia distance ladder (73.0 +/- 1.0 km/s/Mpc) represents a ~5-sigma discrepancy.
+  - Discusses GW170817 standard siren measurement (H0 = 70.0 +12.0 -8.0 km/s/Mpc) and statistical "dark siren" methodology using GLADE+ galaxy catalog cross-correlations.
+  - Highlights the distance-inclination degeneracy: binary orbital inclination angle i is partially degenerate with distance D_L in two-polarization strain measurements.
+elements:
+  # Left Rail
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [14, 24, 142, 484]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [18, 30, 134, 84]
+    src: "assets/thumb_detectors.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [18, 122, 134, 84]
+    src: "assets/thumb_timeline.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-3
+    elementType: image
+    bounds: [18, 214, 134, 84]
+    src: "assets/thumb_catalog.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-4
+    elementType: image
+    bounds: [18, 306, 134, 84]
+    src: "assets/thumb_mass.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-divider
+    elementType: line
+    bounds: [168, 24, 1, 484]
+    points: "0,0 0,484"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Header
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 24, 475, 34]
+    content:
+      style: "$title"
+      text: "Direct Luminosity Distance Yields a Ladder-Free Metric"
+
+  - elementId: slide-category
+    elementType: text
+    bounds: [660, 27, 260, 18]
+    content:
+      style: "$category"
+      align: [right, middle]
+      text: "06 · COSMIC EXPANSION"
+
+  - elementId: header-rule
+    elementType: line
+    bounds: [185, 58, 735, 1]
+    points: "0,0 735,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Center Area: Distance vs Redshift Matplotlib Plot
+  - elementId: chart-cosmo
+    elementType: image
+    bounds: [185, 70, 420, 235]
+    src: "assets/distance_redshift.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Epistemology Distinction Box
+  - elementId: dist-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 315, 420, 125]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: dist-txt
+    elementType: text
+    bounds: [193, 321, 404, 113]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>[Catalog Fact]</b> GW170817 standard siren directly measured \( D_L = 40^{+8}_{-8}\text{ Mpc} \) and \( H_0 = 70.0^{+12.0}_{-8.0}\text{ km s}^{-1}\text{ Mpc}^{-1} \).<br/>
+        <b>[Visualization Choice]</b> Cosmological \( D_L(z) \) curves comparing Planck vs SH0ES with GW error bars.<br/>
+        <b>[Physical Interpretation]</b> General relativity gives absolute physical scale; waveform amplitude is calibrated by the chirp rate \( \dot{f} \).<br/>
+        <b>[Open Question]</b> Resolving the 5-sigma Hubble tension with \( \sim 50 \) BNS bright sirens or \( \sim 1000 \) statistical dark sirens.
+
+  # Right Sidebar
+  - elementId: side-1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 75, 295, 110]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-1-icon
+    elementType: icon
+    iconName: "fas:calculator"
+    bounds: [637, 85, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-1-head
+    elementType: text
+    bounds: [658, 85, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "STANDARD SIREN FORMULA"
+
+  - elementId: side-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 103, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-1-formula
+    elementType: text
+    bounds: [642, 107, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: |
+        \( h \propto (G \mathrm{M}_z)^{5/6} f^{2/3} / (c^2 D_L) \)
+
+  - elementId: side-1-desc
+    elementType: text
+    bounds: [637, 134, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Measuring frequency evolution yields redshifted chirp mass M_z cleanly; waveform amplitude then provides absolute luminosity distance D_L without calibration steps."
+
+  - elementId: side-2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 195, 295, 118]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-2-icon
+    elementType: icon
+    iconName: "fas:scale-balanced"
+    bounds: [637, 205, 15, 15]
+    fill: { type: solid, color: "$teal" }
+
+  - elementId: side-2-head
+    elementType: text
+    bounds: [658, 205, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "HUBBLE TENSION REFEREE"
+
+  - elementId: side-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 223, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-2-formula
+    elementType: text
+    bounds: [642, 227, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$teal"
+      text: |
+        \( H_0^{\text{Planck}} = 67.4 \pm 0.5 \text{ vs } H_0^{\text{SH0ES}} = 73.0 \pm 1.0 \)
+
+  - elementId: side-2-desc
+    elementType: text
+    bounds: [637, 254, 271, 52]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Because gravitational waves suffer zero dust extinction or calibration systematics, standard sirens provide an entirely orthogonal, independent test of the cosmological crisis."
+
+  - elementId: side-3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 323, 295, 108]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-3-icon
+    elementType: icon
+    iconName: "fas:database"
+    bounds: [637, 333, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-3-head
+    elementType: text
+    bounds: [658, 333, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "DARK SIREN GALAXY STACKING"
+
+  - elementId: side-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 351, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-3-formula
+    elementType: text
+    bounds: [642, 355, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$primary"
+      text: |
+        \( p(H_0|d) \propto \sum p(d | D_L(z_i, H_0))\, W_i \)
+
+  - elementId: side-3-desc
+    elementType: text
+    bounds: [637, 382, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "For dark binary black hole events lacking optical kilonovae, cross-matching 3D localization volumes with galaxy catalogs (GLADE+) yields statistical H0 constraints."
+
+  # Takeaway Line
+  - elementId: footer-takeaway
+    elementType: text
+    bounds: [185, 456, 735, 24]
+    content:
+      style: "$takeaway"
+      text: "<b>Takeaway</b> · <b>Standard sirens measure cosmic distances purely through general relativity — zero ladder required.</b>"
+
+  # Sources Line
+  - elementId: footer-sources
+    elementType: text
+    bounds: [185, 490, 680, 20]
+    content:
+      style: "$footer"
+      text: "Sources: Schutz, Nature 323, 310 (1986); Abbott et al., Nature 551, 85 (2017); LVK, arXiv:2111.03604 · notes/cosmology.md"
+
+  # Page Number
+  - elementId: footer-page
+    elementType: text
+    bounds: [875, 490, 45, 20]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      text: "7"

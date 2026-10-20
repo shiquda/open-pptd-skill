@@ -1,0 +1,260 @@
+pageType: content
+notes: |
+  最后一页面向投委会形成最终行动执行决议建议。
+  报告提出三大落地支柱：
+  第一，资产配置结构：建议基金以“50%出海系统集成与PCS龙头 + 35%核心电芯与液冷温控冠军 + 15%前沿技术与构网算法”进行组合配置，重点捕获出海确定性最高的价值高地；
+  第二，尽调核查“四道防火墙”：在进场尽调阶段，严打海外应收账款坏账风险，确保质保金计提充足；核查美国FEOC合规方案与关税转嫁条款，杜绝地缘政策黑天鹅；
+  第三，估值锚点与退出保障：以15-20x EV/EBITDA为估值天花板，锁定安全边际；通过A/H股IPO以及跨国产业巨头战略并购实现多元化退出。
+  投委会建议结论：批准设立储能出海产业专项基金，即刻启动标的A与标的B的现场全面尽调。
+elements:
+  # Navigation Bar (Active: Section 4)
+  - elementId: nav-s1
+    elementType: text
+    bounds: [40, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">01 市场容量与装机</span></p>"
+  - elementId: nav-s2
+    elementType: text
+    bounds: [180, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">02 产业链与技术</span></p>"
+  - elementId: nav-s3
+    elementType: text
+    bounds: [320, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">03 竞争格局与成本</span></p>"
+  - elementId: nav-s4
+    elementType: text
+    bounds: [460, 18, 125, 16]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9pt;\">04 政策壁垒与投资</span></strong></p>"
+  - elementId: nav-tag
+    elementType: text
+    bounds: [700, 18, 220, 16]
+    content:
+      text: "<p style=\"text-align: right;\"><span style=\"color: #2151FF; font-weight: bold; font-size: 8.5pt;\">INVESTMENT COMMITTEE REPORT</span></p>"
+      letterSpacing: 0.8
+  - elementId: nav-active-indicator
+    elementType: shape
+    shapeName: rect
+    bounds: [460, 35, 125, 2]
+    fill: { type: solid, color: "$primary" }
+
+  # Slide Title & Subtitle
+  - elementId: slide-title
+    elementType: text
+    bounds: [40, 42, 880, 26]
+    content:
+      style: "$slideTitle"
+      text: "<p>投委会结论与建议：规避国内低价内卷标的，重注欧美Tier-1资质与集成交付隐形冠军</p>"
+
+  - elementId: slide-subtitle
+    elementType: text
+    bounds: [40, 69, 880, 16]
+    content:
+      style: "$subtitle"
+      text: "<p>行动纲领：资产配置比例、尽职调查“四道防火墙”核查红线、估值安全边际与资本退出闭环</p>"
+
+  - elementId: slide-top-divider
+    elementType: line
+    bounds: [40, 89, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # 3 Pillars Layout (Consulting style, fine borders, no card walls)
+  # Pillar 1: Portfolio Strategy
+  - elementId: col-1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 98, 280, 200]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: col-1-top
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 98, 280, 26]
+    fill: { type: solid, color: "$dark" }
+  - elementId: col-1-top-txt
+    elementType: text
+    bounds: [48, 102, 264, 18]
+    content:
+      text: "<p><span style=\"color: #FFFFFF; font-weight: bold; font-size: 9pt;\">01 / 资产配置策略与细分赛道</span></p>"
+  - elementId: col-1-body
+    elementType: text
+    bounds: [50, 132, 260, 160]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">【建议组合配置比例】</span></strong></p>
+        <p style="margin-top: 5px; color: #041C2C;"><strong>• 50% 投向出海集成与PCS龙头：</strong>聚焦海外大储高毛利出海企业，具备深厚海外电网认证与本地化运维团队。</p>
+        <p style="margin-top: 8px; color: #041C2C;"><strong>• 35% 投向核心电芯与液冷温控：</strong>锁定314Ah及以上大电芯第一梯队、高可靠性液冷机组龙头（ROE稳定&gt;18%）。</p>
+        <p style="margin-top: 8px; color: #041C2C;"><strong>• 15% 布局前沿构网与固态储能：</strong>前瞻配置构网型算法软件（Grid-forming）及半固态安全电池初创企业。</p>
+      fontSize: 8.5
+      lineHeight: 1.4
+
+  # Pillar 2: DD Redlines
+  - elementId: col-2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [340, 98, 280, 200]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: col-2-top
+    elementType: shape
+    shapeName: rect
+    bounds: [340, 98, 280, 26]
+    fill: { type: solid, color: "$dark" }
+  - elementId: col-2-top-txt
+    elementType: text
+    bounds: [348, 102, 264, 18]
+    content:
+      text: "<p><span style=\"color: #FFFFFF; font-weight: bold; font-size: 9pt;\">02 / 尽职调查“四道防火墙”</span></p>"
+  - elementId: col-2-body
+    elementType: text
+    bounds: [350, 132, 260, 160]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">【进场尽调核心核查红线】</span></strong></p>
+        <p style="margin-top: 5px; color: #041C2C;"><strong>① 财务与质保审计：</strong>核查海外大储项目15-20年质保金计提是否充分（≥3%营收），审计长账龄海外应收账款风险。</p>
+        <p style="margin-top: 8px; color: #041C2C;"><strong>② 地缘贸易与FEOC合规：</strong>核查北美合同是否包含关税风险转嫁条款，严审第三方产地证明与非新疆供应链穿透。</p>
+        <p style="margin-top: 8px; color: #041C2C;"><strong>③ 银行可融资性背书：</strong>调取海外独立工程师报告（DNV/PVEL）及主流商业银行非追索权贷款放款实绩。</p>
+      fontSize: 8.5
+      lineHeight: 1.4
+
+  # Pillar 3: Valuation & Exit
+  - elementId: col-3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [640, 98, 280, 200]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: col-3-top
+    elementType: shape
+    shapeName: rect
+    bounds: [640, 98, 280, 26]
+    fill: { type: solid, color: "$dark" }
+  - elementId: col-3-top-txt
+    elementType: text
+    bounds: [648, 102, 264, 18]
+    content:
+      text: "<p><span style=\"color: #FFFFFF; font-weight: bold; font-size: 9pt;\">03 / 估值锚点与退出路径</span></p>"
+  - elementId: col-3-body
+    elementType: text
+    bounds: [650, 132, 260, 160]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">【安全边际与流动性退出】</span></strong></p>
+        <p style="margin-top: 5px; color: #041C2C;"><strong>• 估值安全边际线：</strong>当前处于行业重组出清期，投资估值严格锚定<strong>15–18x EV/EBITDA</strong>或<strong>18–22x 动态P/E</strong>，拒绝高溢价跟风。</p>
+        <p style="margin-top: 8px; color: #041C2C;"><strong>• 资本市场IPO退出：</strong>支持成熟期标的申报A股科创板/创业板分拆上市，或赴港股进行“H+海外”双重主要上市。</p>
+        <p style="margin-top: 8px; color: #041C2C;"><strong>• 跨国产业并购退出：</strong>推动标的成为欧洲电气巨头（施耐德/西门子/ABB）亚太供应链核心并购标的。</p>
+      fontSize: 8.5
+      lineHeight: 1.4
+
+  # Execution Roadmap Strip (line-based phased timeline with arrow)
+  - elementId: roadmap-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 312, 880, 100]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: roadmap-title
+    elementType: text
+    bounds: [52, 318, 856, 16]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9pt;\">分阶段执行节奏与里程碑 (Execution Roadmap)</span></strong></p>"
+
+  - elementId: roadmap-line
+    elementType: line
+    bounds: [90, 360, 790, 2]
+    points: "0,0 790,0"
+    arrow: [null, "triangle"]
+    border: { style: solid, width: 1.5, color: "$dark" }
+
+  - elementId: rm-node-1
+    elementType: shape
+    shapeName: ellipse
+    bounds: [152, 355, 12, 12]
+    fill: { type: solid, color: "$primary" }
+  - elementId: rm-txt-1
+    elementType: text
+    bounds: [82, 372, 150, 32]
+    content:
+      text: |
+        <p style="text-align: center;"><strong><span style="color: #2151FF; font-size: 8.5pt;">2024 Q4</span></strong></p>
+        <p style="text-align: center; color: #334155; font-size: 8pt;">立项论证与初步尽调</p>
+
+  - elementId: rm-node-2
+    elementType: shape
+    shapeName: ellipse
+    bounds: [382, 355, 12, 12]
+    fill: { type: solid, color: "$primary" }
+  - elementId: rm-txt-2
+    elementType: text
+    bounds: [312, 372, 150, 32]
+    content:
+      text: |
+        <p style="text-align: center;"><strong><span style="color: #2151FF; font-size: 8.5pt;">2025 Q1</span></strong></p>
+        <p style="text-align: center; color: #334155; font-size: 8pt;">现场尽调与投资协议签署</p>
+
+  - elementId: rm-node-3
+    elementType: shape
+    shapeName: ellipse
+    bounds: [612, 355, 12, 12]
+    fill: { type: solid, color: "$primary" }
+  - elementId: rm-txt-3
+    elementType: text
+    bounds: [542, 372, 150, 32]
+    content:
+      text: |
+        <p style="text-align: center;"><strong><span style="color: #2151FF; font-size: 8.5pt;">2025 Q2–Q3</span></strong></p>
+        <p style="text-align: center; color: #334155; font-size: 8pt;">交割放款与投后协同赋能</p>
+
+  - elementId: rm-node-4
+    elementType: shape
+    shapeName: ellipse
+    bounds: [842, 355, 12, 12]
+    fill: { type: solid, color: "$dark" }
+  - elementId: rm-txt-4
+    elementType: text
+    bounds: [772, 372, 140, 32]
+    content:
+      text: |
+        <p style="text-align: center;"><strong><span style="color: #041C2C; font-size: 8.5pt;">2026–2027</span></strong></p>
+        <p style="text-align: center; color: #334155; font-size: 8pt;">上市辅导与多元退出准备</p>
+
+  # Bottom Synthesis Action Banner
+  - elementId: action-bar-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 422, 880, 76]
+    fill: { type: solid, color: "$tint" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: action-bar-txt
+    elementType: text
+    bounds: [52, 428, 856, 64]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF; font-size: 9.5pt;">投委会表决决议建议 (FINAL DECISION)：</span></strong></p>
+        <p style="margin-top: 4px; color: #041C2C; font-size: 8.5pt; line-height: 1.4;">原则同意设立<strong>“新能源储能全球化出海专项股权投资基金”（首期拟设规模10亿元人民币）</strong>；首批重点推进<strong>标的A（全球光储逆变器领军企业，拟出资2.5亿元）</strong>与<strong>标的B（大储液冷热管理隐形冠军，拟出资1.5亿元）</strong>的全面进场尽职调查与排他性投资协议签署。</p>
+
+  # Bottom hairline and footer
+  - elementId: slide-bottom-line
+    elementType: line
+    bounds: [40, 508, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: slide-foot-src
+    elementType: text
+    bounds: [40, 514, 740, 16]
+    content:
+      style: "$footnote"
+      text: "<p>报告拟制：新能源与硬科技产业投资组  |  审议机构：投资决策委员会 (Investment Committee)  |  呈送日期：2024年10月</p>"
+
+  - elementId: slide-foot-page
+    elementType: text
+    bounds: [820, 514, 100, 16]
+    content:
+      style: "$footnote"
+      text: "<p style=\"text-align: right;\"><strong><span style=\"color: #041C2C;\">10</span></strong> / 10</p>"

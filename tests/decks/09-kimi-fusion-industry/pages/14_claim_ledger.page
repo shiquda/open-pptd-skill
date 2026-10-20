@@ -1,0 +1,191 @@
+pageType: content
+notes: |
+  Claim ledger slide. Provides an audit table cataloging the primary scientific, engineering, financial, and economic assertions made throughout the briefing. Explicitly classifies each claim by empirical evidence type (physical measurement vs experimental subsystem vs simulation vs parametric projection) and assigns an analytical confidence rating, strictly maintaining the boundary between observed reality and forward projections.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "08 · CLAIM LEDGER"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Structured Audit of Empirical Claims, Data Sources, and Analytical Confidence"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Methodological separation between physically measured results, validated simulations, and forward commercial projections"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Dense Native Table
+  - elementId: ledger-table
+    elementType: table
+    bounds: [50, 102, 860, 362]
+    columnWidths: [0.26, 0.24, 0.14, 0.18, 0.18]
+    rowHeights: [0.16, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12]
+    style: "$denseConsulting"
+    rows:
+      # Header Row
+      - - text: "Core Thesis Claim / Finding"
+          align: [left, middle]
+        - text: "Empirical Source & Author"
+          align: [left, middle]
+        - text: "Milestone Date"
+          align: [center, middle]
+        - text: "Evidence Class"
+          align: [center, middle]
+        - text: "Confidence Rating"
+          align: [center, middle]
+
+      # Row 1: NIF Ignition
+      - - text: "NIF Net Ignition: 3.15 MJ yield (Q=1.54)"
+          align: [left, middle]
+          bold: true
+        - text: "LLNL / Physical Review Letters"
+          align: [left, middle]
+        - text: "Dec 2022 / 2023"
+          align: [center, middle]
+        - text: "Measured Physical Result"
+          align: [center, middle]
+        - text: "High (Replicated in Lab)"
+          align: [center, middle]
+
+      # Row 2: JET Record
+      - - text: "JET DTE3 Energy Record: 69.3 MJ pulse"
+          align: [left, middle]
+          bold: true
+        - text: "EUROfusion / UKAEA JET Campaign"
+          align: [left, middle]
+        - text: "October 2023"
+          align: [center, middle]
+        - text: "Measured Physical Result"
+          align: [center, middle]
+        - text: "High (Calibrated Sensors)"
+          align: [center, middle]
+
+      # Row 3: HTS 20T Magnet
+      - - text: "20T Large-Bore HTS Magnet Coil at 20 K"
+          align: [left, middle]
+          bold: true
+        - text: "CFS & MIT Plasma Science Center"
+          align: [left, middle]
+        - text: "September 2021"
+          align: [center, middle]
+        - text: "Subsystem Hardware Test"
+          align: [center, middle]
+        - text: "High (Verified Field)"
+          align: [center, middle]
+
+      # Row 4: Private Capital
+      - - text: "Cumulative Private Capital: $7.12B in 45 firms"
+          align: [left, middle]
+          bold: true
+        - text: "Fusion Industry Association (FIA)"
+          align: [left, middle]
+        - text: "July 2024 Survey"
+          align: [center, middle]
+        - text: "Self-Reported Census"
+          align: [center, middle]
+        - text: "High (Audited Filings)"
+          align: [center, middle]
+
+      # Row 5: Tritium TBR
+      - - text: "Closed-Loop Tritium Breeding (TBR ≥ 1.05)"
+          align: [left, middle]
+          bold: true
+        - text: "IAEA Nuclear Fusion Assessments"
+          align: [left, middle]
+        - text: "2023–2024 Studies"
+          align: [center, middle]
+        - text: "Neutron Transport Simulation"
+          align: [center, middle]
+        - text: "Medium (Unproven at Scale)"
+          align: [center, middle]
+
+      # Row 6: First-Wall Damage
+      - - text: "14 MeV Neutron Damage: 10–15 dpa/yr in steel"
+          align: [left, middle]
+          bold: true
+        - text: "UKAEA / Fusion Engineering & Design"
+          align: [left, middle]
+        - text: "2023 Research"
+          align: [center, middle]
+        - text: "Fission Proxy & Modeling"
+          align: [center, middle]
+        - text: "Medium (No 14 MeV Source)"
+          align: [center, middle]
+
+      # Row 7: LCOE NOAK
+      - - text: "NOAK Capital Parity: $3,500/kW, LCOE $65/MWh"
+          align: [left, middle]
+          bold: true
+        - text: "Sheffield et al. / ARPA-E Models"
+          align: [left, middle]
+        - text: "2024 Techno-Econ"
+          align: [center, middle]
+        - text: "Parametric Projection"
+          align: [center, middle]
+        - text: "Speculative (Awaiting Pilots)"
+          align: [center, middle]
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Ledger Synthesis:</b> Laboratory physics and capital figures are empirically grounded; blanket breeding loops and commercial LCOE remain forward projections requiring pilot validation."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Audit Framework: Global Fusion Research Initiative (GFRI); methodology conforms to GAO Technology Readiness Assessment criteria."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 14 / 16"

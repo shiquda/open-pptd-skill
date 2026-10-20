@@ -1,0 +1,132 @@
+pageType: content
+notes: |
+  Private capital landscape slide. Combines the FIA annual survey investment trajectory with an analysis of tier-1 venture capitalization. Explains that despite more than 45 companies being formed globally, over 70% of total capital is concentrated in the top 5 players (CFS, Helion, TAE, Tokamak Energy, Energy Singularity). Analyzes the growing role of sovereign co-funding and corporate power purchase agreements (e.g., Microsoft-Helion PPA).
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "04 · INDUSTRY LANDSCAPE"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Cumulative Private Investment Exceeds $7.1 Billion Across 45+ Ventures; Capital Concentrates in Top 5 Leaders"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Historical funding velocity (FIA annual surveys 2021–2025) and capital allocation across private commercial ventures"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Chart Image Left
+  - elementId: chart-investment
+    elementType: image
+    bounds: [50, 104, 490, 358]
+    src: "assets/chart_fusion_investment.png"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Right Column - Venture Profiles
+  - elementId: right-bg
+    elementType: shape
+    bounds: [552, 104, 358, 358]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: right-header
+    elementType: shape
+    bounds: [552, 104, 358, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: right-title
+    elementType: text
+    bounds: [562, 109, 338, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "TIER-1 PRIVATE COMMERCIAL PLAYERS"
+
+  - elementId: right-content
+    elementType: text
+    bounds: [562, 138, 338, 316]
+    content:
+      fontSize: 8.1
+      color: "$ink"
+      lineHeight: 1.34
+      text: |
+        <p><b>Commonwealth Fusion Systems (CFS, USA):</b></p>
+        <p>• <b>Funding:</b> &gt;$2.0B (Breakthrough Energy, Temasek, Tiger Global)</p>
+        <p>• <b>Core Machine:</b> SPARC compact HTS tokamak; 20T field demonstration completed; commercial pilot ARC targeted 2030s.</p>
+        <p><br><b>Helion Energy (USA):</b></p>
+        <p>• <b>Funding:</b> &gt;$570M direct (&gt;$1.7B milestone commitments; Sam Altman)</p>
+        <p>• <b>Core Machine:</b> Polaris pulsed FRC (D-³He); direct inductive recovery; landmark commercial 50 MW PPA signed with Microsoft (2028).</p>
+        <p><br><b>TAE Technologies (USA):</b></p>
+        <p>• <b>Funding:</b> &gt;$1.2B (Google, Chevron, Sumitomo)</p>
+        <p>• <b>Core Machine:</b> Norman / Copernicus FRC; targeting p-¹¹B aneutronic fusion to eliminate structural neutron activation.</p>
+        <p><br><b>Tokamak Energy (UK):</b></p>
+        <p>• <b>Funding:</b> &gt;$250M; spherical tokamak (ST40) + HTS magnet IP.</p>
+        <p><br><b>Energy Singularity (能量奇点, China):</b></p>
+        <p>• <b>Funding:</b> &gt;$110M (miHoYo, NIO Capital, Sequoia China); built world's first all-HTS tokamak (Honghuang-70) operating in Shanghai (2024).</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Industry Takeaway:</b> Capital has decoupled from treaty timelines, but 75% sits with the top 5 players; tier-1 ventures are shifting from laboratory R&D to facility construction."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: Fusion Industry Association (FIA) Annual Global Reports (2021–2024); company regulatory filings and SEC disclosures."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 08 / 16"

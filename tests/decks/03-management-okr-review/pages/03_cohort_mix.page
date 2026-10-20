@@ -1,0 +1,311 @@
+pageType: content
+background: { type: solid, color: "$bg" }
+notes: |
+  【第 3 页·管委会演讲备注】
+  第 3 页揭示了我们经营大盘的核心结构性矛盾——客群分化极其剧烈。
+  
+  请大家看左侧的 Cohort（同梯队留存）走势图：
+  绿色线代表 SMB 客户，留存率从 Q0 的 100% 一路上扬到 Q8 的 116.4%，呈现典型的优质 SaaS“微笑曲线”；
+  而红色线代表 500 万以上的 KA 战略大客户，前几个季度表现尚可，但在第 4 个季度交付延期开始发酵后，留存率断崖式下坠，到 Q3 已经跌穿 100% 警戒线，跌到了 96.2%。
+  
+  右侧的三层客群金字塔对比非常触目惊心：
+  1. 18 家 KA 大客户贡献了 42% 的 ARR（5,460 万），但 NRR 只有 96.2%，意味着如果没有新单补充，大客盘子每年都在缩水 3.8%；
+  2. 腰部 64 家客户 NRR 105.8%，基本持平，但面临区域集成商的降价蚕食；
+  3. 420 家 SMB 客户依靠标准化云端产品，自增购率 116.4%，毛利高达 86%，但体量只占 20%。
+  
+  结论很清晰：我们不能用 SMB 的繁荣掩盖 KA 的危机。如果 KA 交付瓶颈不破除，公司就无法在大客户市场立足。
+elements:
+  # Top Header Menu & Navigation
+  - elementId: nav-line-1
+    elementType: line
+    bounds: [50, 26, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-2
+    elementType: line
+    bounds: [50, 31, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-3
+    elementType: line
+    bounds: [50, 36, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-section-tag
+    elementType: text
+    bounds: [74, 25, 480, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$muted"
+      text: "02 收入结构与客群分化 · 留存曲线与金字塔诊断 (示例公司)"
+
+  - elementId: nav-report-title
+    elementType: text
+    bounds: [660, 25, 250, 16]
+    content:
+      align: [right, middle]
+      fontSize: 10
+      color: "$muted"
+      text: "云枢网络 2026 Q3 经营复盘"
+
+  - elementId: header-divider
+    elementType: line
+    bounds: [50, 46, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Slide Takeaway Title & Subtitle
+  - elementId: page3-title
+    elementType: text
+    bounds: [50, 54, 860, 24]
+    content:
+      fontFamily: "MiSans"
+      fontSize: 17
+      bold: true
+      color: "$ink"
+      text: "中小客户扩张强劲（NRR 116%），但 500 万以上 KA 续约下滑至 96% 构成核心隐患"
+
+  - elementId: page3-subtitle
+    elementType: text
+    bounds: [50, 78, 860, 16]
+    content:
+      fontSize: 10.5
+      color: "$muted"
+      text: "客群结构分化：SMB 靠标准产品自增购实现健康自循环，KA 陷入定制交付深水区引发流失与缩容"
+
+  # ================= LEFT COLUMN: LOCAL CHART ASSET + TAKEAWAYS =================
+  - elementId: cohort-chart-img
+    elementType: image
+    src: "assets/cohort_retention_mix.png"
+    bounds: [50, 98, 400, 240]
+    fit: { mode: "contain" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+
+  - elementId: cohort-summary-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 348, 400, 140]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: cohort-summary-title
+    elementType: text
+    bounds: [65, 358, 370, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+      text: "【客群分化深层诊断：SaaS 经济学撕裂】"
+
+  - elementId: cohort-summary-text
+    elementType: text
+    bounds: [65, 378, 370, 100]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.38
+      color: "$inkSecondary"
+      text: "• <b>SMB 标准产品验证飞轮：</b>公有云多租户版本交付周期为 0 天，席位扩容转化率高达 34%，形成健康的自增购引擎。<br/>• <b>KA 定制重构损伤续约：</b>500 万级客单虽高，但私有云二次开发返工率达 42%，导致承诺工期严重失信，客户信任受损直接反映在次年续约与增购预算缩水上。"
+
+  # ================= RIGHT COLUMN: 3 TIER STRIPS =================
+  # Tier 1: KA Enterprise
+  - elementId: tier1-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [470, 98, 440, 124]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: tier1-header
+    elementType: text
+    bounds: [486, 108, 260, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "战略级 KA 客户 (ARR > 500 万元)"
+
+  - elementId: tier1-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [800, 108, 96, 20]
+    fill: { type: solid, color: "$statusRedBg" }
+    border: { style: solid, width: 0.8, color: "$statusRedBorder" }
+    adjustments: [15000]
+
+  - elementId: tier1-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [808, 113, 8, 8]
+    fill: { type: solid, color: "$statusRed" }
+
+  - elementId: tier1-status-label
+    elementType: text
+    bounds: [820, 110, 70, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$statusRed"
+      text: "风险警戒"
+
+  - elementId: tier1-metrics
+    elementType: text
+    bounds: [486, 128, 410, 16]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      text: "客户数: <b>18 家</b> ｜ ARR 占比: <b>42% (5,460万)</b> ｜ Q3 NRR: <span style=\"color:#B83A2C\"><strong>96.2%</strong></span> (同比-12.4%)"
+
+  - elementId: tier1-desc
+    elementType: text
+    bounds: [486, 146, 410, 68]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>现状与病灶：</b>定制开发分支过多挤占通用研发版本，私有化部署升级受阻。Q3 发生 1 家制造业大客转投低价一体机竞品（流失-380万）、2 家客户因上线延期缩单（-240万），净损失 620 万。"
+
+  # Tier 2: Mid-Market
+  - elementId: tier2-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [470, 232, 440, 124]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: tier2-header
+    elementType: text
+    bounds: [486, 242, 260, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "腰部 Mid-Market 客户 (ARR 100~500 万元)"
+
+  - elementId: tier2-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [800, 242, 96, 20]
+    fill: { type: solid, color: "$statusAmberBg" }
+    border: { style: solid, width: 0.8, color: "$statusAmberBorder" }
+    adjustments: [15000]
+
+  - elementId: tier2-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [808, 247, 8, 8]
+    fill: { type: solid, color: "$statusAmber" }
+
+  - elementId: tier2-status-label
+    elementType: text
+    bounds: [820, 244, 70, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$statusAmber"
+      text: "适度平稳"
+
+  - elementId: tier2-metrics
+    elementType: text
+    bounds: [486, 262, 410, 16]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      text: "客户数: <b>64 家</b> ｜ ARR 占比: <b>38% (4,940万)</b> ｜ Q3 NRR: <b>105.8%</b> (目标 108.0%)"
+
+  - elementId: tier2-desc
+    elementType: text
+    bounds: [486, 280, 410, 68]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>现状与病灶：</b>行业标准解决方案套件续约总体可控，但华东区域制造业面临低价集成商打折围剿，客户在续约时提出 15~20% 降价要求，客单价增长面临瓶颈。"
+
+  # Tier 3: SMB Standard
+  - elementId: tier3-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [470, 366, 440, 122]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: tier3-header
+    elementType: text
+    bounds: [486, 376, 260, 18]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      text: "长尾 SMB 标准客户 (ARR < 100 万元)"
+
+  - elementId: tier3-status-pill
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [800, 376, 96, 20]
+    fill: { type: solid, color: "$statusGreenBg" }
+    border: { style: solid, width: 0.8, color: "$statusGreenBorder" }
+    adjustments: [15000]
+
+  - elementId: tier3-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [808, 381, 8, 8]
+    fill: { type: solid, color: "$statusGreen" }
+
+  - elementId: tier3-status-label
+    elementType: text
+    bounds: [820, 378, 70, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$statusGreen"
+      text: "强劲增长"
+
+  - elementId: tier3-metrics
+    elementType: text
+    bounds: [486, 396, 410, 16]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      text: "客户数: <b>420 家</b> ｜ ARR 占比: <b>20% (2,600万)</b> ｜ Q3 NRR: <span style=\"color:#2D6A4F\"><strong>116.4%</strong></span> (超额+8.4pct)"
+
+  - elementId: tier3-desc
+    elementType: text
+    bounds: [486, 414, 410, 68]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "<b>现状与亮点：</b>纯多租户公有云标准版，零现场实施成本，自助开通率 92%；PLG 产品内席位扩充与增购自动化运转，毛利率高达 86%，是全公司最健康的利润与现金流基本盘。"
+
+  # Footer
+  - elementId: footer-divider
+    elementType: line
+    bounds: [50, 498, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 506, 680, 16]
+    content:
+      style: "$footer"
+      text: "客群界定：根据签约年度 ARR 规模划分 · 数据来源：云枢网络 CRM 与收入计量系统 (示例公司/假设口径)"
+
+  - elementId: footer-page-num
+    elementType: text
+    bounds: [850, 506, 60, 16]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      bold: true
+      color: "$ink"
+      text: "03 / 09"

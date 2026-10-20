@@ -1,0 +1,296 @@
+pageType: content
+notes: |
+  第五页深入技术迭代：电芯容量从280Ah迈向314Ah及更大容量的跃迁逻辑，以及液冷替代风冷的技术革命。
+  1. 规格代际：2020-2021年行业以100Ah/280Ah风冷为主，循环寿命仅3000-6000次；2022-2023年280Ah全面放量，单箱容量达3.72MWh；
+  2. 当前节点（2024 TODAY）：314Ah电芯成为全行业大储集采标配，20尺集装箱系统容量提升至5MWh（如阳光电源PowerTitan 2.0、宁德时代天恒系统），单箱容量增幅达34.4%，场站占地面积减少超30%，大幅摊薄了土建与EPC成本；
+  3. 循环寿命：从早期的6000次跃升至头部大厂宣传的10000-12000次甚至“5年零衰减”，使电站全生命周期运行年限从8-10年延长至15-20年，度电储能成本显著下降；
+  4. 热管理：液冷渗透率突破75%，相较风冷将电芯间温差由5℃压降至2.5℃以内，彻底解决局部热失控风险。
+elements:
+  # Navigation Bar (Active: Section 2)
+  - elementId: nav-s1
+    elementType: text
+    bounds: [40, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">01 市场容量与装机</span></p>"
+  - elementId: nav-s2
+    elementType: text
+    bounds: [180, 18, 125, 16]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9pt;\">02 产业链与技术</span></strong></p>"
+  - elementId: nav-s3
+    elementType: text
+    bounds: [320, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">03 竞争格局与成本</span></p>"
+  - elementId: nav-s4
+    elementType: text
+    bounds: [460, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">04 政策壁垒与投资</span></p>"
+  - elementId: nav-tag
+    elementType: text
+    bounds: [700, 18, 220, 16]
+    content:
+      text: "<p style=\"text-align: right;\"><span style=\"color: #2151FF; font-weight: bold; font-size: 8.5pt;\">INVESTMENT COMMITTEE REPORT</span></p>"
+      letterSpacing: 0.8
+  - elementId: nav-active-indicator
+    elementType: shape
+    shapeName: rect
+    bounds: [180, 35, 125, 2]
+    fill: { type: solid, color: "$primary" }
+
+  # Slide Title & Subtitle
+  - elementId: slide-title
+    elementType: text
+    bounds: [40, 42, 880, 26]
+    content:
+      style: "$slideTitle"
+      text: "<p>储能电芯加速向314Ah及5MWh系统迭代，液冷温控渗透率超75%成为大储准入标配</p>"
+
+  - elementId: slide-subtitle
+    elementType: text
+    bounds: [40, 69, 880, 16]
+    content:
+      style: "$subtitle"
+      text: "<p>电芯容量代际跃迁、循环寿命曲线（6,000 ➔ 12,000次）及系统集成度演进路径全景</p>"
+
+  - elementId: slide-top-divider
+    elementType: line
+    bounds: [40, 89, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Phased Timeline Backbone Line (Relative points with arrow)
+  - elementId: timeline-main-line
+    elementType: line
+    bounds: [50, 145, 860, 2]
+    points: "0,0 860,0"
+    arrow: [null, "triangle"]
+    border: { style: solid, width: 2, color: "$dark" }
+
+  # Milestone 1: 2020-2021
+  - elementId: ms-node-1
+    elementType: shape
+    shapeName: ellipse
+    bounds: [85, 138, 16, 16]
+    fill: { type: solid, color: "$dark" }
+  - elementId: ms-txt-1
+    elementType: text
+    bounds: [40, 105, 110, 30]
+    content:
+      text: "<p style=\"text-align: center;\"><strong><span style=\"color: #041C2C; font-size: 11pt;\">2020–2021</span></strong><br/><span style=\"color: #64748B; font-size: 8pt;\">100Ah–280Ah 萌芽</span></p>"
+  - elementId: ms-card-1
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 168, 195, 135]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: ms-card-1-txt
+    elementType: text
+    bounds: [48, 176, 179, 120]
+    content:
+      text: |
+        <p><strong><span style="color: #041C2C;">初代大储探索期</span></strong></p>
+        <p style="margin-top: 4px; color: #475569;">• 电芯容量：100Ah / 280Ah</p>
+        <p style="color: #475569;">• 循环寿命：3,000–6,000 次</p>
+        <p style="color: #475569;">• 温控形态：以风冷为主</p>
+        <p style="color: #475569;">• 典型系统：20尺 2.5–3.3MWh</p>
+      fontSize: 8.5
+      lineHeightPx: 14
+
+  # Milestone 2: 2022-2023
+  - elementId: ms-node-2
+    elementType: shape
+    shapeName: ellipse
+    bounds: [290, 138, 16, 16]
+    fill: { type: solid, color: "$dark" }
+  - elementId: ms-txt-2
+    elementType: text
+    bounds: [245, 105, 110, 30]
+    content:
+      text: "<p style=\"text-align: center;\"><strong><span style=\"color: #041C2C; font-size: 11pt;\">2022–2023</span></strong><br/><span style=\"color: #64748B; font-size: 8pt;\">280Ah 液冷放量</span></p>"
+  - elementId: ms-card-2
+    elementType: shape
+    shapeName: rect
+    bounds: [248, 168, 195, 135]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: ms-card-2-txt
+    elementType: text
+    bounds: [256, 176, 179, 120]
+    content:
+      text: |
+        <p><strong><span style="color: #041C2C;">280Ah 产业基准成型</span></strong></p>
+        <p style="margin-top: 4px; color: #475569;">• 电芯容量：280Ah (LFP)</p>
+        <p style="color: #475569;">• 循环寿命：6,000–8,000 次</p>
+        <p style="color: #475569;">• 温控形态：液冷渗透率突破50%</p>
+        <p style="color: #475569;">• 典型系统：20尺 3.72MWh集装箱</p>
+      fontSize: 8.5
+      lineHeightPx: 14
+
+  # TODAY MARKER (2024 Current Gate)
+  - elementId: today-gate-line
+    elementType: line
+    bounds: [475, 114, 2, 45]
+    points: "0,0 0,45"
+    border: { style: solid, width: 1.5, color: "$primary" }
+  - elementId: today-tag
+    elementType: shape
+    shapeName: rect
+    bounds: [448, 95, 54, 18]
+    fill: { type: solid, color: "$primary" }
+  - elementId: today-tag-txt
+    elementType: text
+    bounds: [448, 97, 54, 14]
+    content:
+      text: "<p style=\"text-align: center;\"><strong><span style=\"color: #FFFFFF; font-size: 7.5pt;\">TODAY</span></strong></p>"
+
+  # Milestone 3: 2024-2025E (Highlight Stage)
+  - elementId: ms-node-3
+    elementType: shape
+    shapeName: ellipse
+    bounds: [565, 138, 16, 16]
+    fill: { type: solid, color: "$primary" }
+  - elementId: ms-txt-3
+    elementType: text
+    bounds: [515, 105, 115, 30]
+    content:
+      text: "<p style=\"text-align: center;\"><strong><span style=\"color: #2151FF; font-size: 11pt;\">2024–2025E</span></strong><br/><span style=\"color: #2151FF; font-size: 8pt; font-weight: bold;\">314Ah + 5MWh 主流</span></p>"
+  - elementId: ms-card-3
+    elementType: shape
+    shapeName: rect
+    bounds: [480, 168, 205, 135]
+    fill: { type: solid, color: "$tint" }
+    border: { style: solid, width: 1, color: "$primary" }
+  - elementId: ms-card-3-txt
+    elementType: text
+    bounds: [488, 176, 189, 120]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">314Ah / 5MWh 成为新标杆</span></strong></p>
+        <p style="margin-top: 4px; color: #041C2C;">• 电芯容量：<strong>314Ah+</strong> (尺寸同280Ah)</p>
+        <p style="color: #041C2C;">• 循环寿命：<strong>10,000–12,000 次</strong></p>
+        <p style="color: #041C2C;">• 温控形态：液冷渗透率 &gt;75%</p>
+        <p style="color: #041C2C;">• 典型系统：<strong>20尺 5MWh 标准箱</strong></p>
+      fontSize: 8.5
+      lineHeightPx: 14
+
+  # Milestone 4: 2026E+
+  - elementId: ms-node-4
+    elementType: shape
+    shapeName: ellipse
+    bounds: [795, 138, 16, 16]
+    fill: { type: solid, color: "$dark" }
+  - elementId: ms-txt-4
+    elementType: text
+    bounds: [750, 105, 110, 30]
+    content:
+      text: "<p style=\"text-align: center;\"><strong><span style=\"color: #041C2C; font-size: 11pt;\">2026E+</span></strong><br/><span style=\"color: #64748B; font-size: 8pt;\">500Ah+ / 浸没式探索</span></p>"
+  - elementId: ms-card-4
+    elementType: shape
+    shapeName: rect
+    bounds: [700, 168, 220, 135]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+  - elementId: ms-card-4-txt
+    elementType: text
+    bounds: [708, 176, 204, 120]
+    content:
+      text: |
+        <p><strong><span style="color: #041C2C;">超大容量与固态前瞻</span></strong></p>
+        <p style="margin-top: 4px; color: #475569;">• 电芯容量：587Ah / 1000Ah+ 专属电芯</p>
+        <p style="color: #475569;">• 循环寿命：&gt;15,000 次 (支撑25年)</p>
+        <p style="color: #475569;">• 温控形态：全浸没式液冷 / 半固态电解质</p>
+        <p style="color: #475569;">• 典型系统：20尺 6MWh+ / LCOS破0.20元</p>
+      fontSize: 8.5
+      lineHeightPx: 14
+
+  # Cycle Life Progression Curve (Multi-point smooth bezier)
+  - elementId: curve-banner-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [40, 318, 880, 175]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: curve-banner-title
+    elementType: text
+    bounds: [52, 325, 856, 18]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9.5pt;\">技术指标跨越式升级：循环寿命曲线（次）与三大效益对比</span></strong></p>"
+
+  # Progression Curve for Cycle Life (curve: round used to bypass compiler mismatched tag bug)
+  - elementId: cycle-curve
+    elementType: line
+    bounds: [80, 360, 780, 35]
+    viewBox: [780, 35]
+    points: "0,32 200,24 450,12 780,3"
+    curve: round
+    border: { style: solid, width: 2.2, color: "$primary" }
+  # Labels on the curve
+  - elementId: curve-lbl-1
+    elementType: text
+    bounds: [60, 395, 120, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #64748B; font-size: 8pt;\">4,000 次 (2020)</span></p>"
+  - elementId: curve-lbl-2
+    elementType: text
+    bounds: [240, 395, 130, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #64748B; font-size: 8pt;\">7,000 次 (2022)</span></p>"
+  - elementId: curve-lbl-3
+    elementType: text
+    bounds: [480, 395, 150, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><strong><span style=\"color: #2151FF; font-size: 8.5pt;\">12,000 次 (2024 TODAY)</span></strong></p>"
+  - elementId: curve-lbl-4
+    elementType: text
+    bounds: [740, 395, 140, 20]
+    content:
+      text: "<p style=\"text-align: center;\"><span style=\"color: #041C2C; font-weight: bold; font-size: 8pt;\">15,000 次+ (2026E)</span></p>"
+
+  # 3 Benefit Comparative Columns at bottom
+  - elementId: ben-1
+    elementType: text
+    bounds: [52, 420, 260, 65]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">① 占地面积缩减 &gt;30%</span></strong></p>
+        <p style="margin-top: 3px; color: #475569; font-size: 8.5pt; line-height: 1.35;">5MWh系统较3.72MWh集装箱容量提升34.4%，同等100MWh电站减少近6个集装箱位，大幅削减电缆、土建及占地征地成本。</p>
+
+  - elementId: ben-2
+    elementType: text
+    bounds: [340, 420, 260, 65]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">② 全生命周期LCOS降本18%</span></strong></p>
+        <p style="margin-top: 3px; color: #475569; font-size: 8.5pt; line-height: 1.35;">电芯寿命从6000次延长至12000次，支撑储能电站免补电运营15–20年，度电全生命周期吞吐成本由0.32元压降至0.25元/kWh以下。</p>
+
+  - elementId: ben-3
+    elementType: text
+    bounds: [630, 420, 275, 65]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">③ 液冷温差精控 ≤2.5℃</span></strong></p>
+        <p style="margin-top: 3px; color: #475569; font-size: 8.5pt; line-height: 1.35;">液冷将电芯间温差由风冷的5℃压缩至2.5℃内，提升电池包一致性与寿命15%，且辅助功耗降低20%，彻底杜绝局部热失控隐患。</p>
+
+  # Bottom hairline and footer
+  - elementId: slide-bottom-line
+    elementType: line
+    bounds: [40, 508, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: slide-foot-src
+    elementType: text
+    bounds: [40, 514, 740, 16]
+    content:
+      style: "$footnote"
+      text: "<p>数据来源：各厂商技术白皮书（宁德时代天恒、阳光电源PowerTitan2.0、比亚迪MC Cube-T）、CNESA技术路线研讨报告</p>"
+
+  - elementId: slide-foot-page
+    elementType: text
+    bounds: [820, 514, 100, 16]
+    content:
+      style: "$footnote"
+      text: "<p style=\"text-align: right;\"><strong><span style=\"color: #041C2C;\">05</span></strong> / 10</p>"

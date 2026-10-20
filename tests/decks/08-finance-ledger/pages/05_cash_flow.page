@@ -1,0 +1,264 @@
+pageType: content
+background:
+  type: solid
+  color: "$bgWhite"
+notes: |
+  本页依据《企业会计准则第31号——现金流量表》深入剖析现金流质量：
+  1. 经营现金流净额8.15亿元，净现比达到1.20x，利润含金量高；
+  2. 资本开支3.25亿元维持克制且高效投向高产值瓶颈环节，产生4.90亿元充沛自由现金流；
+  3. 筹资现金流净流出2.15亿元，主要系按期偿还债务利息及实施中期分红，展现良好的外部信用与股东回报纪律。
+elements:
+  # Thin black top rule signature
+  - elementId: s5-top-rule
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 28, 856, 2]
+    fill:
+      type: solid
+      color: "$inkBlack"
+  - elementId: s5-title
+    elementType: text
+    bounds: [52, 42, 856, 26]
+    content:
+      text: "<p>经营现金流净额持续覆盖净利润，自由现金流与再投资能力良好匹配</p>"
+      style: "$slideTitle"
+
+  # Subtitle
+  - elementId: s5-subtitle
+    elementType: text
+    bounds: [52, 70, 856, 18]
+    content:
+      text: "<p>现金流量表质量与造血能力穿透（准则依据：《企业会计准则第31号——现金流量表》，单位：亿元） | 口径：示例数据</p>"
+      style: "$subtitle"
+
+  # Light divider
+  - elementId: s5-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 94, 856, 1]
+    fill:
+      type: solid
+      color: "$hairline"
+  - elementId: s5-table-cashflow
+    elementType: table
+    bounds: [52, 108, 560, 315]
+    columnWidths: [0.22, 0.30, 0.16, 0.16, 0.16]
+    rowHeights: [0.16, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12]
+    style: "$cashFlowMatrix"
+    rows:
+      # Header
+      - - text: "现金流量活动大类"
+          align: [center, middle]
+        - text: "细分会计科目明细"
+          align: [left, middle]
+        - text: "2024A"
+          align: [right, middle]
+        - text: "2025A"
+          align: [right, middle]
+        - text: "2026H1"
+          align: [right, middle]
+
+      # Row 1: 经营活动 (rowSpan: 3)
+      - - text: "一、经营活动\n(净流入 8.15亿)"
+          rowSpan: 3
+          align: [center, middle]
+          bold: true
+        - text: "销售商品、提供劳务收到的现金"
+        - text: "85.20"
+          align: [right, middle]
+        - text: "101.40"
+          align: [right, middle]
+        - text: "50.85"
+          align: [right, middle]
+          bold: true
+
+      # Row 2: (col 0 covered)
+      - - text: "购买商品、接受劳务支付的现金"
+        - text: "52.10"
+          align: [right, middle]
+        - text: "61.30"
+          align: [right, middle]
+        - text: "30.20"
+          align: [right, middle]
+
+      # Row 3: (col 0 covered) Key metric with gradient cell fill
+      - - text: "经营活动产生的现金流量净额"
+          bold: true
+          color: "$inkBlack"
+        - text: "12.80"
+          align: [right, middle]
+          bold: true
+        - text: "15.60"
+          align: [right, middle]
+          bold: true
+        - text: "8.15"
+          align: [right, middle]
+          bold: true
+          color: "$primaryGold"
+          fill:
+            type: gradient
+            gradientType: linear
+            angle: 90
+            stops:
+              - {position: 0, color: "#FFF8E7"}
+              - {position: 1, color: "#FFE8A3"}
+
+      # Row 4: 投资活动 (rowSpan: 2)
+      - - text: "二、投资活动\n(净流出 3.10亿)"
+          rowSpan: 2
+          align: [center, middle]
+          bold: true
+        - text: "购建固定资产、在建工程支付现金"
+        - text: "-6.50"
+          align: [right, middle]
+        - text: "-7.20"
+          align: [right, middle]
+        - text: "-3.25"
+          align: [right, middle]
+          bold: true
+
+      # Row 5: (col 0 covered)
+      - - text: "投资活动产生的现金流量净额"
+          bold: true
+        - text: "-6.20"
+          align: [right, middle]
+        - text: "-6.80"
+          align: [right, middle]
+        - text: "-3.10"
+          align: [right, middle]
+          bold: true
+
+      # Row 6: 筹资活动 (rowSpan: 2)
+      - - text: "三、筹资与净增\n(现金净增 2.90亿)"
+          rowSpan: 2
+          align: [center, middle]
+          bold: true
+        - text: "分配股利、利润或偿付利息支付"
+        - text: "-3.40"
+          align: [right, middle]
+        - text: "-4.10"
+          align: [right, middle]
+        - text: "-2.15"
+          align: [right, middle]
+
+      # Row 7: (col 0 covered)
+      - - text: "现金及现金等价物净增加额"
+          bold: true
+        - text: "3.20"
+          align: [right, middle]
+        - text: "4.70"
+          align: [right, middle]
+        - text: "2.90"
+          align: [right, middle]
+          bold: true
+
+  # Right side diagnosis rail
+  - elementId: s5-side-box
+    elementType: shape
+    shapeName: rect
+    bounds: [632, 108, 276, 315]
+    fill:
+      type: solid
+      color: "$panelGray"
+
+  - elementId: s5-side-header
+    elementType: text
+    bounds: [648, 120, 244, 26]
+    content:
+      text: "<p><strong>现金流造血与再投资匹配诊断</strong></p>"
+      fontSize: 11
+      bold: true
+      color: "$inkBlack"
+
+  # Gold capsule threshold
+  - elementId: s5-side-capsule
+    elementType: shape
+    shapeName: roundRect
+    adjustments: [0.5]
+    bounds: [648, 150, 175, 24]
+    fill:
+      type: solid
+      color: "$primaryGold"
+  - elementId: s5-side-capsule-text
+    elementType: text
+    bounds: [648, 153, 175, 18]
+    content:
+      text: "<p><strong>净现比 1.20x · 自由现金流 4.90亿</strong></p>"
+      fontSize: 8.0
+      bold: true
+      color: "$inkBlack"
+      align: [center, middle]
+
+  # Commentary items
+  - elementId: s5-side-p1
+    elementType: text
+    bounds: [648, 186, 244, 66]
+    content:
+      text: "<p><strong>1. 净现比健康度持续 > 1.0x：</strong></p><p>上半年经营性现金净流入8.15亿元对比归母净利6.82亿元，销售收现率达104.5%，营运资金不存在虚增垫付，盈利质量极其真实。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  - elementId: s5-side-divider1
+    elementType: shape
+    shapeName: rect
+    bounds: [648, 256, 244, 1]
+    fill:
+      type: solid
+      color: "$lightGray"
+  - elementId: s5-side-p2
+    elementType: text
+    bounds: [648, 266, 244, 66]
+    content:
+      text: "<p><strong>2. 资本开支节奏与内生造血适配：</strong></p><p>购建固定资产支付3.25亿元，占经营现金流比例仅39.9%，形成4.90亿元正向自由现金流，不依赖外部举债维持扩产。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  - elementId: s5-side-divider2
+    elementType: shape
+    shapeName: rect
+    bounds: [648, 336, 244, 1]
+    fill:
+      type: solid
+      color: "$lightGray"
+  - elementId: s5-side-p3
+    elementType: text
+    bounds: [648, 346, 244, 66]
+    content:
+      text: "<p><strong>3. 准则合规与外部信用约束：</strong></p><p>遵循CAS-31第十条编制，利息与分红偿付按期兑现；期末现金净额达2.90亿元，无质押受限流动性，具备充裕抗宏观波动缓冲。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+      lineHeight: 1.35
+
+  # Bottom Verdict Band
+  - elementId: s5-verdict-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 442, 856, 34]
+    fill:
+      type: solid
+      color: "$panelGray"
+  - elementId: s5-verdict-text
+    elementType: text
+    bounds: [68, 450, 824, 20]
+    content:
+      text: "<p><strong>现金流质量诊断：</strong>净现比保持1.20倍高位，造血能力充沛支持产线资本开支，外部融资依赖度极低，资产安全性显著提升。</p>"
+      fontSize: 9.0
+      color: "$charcoal"
+
+  # Footer
+  - elementId: s5-footer-source
+    elementType: text
+    bounds: [52, 505, 600, 18]
+    content:
+      text: "<p>数据来源：示例公司财务账本数据库 · 示例数据 | 报表标准：CAS-31（现金流量表准则） | 审计状态：未经审计中期数</p>"
+      style: "$footnote"
+  - elementId: s5-footer-page
+    elementType: text
+    bounds: [850, 505, 58, 18]
+    content:
+      text: "<p>5 / 9</p>"
+      fontSize: 8.0
+      color: "$footnoteGray"
+      align: [right, middle]

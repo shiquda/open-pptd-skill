@@ -1,0 +1,198 @@
+pageType: content
+background:
+  type: solid
+  color: "$paper"
+notes: "演讲者备注：第三页剖析三大核心微产区的地理坐标与微气象数据。通过对保山潞江坝、临沧昔归高山带以及金沙江峡谷试验微批次的实测，揭示高纬度与极端海拔（1,850m至2,180m）如何协同造就超高昼夜温差与优质慢熟环境。"
+elements:
+  # Fixed top-left section marker
+  - elementId: section-marker
+    elementType: shape
+    bounds: [64, 32, 6, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$klein"
+
+  - elementId: section-num
+    elementType: text
+    bounds: [78, 30, 520, 28]
+    content:
+      style: "$sectionNum"
+      text: "03 // ORIGIN COORDINATES & HIGH-ALTITUDE TERROIR"
+
+  - elementId: top-meta-right
+    elementType: text
+    bounds: [768, 32, 448, 24]
+    content:
+      style: "$meta"
+      align: [right, middle]
+      text: "30°N ROASTERY // GEOGRAPHIC ATLAS // 示例品牌（虚构）"
+
+  - elementId: top-divider
+    elementType: line
+    bounds: [64, 68, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  # Heavy rule above headline
+  - elementId: headline-rule
+    elementType: line
+    bounds: [64, 95, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 3
+      color: "$ink"
+
+  - elementId: page-headline
+    elementType: text
+    bounds: [64, 110, 1152, 50]
+    content:
+      style: "$headline"
+      text: "北纬二十三至二十八度：深切峡谷构筑的高原天然温室"
+
+  # Left 5 columns (x: 64, w: 480): Micro-lot coordinate table & facts
+  - elementId: lot-1-title
+    elementType: text
+    bounds: [64, 175, 480, 30]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 16
+      bold: true
+      color: "$klein"
+      letterSpacing: 1
+      text: "LOT A // BAOSHAN LUJIANG (25.12°N / 1,880m)"
+
+  - elementId: lot-1-body
+    elementType: text
+    bounds: [64, 210, 480, 80]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.55
+      color: "$ink"
+      text: "高黎贡山背风坡干热河谷边缘，火山灰与赤红壤交织，土壤pH值5.4-5.8。降水集中于夏秋，采收季（11月-次年2月）极度干燥晴朗，天然赋予生豆优雅的佛手柑与茉莉花特征。"
+
+  - elementId: mid-hairline-1
+    elementType: line
+    bounds: [64, 300, 480, 0]
+    points: "0,0 480,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  - elementId: lot-2-title
+    elementType: text
+    bounds: [64, 315, 480, 30]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 16
+      bold: true
+      color: "$klein"
+      letterSpacing: 1
+      text: "LOT B // JINSHA CANYON TEST (28.24°N / 2,180m)"
+
+  - elementId: lot-2-body
+    elementType: text
+    bounds: [64, 350, 480, 85]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.55
+      color: "$ink"
+      text: "突破全球商业咖啡种植纬度极限的特选实验地。年均温14.2°C，无霜期达310天。极端冷凉迫使咖啡树将养分高度浓缩于种子内部，杯测显现极高密度的白桃与高山乌龙茶韵。"
+
+  - elementId: mid-hairline-2
+    elementType: line
+    bounds: [64, 445, 480, 0]
+    points: "0,0 480,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  - elementId: lot-summary
+    elementType: text
+    bounds: [64, 460, 480, 160]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.6
+      color: "$ink"
+      text: |
+        <p><strong>微气象实测对比</strong>（云南省气象局2023年观测站定点数据）：</p>
+        <p style="margin-top:6px;">• 日均气温振幅：常规平原产区 6.8°C vs 30°N峡谷产区 <span style="color:$klein; font-weight:bold;">16.4°C</span></p>
+        <p>• 紫外线UVB累积辐射通量：常规产区 1.0x vs 30°N高海拔 <span style="color:$klein; font-weight:bold;">1.72x</span></p>
+        <p>• 极寒逆温保护期：冬夜山谷逆温层有效防止霜冻损害</p>
+
+  # Right 7 columns (x: 576, w: 640): Image with crop and rotation badge
+  - elementId: landscape-img
+    elementType: image
+    bounds: [576, 175, 640, 430]
+    src: "assets/harvest_landscape.jpg"
+    fit:
+      mode: cover
+    crop:
+      top: 0.08
+      bottom: 0.08
+      left: 0.05
+      right: 0.05
+    border:
+      style: solid
+      width: 1.5
+      color: "$ink"
+
+  # Rotated badge on image (-4 degrees rotation)
+  - elementId: rotated-badge
+    elementType: shape
+    bounds: [596, 195, 180, 48]
+    shapeName: rect
+    rotation: -4
+    fill:
+      type: solid
+      color: "$klein"
+    border:
+      style: solid
+      width: 1
+      color: "$white"
+
+  - elementId: rotated-badge-text
+    elementType: text
+    bounds: [600, 203, 172, 32]
+    rotation: -4
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 11
+      bold: true
+      color: "$white"
+      align: [center, middle]
+      letterSpacing: 2
+      text: "GEO SURVEY 2024"
+
+  - elementId: landscape-caption
+    elementType: text
+    bounds: [576, 612, 640, 32]
+    content:
+      style: "$caption"
+      text: "PLATE 03.1 // 金沙江深切峡谷高海拔梯田试验微批次实地测绘地形 // 裁剪比例：8%四周边框"
+
+  # Baseline metadata & source
+  - elementId: bottom-divider
+    elementType: line
+    bounds: [64, 650, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  - elementId: bottom-info
+    elementType: text
+    bounds: [64, 665, 1152, 24]
+    content:
+      style: "$footer"
+      text: "PAGE 03 // 30°N BRAND BOOK // TERROIR MAPPING // 示例品牌（虚构） // GEOLOGICAL & CLIMATE DATA 2023"

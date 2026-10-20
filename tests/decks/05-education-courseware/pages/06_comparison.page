@@ -1,0 +1,251 @@
+pageType: content
+background:
+  type: solid
+  color: "$white"
+notes: "本页是对比与防错的核心页。我们将家庭用户最容易犯的高危动作与工程师推荐的规范处置放在同一套骨架下进行对比。通过对比大家可以清晰看到：按压Reset键虽然心理上有一种‘重置一切’的快感，但它在技术上是将flash闪存里的NVRAM配置表全盘抹除，不仅不能修好断光或松动，还会破坏原有的宽带认证。而正确的序贯重启，通过切断交流电让滤波电容放电，在保留配置的前提下彻底释放内存中的死锁死进程，这才是真正安全、可逆的自愈手段。"
+elements:
+  - elementId: top-rule
+    elementType: shape
+    bounds: [40, 20, 880, 2]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: nav-section
+    elementType: text
+    bounds: [40, 28, 260, 18]
+    content:
+      text: "阶段三 / 避坑对比 (COMPARISON)"
+      fontSize: 9.5
+      bold: true
+      color: "$primaryDeep"
+      letterSpacing: 1.0
+
+  - elementId: running-head
+    elementType: text
+    bounds: [680, 28, 240, 18]
+    content:
+      text: "家庭网络排障实操课 · 误区防范"
+      fontSize: 9.5
+      color: "$grayLight"
+      align: [right, top]
+
+  - elementId: page-title
+    elementType: text
+    bounds: [40, 48, 880, 28]
+    content:
+      text: "盲目全盘捅 Reset 导致配置丢失，序贯断电重启方可自愈系统"
+      style: "$title"
+
+  - elementId: page-subtitle
+    elementType: text
+    bounds: [40, 78, 880, 20]
+    content:
+      text: "高危误区与规范处置横向对照：让每一次家庭维护都建立在可预期的技术反馈之上"
+      style: "$subtitle"
+
+  - elementId: col-left-header
+    elementType: shape
+    bounds: [40, 110, 420, 32]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$warning" }
+
+  - elementId: col-left-header-icon
+    elementType: icon
+    bounds: [54, 116, 20, 20]
+    iconName: "fas:circle-xmark"
+    fill: { type: solid, color: "$warning" }
+
+  - elementId: col-left-header-text
+    elementType: text
+    bounds: [82, 116, 360, 22]
+    content:
+      text: "高危处置方式：盲目全盘捅 Reset / 暴力开关"
+      fontSize: 12
+      bold: true
+      color: "$warning"
+
+  - elementId: left-dim-1-title
+    elementType: text
+    bounds: [40, 152, 420, 20]
+    content:
+      text: "<p><strong>【常见动作】凭直觉拿牙签长按 Reset 复位孔、秒级连续开关</strong></p>"
+      fontSize: 11
+      color: "$ink"
+
+  - elementId: left-dim-1-desc
+    elementType: text
+    bounds: [40, 174, 420, 48]
+    content:
+      text: "<p>遇到断网立刻找尖锐针状物戳入机身背部的小孔并持续按住；或者在排插上以一秒两次的频率反复拨动电源开关，企图‘刺激’设备恢复。</p>"
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: left-dim-2-title
+    elementType: text
+    bounds: [40, 230, 420, 20]
+    content:
+      text: "<p><strong>【底层机理】强制格式化闪存 NVRAM 配置分区、产生电源浪涌</strong></p>"
+      fontSize: 11
+      color: "$ink"
+
+  - elementId: left-dim-2-desc
+    elementType: text
+    bounds: [40, 252, 420, 52]
+    content:
+      text: "<p>Reset 信号触发引导区擦除指令，清除 PPPoE 宽带账号密码与 Wi-Fi 名称；极短时间内的反复通断电则在电感两端产生高压浪涌，极易击穿主控芯片或损坏闪存颗粒。</p>"
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: left-dim-3-title
+    elementType: text
+    bounds: [40, 312, 420, 20]
+    content:
+      text: "<p><strong>【严重后果】将轻微线路假死扩大为不可逆的整网瘫痪</strong></p>"
+      fontSize: 11
+      color: "$ink"
+
+  - elementId: left-dim-3-desc
+    elementType: text
+    bounds: [40, 334, 420, 48]
+    content:
+      text: "<p>原本只需重新插紧的一根网线，被升级为‘账号被清空’。所有智能门锁、监控摄像头、智能音箱全部离线瘫痪，必须等待运营商上门重新配置网络。</p>"
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: left-dim-eval-box
+    elementType: shape
+    bounds: [40, 390, 420, 48]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: left-dim-eval-text
+    elementType: text
+    bounds: [52, 396, 396, 36]
+    content:
+      text: "<p><strong>危害评估：</strong>操作危害等级 <span style=\"color:#EA4335;\"><strong>【极高】</strong></span> ｜ 修复耗时 <strong>24~48小时</strong> ｜ 需上门维修 <strong>是</strong></p>"
+      fontSize: 10
+      color: "$ink"
+
+  - elementId: center-divider
+    elementType: line
+    bounds: [480, 110, 2, 330]
+    viewBox: [2, 330]
+    points: "1,0 1,330"
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: col-right-header
+    elementType: shape
+    bounds: [500, 110, 420, 32]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: col-right-header-icon
+    elementType: icon
+    bounds: [514, 116, 20, 20]
+    iconName: "fas:circle-check"
+    fill: { type: solid, color: "$success" }
+
+  - elementId: col-right-header-text
+    elementType: text
+    bounds: [542, 116, 360, 22]
+    content:
+      text: "规范处置方式：物理加固 / 序贯冷启动自愈"
+      fontSize: 12
+      bold: true
+      color: "$primaryDeep"
+
+  - elementId: right-dim-1-title
+    elementType: text
+    bounds: [500, 152, 420, 20]
+    content:
+      text: "<p><strong>【标准动作】查灯判定、按紧网线、拔出电源插头静置30秒</strong></p>"
+      fontSize: 11
+      color: "$ink"
+
+  - elementId: right-dim-1-desc
+    elementType: text
+    bounds: [500, 174, 420, 48]
+    content:
+      text: "<p>先观察光猫与路由指示灯颜色；确认网线卡扣锁紧；断开设备电源线，静置等待主板滤波电容电量完全释放，再按‘先光猫后路由’时序通电。</p>"
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: right-dim-2-title
+    elementType: text
+    bounds: [500, 230, 420, 20]
+    content:
+      text: "<p><strong>【底层机理】清空易失性内存死锁、重建全新网络协商租约</strong></p>"
+      fontSize: 11
+      color: "$ink"
+
+  - elementId: right-dim-2-desc
+    elementType: text
+    bounds: [500, 252, 420, 52]
+    content:
+      text: "<p>彻底放电清空 RAM 缓存中的僵尸会话、拥塞连接池与错误 DHCP 租约记录；配置分区完整保留；光猫先就绪使路由器发起拨号时能立即完成上行握手。</p>"
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: right-dim-3-title
+    elementType: text
+    bounds: [500, 312, 420, 20]
+    content:
+      text: "<p><strong>【安全收益】零配置风险自愈系统，保护智能家居全套生态</strong></p>"
+      fontSize: 11
+      color: "$ink"
+
+  - elementId: right-dim-3-desc
+    elementType: text
+    bounds: [500, 334, 420, 48]
+    content:
+      text: "<p>所有无线设备的密码与连接参数完好无损。重启后终端自动恢复上线，3~5 分钟内静默恢复正常使用，彻底避免不必要的人工上门派单成本。</p>"
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: right-dim-eval-box
+    elementType: shape
+    bounds: [500, 390, 420, 48]
+    shapeName: rect
+    fill: { type: solid, color: "$lightBlue" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: right-dim-eval-text
+    elementType: text
+    bounds: [512, 396, 396, 36]
+    content:
+      text: "<p><strong>收益评估：</strong>操作危害等级 <span style=\"color:#34A853;\"><strong>【零风险】</strong></span> ｜ 修复耗时 <strong>3~5分钟</strong> ｜ 需上门维修 <strong>否</strong></p>"
+      fontSize: 10
+      color: "$primaryDeep"
+
+  - elementId: bottom-judgment-rule
+    elementType: text
+    bounds: [40, 448, 880, 40]
+    content:
+      text: "<p><strong>决策判断准则：</strong>家庭排障永远遵循「只做无害可逆操作」原则。凡是可能导致配置数据丢失的按键（Reset）坚决不碰；所有疑似死机问题一律采用「30 秒断电序贯冷启动」解决。</p>"
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+
+  - elementId: bottom-source-line
+    elementType: text
+    bounds: [40, 508, 800, 18]
+    content:
+      text: "数据支持：全国智慧家庭运维事故归因分析报告 (2023 样本量 N=14,200)"
+      style: "$caption"
+
+  - elementId: bottom-page-number
+    elementType: text
+    bounds: [870, 508, 50, 18]
+    content:
+      text: "06"
+      style: "$caption"
+      align: [right, top]

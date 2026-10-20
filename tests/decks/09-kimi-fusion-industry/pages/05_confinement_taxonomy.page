@@ -1,0 +1,265 @@
+pageType: content
+notes: |
+  Confinement taxonomy slide. Compares the three primary branches of controlled fusion: Magnetic Confinement (MCF), Inertial Confinement (ICF), and Magneto-Inertial / Alternative (MIF). Explains how each architecture navigates the Lawson trade-off between particle density and energy confinement time, detailing their respective engineering profiles and pilot plant hurdles.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "02 · APPROACH TAXONOMY"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Confinement Architectures Represent Divergent Physics Betas, Density Regimes, and Engineering Risks"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Structural comparison across Magnetic Confinement (MCF), Inertial Confinement (ICF), and Magneto-Inertial / Alternative (MIF)"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Approach 1: MCF
+  - elementId: mcf-bg
+    elementType: shape
+    bounds: [50, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: mcf-header
+    elementType: shape
+    bounds: [50, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: mcf-title
+    elementType: text
+    bounds: [58, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "MAGNETIC CONFINEMENT (MCF)"
+
+  - elementId: mcf-content
+    elementType: text
+    bounds: [58, 142, 260, 216]
+    content:
+      fontSize: 8.3
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Core Topologies:</b> Tokamak &amp; Stellarator.</p>
+        <p><b>Plasma Parameter Regime:</b></p>
+        <p>• Density \( n \sim 10^{20}\,\mathrm{m}^{-3} \) (diffuse gas)</p>
+        <p>• Confinement time \( \tau_E \sim 1 - 10\,\mathrm{seconds} \)</p>
+        <p>• Ion temperature \( T \sim 15 - 25\,\mathrm{keV} \)</p>
+        <p><br><b>Key Ventures &amp; Programs:</b></p>
+        <p>ITER, CFS (SPARC), Energy Singularity, Tokamak Energy, Type One Energy, Wendelstein 7-X.</p>
+        <p><br><b>Engineering Assessment:</b></p>
+        <p><b>Strengths:</b> Most validated physics database; steady-state or long-pulse potential.</p>
+        <p><b>Bottlenecks:</b> Giant superconducting magnet structures; continuous divertor heat removal (&gt;10 MW/m²); complex nuclear licensing.</p>
+
+  # Approach 2: ICF
+  - elementId: icf-bg
+    elementType: shape
+    bounds: [342, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: icf-header
+    elementType: shape
+    bounds: [342, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: icf-title
+    elementType: text
+    bounds: [350, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "INERTIAL CONFINEMENT (ICF)"
+
+  - elementId: icf-content
+    elementType: text
+    bounds: [350, 142, 260, 216]
+    content:
+      fontSize: 8.3
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Core Topologies:</b> Laser Indirect / Direct Drive.</p>
+        <p><b>Plasma Parameter Regime:</b></p>
+        <p>• Density \( n \sim 10^{31}\,\mathrm{m}^{-3} \) (extreme solid compression)</p>
+        <p>• Confinement time \( \tau_E \sim 10^{-10}\,\mathrm{seconds} \)</p>
+        <p>• Ion temperature \( T \sim 5 - 10\,\mathrm{keV} \)</p>
+        <p><br><b>Key Ventures &amp; Programs:</b></p>
+        <p>LLNL NIF, Focused Energy, Marvel Fusion, Xcimer Energy, Longview Fusion.</p>
+        <p><br><b>Engineering Assessment:</b></p>
+        <p><b>Strengths:</b> First laboratory ignition proven (NIF 2022); decoupled reactor chamber physics.</p>
+        <p><b>Bottlenecks:</b> Shot repetition rate (need 5–10 Hz vs 1 shot/day on NIF); high-rate target mass manufacturing (&lt;$0.50/capsule); final optics debris survival.</p>
+
+  # Approach 3: MIF
+  - elementId: mif-bg
+    elementType: shape
+    bounds: [634, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: mif-header
+    elementType: shape
+    bounds: [634, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: mif-title
+    elementType: text
+    bounds: [642, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "MAGNETO-INERTIAL & FRC (MIF)"
+
+  - elementId: mif-content
+    elementType: text
+    bounds: [642, 142, 260, 216]
+    content:
+      fontSize: 8.3
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Core Topologies:</b> Field-Reversed Configuration &amp; Z-Pinch.</p>
+        <p><b>Plasma Parameter Regime:</b></p>
+        <p>• Density \( n \sim 10^{24}\,\mathrm{m}^{-3} \) (intermediate regime)</p>
+        <p>• Confinement time \( \tau_E \sim 10^{-4}\,\mathrm{seconds} \)</p>
+        <p>• Ion temperature \( T \sim 10 - 50\,\mathrm{keV} \)</p>
+        <p><br><b>Key Ventures &amp; Programs:</b></p>
+        <p>Helion Energy (Polaris), TAE Technologies (Norman), Zap Energy (FuZE), General Fusion.</p>
+        <p><br><b>Engineering Assessment:</b></p>
+        <p><b>Strengths:</b> Direct inductive energy conversion (avoids steam BOP); high plasma beta (\( \beta \approx 1 \)); compact plant footprint.</p>
+        <p><b>Bottlenecks:</b> Net fusion gain unproven; fast capacitor bank lifetime; electron thermal conduction losses.</p>
+
+  # Watch Indicators Band
+  - elementId: watch-bg
+    elementType: shape
+    bounds: [50, 384, 860, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: watch-accent
+    elementType: shape
+    bounds: [50, 384, 4, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: watch-label
+    elementType: text
+    bounds: [64, 398, 118, 46]
+    content:
+      fontSize: 7.5
+      bold: true
+      color: "$titleNavy"
+      lineHeight: 1.3
+      text: |
+        <p>WATCH INDICATORS</p>
+        <p>2026–2030</p>
+
+  - elementId: watch-1
+    elementType: text
+    bounds: [190, 398, 250, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Peak field on axis (T)</b></p>
+        <p>20 T HTS coil demonstrated 2021 (CFS/MIT) vs 5.3 T on ITER</p>
+
+  - elementId: watch-2
+    elementType: text
+    bounds: [450, 398, 240, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Confinement time τE</b></p>
+        <p>1–10 s in MCF designs; 10⁻¹⁰ s in inertial compression</p>
+
+  - elementId: watch-3
+    elementType: text
+    bounds: [700, 398, 210, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Net fusion gain achieved</b></p>
+        <p>No MIF/FRC device has yet demonstrated Q &gt; 1</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Architecture Verdict:</b> MCF holds the highest physics maturity (TRL 5–6); ICF proved laboratory ignition; MIF/FRC trades physics certainty for radically cheaper balance-of-plant."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: National Academies of Sciences, Engineering, and Medicine (NASEM, 2021); IAEA Nuclear Fusion Technology Survey."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 05 / 16"

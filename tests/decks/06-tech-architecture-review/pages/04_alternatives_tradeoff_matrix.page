@@ -1,0 +1,177 @@
+background: { type: solid, color: "$paper" }
+notes: |
+  本页是针对三大备选架构的横向横评与技术选型矩阵。
+  方案一（同城双中心增强）成本最低，但本质上没有解决跨地域城市级灾难与数据滞后不敢切的根本痛点。
+  方案二（两地三中心分布式数据库强同步）在学术上很理想，但在工程上遭遇了沪深 36.8ms 物理延迟的致命打击，核心下单延迟从 14ms 劣化至 100ms 以上，无法被高频交易业务接受。
+  方案三（单元化多活）虽然业务改造侵入度最高（需要按 UID 梳理所有微服务与数据库），但它完美平衡了“日常微秒级就地提交”与“故障时秒级隔离切流”，是唯一通过委员会评审的推荐方案。
+elements:
+  # Header
+  - elementId: sec-tag
+    elementType: text
+    bounds: [45, 24, 400, 14]
+    content:
+      text: "04 / 备选方案权衡与选型 | ALTERNATIVES TRADE-OFF MATRIX"
+      fontSize: 8.5
+      bold: true
+      color: "$active"
+
+  - elementId: main-title
+    elementType: text
+    bounds: [45, 38, 870, 26]
+    content:
+      text: "单元化异地多活在数据一致性与故障隔离上显著占优，确定为推荐目标演进路径"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+
+  - elementId: header-line
+    elementType: line
+    bounds: [45, 68, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # Trade-off Table
+  - elementId: matrix-table
+    elementType: table
+    bounds: [45, 76, 870, 400]
+    columnWidths: [0.19, 0.27, 0.27, 0.27]
+    rowHeights: [0.11, 0.11, 0.11, 0.11, 0.11, 0.11, 0.11, 0.23]
+    style: "$engineering"
+    rows:
+      # Row 0: Headers
+      - - text: "评估维度与关键考量"
+          bold: true
+          align: [center, middle]
+        - text: "方案一：同城双中心主备增强"
+          bold: true
+          align: [center, middle]
+        - text: "方案二：两地三中心强同步"
+          bold: true
+          align: [center, middle]
+        - text: "方案三：单元化异地多活 [推荐]"
+          bold: true
+          color: "$active"
+          align: [center, middle]
+
+      # Row 1: Latency
+      - - text: "核心写路径延迟\n(P99 事务耗时)"
+          align: [left, middle]
+        - text: "12ms ~ 18ms\n(同城无跨地域协商)"
+          align: [center, middle]
+        - text: "85ms ~ 140ms\n(跨省 36ms RTT 严重劣化)"
+          color: "$critical"
+          align: [center, middle]
+        - text: "14ms ~ 22ms\n(单元内微秒级就地落盘)"
+          bold: true
+          color: "$sync"
+          align: [center, middle]
+
+      # Row 2: RTO
+      - - text: "机房级故障恢复时间\n(RTO 容灾指标)"
+          align: [left, middle]
+        - text: "30min ~ 60min\n(依赖人工确认对账)"
+          color: "$critical"
+          align: [center, middle]
+        - text: "< 15s\n(Raft/Paxos 多数派自动选主)"
+          align: [center, middle]
+        - text: "< 30s\n(Anycast 边缘自动化路由重定向)"
+          bold: true
+          color: "$sync"
+          align: [center, middle]
+
+      # Row 3: RPO
+      - - text: "极端灾难数据丢失\n(RPO 审计指标)"
+          align: [left, middle]
+        - text: "RPO ≤ 30s\n(异步 Binlog 积压存在丢单风险)"
+          color: "$critical"
+          align: [center, middle]
+        - text: "RPO = 0\n(多数派持久化，零丢失)"
+          align: [center, middle]
+        - text: "RPO = 0\n(本地强持久化 + 跨单元对账)"
+          bold: true
+          color: "$sync"
+          align: [center, middle]
+
+      # Row 4: WAN Jitter
+      - - text: "跨省专线抖动敏感度\n(WAN 抖动抗性)"
+          align: [left, middle]
+        - text: "低 (仅影响后台数据同步)"
+          align: [center, middle]
+        - text: "极高 (专线抖动引发全网交易阻塞)"
+          color: "$critical"
+          align: [center, middle]
+        - text: "极低 (专线抖动不影响核心下单)"
+          bold: true
+          color: "$sync"
+          align: [center, middle]
+
+      # Row 5: Code Intrusion
+      - - text: "业务代码侵入度\n(重构周期与人月)"
+          align: [left, middle]
+        - text: "无侵入\n(仅基础设施与网络改造)"
+          align: [center, middle]
+        - text: "中等侵入\n(需重构全局自增主键与分布式锁)"
+          align: [center, middle]
+        - text: "高侵入\n(梳理 UID 分片键并消除跨单元写)"
+          color: "$brand"
+          align: [center, middle]
+
+      # Row 6: Cost
+      - - text: "基础设施成本增幅\n(服务器与双专线)"
+          align: [left, middle]
+        - text: "+20% (维持轻量级冷备)"
+          align: [center, middle]
+        - text: "+120% (三中心全量算力冗余)"
+          color: "$critical"
+          align: [center, middle]
+        - text: "+85% (按分片容量阶梯式扩展)"
+          bold: true
+          align: [center, middle]
+
+      # Row 7: Verdict
+      - - text: "架构委员会综合评审决议\n(Final Verdict)"
+          bold: true
+          align: [left, middle]
+        - text: "【否决】\n无法抵御跨地域自然灾难，且 RTO/RPO 无法达到金融核心监管要求。"
+          color: "$muted"
+          align: [left, middle]
+        - text: "【否决】\n沪深 36.8ms 物理延迟导致核心写延迟劣化 4 倍以上，严重牺牲日常交易性能与用户体验。"
+          color: "$muted"
+          align: [left, middle]
+        - text: "【强烈推荐 · 唯一通过】\n以 14 人月重构代价换取物理故障域彻底隔离与微秒级写入，全面契合 RPO=0/RTO<30s 目标。"
+          bold: true
+          color: "$active"
+          align: [left, middle]
+
+  # Table Bottom Note
+  - elementId: table-note
+    elementType: text
+    bounds: [45, 482, 870, 20]
+    content:
+      text: "注：评测数据基于 2026-Q3 跨机房网络仿真与基准压测；硬件成本核算包含沪深/京沪 20Gbps 专线与计算节点三年 TCO。"
+      fontSize: 8.5
+      color: "$muted"
+
+  # Footer
+  - elementId: footer-line
+    elementType: line
+    bounds: [45, 510, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  - elementId: footer-meta
+    elementType: text
+    bounds: [45, 516, 500, 16]
+    content:
+      text: "交易核心多活架构评审 | 备选架构横向选型矩阵 | 2026-10-20"
+      fontSize: 8.5
+      color: "$muted"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [840, 516, 75, 16]
+    content:
+      text: "PAGE 04 / 10"
+      fontSize: 8.5
+      color: "$muted"
+      align: [right, top]

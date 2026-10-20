@@ -1,0 +1,81 @@
+version: v2
+title: "Controlled Nuclear Fusion: From Scientific Experiment to Energy Industry"
+size: [960, 540]
+theme:
+  colors:
+    ink: "#0F172A"
+    titleNavy: "#00295F"
+    accentBlue: "#0064BC"
+    cyanAccent: "#00ACEE"
+    orangeAccent: "#F17E00"
+    panelBg: "#F1F5F9"
+    cardBg: "#F8FAFC"
+    border: "#CBD5E1"
+    borderDark: "#94A3B8"
+    textMuted: "#475569"
+    textLight: "#64748B"
+    white: "#FFFFFF"
+    successGreen: "#15803D"
+    tagRed: "#DC2626"
+  textStyles:
+    title:
+      fontFamily: "思源宋体"
+      fontSize: 16.5
+      bold: true
+      color: "$titleNavy"
+    kicker:
+      fontFamily: "MiSans"
+      fontSize: 9
+      bold: true
+      color: "$accentBlue"
+    subtitle:
+      fontFamily: "MiSans"
+      fontSize: 10
+      color: "$textMuted"
+    body:
+      fontFamily: "MiSans"
+      fontSize: 9.5
+      color: "$ink"
+      lineHeight: 1.35
+    caption:
+      fontFamily: "MiSans"
+      fontSize: 8
+      color: "$textLight"
+  tableStyles:
+    denseConsulting:
+      firstRowStyle:
+        fill: {type: solid, color: "$titleNavy"}
+        color: "#FFFFFF"
+        bold: true
+        fontSize: 8.5
+        border: {style: solid, width: 0.8, color: "#94A3B8"}
+      bodyStyles:
+        - fill: {type: solid, color: "#FFFFFF"}
+          fontSize: 7.8
+          color: "$ink"
+          border: {style: solid, width: 0.5, color: "#E2E8F0"}
+        - fill: {type: solid, color: "#F8FAFC"}
+          fontSize: 7.8
+          color: "$ink"
+          border: {style: solid, width: 0.5, color: "#E2E8F0"}
+      cellStyle:
+        fontSize: 7.8
+        color: "$ink"
+        border: {style: solid, width: 0.5, color: "#CBD5E1"}
+pages:
+  - pages/01_cover.page
+  - pages/02_exec_synthesis.page
+  - pages/03_scientific_basis.page
+  - pages/04_triple_product_trajectory.page
+  - pages/05_confinement_taxonomy.page
+  - pages/06_approach_deep_dive.page
+  - pages/07_readiness_matrix.page
+  - pages/08_private_capital_landscape.page
+  - pages/09_hts_superconductor_bottleneck.page
+  - pages/10_tritium_and_firstwall_materials.page
+  - pages/11_plant_engineering_bop.page
+  - pages/12_economics_and_lcoe.page
+  - pages/13_commercialization_scenarios.page
+  - pages/14_claim_ledger.page
+  - pages/15_falsification_criteria.page
+  - pages/16_strategic_roadmap.page

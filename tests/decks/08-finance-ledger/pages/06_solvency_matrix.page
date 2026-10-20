@@ -1,0 +1,212 @@
+pageType: content
+background:
+  type: solid
+  color: "$bgWhite"
+notes: |
+  本页展示偿债能力与财务稳健度情景压力测试矩阵：
+  1. 测算包括基准、轻度承压（收入-10%、应收账款回款周期拉长30天）及极端承压（收入-25%、成本上升5%）三重情景；
+  2. 极端承压情景下，利息保障倍数仍高达5.80x，现金短债比1.35x保持在1.0x安全红线之上；
+  3. 企业当前处于净现金状态（货币资金26.80亿元大于有息负债14.20亿元），偿债敞口完全收敛。
+elements:
+  # Thin black top rule signature
+  - elementId: s6-top-rule
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 28, 856, 2]
+    fill:
+      type: solid
+      color: "$inkBlack"
+  - elementId: s6-title
+    elementType: text
+    bounds: [52, 42, 856, 26]
+    content:
+      text: "<p>极端情景下利息保障倍数仍处安全区间，短期偿债敞口完全受控</p>"
+      style: "$slideTitle"
+
+  # Subtitle
+  - elementId: s6-subtitle
+    elementType: text
+    bounds: [52, 70, 856, 18]
+    content:
+      text: "<p>偿债能力与稳健度情景压力测试矩阵（多维压力模拟，单位：倍数 / 百分比） | 口径：示例数据</p>"
+      style: "$subtitle"
+
+  # Light divider
+  - elementId: s6-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 94, 856, 1]
+    fill:
+      type: solid
+      color: "$hairline"
+  - elementId: s6-table-stress
+    elementType: table
+    bounds: [52, 108, 856, 325]
+    columnWidths: [0.22, 0.24, 0.13, 0.13, 0.14, 0.14]
+    rowHeights: [0.16, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12]
+    style: "$stressMatrix"
+    shadow:
+      blur: 6
+      color: "#00000030"
+      offset: [2, 3]
+    rows:
+      # Header with colSpan merges
+      - - text: "偿债能力核心考核指标"
+          colSpan: 2
+          align: [center, middle]
+        - text: "2026H1实际值"
+          align: [center, middle]
+        - text: "宏观与营运压力情景敏感性模拟矩阵"
+          colSpan: 3
+          align: [center, middle]
+
+      # Row 1: 资产负债率
+      - - text: "资产负债率 (总杠杆)"
+          align: [left, middle]
+        - text: "负债总额 / 资产总额 (CAS-30)"
+          align: [left, middle]
+        - text: "43.5%"
+          align: [right, middle]
+          bold: true
+        - text: "42.0%"
+          align: [right, middle]
+        - text: "46.5%"
+          align: [right, middle]
+        - text: "51.2%"
+          align: [right, middle]
+
+      # Row 2: 流动比率
+      - - text: "流动比率 (营运偿债)"
+          align: [left, middle]
+        - text: "流动资产合计 / 流动负债合计"
+          align: [left, middle]
+        - text: "2.15x"
+          align: [right, middle]
+          bold: true
+        - text: "2.20x"
+          align: [right, middle]
+        - text: "1.85x"
+          align: [right, middle]
+        - text: "1.55x"
+          align: [right, middle]
+
+      # Row 3: 速动比率 (with 4-element BorderSpec override)
+      - - text: "速动比率 (变现缓冲)"
+          align: [left, middle]
+        - text: "(流动资产 - 存货) / 流动负债"
+          align: [left, middle]
+        - text: "1.63x"
+          align: [right, middle]
+          bold: true
+          border:
+            - {style: solid, width: 1.5, color: "$primaryGold"}
+            - {style: solid, width: 0.5, color: "$lightGray"}
+            - {style: solid, width: 1.5, color: "$primaryGold"}
+            - {style: solid, width: 0.5, color: "$lightGray"}
+        - text: "1.70x"
+          align: [right, middle]
+        - text: "1.35x"
+          align: [right, middle]
+        - text: "1.10x"
+          align: [right, middle]
+
+      # Row 4: 现金短债比 (with clear border override using width: 0)
+      - - text: "现金短债比 (直接流动性)"
+          align: [left, middle]
+        - text: "货币资金 / 短期有息债务"
+          align: [left, middle]
+        - text: "2.45x"
+          align: [right, middle]
+          bold: true
+          color: "$primaryGold"
+        - text: "2.60x"
+          align: [right, middle]
+        - text: "1.90x"
+          align: [right, middle]
+        - text: "1.35x"
+          align: [right, middle]
+
+      # Row 5: 利息保障倍数 (EBITDA / 利息)
+      - - text: "利息保障倍数 (利息覆盖)"
+          align: [left, middle]
+        - text: "(利润总额 + 利息支出) / 利息支出"
+          align: [left, middle]
+        - text: "11.20x"
+          align: [right, middle]
+          bold: true
+        - text: "12.50x"
+          align: [right, middle]
+        - text: "8.40x"
+          align: [right, middle]
+        - text: "5.80x"
+          align: [right, middle]
+          bold: true
+
+      # Row 6: 净有息负债率
+      - - text: "净有息负债率 (净杠杆)"
+          align: [left, middle]
+        - text: "(有息负债 - 货币资金) / 净资产"
+          align: [left, middle]
+        - text: "-21.1%"
+          align: [right, middle]
+          bold: true
+        - text: "-25.0%"
+          align: [right, middle]
+        - text: "-10.5%"
+          align: [right, middle]
+        - text: "+5.2%"
+          align: [right, middle]
+
+      # Row 7: 综合稳健度评估与安全评级
+      - - text: "压力测试综合评级结论"
+          colSpan: 2
+          align: [left, middle]
+          bold: true
+          fill: {type: solid, color: "$panelGray"}
+        - text: "AAA (极安全)"
+          align: [center, middle]
+          bold: true
+          color: "$primaryGold"
+          fill: {type: solid, color: "$panelGray"}
+        - text: "基准展望: 优异"
+          align: [center, middle]
+          fill: {type: solid, color: "$panelGray"}
+        - text: "轻度承压: 稳健"
+          align: [center, middle]
+          fill: {type: solid, color: "$panelGray"}
+        - text: "极端承压: 受控"
+          align: [center, middle]
+          bold: true
+          fill: {type: solid, color: "$panelGray"}
+
+  # Bottom Verdict Band
+  - elementId: s6-verdict-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 448, 856, 32]
+    fill:
+      type: solid
+      color: "$panelGray"
+  - elementId: s6-verdict-text
+    elementType: text
+    bounds: [68, 455, 824, 20]
+    content:
+      text: "<p><strong>压力测试诊断：</strong>各情景下指标均处于健康安全边界上方，净现金结构构筑坚固防线，不存在任何短期刚性偿付违约风险。</p>"
+      fontSize: 8.5
+      color: "$charcoal"
+
+  # Footer
+  - elementId: s6-footer-source
+    elementType: text
+    bounds: [52, 505, 600, 18]
+    content:
+      text: "<p>数据来源：示例公司财务账本数据库 · 示例数据 | 测算模型：投研偿债压力测试模型V2.4</p>"
+      style: "$footnote"
+  - elementId: s6-footer-page
+    elementType: text
+    bounds: [850, 505, 58, 18]
+    content:
+      text: "<p>6 / 9</p>"
+      fontSize: 8.0
+      color: "$footnoteGray"
+      align: [right, middle]

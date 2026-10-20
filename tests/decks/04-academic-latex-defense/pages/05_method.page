@@ -1,0 +1,223 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+notes: |
+  第四部分汇报本文提出的核心方法：动态轻量路由注意力机制（DLR-Attn）。
+  传统稠密注意力必须计算全部 N×N 个点积，计算量极为沉重。
+  本文设计了两阶段轻量路由架构：
+  首先，通过正交投影矩阵 W_r 将高维 Query 降维到极小的低维空间（如 m=16，而 d_k=128）；
+  其次，将键向量组织为 B 个块聚类质心，仅需计算查询与 B 个质心的点积并选取 Top-K 个候选簇；
+  最后，仅对激活簇内部的局部 Token 计算精确注意力。整个过程完全免除对全部 Token 的无谓点积计算。
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 30, 600, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$primary"
+      letterSpacing: 1.2
+      text: 04 · PROPOSED METHOD & ARCHITECTURE (DLR-ATTN)
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 48, 860, 34]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$fg"
+      text: 提出基于降维查询投影与两阶段层次聚类的动态路由注意力机制
+
+  # Top dividing line
+  - elementId: div-top
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 86, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: math-label
+    elementType: text
+    bounds: [50, 98, 440, 20]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$primary"
+      text: DLR-Attn 核心算子数学形式化推导 (Formulation)
+
+  # Multi-line equation array using aligned (compiles to <m:eqArr>)
+  - elementId: display-aligned
+    elementType: text
+    bounds: [50, 118, 440, 130]
+    content:
+      fontSize: 13
+      align: [center, middle]
+      text: |
+        <p>\( \begin{aligned} z_i &= W_r q_i \in \mathbb{R}^m, \quad W_r \in \mathbb{R}^{m \times d_k} \quad (m &lt; d_k) \\ \hat{S}_i &= \operatorname{TopK}\left( \left\{ \frac{z_i \cdot \bar{k}_b^T}{\sqrt{m}} \;\mid\; b \in [1, B] \right\}, k \right) \\ A_{\mathrm{dyn}}(i, j) &= \frac{\exp\left( \frac{q_i k_j^T}{\sqrt{d_k}} \right)}{\sum_{b \in \hat{S}_i} \sum_{l \in C_b} \exp\left( \frac{q_i k_l^T}{\sqrt{d_k}} \right)} \end{aligned} \)</p>
+
+  - elementId: formula-num-51
+    elementType: text
+    bounds: [445, 175, 45, 24]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$gray"
+      align: [right, middle]
+      text: (式 5.1)
+
+  # Cluster Centroids matrix (bmatrix)
+  - elementId: centroid-matrix
+    elementType: text
+    bounds: [50, 252, 440, 75]
+    content:
+      fontSize: 13
+      align: [center, middle]
+      text: |
+        <p>\( \bar{K} = \begin{bmatrix} \bar{k}_1 \\ \bar{k}_2 \\ \vdots \\ \bar{k}_B \end{bmatrix} \in \mathbb{R}^{B \times m}, \quad \bar{k}_b = \frac{1}{|C_b|} \sum_{j \in C_b} W_r k_j \)</p>
+
+  - elementId: formula-num-52
+    elementType: text
+    bounds: [340, 336, 150, 20]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$gray"
+      align: [right, middle]
+      text: (式 5.2)
+
+  - elementId: symbol-expl-5
+    elementType: text
+    bounds: [50, 360, 440, 128]
+    content:
+      fontSize: 11
+      lineHeight: 1.42
+      color: "$gray"
+      text: |
+        <p><strong>机制核心逻辑：</strong></p>
+        <p>1. <strong>降维投影（式 5.1 上）：</strong>将高维查询 \( q_i \) 压缩至低维流形空间 \( m=16 \)（降维比达 8×），显著减少路由计算量；</p>
+        <p>2. <strong>粗粒度质心召回（式 5.1 中）：</strong>仅与 \( B \) 个候选簇质心 \( \bar{k}_b \) 交互，召回最相关的 \( k \) 个语义簇；</p>
+        <p>3. <strong>细粒度局部精确计算（式 5.1 下）：</strong>仅对选中的 \( k \) 个候选块内部 Token 展开精确 Dot-Product 注意力。</p>
+
+  # Right Column: System Pipeline & Triton Kernel Integration
+  - elementId: arch-panel-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [515, 98, 395, 385]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$ruleColor"
+
+  - elementId: arch-title
+    elementType: text
+    bounds: [530, 110, 365, 22]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$fg"
+      text: 两阶段高效路由算子执行流 (Two-Stage Execution Flow)
+
+  # Stage 1
+  - elementId: st1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [530, 138, 365, 74]
+    fill:
+      type: solid
+      color: "#FFFFFF"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: st1-text
+    elementType: text
+    bounds: [540, 144, 345, 62]
+    content:
+      fontSize: 10.5
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">阶段 1 · 离线/Prefill 质心预聚合</span></p>
+        <p style="color:#555555;">利用 GPU 共享内存并行归约，将 KV Cache 划分为 \( B \) 个连续块并生成低维质心矩阵 \( \bar{K} \in \mathbb{R}^{B \times m} \)。</p>
+
+  # Stage 2
+  - elementId: st2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [530, 220, 365, 74]
+    fill:
+      type: solid
+      color: "#FFFFFF"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: st2-text
+    elementType: text
+    bounds: [540, 226, 345, 62]
+    content:
+      fontSize: 10.5
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">阶段 2 · 实时轻量查询投影与 Top-K 路由</span></p>
+        <p style="color:#555555;">单 Token 解码时实时执行 \( z_i = W_r q_i \)，并在寄存器内执行 \( B \) 维快速点积排序，生成稀疏路由索引 \( \hat{S}_i \)。</p>
+
+  # Stage 3
+  - elementId: st3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [530, 302, 365, 78]
+    fill:
+      type: solid
+      color: "#FFFFFF"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: st3-text
+    elementType: text
+    bounds: [540, 308, 345, 66]
+    content:
+      fontSize: 10.5
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">阶段 3 · Triton 稀疏张量聚集运算 (Gather-Attn)</span></p>
+        <p style="color:#555555;">定制 Triton 融合 Kernel：根据路由索引 \( \hat{S}_i \) 直接加载目标 KV 块，避免全局非连续显存搬运与带宽浪费。</p>
+
+  - elementId: method-highlight
+    elementType: text
+    bounds: [530, 390, 365, 84]
+    content:
+      fontSize: 10
+      lineHeight: 1.35
+      color: "$gray"
+      text: |
+        <p><strong>即插即用特性：</strong>投影矩阵 \( W_r \) 可直接通过预训练注意力的头部奇异值分解（SVD）初始化，<strong>完全无需全参数微调或重训练</strong>，可在现有开源权重上直接部署生效。</p>
+
+  # Footer dividing line
+  - elementId: div-bottom
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 498, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: footer-nav
+    elementType: text
+    bounds: [50, 506, 860, 20]
+    content:
+      fontSize: 10
+      color: "$gray"
+      text: |
+        <p>面向长上下文推理的稀疏注意力机制 · 博士学位论文答辩 <span style="float:right;">§4 核心方法 ｜ 05 / 10</span></p>

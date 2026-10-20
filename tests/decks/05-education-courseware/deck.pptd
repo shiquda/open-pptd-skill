@@ -1,0 +1,68 @@
+version: v2
+title: "家庭网络排障实操课"
+size: [960, 540]
+theme:
+  colors:
+    ink: "#202124"
+    white: "#FFFFFF"
+    bgLight: "#F8F9FA"
+    primary: "#4285F4"
+    primaryDeep: "#0059BA"
+    cyan: "#24C2E0"
+    lightBlue: "#E8F0FE"
+    grayBorder: "#D8DBE0"
+    grayText: "#5F6368"
+    grayLight: "#9AA0A6"
+    success: "#34A853"
+    warning: "#EA4335"
+    orange: "#F9AB00"
+  textStyles:
+    title:
+      fontFamily: { latin: "Liter", ea: "MiSans" }
+      fontSize: 20
+      bold: true
+      color: "$ink"
+    subtitle:
+      fontFamily: { latin: "Liter", ea: "MiSans" }
+      fontSize: 12
+      color: "$grayText"
+    body:
+      fontFamily: { latin: "Liter", ea: "MiSans" }
+      fontSize: 11
+      lineHeight: 1.35
+      color: "$ink"
+    caption:
+      fontFamily: { latin: "Liter", ea: "MiSans" }
+      fontSize: 9.5
+      color: "$grayLight"
+    badge:
+      fontFamily: { latin: "Liter", ea: "MiSans" }
+      fontSize: 10.5
+      bold: true
+      color: "$white"
+  tableStyles:
+    jobAidTable:
+      cellStyle:
+        fontSize: 10
+        color: "$ink"
+        fontFamily: { latin: "Liter", ea: "MiSans" }
+        border: [{width: 0}, {width: 0}, {style: solid, width: 0.75, color: "$grayBorder"}, {width: 0}]
+        align: [left, middle]
+        fill: {type: solid, color: "$white"}
+      firstRowStyle:
+        fill: {type: solid, color: "$primaryDeep"}
+        color: "$white"
+        bold: true
+        fontSize: 10.5
+        border: [{width: 0}, {width: 0}, {style: solid, width: 1.5, color: "$primary"}, {width: 0}]
+pages:
+  - pages/01_cover.page
+  - pages/02_orientation.page
+  - pages/03_topology.page
+  - pages/04_indicators.page
+  - pages/05_steps.page
+  - pages/06_comparison.page
+  - pages/07_practice.page
+  - pages/08_feedback.page
+  - pages/09_checklist.page
+  - pages/10_summary.page

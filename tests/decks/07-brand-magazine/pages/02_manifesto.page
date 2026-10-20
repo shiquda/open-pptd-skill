@@ -1,0 +1,172 @@
+pageType: content
+background:
+  type: solid
+  color: "$paper"
+notes: "演讲者备注：第二页为品牌核心宣言。北纬30度传统上被视为商业咖啡种植的边缘地带，但高山逆温层与冷凉气候使得咖啡樱桃成熟期延长50%以上。这一页通过96pt极端字号对比与严谨的理化指标对比，奠定品牌的技术权威感与现代主义格调。"
+elements:
+  # Fixed top-left section marker
+  - elementId: section-marker
+    elementType: shape
+    bounds: [64, 32, 6, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$klein"
+
+  - elementId: section-num
+    elementType: text
+    bounds: [78, 32, 400, 24]
+    content:
+      style: "$sectionNum"
+      text: "02 // BRAND MANIFESTO & TERROIR THESIS"
+
+  - elementId: top-meta-right
+    elementType: text
+    bounds: [768, 32, 448, 24]
+    content:
+      style: "$meta"
+      align: [right, middle]
+      text: "30°N ROASTERY // COLD GEOGRAPHY // 示例品牌（虚构）"
+
+  - elementId: top-divider
+    elementType: line
+    bounds: [64, 68, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  # Left column (Cols 1-4, width 384): Extreme typography & custom SVG wave
+  - elementId: manifesto-lead
+    elementType: text
+    bounds: [64, 85, 384, 240]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 80
+      bold: true
+      color: "$ink"
+      lineHeight: 0.88
+      letterSpacing: -2
+      text: |
+        COLD
+        SLOW
+        PURE.
+
+  - elementId: manifesto-cn
+    elementType: text
+    bounds: [64, 335, 384, 36]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 22
+      bold: true
+      color: "$klein"
+      letterSpacing: 2
+      text: "极地冷凉，慢熟至纯。"
+
+  # Custom SVG path shape: 30°N Topographic latitude wave
+  - elementId: topo-wave
+    elementType: shape
+    bounds: [64, 380, 384, 45]
+    shapeName: custom
+    viewBox: [1000, 200]
+    path: "M0,100 C150,20 300,180 500,100 C700,20 850,180 1000,100 L1000,200 L0,200 Z"
+    fill:
+      type: solid
+      color: "$klein"
+
+  - elementId: wave-caption
+    elementType: text
+    bounds: [64, 432, 384, 30]
+    content:
+      style: "$caption"
+      text: "TOPOGRAPHIC WAVE REF 30°00'N // 逆温层等高线拓扑波形模型"
+
+  # Recurring motif: star8 navigation mark
+  - elementId: motif-star
+    elementType: shape
+    bounds: [64, 480, 36, 36]
+    shapeName: star8
+    adjustments: [37500]
+    fill:
+      type: solid
+      color: "$ink"
+
+  - elementId: manifesto-quote
+    elementType: text
+    bounds: [116, 475, 332, 140]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.6
+      color: "$ink"
+      text: "“我们拒绝平庸的量产热带风味。在北纬30度的严寒极境，咖啡豆学会了在漫长的时间里锁紧糖分与有机酸。”"
+
+  # Right section (Cols 5-12, width 736): Heavy 3px rule & asymmetric comparison
+  - elementId: right-heavy-rule
+    elementType: line
+    bounds: [480, 100, 736, 0]
+    points: "0,0 736,0"
+    border:
+      style: solid
+      width: 3
+      color: "$ink"
+
+  - elementId: thesis-title
+    elementType: text
+    bounds: [480, 115, 736, 60]
+    content:
+      style: "$headline"
+      text: "慢熟周期重构咖啡豆内生糖分与有机酸密度"
+
+  # Mixed span style comparison block (Cols 5-8)
+  - elementId: comp-col1
+    elementType: text
+    bounds: [480, 195, 380, 420]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 14
+      lineHeight: 1.6
+      color: "$ink"
+      text: |
+        <p><span style="font-size:28px; color:$klein; font-weight:bold;">210 DAYS</span> <span style="font-size:13px; color:$muted;">/ 极致浆果慢熟周期</span></p>
+        <p style="margin-top:8px;">常规热带产区（海拔500-1,000米）平均成熟期仅为130-150天；而在北纬30度峡谷冷凉小气候区，高昼夜温差（日均温差达16.4°C）显著抑制了呼吸消耗，细胞分裂速率放缓，致使单宁向可溶性糖苷的转化极其彻底。</p>
+        <p style="margin-top:16px;"><span style="font-size:28px; color:$ink; font-weight:bold;">0.84 g/ml</span> <span style="font-size:13px; color:$muted;">/ 超高生豆物理密实度</span></p>
+        <p style="margin-top:8px;">豆体结晶组织更为紧密，耐烘焙热穿透力极强，在梅纳反应阶段能释放成倍的多酚芳香族化合物与明亮苹果酸。</p>
+        <p style="margin-top:16px; font-size:11px; color:$muted;">数据源：ICO Technical Report 2023 & SCA Chemistry Research Series</p>
+
+  # Right image (Cols 9-12): Macro monochrome texture
+  - elementId: beans-img
+    elementType: image
+    bounds: [896, 195, 320, 240]
+    src: "assets/beans_macro.jpg"
+    fit:
+      mode: cover
+    border:
+      style: solid
+      width: 1
+      color: "$ink"
+
+  - elementId: beans-img-caption
+    elementType: text
+    bounds: [896, 445, 320, 40]
+    content:
+      style: "$caption"
+      text: "PLATE 02.1 // 高海拔铁比卡原生种高密度生豆显微结晶结构"
+
+  # Baseline metadata & source
+  - elementId: bottom-divider
+    elementType: line
+    bounds: [64, 650, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  - elementId: bottom-info
+    elementType: text
+    bounds: [64, 665, 1152, 24]
+    content:
+      style: "$footer"
+      text: "PAGE 02 // 30°N BRAND BOOK // CRITICAL MANIFESTO // 示例品牌（虚构） // SOURCE: ICO & SCA DATA 2023"

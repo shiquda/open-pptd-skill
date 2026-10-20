@@ -1,0 +1,60 @@
+version: v2
+title: "GWTC-5 Gravitational-Wave Catalog"
+size: [960, 540]
+theme:
+  colors:
+    ink: "#0F172A"
+    muted: "#64748B"
+    paper: "#FFFFFF"
+    primary: "#1E40AF"
+    teal: "#0D9488"
+    accent: "#DC2626"
+    amber: "#D97706"
+    green: "#16A34A"
+    surface: "#FFFFFF"
+    cardBg: "#F8FAFC"
+    highlightBg: "#F1F5F9"
+    border: "#E2E8F0"
+    borderHair: "#CBD5E1"
+  textStyles:
+    title:
+      fontFamily: "Liter"
+      fontSize: 16.5
+      bold: true
+      color: "$ink"
+    category:
+      fontFamily: "Liter"
+      fontSize: 10
+      bold: true
+      color: "$muted"
+    body:
+      fontFamily: "Liter"
+      fontSize: 11
+      lineHeight: 1.35
+      color: "$ink"
+    caption:
+      fontFamily: "Liter"
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$muted"
+    footer:
+      fontFamily: "Liter"
+      fontSize: 9.5
+      color: "$muted"
+    takeaway:
+      fontFamily: "Liter"
+      fontSize: 12
+      bold: true
+      color: "$ink"
+pages:
+  - pages/01_detector_fundamentals.page
+  - pages/02_global_network.page
+  - pages/03_observing_timeline.page
+  - pages/04_catalog_growth.page
+  - pages/05_mass_plane.page
+  - pages/06_sky_localization.page
+  - pages/07_distance_redshift.page
+  - pages/08_highlight_events.page
+  - pages/09_population_synthesis.page
+  - pages/10_open_science_workflow.page
+  - pages/11_future_horizons.page

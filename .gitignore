@@ -17,3 +17,14 @@ _user_meta.json
 # Rust build artifacts
 /target/
 **/*.rs.bk
+
+# PPTD build outputs and sync sidecar files
+*.pptx
+.sync.hash
+**/.sync.hash
+preview/
+**/preview/
+build/
+**/build/
+*.log
+**/*.log

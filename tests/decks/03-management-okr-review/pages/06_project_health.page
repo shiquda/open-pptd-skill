@@ -1,0 +1,475 @@
+pageType: content
+background: { type: solid, color: "$bg" }
+notes: |
+  【第 6 页·管委会演讲备注】
+  第 6 页深入到研发与交付一线的具体战役。经管会对项目管理的刚性铁律是：亮红灯不可怕，但红灯项目没有量化证据和带时间表责任人的补救承诺，就是严重管理失职。
+  
+  请看 3 大关键战役审计：
+  左侧两项均亮起红灯：
+  1. 金融行业 KA 混合云交付：进度仅 58%，落后计划 32 个百分点。核心堵在本地 Oracle 兼容与网络安全审计上，驻场已经超过 45 天。
+     补救方案：VP 张立立下军令状，10/28 前派驻 4 名原厂资深架构师接管，必须在 11/15 前拿到第一阶段终验单，锁定 120 万确认收入。
+  2. 制造业灯塔工厂项目：进度仅 45%，落后 35 个百分点。病因是客户现场提了 18 次定制变更，典型的需求蔓延。
+     补救方案：行业线负责人王强已在 10/12 强制启动“需求冻结”，不再接受无偿定制，11/05 交付受限核心版，将超范围需求切割至二期增购。
+  
+  右侧一项是绿色模范项目：
+  云原生标准版 V4.2 研发进度达 96%，多租户自助开通率提到 92%，零现场成本。
+  
+  这更加坚定了管理层的判断：云枢必须坚定不移地推进“标准化蓝图”，把交付工程师从低效的定制泥潭中解救出来。
+elements:
+  # Top Header Menu & Navigation
+  - elementId: nav-line-1
+    elementType: line
+    bounds: [50, 26, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-2
+    elementType: line
+    bounds: [50, 31, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-3
+    elementType: line
+    bounds: [50, 36, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-section-tag
+    elementType: text
+    bounds: [74, 25, 480, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$muted"
+      text: "05 战役健康度审计 · 红黄绿运营诊断 (示例公司)"
+
+  - elementId: nav-report-title
+    elementType: text
+    bounds: [660, 25, 250, 16]
+    content:
+      align: [right, middle]
+      fontSize: 10
+      color: "$muted"
+      text: "云枢网络 2026 Q3 经营复盘"
+
+  - elementId: header-divider
+    elementType: line
+    bounds: [50, 46, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Slide Takeaway Title & Subtitle
+  - elementId: page6-title
+    elementType: text
+    bounds: [50, 54, 860, 24]
+    content:
+      fontFamily: "MiSans"
+      fontSize: 17
+      bold: true
+      color: "$ink"
+      text: "3 大交付战役 2 项亮红灯：私有化混合云标准化不足导致客单实施严重超时"
+
+  - elementId: page6-subtitle
+    elementType: text
+    bounds: [50, 78, 860, 16]
+    content:
+      fontSize: 10.5
+      color: "$muted"
+      text: "三级状态审计：状态徽标 + 进度偏离度量 + 责任人限期补救承诺（无补救方案即为管理缺陷）"
+
+  # ================= PROJECT 1: FINANCIAL HYBRID CLOUD (RED) =================
+  - elementId: p1-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 98, 274, 390]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: p1-header-bar
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 98, 274, 32]
+    fill: { type: solid, color: "$statusRedBg" }
+    adjustments: [0]
+
+  - elementId: p1-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [62, 109, 10, 10]
+    fill: { type: solid, color: "$statusRed" }
+
+  - elementId: p1-status-label
+    elementType: text
+    bounds: [78, 105, 120, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusRed"
+      text: "延期 · 严重阻滞"
+
+  - elementId: p1-code
+    elementType: text
+    bounds: [220, 105, 92, 18]
+    content:
+      align: [right, middle]
+      fontSize: 9
+      color: "$muted"
+      text: "PRJ-FIN-09"
+
+  - elementId: p1-name
+    elementType: text
+    bounds: [62, 138, 250, 20]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$ink"
+      text: "金融行业 KA 混合云交付战役"
+
+  # Progress Donut Shape Indicator
+  - elementId: p1-donut
+    elementType: shape
+    shapeName: "donut"
+    bounds: [62, 164, 36, 36]
+    fill: { type: solid, color: "$statusRed" }
+    adjustments: [25000]
+
+  - elementId: p1-progress-num
+    elementType: text
+    bounds: [106, 164, 200, 20]
+    content:
+      fontSize: 14
+      bold: true
+      color: "$statusRed"
+      text: "进度: 58% (偏离 -32%)"
+
+  - elementId: p1-progress-plan
+    elementType: text
+    bounds: [106, 184, 200, 16]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      text: "原定目标: 90% 终验 ｜ 预算消耗: 142%"
+
+  - elementId: p1-divider1
+    elementType: line
+    bounds: [62, 206, 250, 1]
+    points: "0,0.5 250,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: p1-issue-title
+    elementType: text
+    bounds: [62, 214, 250, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "核心堵点与事实审计："
+
+  - elementId: p1-issue-desc
+    elementType: text
+    bounds: [62, 232, 250, 78]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• 客户本地 Oracle 兼容性缺陷导致容器跨网通信频繁丢包，现场驻场超 45 天。<br/>• 客户安全合规审计反复驳回架构拓扑，导致 120 万元认收节点被动推迟。"
+
+  - elementId: p1-action-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [60, 316, 254, 160]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: p1-action-title
+    elementType: text
+    bounds: [70, 324, 234, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusRed"
+      text: "【限期补救承诺 · 责任人】"
+
+  - elementId: p1-action-desc
+    elementType: text
+    bounds: [70, 344, 234, 122]
+    content:
+      fontSize: 9
+      lineHeight: 1.36
+      color: "$inkSecondary"
+      text: "<b>第一责任人：VP 交付 (张立)</b><br/>• <b>10/28 前：</b>从总部抽调 4 名资深中间件架构师接管现场网络调试；<br/>• <b>11/15 前：</b>完成客户安全白皮书二次答辩，必须拿到阶段终验单，锁定 120 万确认收入。<br/><b>兜底后果：</b>若 11/15 未终验，扣减交付团队 Q4 绩效。"
+
+  # ================= PROJECT 2: MANUFACTURING LIGHTHOUSE (RED) =================
+  - elementId: p2-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [343, 98, 274, 390]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: p2-header-bar
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [343, 98, 274, 32]
+    fill: { type: solid, color: "$statusRedBg" }
+    adjustments: [0]
+
+  - elementId: p2-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [355, 109, 10, 10]
+    fill: { type: solid, color: "$statusRed" }
+
+  - elementId: p2-status-label
+    elementType: text
+    bounds: [371, 105, 120, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusRed"
+      text: "延期 · 严重阻滞"
+
+  - elementId: p2-code
+    elementType: text
+    bounds: [513, 105, 92, 18]
+    content:
+      align: [right, middle]
+      fontSize: 9
+      color: "$muted"
+      text: "PRJ-MFG-04"
+
+  - elementId: p2-name
+    elementType: text
+    bounds: [355, 138, 250, 20]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$ink"
+      text: "制造业灯塔工厂定制集成项目"
+
+  # Progress Donut Shape Indicator
+  - elementId: p2-donut
+    elementType: shape
+    shapeName: "donut"
+    bounds: [355, 164, 36, 36]
+    fill: { type: solid, color: "$statusRed" }
+    adjustments: [25000]
+
+  - elementId: p2-progress-num
+    elementType: text
+    bounds: [399, 164, 200, 20]
+    content:
+      fontSize: 14
+      bold: true
+      color: "$statusRed"
+      text: "进度: 45% (偏离 -35%)"
+
+  - elementId: p2-progress-plan
+    elementType: text
+    bounds: [399, 184, 200, 16]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      text: "原定目标: 80% 联调 ｜ 变更申请: 18次"
+
+  - elementId: p2-divider1
+    elementType: line
+    bounds: [355, 206, 250, 1]
+    points: "0,0.5 250,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: p2-issue-title
+    elementType: text
+    bounds: [355, 214, 250, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "核心堵点与事实审计："
+
+  - elementId: p2-issue-desc
+    elementType: text
+    bounds: [355, 232, 250, 78]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• 客户车间 MES 接口协议定制变更达 18 次，需求范围严重蔓延；<br/>• 销售未在商务合同中锁定定制边界，现场研发人员被日常运维套牢，人效产出严重倒挂。"
+
+  - elementId: p2-action-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [353, 316, 254, 160]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: p2-action-title
+    elementType: text
+    bounds: [363, 324, 234, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusRed"
+      text: "【限期补救承诺 · 责任人】"
+
+  - elementId: p2-action-desc
+    elementType: text
+    bounds: [363, 344, 234, 122]
+    content:
+      fontSize: 9
+      lineHeight: 1.36
+      color: "$inkSecondary"
+      text: "<b>第一责任人：制造行业线 (王强)</b><br/>• <b>10/12 已执行：</b>签发全员备忘录，强行冻结新增定制需求；<br/>• <b>11/05 前：</b>交付现有受限标准版，组织客户关键业务闭环验证；<br/><b>商务止损：</b>超范围 12 项定制拆分至二期合同，增收 60 万。"
+
+  # ================= PROJECT 3: CLOUD SAAS V4.2 (GREEN BENCHMARK) =================
+  - elementId: p3-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [636, 98, 274, 390]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: p3-header-bar
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [636, 98, 274, 32]
+    fill: { type: solid, color: "$statusGreenBg" }
+    adjustments: [0]
+
+  - elementId: p3-status-dot
+    elementType: shape
+    shapeName: "ellipse"
+    bounds: [648, 109, 10, 10]
+    fill: { type: solid, color: "$statusGreen" }
+
+  - elementId: p3-status-label
+    elementType: text
+    bounds: [664, 105, 120, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusGreen"
+      text: "正常 · 达成标杆"
+
+  - elementId: p3-code
+    elementType: text
+    bounds: [806, 105, 92, 18]
+    content:
+      align: [right, middle]
+      fontSize: 9
+      color: "$muted"
+      text: "PRJ-PLG-01"
+
+  - elementId: p3-name
+    elementType: text
+    bounds: [648, 138, 250, 20]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$ink"
+      text: "云原生标准 SaaS 平台升级 (V4.2)"
+
+  # Progress Donut Shape Indicator
+  - elementId: p3-donut
+    elementType: shape
+    shapeName: "donut"
+    bounds: [648, 164, 36, 36]
+    fill: { type: solid, color: "$statusGreen" }
+    adjustments: [25000]
+
+  - elementId: p3-progress-num
+    elementType: text
+    bounds: [692, 164, 200, 20]
+    content:
+      fontSize: 14
+      bold: true
+      color: "$statusGreen"
+      text: "进度: 96% (超标 +1%)"
+
+  - elementId: p3-progress-plan
+    elementType: text
+    bounds: [692, 184, 200, 16]
+    content:
+      fontSize: 9.5
+      color: "$muted"
+      text: "原定目标: 95% 发版 ｜ 零线上故障"
+
+  - elementId: p3-divider1
+    elementType: line
+    bounds: [648, 206, 250, 1]
+    points: "0,0.5 250,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: p3-issue-title
+    elementType: text
+    bounds: [648, 214, 250, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "运行亮点与成功要素："
+
+  - elementId: p3-issue-desc
+    elementType: text
+    bounds: [648, 232, 250, 78]
+    content:
+      fontSize: 9
+      lineHeight: 1.35
+      color: "$inkSecondary"
+      text: "• 严格遵循双周敏捷发版，单元测试覆盖率达 88%，多租户性能提升 40%；<br/>• SMB 客户自助开通与权限配置零人工介入，新版灰度上线后席位自扩容比例升至 34%。"
+
+  - elementId: p3-action-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [646, 316, 254, 160]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: p3-action-title
+    elementType: text
+    bounds: [656, 324, 234, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$statusGreen"
+      text: "【复制经验与后续规划】"
+
+  - elementId: p3-action-desc
+    elementType: text
+    bounds: [656, 344, 234, 122]
+    content:
+      fontSize: 9
+      lineHeight: 1.36
+      color: "$inkSecondary"
+      text: "<b>第一责任人：CPO 产品负责人 (李维)</b><br/>• <b>10/31：</b>启动全网客户静默热升级，预计节省运维云成本 14%；<br/>• <b>赋能大客：</b>将 V4.2 的标准工作流引擎下沉封装为混合云蓝图（BluePrint V2），在 Q4 全面替换 KA 定制分支代码。"
+
+  # Footer
+  - elementId: footer-divider
+    elementType: line
+    bounds: [50, 498, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 506, 680, 16]
+    content:
+      style: "$footer"
+      text: "评审标准：研发与交付战役红黄绿三级审计机制 · 数据来源：Jira & PMO 项目管理周报 (示例公司/假设口径)"
+
+  - elementId: footer-page-num
+    elementType: text
+    bounds: [850, 506, 60, 16]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      bold: true
+      color: "$ink"
+      text: "06 / 09"

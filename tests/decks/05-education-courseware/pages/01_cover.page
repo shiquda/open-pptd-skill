@@ -1,0 +1,95 @@
+pageType: cover
+background:
+  type: solid
+  color: "$white"
+notes: "欢迎进入家庭网络排障实操课。本课程专为非技术家庭用户设计，旨在帮助大家建立清晰的网络定界思维。在家庭断网时，不需要背诵复杂的网络协议，只需通过观察指示灯、测试终端和按序重启，即可迅速判断出是自身线路松动、路由器死机，还是运营商光纤中断。请大家跟随课程的六个学习阶段，逐步完成实操能力的构建。"
+elements:
+  - elementId: top-accent-line
+    elementType: shape
+    bounds: [40, 36, 880, 3]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: cover-tag
+    elementType: text
+    bounds: [40, 56, 320, 24]
+    content:
+      text: "<p><strong>家庭数字生活实操手册 · 零基础通识</strong></p>"
+      color: "$primaryDeep"
+      fontSize: 12
+      letterSpacing: 1.2
+      wrap: false
+
+  - elementId: cover-title
+    elementType: text
+    bounds: [40, 92, 540, 84]
+    content:
+      text: "<p><strong>家庭网络排障实操课：</strong></p><p><strong>断网不求人，3 分钟锁定故障源</strong></p>"
+      color: "$ink"
+      fontSize: 26
+      lineHeight: 1.25
+
+  - elementId: cover-subtitle
+    elementType: text
+    bounds: [40, 190, 540, 48]
+    content:
+      text: "<p>从光猫指示灯到终端网络配置的分层诊断法 · 告别盲目重启与被动等待运维</p>"
+      color: "$grayText"
+      fontSize: 13
+      lineHeight: 1.35
+
+  - elementId: cover-divider
+    elementType: line
+    bounds: [40, 256, 540, 2]
+    viewBox: [540, 2]
+    points: "0,1 540,1"
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: cover-target-audience
+    elementType: text
+    bounds: [40, 274, 540, 68]
+    content:
+      text: |
+        <p><strong>适合人群：</strong>具备基础手机/电脑操作能力的家庭网络使用者与远程办公人员</p>
+        <p><strong>核心收益：</strong>掌握物理层至网络层 4 步定界法，独立解决 80% 常见日常断网</p>
+      color: "$grayText"
+      fontSize: 11
+      lineHeight: 1.45
+
+  - elementId: cover-action-capsule
+    elementType: shape
+    bounds: [40, 360, 180, 36]
+    shapeName: roundRect
+    adjustments: [50000]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: cover-action-text
+    elementType: text
+    bounds: [40, 360, 180, 36]
+    content:
+      text: "开始实操学习 ➔"
+      style: "$badge"
+      align: [center, middle]
+      wrap: false
+
+  - elementId: cover-hero-art
+    elementType: image
+    bounds: [600, 75, 320, 380]
+    src: "assets/cover_hero.png"
+    fit: { mode: contain }
+
+  - elementId: cover-bottom-line
+    elementType: line
+    bounds: [40, 486, 880, 2]
+    viewBox: [880, 2]
+    points: "0,1 880,1"
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: cover-meta-text
+    elementType: text
+    bounds: [40, 498, 880, 22]
+    content:
+      text: "PPTD v2 课件规范 · 蓝线学术课件系统 (academic/blue-line-courseware) · 案例素材：工信部与运营商公开运维数据整理"
+      style: "$caption"
+      color: "$grayLight"
+      wrap: false

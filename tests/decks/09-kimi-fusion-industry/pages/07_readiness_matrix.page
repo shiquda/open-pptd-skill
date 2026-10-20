@@ -1,0 +1,207 @@
+pageType: content
+notes: |
+  Technology readiness matrix slide. Presents an independent, rigorous TRL evaluation across seven core fusion subsystems and three primary confinement architectures. Clearly highlights that while scientific confinement physics has reached TRL 5 to 6, the nuclear engineering subsystems—specifically closed-loop tritium breeding and 14 MeV neutron-resistant first-wall materials—remain at TRL 3 to 4, representing the true critical path to commercialization.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "03 · READINESS ASSESSMENT"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Scientific Feasibility (TRL 5–6) Outpaces Nuclear Engineering Readiness (TRL 3–4)"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Independent TRL-style evaluation across seven critical subsystems and primary confinement architectures (Assessment as of Q3 2026)"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Dense Native Table
+  - elementId: trl-table
+    elementType: table
+    bounds: [50, 102, 860, 362]
+    columnWidths: [0.20, 0.16, 0.16, 0.16, 0.16, 0.16]
+    rowHeights: [0.16, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12]
+    style: "$denseConsulting"
+    rows:
+      # Header Row
+      - - text: "Subsystem Domain"
+          align: [left, middle]
+        - text: "MCF Tokamak"
+          align: [center, middle]
+        - text: "MCF Stellarator"
+          align: [center, middle]
+        - text: "ICF (Laser)"
+          align: [center, middle]
+        - text: "MIF / FRC"
+          align: [center, middle]
+        - text: "Primary Bottleneck"
+          align: [left, middle]
+
+      # Row 1: Net Gain
+      - - text: "1. Scientific Net Gain (Q > 1)"
+          align: [left, middle]
+          bold: true
+        - text: "TRL 5 (JET Q=0.67)"
+          align: [center, middle]
+        - text: "TRL 4 (Lab Demo)"
+          align: [center, middle]
+        - text: "TRL 6 (NIF Q=1.54)"
+          align: [center, middle]
+        - text: "TRL 3 (Sub-break-even)"
+          align: [center, middle]
+        - text: "Self-heating thermal stability"
+          align: [left, middle]
+
+      # Row 2: Steady-State
+      - - text: "2. Steady-State / Long Pulse"
+          align: [left, middle]
+          bold: true
+        - text: "TRL 4 (EAST ~1000s)"
+          align: [center, middle]
+        - text: "TRL 5 (W7-X 30min)"
+          align: [center, middle]
+        - text: "TRL 2 (Single shot/day)"
+          align: [center, middle]
+        - text: "TRL 3 (Rep-rate &lt;1Hz)"
+          align: [center, middle]
+        - text: "Current drive & rep-rate lasers"
+          align: [left, middle]
+
+      # Row 3: HTS Magnets
+      - - text: "3. High-Field HTS Magnets"
+          align: [left, middle]
+          bold: true
+        - text: "TRL 5 (20T Coil Demo)"
+          align: [center, middle]
+        - text: "TRL 4 (3D Prototype)"
+          align: [center, middle]
+        - text: "N/A (Non-magnetic)"
+          align: [center, middle]
+        - text: "TRL 4 (Fast pulsed)"
+          align: [center, middle]
+        - text: "Global REBCO tape capacity"
+          align: [left, middle]
+
+      # Row 4: Tritium Loop
+      - - text: "4. Tritium Breeding (TBR ≥ 1.05)"
+          align: [left, middle]
+          bold: true
+        - text: "TRL 3 (Coupon tests)"
+          align: [center, middle]
+        - text: "TRL 3 (Design stage)"
+          align: [center, middle]
+        - text: "TRL 3 (Conceptual)"
+          align: [center, middle]
+        - text: "TRL 3 (Aneutronic/DT)"
+          align: [center, middle]
+        - text: "Extraction kinetics & inventory"
+          align: [left, middle]
+
+      # Row 5: First-Wall Materials
+      - - text: "5. First-Wall 14 MeV Damage"
+          align: [left, middle]
+          bold: true
+        - text: "TRL 3 (Fission proxy)"
+          align: [center, middle]
+        - text: "TRL 3 (Fission proxy)"
+          align: [center, middle]
+        - text: "TRL 3 (Debris optics)"
+          align: [center, middle]
+        - text: "TRL 3 (Electrode erosion)"
+          align: [center, middle]
+        - text: "Lack of 14 MeV neutron source"
+          align: [left, middle]
+
+      # Row 6: Divertor Heat Exhaust
+      - - text: "6. Divertor Heat Exhaust (>10 MW/m²)"
+          align: [left, middle]
+          bold: true
+        - text: "TRL 4 (Detached SOL)"
+          align: [center, middle]
+        - text: "TRL 4 (Island divertor)"
+          align: [center, middle]
+        - text: "N/A (Chamber wall)"
+          align: [center, middle]
+        - text: "TRL 3 (End-loss dump)"
+          align: [center, middle]
+        - text: "Tungsten recrystallization"
+          align: [left, middle]
+
+      # Row 7: Balance of Plant
+      - - text: "7. Grid BOP & Electricity Conv."
+          align: [left, middle]
+          bold: true
+        - text: "TRL 4 (Steam cycle spec)"
+          align: [center, middle]
+        - text: "TRL 4 (Steam/sCO2)"
+          align: [center, middle]
+        - text: "TRL 3 (Steam island)"
+          align: [center, middle]
+        - text: "TRL 3 (Direct induction)"
+          align: [center, middle]
+        - text: "High parasitic load fraction"
+          align: [left, middle]
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Readiness Assessment:</b> Physics feasibility (TRL 5–6) is well advanced; nuclear blanket breeding and 14 MeV materials (TRL 3) represent the unhedged engineering bottleneck."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Assessment Basis: Public technical disclosures through Q3 2026; IAEA, EUROfusion, and US DOE Milestone Program evaluations."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 07 / 16"

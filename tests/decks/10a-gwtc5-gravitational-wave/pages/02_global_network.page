@@ -1,0 +1,352 @@
+pageType: content
+background: { type: solid, color: "$paper" }
+notes: |
+  Slide 2: Global Detector Network: Coincidence, Sky Coverage, and Baseline Delays.
+  - Covers the five terrestrial instruments in the international gravitational-wave network: LIGO Hanford (H1), LIGO Livingston (L1), Virgo (V1), KAGRA (K1), and GEO 600 (G1).
+  - Explains the network baseline geometry: light travel times between Hanford and Livingston (10 ms) and transatlantic baselines to Virgo (27 ms) and KAGRA (26-30 ms).
+  - Details antenna pattern coverage: interferometers have quadrupolar antenna lobes and cannot point; spatial gaps are covered by orthogonal orientations across the globe.
+  - Reviews network duty cycle: simultaneous multi-detector coincidence (joint up-time ~53%) is essential for rejecting local non-Gaussian instrumental glitches.
+elements:
+  # Left Rail
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [14, 24, 142, 484]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [18, 30, 134, 84]
+    src: "assets/thumb_detectors.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [18, 122, 134, 84]
+    src: "assets/thumb_timeline.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-3
+    elementType: image
+    bounds: [18, 214, 134, 84]
+    src: "assets/thumb_catalog.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-4
+    elementType: image
+    bounds: [18, 306, 134, 84]
+    src: "assets/thumb_mass.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-divider
+    elementType: line
+    bounds: [168, 24, 1, 484]
+    points: "0,0 0,484"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Header
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 24, 475, 34]
+    content:
+      style: "$title"
+      text: "Five Detectors Form a Global Terrestrial Antenna"
+
+  - elementId: slide-category
+    elementType: text
+    bounds: [660, 27, 260, 18]
+    content:
+      style: "$category"
+      align: [right, middle]
+      text: "01 · DETECTOR NETWORK"
+
+  - elementId: header-rule
+    elementType: line
+    bounds: [185, 58, 735, 1]
+    points: "0,0 735,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Center Area: Five Detectors Native Table
+  - elementId: net-table-title
+    elementType: text
+    bounds: [185, 70, 420, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "International Gravitational-Wave Network Observatory Fleet"
+
+  - elementId: net-table
+    elementType: table
+    bounds: [185, 92, 420, 210]
+    columnWidths: [0.12, 0.28, 0.35, 0.25]
+    rowHeights: [0.18, 0.20, 0.20, 0.21, 0.21]
+    style:
+      cellStyle:
+        fontFamily: "Liter"
+        fontSize: 8
+        lineHeight: 1.15
+        color: "$ink"
+      firstRowStyle:
+        fill: { type: solid, color: "$highlightBg" }
+        color: "$ink"
+        bold: true
+    rows:
+      - - text: "Site"
+        - text: "Observatory"
+        - text: "Arm & Optical Configuration"
+        - text: "O4 BNS Range"
+      - - text: "H1"
+        - text: "LIGO Hanford (WA, USA)"
+        - text: "4 km dual-recycled Fabry–Pérot"
+        - text: "140–155 Mpc"
+      - - text: "L1"
+        - text: "LIGO Livingston (LA, USA)"
+        - text: "4 km dual-recycled Fabry–Pérot"
+        - text: "150–165 Mpc"
+      - - text: "V1"
+        - text: "Advanced Virgo+ (Italy)"
+        - text: "3 km dual-recycled Fabry–Pérot"
+        - text: "50–65 Mpc"
+      - - text: "K1"
+        - text: "KAGRA (Kamioka, Japan)"
+        - text: "3 km underground cryogenic sapphire"
+        - text: "5–10 Mpc (test)"
+
+  # Metrics Row Below Table
+  - elementId: metric-box-1
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 316, 134, 60]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: metric-txt-1
+    elementType: text
+    bounds: [190, 322, 124, 48]
+    content:
+      align: [center, middle]
+      fontSize: 15
+      bold: true
+      color: "$primary"
+      text: "53%\n<span style=\"font-size: 8pt; color: #64748B; font-weight: normal;\">Network Coincidence</span>"
+
+  - elementId: metric-box-2
+    elementType: shape
+    shapeName: rect
+    bounds: [328, 316, 134, 60]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: metric-txt-2
+    elementType: text
+    bounds: [333, 322, 124, 48]
+    content:
+      align: [center, middle]
+      fontSize: 15
+      bold: true
+      color: "$teal"
+      text: "31.1%\n<span style=\"font-size: 8pt; color: #64748B; font-weight: normal;\">Triple Lock Up-Time</span>"
+
+  - elementId: metric-box-3
+    elementType: shape
+    shapeName: rect
+    bounds: [471, 316, 134, 60]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: metric-txt-3
+    elementType: text
+    bounds: [476, 322, 124, 48]
+    content:
+      align: [center, middle]
+      fontSize: 15
+      bold: true
+      color: "$ink"
+      text: "198.9 d\n<span style=\"font-size: 8pt; color: #64748B; font-weight: normal;\">O4b Science Livetime</span>"
+
+  # Definition callout box
+  - elementId: network-callout
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 386, 420, 50]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: network-callout-txt
+    elementType: text
+    bounds: [193, 392, 404, 38]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$ink"
+      text: |
+        Coincidence timing: \( \Delta t \le D/c \approx 10\text{ ms} \) (Hanford–Livingston), \( \le 27\text{ ms} \) (Hanford–Virgo). Signals failing this light travel window are strictly discarded as non-astrophysical glitches.
+
+  # Right Sidebar
+  - elementId: side-1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 75, 295, 110]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-1-icon
+    elementType: icon
+    iconName: "fas:satellite-dish"
+    bounds: [637, 85, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-1-head
+    elementType: text
+    bounds: [658, 85, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "ANTENNA PATTERNS"
+
+  - elementId: side-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 103, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-1-formula
+    elementType: text
+    bounds: [642, 107, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: |
+        \( F_+(\theta,\phi,\psi), \; F_\times(\theta,\phi,\psi) \text{ quadrupolar lobes} \)
+
+  - elementId: side-1-desc
+    elementType: text
+    bounds: [637, 134, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Interferometers cannot point. They listen omnidirectionally with quadrupolar beam patterns; blind spots of one detector are covered by cross-continental partners."
+
+  - elementId: side-2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 195, 295, 118]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-2-icon
+    elementType: icon
+    iconName: "fas:clock"
+    bounds: [637, 205, 15, 15]
+    fill: { type: solid, color: "$teal" }
+
+  - elementId: side-2-head
+    elementType: text
+    bounds: [658, 205, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "BASELINE DELAYS"
+
+  - elementId: side-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 223, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-2-formula
+    elementType: text
+    bounds: [642, 227, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$teal"
+      text: |
+        \( \tau_{HL} = 10.01\text{ ms}, \quad \tau_{HV} = 27.28\text{ ms} \)
+
+  - elementId: side-2-desc
+    elementType: text
+    bounds: [637, 254, 271, 52]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Earth-scale light travel delays between observatories restrict candidate arrival directions to rings on the celestial sphere, which intersect to form localized ellipses."
+
+  - elementId: side-3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 323, 295, 108]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-3-icon
+    elementType: icon
+    iconName: "fas:shield-halved"
+    bounds: [637, 333, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-3-head
+    elementType: text
+    bounds: [658, 333, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "GLITCH REJECTION"
+
+  - elementId: side-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 351, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-3-formula
+    elementType: text
+    bounds: [642, 355, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$primary"
+      text: |
+        \( \text{FAR} < 1\text{ per } 1000\text{ yr in triple coincidence} \)
+
+  - elementId: side-3-desc
+    elementType: text
+    bounds: [637, 382, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Environmental glitches (microseisms, acoustic trucks, laser jitter) cannot correlate across 3000 km baselines, guaranteeing pure astronomical purity."
+
+  # Takeaway Line
+  - elementId: footer-takeaway
+    elementType: text
+    bounds: [185, 456, 735, 24]
+    content:
+      style: "$takeaway"
+      text: "<b>Takeaway</b> · <b>A global network turns omnidirectional strain receivers into a triangulating cosmic observatory.</b>"
+
+  # Sources Line
+  - elementId: footer-sources
+    elementType: text
+    bounds: [185, 490, 680, 20]
+    content:
+      style: "$footer"
+      text: "Sources: LVK Network Status, Abbott et al., arXiv:2311.10246, arXiv:2404.11557 · notes/network.md"
+
+  # Page Number
+  - elementId: footer-page
+    elementType: text
+    bounds: [875, 490, 45, 20]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      text: "2"

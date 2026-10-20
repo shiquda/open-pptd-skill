@@ -1,0 +1,147 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+notes: |
+  进入第一部分研究背景。当前前沿大模型推理应用（如长文献研读、多轮复杂代码生成）普遍要求 32K 至 128K 的长上下文感知能力。
+  然而，由式 2.1 可见，标准自注意力具有内在的 O(N^2) 计算复杂度与线性增长的 KV Cache 显存占用。
+  右侧实测数据（图 2.1）表明，在 70B 模型中，序列长度扩展到 128K 时，仅单条序列的密集 KV Cache 就需要 84GB 显存，彻底击穿目前业界主流 NVIDIA H100 80GB HBM 的显存上限。
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 30, 600, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$primary"
+      letterSpacing: 1.2
+      text: 01 · RESEARCH BACKGROUND & COMPUTATIONAL WALL
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 48, 860, 34]
+    content:
+      fontSize: 21
+      bold: true
+      color: "$fg"
+      text: 全注意力 \( O(N^2) \) 计算与显存壁垒制约 128K 级长上下文高效推理
+
+  # Top dividing line
+  - elementId: div-top
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 86, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: math-label
+    elementType: text
+    bounds: [50, 98, 460, 20]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$primary"
+      text: 理论基础：标准缩放点积注意力与全局依赖 (Vaswani et al., 2017)
+
+  - elementId: display-formula-1
+    elementType: text
+    bounds: [50, 118, 410, 90]
+    content:
+      fontSize: 15
+      align: [center, middle]
+      text: |
+        <p>\( \mathrm{Attention}(Q, K, V) = \operatorname{Softmax}\left( \frac{QK^T}{\sqrt{d_k}} \right) V = \sum_{j=1}^N \frac{\exp\left( \frac{q_i k_j^T}{\sqrt{d_k}} \right)}{\sum_{l=1}^N \exp\left( \frac{q_i k_l^T}{\sqrt{d_k}} \right)} v_j \)</p>
+
+  - elementId: formula-num
+    elementType: text
+    bounds: [465, 150, 45, 24]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$gray"
+      align: [right, middle]
+      text: (式 2.1)
+
+  - elementId: symbol-expl
+    elementType: text
+    bounds: [50, 214, 460, 75]
+    content:
+      fontSize: 11
+      lineHeight: 1.4
+      color: "$gray"
+      text: |
+        <p><strong>符号定义：</strong>\( Q, K, V \in \mathbb{R}^{N \times d_k} \) 分别表示查询、键、值矩阵；\( N \) 为上下文序列 Token 长度；\( d_k \) 为投影维度；分母对全局 \( l \in [1, N] \) 求和，构成 \( O(N^2) \) 计算量的数学根源。</p>
+
+  - elementId: memory-wall-desc
+    elementType: text
+    bounds: [50, 298, 460, 180]
+    content:
+      fontSize: 12
+      lineHeight: 1.45
+      color: "$fg"
+      text: |
+        <p><strong>显存墙（Memory Wall）瓶颈建模：</strong></p>
+        <p>自回归解码阶段每层 KV Cache 的显存足迹满足关系式：</p>
+        <p style="text-align:center;"><span style="color:#009682; font-weight:bold;">\( M_{\mathrm{KV}} = 2 \times b \times l \times h_{\mathrm{kv}} \times d_k \times N \times \text{sizeof(FP16)} \)</span></p>
+        <p>对于典型 70B 稠密模型（\( l=80, h_{\mathrm{kv}}=8, d_k=128 \)），当 \( N=128\mathrm{K} \) 时：</p>
+        <p>• <strong>GQA-8 压缩机制：</strong>单请求显存占用仍高达 \( 10.5\,\text{GB} \)，多并发下 HBM 极度匮乏；</p>
+        <p>• <strong>标准 MHA 模式：</strong>显存暴涨至 \( 84.0\,\text{GB} \)，已越过单张 80GB GPU 物理极限。</p>
+
+  # Right Column: Matplotlib figure & Quantitative Evidence
+  - elementId: chart-img
+    elementType: image
+    bounds: [535, 102, 375, 230]
+    src: assets/kv_cache_scaling.png
+    fit:
+      mode: contain
+
+  - elementId: chart-caption
+    elementType: text
+    bounds: [535, 336, 375, 42]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.3
+      color: "$gray"
+      text: |
+        <p><strong>图 2.1: 70B 模型单请求 KV Cache 显存随序列长度扩展趋势</strong>。虚线指示单张 H100 80GB HBM 容量界限（数据源：Meta Llama-3 Technical Report, 2024; Dao et al., NeurIPS 2022）。</p>
+
+  - elementId: callout-box
+    elementType: shape
+    shapeName: rect
+    bounds: [535, 386, 375, 92]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$ruleColor"
+
+  - elementId: callout-text
+    elementType: text
+    bounds: [550, 396, 345, 72]
+    content:
+      fontSize: 11
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">● 核心观测：</span>显存带宽饥饿导致首字生成延迟（TTFT）占比超 80%；仅依靠算子层融合（如 FlashAttention-2）无法突破长程计算与存储的阶数诅咒，必须探索<strong>算法级动态稀疏化</strong>。</p>
+
+  # Footer dividing line
+  - elementId: div-bottom
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 498, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: footer-nav
+    elementType: text
+    bounds: [50, 506, 860, 20]
+    content:
+      fontSize: 10
+      color: "$gray"
+      text: |
+        <p>面向长上下文推理的稀疏注意力机制 · 博士学位论文答辩 <span style="float:right;">§1 背景与动机 ｜ 02 / 10</span></p>

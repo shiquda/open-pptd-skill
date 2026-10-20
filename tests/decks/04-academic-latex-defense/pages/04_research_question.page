@@ -1,0 +1,209 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+notes: |
+  第三部分提炼本论文的核心科学问题与理论假设。
+  基于上述文献鸿沟，本论文确立了三大核心科学命题：
+  第一，能否在理论上证明自注意力在有界近似误差下的最优计算复杂度下界？
+  第二，如何设计轻量级的动态路由算法，在不产生 O(N^2) 算力开销的前提下准确定位远端高关联 Token？
+  第三，当序列长度扩展至 128K 以上且多跳推理步数增加时，稀疏化的精度退化边界与稳定性条件为何？
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 30, 600, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$primary"
+      letterSpacing: 1.2
+      text: 03 · RESEARCH QUESTIONS & FORMAL HYPOTHESES
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 48, 860, 34]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$fg"
+      text: 核心科学问题：如何在亚二次方计算预算下实现全向动态感知与误差有界？
+
+  # Top dividing line
+  - elementId: div-top
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 86, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: def-label
+    elementType: text
+    bounds: [50, 98, 430, 20]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$primary"
+      text: 形式化理论命题与有界近似条件 (Formal Problem Definition)
+
+  # Display Formula with Macro definition
+  - elementId: formula-macro
+    elementType: text
+    bounds: [50, 118, 430, 80]
+    content:
+      fontSize: 13.5
+      align: [center, middle]
+      text: |
+        <p>\( \newcommand{\R}{\mathbb{R}} \newcommand{\norm}[1]{\left|#1\right|} \forall x \in \R^{d_k}, \quad \norm{x}_2 = \sqrt{\sum_{i=1}^{d_k} x_i^2} \le C_x \)</p>
+
+  # Display Formula with Limits & Integral
+  - elementId: formula-limit-int
+    elementType: text
+    bounds: [50, 198, 430, 90]
+    content:
+      fontSize: 13.5
+      align: [center, middle]
+      text: |
+        <p>\( \lim_{N \to \infty} \frac{E_{\mathrm{sparse}}(N)}{N} = 0 \Leftrightarrow \left| \int_{0}^{1} p(t) dt - \sum_{k=1}^K w_k p(t_k) \right| &lt; \epsilon \)</p>
+
+  # Determinant matrix vmatrix
+  - elementId: formula-vmatrix
+    elementType: text
+    bounds: [50, 288, 430, 85]
+    content:
+      fontSize: 13.5
+      align: [center, middle]
+      text: |
+        <p>\( \det(\Phi - \lambda I) = \begin{vmatrix} \phi_{11} - \lambda & \phi_{12} \\ \phi_{21} & \phi_{22} - \lambda \end{vmatrix} = 0 \)</p>
+
+  - elementId: def-text
+    elementType: text
+    bounds: [50, 376, 430, 105]
+    content:
+      fontSize: 11
+      lineHeight: 1.4
+      color: "$gray"
+      text: |
+        <p><strong>理论收敛性保证：</strong>通过式 (4.1) 低阶范数上界约束，证明在特征矩阵特征多项式行列式非奇异条件下，稀疏近似算子关于全稠密算子的 Frobenius 范数误差满足：\( \left| \hat{A} - A \right|_{\mathrm{F}} \le \delta \cdot \left| A \right|_{\mathrm{F}} \)。</p>
+
+  # Right Column: The 3 Core Research Questions
+  - elementId: rq-panel-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [505, 98, 405, 385]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$ruleColor"
+
+  - elementId: rq-title
+    elementType: text
+    bounds: [520, 110, 375, 22]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$fg"
+      text: 论文分解的三大核心学术问题 (Key Research Questions)
+
+  # RQ 1
+  - elementId: rq1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [520, 138, 375, 76]
+    fill:
+      type: solid
+      color: "#FFFFFF"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: rq1-text
+    elementType: text
+    bounds: [530, 144, 355, 64]
+    content:
+      fontSize: 10.5
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">Q1 · 复杂度下界命题 (Lower Bound & Convergence)</span></p>
+        <p style="color:#555555;">在保证全局检索误差有界 \( \epsilon &lt; 10^{-2} \) 的前提下，注意力机制的理论时间复杂度能否由 \( O(N^2) \) 严格降阶至 \( O(N^{1.5}) \)？</p>
+
+  # RQ 2
+  - elementId: rq2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [520, 222, 375, 80]
+    fill:
+      type: solid
+      color: "#FFFFFF"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: rq2-text
+    elementType: text
+    bounds: [530, 228, 355, 68]
+    content:
+      fontSize: 10.5
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">Q2 · 算法实现命题 (Lightweight Routing Mechanism)</span></p>
+        <p style="color:#555555;">如何设计无须全量点积计算的轻量级降维投影矩阵 \( W_r \in \mathbb{R}^{m \times d_k} \) 与动态聚类质心路由，实现亚微秒级快速候选块召回？</p>
+
+  # RQ 3
+  - elementId: rq3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [520, 310, 375, 80]
+    fill:
+      type: solid
+      color: "#FFFFFF"
+    border:
+      style: solid
+      width: 0.8
+      color: "$ruleColor"
+
+  - elementId: rq3-text
+    elementType: text
+    bounds: [530, 316, 355, 68]
+    content:
+      fontSize: 10.5
+      lineHeight: 1.35
+      color: "$fg"
+      text: |
+        <p><span style="color:#009682; font-weight:bold;">Q3 · 极限与退化边界命题 (Boundary Conditions)</span></p>
+        <p style="color:#555555;">当长程多跳关联深度 \( T > 5 \) 时，局部稀疏近似的累积截断误差呈现何种发散规律？在哪些极端场景下动态稀疏将发生精度失效？</p>
+
+  - elementId: rq-summary
+    elementType: text
+    bounds: [520, 398, 375, 78]
+    content:
+      fontSize: 10
+      lineHeight: 1.35
+      color: "$gray"
+      text: |
+        <p><strong>答辩论证主线：</strong>后续章节将围绕 Q1、Q2、Q3 逐层展开推导与实证，构造理论自洽、算子可行的完整技术闭环。</p>
+
+  # Footer dividing line
+  - elementId: div-bottom
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 498, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: footer-nav
+    elementType: text
+    bounds: [50, 506, 860, 20]
+    content:
+      fontSize: 10
+      color: "$gray"
+      text: |
+        <p>面向长上下文推理的稀疏注意力机制 · 博士学位论文答辩 <span style="float:right;">§3 科学问题 ｜ 04 / 10</span></p>

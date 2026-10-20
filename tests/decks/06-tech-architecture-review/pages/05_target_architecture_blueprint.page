@@ -1,0 +1,598 @@
+background: { type: solid, color: "$paper" }
+notes: |
+  本页展示目标态的三地四单元多活架构蓝图与物理故障域划分。
+  顶部为边缘 Anycast 智能接入网关，基于用户 UID 哈希算法将请求精确路由至归属单元。
+  系统划分为三个独立的物理故障域：上海核心单元（双单元）、深圳业务单元与北京独立仲裁单元。
+  每个单元内部具备完全独立的应用层、撮合引擎与分片存储，实现 98.5% 的核心写流量就地闭环提交。
+  图中包含三种不同语义的连接线：实线三角箭头代表同步 gRPC 业务流；虚线隐形战机箭头代表跨机房 DTS 异步复制；菱形端点线条代表跨地域 Raft 租约与防脑裂仲裁控制流。所有连线均避开文字与节点边缘。
+elements:
+  # Header
+  - elementId: sec-tag
+    elementType: text
+    bounds: [45, 24, 400, 14]
+    content:
+      text: "05 / 目标架构蓝图与故障域 | TARGET ARCHITECTURE BLUEPRINT"
+      fontSize: 8.5
+      bold: true
+      color: "$active"
+
+  - elementId: main-title
+    elementType: text
+    bounds: [45, 38, 870, 26]
+    content:
+      text: "三地四单元构建独立物理故障域，单元内写自闭环与跨域异步复制消除长尾"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+
+  - elementId: header-line
+    elementType: line
+    bounds: [45, 68, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # Top: Global Edge Anycast Gateway (Spans across all three cell x-positions)
+  - elementId: anycast-box
+    elementType: shape
+    shapeName: rect
+    bounds: [90, 80, 615, 42]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 1, color: "$borderDark" }
+
+  - elementId: anycast-title
+    elementType: text
+    bounds: [100, 84, 595, 16]
+    content:
+      text: "边缘全局 Anycast 智能接入网关 (Anycast BGP + GSLB 动态路由)"
+      fontSize: 9.5
+      bold: true
+      align: [center, middle]
+      color: "$ink"
+
+  - elementId: anycast-desc
+    elementType: text
+    bounds: [100, 102, 595, 16]
+    content:
+      text: "基于 UID Hash % 1024 进行单元绑定 | 智能心跳探测 (RTT/5xx) 秒级切流"
+      fontSize: 8.2
+      align: [center, middle]
+      color: "$muted"
+
+  # Legend Box at Top Right
+  - elementId: legend-box
+    elementType: shape
+    shapeName: rect
+    bounds: [720, 76, 195, 52]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  - elementId: leg1-line
+    elementType: line
+    bounds: [730, 86, 30, 1]
+    points: "0,0 30,0"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$active" }
+
+  - elementId: leg1-text
+    elementType: text
+    bounds: [765, 80, 145, 14]
+    content:
+      text: "同步业务请求 (gRPC/HTTPS)"
+      fontSize: 7.5
+      color: "$ink"
+
+  - elementId: leg2-line
+    elementType: line
+    bounds: [730, 102, 30, 1]
+    points: "0,0 30,0"
+    arrow: [null, stealth]
+    border: { style: dash, width: 1.5, color: "$sync" }
+
+  - elementId: leg2-text
+    elementType: text
+    bounds: [765, 96, 145, 14]
+    content:
+      text: "异步数据复制 (DTS Binlog)"
+      fontSize: 7.5
+      color: "$ink"
+
+  - elementId: leg3-line
+    elementType: line
+    bounds: [730, 118, 30, 1]
+    points: "0,0 30,0"
+    arrow: [null, diamond]
+    border: { style: solid, width: 1.5, color: "$critical" }
+
+  - elementId: leg3-text
+    elementType: text
+    bounds: [765, 112, 145, 14]
+    content:
+      text: "仲裁控制租约 (Raft Quorum)"
+      fontSize: 7.5
+      color: "$ink"
+
+  # ==========================================
+  # Region 1: Shanghai Core Region Cluster
+  # ==========================================
+  - elementId: reg1-container
+    elementType: shape
+    shapeName: rect
+    bounds: [45, 148, 400, 348]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderDark" }
+
+  - elementId: reg1-badge
+    elementType: text
+    bounds: [55, 154, 380, 16]
+    content:
+      text: "【物理故障域 1】 上海核心单元集群 (Region-East)"
+      fontSize: 9
+      bold: true
+      color: "$ink"
+
+  # Region 1: Cell-SH01
+  - elementId: sh01-box
+    elementType: shape
+    shapeName: rect
+    bounds: [55, 175, 185, 310]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  - elementId: sh01-gw
+    elementType: shape
+    shapeName: rect
+    bounds: [65, 185, 165, 42]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$active" }
+
+  - elementId: sh01-gw-text
+    elementType: text
+    bounds: [65, 189, 165, 34]
+    content:
+      text: "单元 Ingress 网关 · SH01\n(路由 UID 0~255 | 鉴权)"
+      fontSize: 7.5
+      bold: true
+      align: [center, middle]
+      color: "$active"
+
+  - elementId: sh01-app
+    elementType: shape
+    shapeName: rect
+    bounds: [65, 238, 165, 42]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  - elementId: sh01-app-text
+    elementType: text
+    bounds: [65, 243, 165, 32]
+    content:
+      text: "核心交易服务集群\n(订单 / 账务 / 撮合前置)\n微秒级就地事务提交"
+      fontSize: 7.5
+      align: [center, middle]
+      color: "$ink"
+
+  - elementId: sh01-db
+    elementType: shape
+    shapeName: rect
+    bounds: [65, 292, 165, 42]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  - elementId: sh01-db-text
+    elementType: text
+    bounds: [65, 296, 165, 34]
+    content:
+      text: "本地分片存储 DB\n(MySQL Shards 0~255)\n独立写日志 WAL"
+      fontSize: 7.2
+      align: [center, middle]
+      color: "$ink"
+
+  - elementId: sh01-dts
+    elementType: shape
+    shapeName: rect
+    bounds: [65, 346, 165, 34]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  - elementId: sh01-dts-text
+    elementType: text
+    bounds: [65, 351, 165, 24]
+    content:
+      text: "DTS 同步引擎客户端\n(Binlog 解析与批量抓取)"
+      fontSize: 7.5
+      align: [center, middle]
+      color: "$sync"
+
+  - elementId: sh01-stat
+    elementType: text
+    bounds: [65, 395, 165, 82]
+    content:
+      text: |
+        • 承载规格：12,000 TPS
+        • 闭环率：98.6%
+        • P95 延迟：18.2ms
+        • 存储主备：本地三副本
+      fontSize: 7.5
+      lineHeight: 1.25
+      color: "$muted"
+
+  # Region 1: Cell-SH02
+  - elementId: sh02-box
+    elementType: shape
+    shapeName: rect
+    bounds: [250, 175, 185, 310]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  - elementId: sh02-gw
+    elementType: shape
+    shapeName: rect
+    bounds: [260, 185, 165, 42]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$active" }
+
+  - elementId: sh02-gw-text
+    elementType: text
+    bounds: [260, 189, 165, 34]
+    content:
+      text: "单元 Ingress 网关 · SH02\n(路由 UID 256~511 | 鉴权)"
+      fontSize: 7.5
+      bold: true
+      align: [center, middle]
+      color: "$active"
+
+  - elementId: sh02-app
+    elementType: shape
+    shapeName: rect
+    bounds: [260, 238, 165, 42]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  - elementId: sh02-app-text
+    elementType: text
+    bounds: [260, 243, 165, 32]
+    content:
+      text: "核心交易服务集群\n(订单 / 账务 / 撮合前置)\n微秒级就地事务提交"
+      fontSize: 7.5
+      align: [center, middle]
+      color: "$ink"
+
+  - elementId: sh02-db
+    elementType: shape
+    shapeName: rect
+    bounds: [260, 292, 165, 42]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  - elementId: sh02-db-text
+    elementType: text
+    bounds: [260, 296, 165, 34]
+    content:
+      text: "本地分片存储 DB\n(MySQL Shards 256~511)\n独立写日志 WAL"
+      fontSize: 7.2
+      align: [center, middle]
+      color: "$ink"
+
+  - elementId: sh02-dts
+    elementType: shape
+    shapeName: rect
+    bounds: [260, 346, 165, 34]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  - elementId: sh02-dts-text
+    elementType: text
+    bounds: [260, 351, 165, 24]
+    content:
+      text: "DTS 同步引擎客户端\n(Binlog 解析与批量抓取)"
+      fontSize: 7.5
+      align: [center, middle]
+      color: "$sync"
+
+  - elementId: sh02-stat
+    elementType: text
+    bounds: [260, 395, 165, 82]
+    content:
+      text: |
+        • 承载规格：12,000 TPS
+        • 闭环率：98.4%
+        • P95 延迟：18.5ms
+        • 存储主备：本地三副本
+      fontSize: 7.5
+      lineHeight: 1.25
+      color: "$muted"
+
+  # ==========================================
+  # Region 2: Shenzhen Regional Cluster
+  # ==========================================
+  - elementId: reg2-container
+    elementType: shape
+    shapeName: rect
+    bounds: [460, 148, 245, 348]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderDark" }
+
+  - elementId: reg2-badge
+    elementType: text
+    bounds: [470, 154, 225, 16]
+    content:
+      text: "【物理故障域 2】 深圳业务单元 (South)"
+      fontSize: 9
+      bold: true
+      color: "$ink"
+
+  # Region 2: Cell-SZ01
+  - elementId: sz01-box
+    elementType: shape
+    shapeName: rect
+    bounds: [470, 175, 225, 310]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  - elementId: sz01-gw
+    elementType: shape
+    shapeName: rect
+    bounds: [485, 185, 195, 42]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$active" }
+
+  - elementId: sz01-gw-text
+    elementType: text
+    bounds: [485, 189, 195, 34]
+    content:
+      text: "单元 Ingress 网关 · SZ01\n(路由 UID 512~767 | 鉴权)"
+      fontSize: 7.5
+      bold: true
+      align: [center, middle]
+      color: "$active"
+
+  - elementId: sz01-app
+    elementType: shape
+    shapeName: rect
+    bounds: [485, 238, 195, 42]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  - elementId: sz01-app-text
+    elementType: text
+    bounds: [485, 243, 195, 32]
+    content:
+      text: "核心交易服务集群\n(订单 / 账务 / 撮合前置)\n微秒级就地事务提交"
+      fontSize: 7.5
+      align: [center, middle]
+      color: "$ink"
+
+  - elementId: sz01-db
+    elementType: shape
+    shapeName: rect
+    bounds: [485, 292, 195, 42]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  - elementId: sz01-db-text
+    elementType: text
+    bounds: [485, 296, 195, 34]
+    content:
+      text: "本地分片存储 DB\n(MySQL Shards 512~767)\n独立写日志 WAL"
+      fontSize: 7.2
+      align: [center, middle]
+      color: "$ink"
+
+  - elementId: sz01-dts
+    elementType: shape
+    shapeName: rect
+    bounds: [485, 346, 195, 34]
+    fill: { type: solid, color: "$surfaceMuted" }
+    border: { style: solid, width: 0.5, color: "$hairline" }
+
+  - elementId: sz01-dts-text
+    elementType: text
+    bounds: [485, 351, 195, 24]
+    content:
+      text: "DTS 同步引擎客户端\n(Binlog 解析与批量抓取)"
+      fontSize: 7.5
+      align: [center, middle]
+      color: "$sync"
+
+  - elementId: sz01-stat
+    elementType: text
+    bounds: [485, 395, 195, 82]
+    content:
+      text: |
+        • 承载规格：12,000 TPS
+        • 闭环率：98.7%
+        • 异地专线：双裸纤 20Gbps
+        • 跨城复制延迟：P95 < 45ms
+      fontSize: 7.5
+      lineHeight: 1.25
+      color: "$muted"
+
+  # ==========================================
+  # Region 3: Beijing Quorum & Standby
+  # ==========================================
+  - elementId: reg3-container
+    elementType: shape
+    shapeName: rect
+    bounds: [720, 148, 195, 348]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderDark" }
+
+  - elementId: reg3-badge
+    elementType: text
+    bounds: [728, 154, 180, 16]
+    content:
+      text: "【物理故障域 3】 北京仲裁 (North)"
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+
+  # BJ Quorum Arbiter Box
+  - elementId: bj-quorum-box
+    elementType: shape
+    shapeName: rect
+    bounds: [730, 175, 175, 115]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 0.75, color: "$critical" }
+
+  - elementId: bj-quorum-title
+    elementType: text
+    bounds: [735, 180, 165, 16]
+    content:
+      text: "全局第三方 Raft 仲裁集群"
+      fontSize: 8
+      bold: true
+      color: "$critical"
+
+  - elementId: bj-quorum-desc
+    elementType: text
+    bounds: [735, 198, 165, 88]
+    content:
+      text: |
+        • 独立地理第三方仲裁点
+        • 动态发放单元写租约 (Lease)
+        • 心跳超时 (1500ms) 触发投票
+        • 强制隔离网络分区 (防脑裂)
+        • Quorum 法定多数派仲裁
+      fontSize: 7.5
+      lineHeight: 1.25
+      color: "$ink"
+
+  # BJ Standby Cell Box
+  - elementId: bj-standby-box
+    elementType: shape
+    shapeName: rect
+    bounds: [730, 300, 175, 185]
+    fill: { type: solid, color: "$paper" }
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  - elementId: bj-standby-title
+    elementType: text
+    bounds: [735, 306, 165, 16]
+    content:
+      text: "Cell-BJ01 容灾冷备单元"
+      fontSize: 8
+      bold: true
+      color: "$sync"
+
+  - elementId: bj-standby-desc
+    elementType: text
+    bounds: [735, 324, 165, 155]
+    content:
+      text: |
+        • UID 768~1023 预留备用
+        • 全量异地冷备只读从库
+        • 极值灾难兜底接管中心
+        • 数据双向镜像备份节点
+        • 自动化平账核验服务
+      fontSize: 7.5
+      lineHeight: 1.3
+      color: "$muted"
+
+  # ==========================================
+  # Connectors (Strictly Clean & Obstacle-Free)
+  # ==========================================
+  # 1. Anycast GW to Cell-SH01 (Sync gRPC) - Triangle (Completely Vertical)
+  - elementId: conn-gw-sh01
+    elementType: line
+    bounds: [147, 122, 1, 63]
+    points: "0,0 0,63"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$active" }
+
+  - elementId: conn-gw-sh01-lbl
+    elementType: text
+    bounds: [153, 128, 100, 14]
+    content:
+      text: "UID 0~255 (gRPC)"
+      fontSize: 7.2
+      color: "$active"
+
+  # 2. Anycast GW to Cell-SH02 (Sync gRPC) - Triangle (Completely Vertical)
+  - elementId: conn-gw-sh02
+    elementType: line
+    bounds: [342, 122, 1, 63]
+    points: "0,0 0,63"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$active" }
+
+  - elementId: conn-gw-sh02-lbl
+    elementType: text
+    bounds: [348, 128, 100, 14]
+    content:
+      text: "UID 256~511 (gRPC)"
+      fontSize: 7.2
+      color: "$active"
+
+  # 3. Anycast GW to Cell-SZ01 (Sync gRPC) - Triangle (Completely Vertical)
+  - elementId: conn-gw-sz01
+    elementType: line
+    bounds: [582, 122, 1, 63]
+    points: "0,0 0,63"
+    arrow: [null, triangle]
+    border: { style: solid, width: 1.5, color: "$active" }
+
+  - elementId: conn-gw-sz01-lbl
+    elementType: text
+    bounds: [588, 128, 100, 14]
+    content:
+      text: "UID 512~767 (gRPC)"
+      fontSize: 7.2
+      color: "$active"
+
+  # 4. Cross-Cell DTS Sync between SH02 DTS and SZ01 DTS - Stealth (Horizontal)
+  - elementId: conn-dts-sync
+    elementType: line
+    bounds: [425, 363, 60, 1]
+    points: "0,0 60,0"
+    arrow: [stealth, stealth]
+    border: { style: dash, width: 1.5, color: "$sync" }
+
+  - elementId: conn-dts-lbl
+    elementType: text
+    bounds: [415, 336, 80, 26]
+    content:
+      text: "DTS 专线复制\n(Binlog RTT 36ms)"
+      fontSize: 6.8
+      align: [center, top]
+      color: "$sync"
+
+  # 5. Quorum Lease to SZ01 DB (Arbitration Lease) - Diamond (Horizontal)
+  - elementId: conn-quorum-sz
+    elementType: line
+    bounds: [705, 490, 25, 1]
+    points: "25,0 0,0"
+    arrow: [null, diamond]
+    border: { style: solid, width: 1.5, color: "$critical" }
+
+  - elementId: conn-quorum-lbl
+    elementType: text
+    bounds: [598, 476, 100, 14]
+    content:
+      text: "Quorum 租约 (1.5s)"
+      fontSize: 6.8
+      align: [right, top]
+      color: "$critical"
+
+  # Footer
+  - elementId: footer-line
+    elementType: line
+    bounds: [45, 510, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  - elementId: footer-meta
+    elementType: text
+    bounds: [45, 516, 500, 16]
+    content:
+      text: "交易核心多活架构评审 | 目标架构蓝图与故障域划分 | 2026-10-20"
+      fontSize: 8.5
+      color: "$muted"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [840, 516, 75, 16]
+    content:
+      text: "PAGE 05 / 10"
+      fontSize: 8.5
+      color: "$muted"
+      align: [right, top]

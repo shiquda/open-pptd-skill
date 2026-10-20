@@ -1,0 +1,395 @@
+pageType: content
+notes: |
+  第六页对全球前六大储能电芯厂商进行横向尽调对比。
+  从出货量看：
+  1. 宁德时代与比亚迪构成了绝对的第一梯队。2023年宁德时代储能电芯出货约40GWh，2024E预计达到68GWh，全球市占率超35%；比亚迪紧随其后，2024E预计达到42GWh。前两强合计占据全球超60%的电芯出货量；
+  2. 二线厂商中，亿纬锂能、瑞浦兰钧、海辰储能与国轩高科快速跟进，均推出了314Ah及更前沿的500Ah-600Ah大容量电芯。
+  右侧尽调研判指出了三大核心分化维度：
+  第一，海外可融资性（Bankability）壁垒极高：海外项目通常要求BNEF Tier-1清单与可融资性尽调报告，宁德与比亚迪享有排他性头部订单优先权；
+  第二，海外与国内毛利剪刀差：宁德时代海外储能业务毛利率超28%，而国内电芯集采价格杀跌导致二线国内毛利率仅在10%左右甚至亏损；
+  第三，海外长周期质保隐形负债：海外大储要求15-20年质保责任，头部企业质保金计提充分（3%-5%），而二线企业出海在质保金计提与当地售后响应能力上存在潜在风险暴露。
+elements:
+  # Navigation Bar (Active: Section 3)
+  - elementId: nav-s1
+    elementType: text
+    bounds: [40, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">01 市场容量与装机</span></p>"
+  - elementId: nav-s2
+    elementType: text
+    bounds: [180, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">02 产业链与技术</span></p>"
+  - elementId: nav-s3
+    elementType: text
+    bounds: [320, 18, 125, 16]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 9pt;\">03 竞争格局与成本</span></strong></p>"
+  - elementId: nav-s4
+    elementType: text
+    bounds: [460, 18, 125, 16]
+    content:
+      text: "<p><span style=\"color: #64748B; font-size: 9pt;\">04 政策壁垒与投资</span></p>"
+  - elementId: nav-tag
+    elementType: text
+    bounds: [700, 18, 220, 16]
+    content:
+      text: "<p style=\"text-align: right;\"><span style=\"color: #2151FF; font-weight: bold; font-size: 8.5pt;\">INVESTMENT COMMITTEE REPORT</span></p>"
+      letterSpacing: 0.8
+  - elementId: nav-active-indicator
+    elementType: shape
+    shapeName: rect
+    bounds: [320, 35, 125, 2]
+    fill: { type: solid, color: "$primary" }
+
+  # Slide Title & Subtitle
+  - elementId: slide-title
+    elementType: text
+    bounds: [40, 42, 880, 26]
+    content:
+      style: "$slideTitle"
+      text: "<p>宁德时代与比亚迪双寡头格局稳固，二线厂商依托314Ah性价比与海外贴牌突围</p>"
+
+  - elementId: slide-subtitle
+    elementType: text
+    bounds: [40, 69, 880, 16]
+    content:
+      style: "$subtitle"
+      text: "<p>全球前六大储能电芯厂商尽调多维横评：出货体量、主流电芯规格、标称寿命、海外占比与BNEF可融资性评级</p>"
+
+  - elementId: slide-top-divider
+    elementType: line
+    bounds: [40, 89, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Left Native Table (Dense multi-col/multi-row, merged headers, hairline rules)
+  - elementId: table-tier1-cells
+    elementType: table
+    bounds: [40, 98, 615, 398]
+    columnWidths: [0.18, 0.12, 0.12, 0.16, 0.14, 0.14, 0.14]
+    rowHeights: [0.10, 0.10, 0.133, 0.133, 0.133, 0.133, 0.133, 0.135]
+    rows:
+      # Header Row 0 (with rowSpan and colSpan)
+      - - text: "<p style=\"text-align: left;\"><strong>厂商名称</strong></p>"
+          rowSpan: 2
+          align: [left, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: center;\"><strong>全球出货 (GWh)</strong></p>"
+          colSpan: 2
+          align: [center, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: center;\"><strong>主力规格</strong></p>"
+          rowSpan: 2
+          align: [center, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: right;\"><strong>循环寿命</strong></p>"
+          rowSpan: 2
+          align: [right, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: right;\"><strong>海外占比</strong></p>"
+          rowSpan: 2
+          align: [right, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+        - text: "<p style=\"text-align: center;\"><strong>可融资性</strong></p>"
+          rowSpan: 2
+          align: [center, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$dark" }, null]
+
+      # Header Row 1 (sub-headers for col 1 & 2)
+      - - text: "<p style=\"text-align: right;\"><strong>2023</strong></p>"
+          align: [right, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p style=\"text-align: right;\"><strong>2024E</strong></p>"
+          align: [right, middle]
+          fill: { type: solid, color: "$dark" }
+          color: "$white"
+          bold: true
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$dark" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 1: CATL (Emphasis row)
+      - - text: "<p><strong>宁德时代 (CATL)</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>40.0</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p><strong>68.0</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>314Ah / 天恒5MWh</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>15,000 次</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>35.2%</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p><strong>Tier 1 (极高)</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 2: BYD (Emphasis row)
+      - - text: "<p><strong>比亚迪 (BYD)</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [left, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>28.4</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p><strong>42.0</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>刀片 / MC Cube-T</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>10,000 次</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>38.5%</p>"
+          fill: { type: solid, color: "$tint" }
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p><strong>Tier 1 (极高)</strong></p>"
+          fill: { type: solid, color: "$tint" }
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 3: EVE
+      - - text: "<p><strong>亿纬锂能 (EVE)</strong></p>"
+          align: [left, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>14.2</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>26.0</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>Mr.Big 628Ah / 314</p>"
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>12,000 次</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>28.0%</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>Tier 1 (高)</p>"
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 4: REPT
+      - - text: "<p><strong>瑞浦兰钧 (REPT)</strong></p>"
+          align: [left, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>12.1</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>18.5</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>问顶 320Ah / 345Ah</p>"
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>10,000 次</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>18.5%</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>Tier 1 (中高)</p>"
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 5: Hithium
+      - - text: "<p><strong>海辰储能 (Hithium)</strong></p>"
+          align: [left, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>10.5</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>16.0</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>314Ah / MIC 1130Ah</p>"
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>11,000 次</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>22.0%</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>Tier 1 (中)</p>"
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+      # Data Row 6: Gotion
+      - - text: "<p><strong>国轩高科 (Gotion)</strong></p>"
+          align: [left, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>8.2</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>13.0</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>314Ah / G刻系列</p>"
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>10,000 次</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>29.5%</p>"
+          align: [right, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+        - text: "<p>Tier 1 (中)</p>"
+          align: [center, middle]
+          fontSize: 8.5
+          border: [{ style: solid, width: 0.5, color: "$border" }, null, { style: solid, width: 0.5, color: "$border" }, null]
+
+  # Right Interpretation Panel
+  - elementId: right-dd-panel-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [670, 98, 250, 398]
+    fill: { type: solid, color: "$panelBg" }
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: right-dd-panel-header
+    elementType: text
+    bounds: [680, 108, 230, 20]
+    content:
+      text: "<p><strong><span style=\"color: #041C2C; font-size: 10pt;\">尽调关键发现与财务透视</span></strong></p>"
+
+  - elementId: right-dd-panel-body
+    elementType: text
+    bounds: [680, 134, 230, 260]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">① 可融资性（Bankability）垄断</span></strong></p>
+        <p style="margin-top: 3px; color: #334155; font-size: 8.5pt; line-height: 1.35;">海外公用事业级独立大储必须取得国际商业银行的非追索权贷款，BNEF Tier-1入围是硬性门槛，前二强享有海外超60%高端订单份额。</p>
+
+        <p style="margin-top: 10px;"><strong><span style="color: #2151FF;">② 海外与国内毛利率剪刀差</span></strong></p>
+        <p style="margin-top: 3px; color: #334155; font-size: 8.5pt; line-height: 1.35;">宁德时代海外储能电芯综合毛利率仍维系在25%–28%高位，而国内纯代工电芯毛利率已被打压至10%以内，盈利严重依赖海外出货支撑。</p>
+
+        <p style="margin-top: 10px;"><strong><span style="color: #2151FF;">③ 质保准备金与索赔暴露风险</span></strong></p>
+        <p style="margin-top: 3px; color: #334155; font-size: 8.5pt; line-height: 1.35;">海外大储质保期普遍长达15–20年，头部企业按营收3%-5%计提质保金；二线抢单企业质保金计提普遍不足1.5%，存在远期或有负债风险。</p>
+
+  - elementId: right-dd-panel-bottom
+    elementType: shape
+    shapeName: rect
+    bounds: [678, 408, 234, 76]
+    fill: { type: solid, color: "$tint" }
+    border: { style: solid, width: 0.8, color: "$primary" }
+
+  - elementId: right-dd-panel-bottom-txt
+    elementType: text
+    bounds: [684, 414, 222, 64]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF; font-size: 8.5pt;">投委会筛选建议：</span></strong></p>
+        <p style="margin-top: 3px; color: #041C2C; font-size: 8pt; line-height: 1.3;">锁定具备海外成熟交付经验、具备BNEF Tier-1可融资性背书的头部电芯供应商，警惕缺乏海外售后能力的中小厂。</p>
+
+  # Bottom hairline and footer
+  - elementId: slide-bottom-line
+    elementType: line
+    bounds: [40, 508, 880, 1]
+    points: "0,0 880,0"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  - elementId: slide-foot-src
+    elementType: text
+    bounds: [40, 514, 740, 16]
+    content:
+      style: "$footnote"
+      text: "<p>数据来源：各公司2023年报及2024半年报、InfoLink全球储能供应链调研、BloombergNEF (BNEF) 2024 Tier 1清单</p>"
+
+  - elementId: slide-foot-page
+    elementType: text
+    bounds: [820, 514, 100, 16]
+    content:
+      style: "$footnote"
+      text: "<p style=\"text-align: right;\"><strong><span style=\"color: #041C2C;\">06</span></strong> / 10</p>"

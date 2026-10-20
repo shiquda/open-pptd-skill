@@ -1,0 +1,166 @@
+pageType: content
+background:
+  type: solid
+  color: "$white"
+notes: "这是第 7 页实操案例的标准解答。整个诊断推理过程遵循了严格的排除法：三设备断网排除了终端，PON常亮排除了局端，WAN口橙色加上扫除动作精准锁定了网线虚接。请大家对比自己的分析，看看是否也是顺着这条逻辑链推理出来的。如果是，说明你已经真正掌握了分层定界法。在今后的家庭生活中，遇到类似问题就能做到不慌不忙，一击即中。"
+elements:
+  - elementId: top-rule
+    elementType: shape
+    bounds: [40, 20, 880, 2]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: nav-section
+    elementType: text
+    bounds: [40, 28, 260, 18]
+    content:
+      text: "阶段五 / 评价反馈 (FEEDBACK)"
+      fontSize: 9.5
+      bold: true
+      color: "$primaryDeep"
+      letterSpacing: 1.0
+
+  - elementId: running-head
+    elementType: text
+    bounds: [680, 28, 240, 18]
+    content:
+      text: "家庭网络排障实操课 · 答案复盘"
+      fontSize: 9.5
+      color: "$grayLight"
+      align: [right, top]
+
+  - elementId: page-title
+    elementType: text
+    bounds: [40, 48, 880, 28]
+    content:
+      text: "演练复盘：路由 WAN 口松动与会话未释放，重插网线即恢复连通"
+      style: "$title"
+
+  - elementId: page-subtitle
+    elementType: text
+    bounds: [40, 78, 880, 20]
+    content:
+      text: "练习示例 · 诊断推理过程、失误点定位与防错检查规则（与第 07 页演练对齐）"
+      style: "$subtitle"
+
+  - elementId: feedback-tag
+    elementType: shape
+    bounds: [40, 106, 250, 24]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: feedback-tag-text
+    elementType: text
+    bounds: [40, 106, 250, 24]
+    content:
+      text: "【参考解答与推理路径 · 诊断复盘】"
+      style: "$badge"
+      align: [center, middle]
+      wrap: false
+      letterSpacing: 0.5
+
+  - elementId: left-deduction-box
+    elementType: shape
+    bounds: [40, 138, 420, 310]
+    shapeName: rect
+    fill: { type: solid, color: "$lightBlue" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: left-deduction-header
+    elementType: text
+    bounds: [56, 150, 388, 22]
+    content:
+      text: "<p><strong>标准三步推导逻辑链 (Deduction Chain)</strong></p>"
+      fontSize: 12
+      bold: true
+      color: "$primaryDeep"
+
+  - elementId: step-deduct-1
+    elementType: text
+    bounds: [56, 178, 388, 70]
+    content:
+      text: |
+        <p><strong>第一步：排除终端个体故障（定界往上移）</strong><br/>
+        手机、电视、笔记本三台设备使用不同操作系统（iOS/Android/Windows），同时报连接超时，证伪了单机无线网卡驱动或私密 MAC 冲突假说，故障点必定在网络公共干道上。</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: step-deduct-2
+    elementType: text
+    bounds: [56, 256, 388, 70]
+    content:
+      text: |
+        <p><strong>第二步：排除运营商光纤与欠费（定界往下移）</strong><br/>
+        光猫 PON 绿灯常亮、LOS 完全熄灭，证实物理光路光衰优良，与机房 OLT 注册完好；且昨日刚缴纳宽带费，排除了欠费停机。<strong>此时绝不能拨打报修电话，否则徒增等待。</strong></p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: step-deduct-3
+    elementType: text
+    bounds: [56, 334, 388, 104]
+    content:
+      text: |
+        <p><strong>第三步：锁定光猫至路由器连接网线（精准击中）</strong><br/>
+        路由器 Internet/WAN 指示灯呈橙色慢闪，结合上午电视柜挪动历史，直接推导出：<strong>光猫 LAN 口连入路由器 WAN 口的六类网线在清扫中被外力扯松或卡扣脱钩</strong>，导致物理层协商降级或断开，路由器无法通过 DHCP 从光猫获取有效 IP。</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: right-solution-box
+    elementType: shape
+    bounds: [500, 138, 420, 310]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: right-solution-header
+    elementType: text
+    bounds: [516, 150, 388, 22]
+    content:
+      text: "<p><strong>正确处置三部曲与防错复盘 (Action & Verification)</strong></p>"
+      fontSize: 12
+      bold: true
+      color: "$primaryDeep"
+
+  - elementId: right-solution-content
+    elementType: text
+    bounds: [516, 178, 388, 260]
+    content:
+      autofit: fit_text
+      text: |
+        <p><strong>1. 现场第一处置动作：</strong><br/>
+        走向弱电箱，找到连接光猫与路由器的主要网线。将两端水晶头分别用力按入光猫 LAN1 口与路由器 WAN 口（通常为蓝色），<strong>直至听见清脆的塑料弹片“咔哒”机械锁定声</strong>。</p>
+        <p><strong>2. 观察指示灯转正反馈：</strong><br/>
+        按紧网线后静待 10~15 秒，观察路由器 Internet/WAN 指示灯由橙色慢闪转为<strong>常亮或快速绿色频闪</strong>。电视与手机网页应在 30 秒内自愈恢复访问。</p>
+        <p><strong>3. 若指示灯仍未变绿（二次备用方案）：</strong><br/>
+        若指示灯依旧为橙色，说明水晶头弹片已折断或金属触点氧化。执行「序贯断电冷启动」：先拔光猫和路由器电源，静置 30 秒后依次重新通电；若仍不通，换一条备用千兆网线测试。</p>
+        <p><strong>防错总结：</strong>切忌一看到断网就掏牙签捅 Reset！全屋断网有超过 70% 属于此类机械外力导致的虚接，手摇按紧即可恢复。</p>
+      style: "$body"
+      fontSize: 9.6
+      lineHeight: 1.35
+
+  - elementId: bottom-learning-anchor
+    elementType: text
+    bounds: [40, 462, 880, 30]
+    content:
+      text: "<p><strong>核心原则：</strong>看灯知因，按线解难。排障永远从物理最薄弱点（插头卡扣、电线弯折）查起，以零破坏性的机械确认开始，以序贯冷启动结束。</p>"
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+
+  - elementId: bottom-source-line
+    elementType: text
+    bounds: [40, 508, 800, 18]
+    content:
+      text: "说明：本页为第 07 页虚拟演练之官方解析标准，用于强化排障推理因果严密性"
+      style: "$caption"
+
+  - elementId: bottom-page-number
+    elementType: text
+    bounds: [870, 508, 50, 18]
+    content:
+      text: "08"
+      style: "$caption"
+      align: [right, top]

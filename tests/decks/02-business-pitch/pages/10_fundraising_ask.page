@@ -1,0 +1,209 @@
+pageType: content
+notes: "最后是我们的融资计划。本轮拟募集 1,500 万美元，45% 用于复制印尼成功经验，拓展越南、泰国与菲律宾市场；30% 用于深化 AI 预测温控算法。我们规划在 2026 年实现 8 万辆联网车辆、ARR 突破 3,500 万美元并实现规模化盈利。非常期待与各位有远见的投资人携手，共同定义东南亚冷链新基建！"
+elements:
+  # Navigation / Chapter locator
+  - elementId: nav-chapter
+    elementType: text
+    bounds: [50, 24, 400, 20]
+    content:
+      style: "$chapter"
+      text: "08 融资需求 | THE ASK & MILESTONES"
+
+  - elementId: nav-line
+    elementType: line
+    bounds: [50, 48, 860, 1]
+    viewBox: [860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 1, color: "$primary"}
+
+  # Assertion Title & Subtitle
+  - elementId: title
+    elementType: text
+    bounds: [50, 58, 860, 32]
+    content:
+      style: "$title"
+      text: "拟通过 A 轮融资 1,500 万美元，加速拓展越/泰/菲三国市场并升级 AI 预测温控"
+
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 92, 860, 20]
+    content:
+      style: "$subtitle"
+      text: "募集资金规划与 2024-2026 年三年里程碑目标：从印尼第一跨越为东盟全境冷链数字化领跑者"
+
+  # Left Column: The Ask & Capital Allocation (w: 360)
+  - elementId: ask-summary-box
+    elementType: shape
+    bounds: [50, 126, 360, 68]
+    shapeName: rect
+    fill: {type: solid, color: "$mint"}
+    border: {style: solid, width: 1.5, color: "$primary"}
+
+  - elementId: ask-sum-title
+    elementType: text
+    bounds: [65, 134, 330, 24]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "A 轮拟融资规模：$15,000,000 美元"
+
+  - elementId: ask-sum-desc
+    elementType: text
+    bounds: [65, 158, 330, 28]
+    content:
+      fontSize: 10.5
+      color: "$text"
+      text: "出让股权比例：15.0% - 20.0% · 投后估值约 7,500 万 - 1 亿美元"
+
+  - elementId: capital-alloc-title
+    elementType: text
+    bounds: [50, 206, 360, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "资金投向分配 (Capital Allocation)"
+
+  # 4 Allocation Rows
+  - elementId: alloc-row-1
+    elementType: text
+    bounds: [50, 232, 360, 38]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>• 45% ($675 万) 区域市场跨国扩张</b><br/>在越南 (胡志明/河内)、泰国 (曼谷) 及菲律宾设本地销售网络"
+
+  - elementId: alloc-row-2
+    elementType: text
+    bounds: [50, 274, 360, 38]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>• 30% ($450 万) AI 算法与平台研发</b><br/>升级热带暴雨气象大模型多温区预测性调度算法及离线协议"
+
+  - elementId: alloc-row-3
+    elementType: text
+    bounds: [50, 316, 360, 38]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>• 15% ($225 万) 硬件供应链与生态铺设</b><br/>LoRaWAN/BLE 车载网关规模化集采，进一步摊薄单车硬件成本"
+
+  - elementId: alloc-row-4
+    elementType: text
+    bounds: [50, 358, 360, 38]
+    fill: {type: solid, color: "$bgLight"}
+    content:
+      style: "$body"
+      text: "<b>• 10% ($150 万) 营运资金与各国合规认证</b><br/>东盟各国冷链医药食品合规认证储备与海外营运安全资金"
+
+  # Right Column: Phased Milestone Roadmap (2024 - 2026) (w: 480)
+  - elementId: roadmap-title
+    elementType: text
+    bounds: [440, 126, 470, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "三年跨越式里程碑演进路线图 (2024 - 2026E)"
+
+  # Phase 1: 2024 (TODAY)
+  - elementId: phase-1-chevron
+    elementType: shape
+    bounds: [440, 154, 470, 72]
+    shapeName: chevron
+    adjustments: [40000]
+    fill: {type: solid, color: "$primary"}
+
+  - elementId: phase-1-txt
+    elementType: text
+    bounds: [485, 158, 395, 64]
+    content:
+      fontSize: 10
+      color: "$white"
+      lineHeight: 1.35
+      text: "<b>2024 年 · 深化印尼基本盘 (当前阶段 TODAY)</b><br/>• 覆盖冷藏车辆：<b>1.2 万辆</b> · 监测冷库：<b>180 座</b><br/>• 年化 ARR：<b>$620 万美元</b> · 确立印尼冷链 SaaS 第一品牌"
+
+  # Phase 2: 2025
+  - elementId: phase-2-chevron
+    elementType: shape
+    bounds: [440, 234, 470, 72]
+    shapeName: chevron
+    adjustments: [40000]
+    fill: {type: solid, color: "$accent"}
+
+  - elementId: phase-2-txt
+    elementType: text
+    bounds: [485, 238, 395, 64]
+    content:
+      fontSize: 10
+      color: "$white"
+      lineHeight: 1.35
+      text: "<b>2025 年 · 进军越南与泰国核心市场</b><br/>• 联网车辆突破：<b>3.5 万辆</b> · 泛亚跨境果蔬冷运专线贯通<br/>• 年化 ARR 目标：<b>$1,800 万美元</b> · 启动冷运交易撮合佣金"
+
+  # Phase 3: 2026
+  - elementId: phase-3-chevron
+    elementType: shape
+    bounds: [440, 314, 470, 72]
+    shapeName: chevron
+    adjustments: [40000]
+    fill: {type: solid, color: "$primary"}
+
+  - elementId: phase-3-txt
+    elementType: text
+    bounds: [485, 318, 395, 64]
+    content:
+      fontSize: 10
+      color: "$white"
+      lineHeight: 1.35
+      text: "<b>2026 年 · 覆盖东盟全境，实现规模盈利</b><br/>• 联网车辆规模：<b>8.0 万辆</b> · 覆盖东盟 6 大核心国家<br/>• 年化 ARR 冲刺：<b>$3,600 万美元</b> · 综合 EBITDA 全面转正"
+
+  # Investor Contact Strip
+  - elementId: contact-box
+    elementType: shape
+    bounds: [440, 394, 470, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1, color: "$accent"}
+
+  - elementId: contact-txt
+    elementType: text
+    bounds: [450, 398, 450, 20]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$primary"
+      align: [center, middle]
+      text: "IR 联络：ir@coldsync.io | 期待与您携手共建东南亚冷链新基建！"
+
+  # Bottom Synthesis Bar
+  - elementId: so-what-bar
+    elementType: shape
+    bounds: [50, 428, 860, 42]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1, color: "$primary"}
+
+  - elementId: so-what-text
+    elementType: text
+    bounds: [65, 432, 830, 32]
+    content:
+      style: "$synthesis"
+      text: "投资总结：ColdSync 兼具 SaaS 的高粘性现金流与产业互联网的万亿交易爆发力，本轮融资将助力我们在 18 个月内奠定东盟绝对垄断地位。"
+
+  # Fixed Footer
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 498, 600, 18]
+    content:
+      style: "$caption"
+      text: "融资规划与财务测算：ColdSync 管理层业务模型 (示例数据)"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [810, 498, 100, 18]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "10 / 10"

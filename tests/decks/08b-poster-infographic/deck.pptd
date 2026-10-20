@@ -1,0 +1,39 @@
+version: v2
+title: 中国新能源汽车 2025 年销量与充电网络单页数据看板
+size: [1080, 1080]
+theme:
+  colors:
+    posterBg: "#111317"
+    panelBg: "#1A1D24"
+    cardBorder: "#262B34"
+    accentGold: "#F59E0B"
+    accentGreen: "#10B981"
+    textPrimary: "#F9FAFB"
+    textSecondary: "#9CA3AF"
+    textMuted: "#6B7280"
+  tableStyles:
+    posterTable:
+      cellStyle:
+        fontSize: 8.5
+        color: "#9CA3AF"
+        align: [left, middle]
+        border: [null, null, {style: solid, width: 0.5, color: "#262B34"}, null]
+      firstRowStyle:
+        fontSize: 9.0
+        color: "#F9FAFB"
+        bold: true
+        letterSpacing: 0.5
+        align: [center, middle]
+        fill: {type: solid, color: "#16191F"}
+        border: [{style: solid, width: 1.0, color: "#F59E0B"}, null, {style: solid, width: 1.0, color: "#262B34"}, null]
+      lastRowStyle:
+        fontSize: 8.5
+        bold: true
+        color: "#F59E0B"
+        fill: {type: solid, color: "#16191F"}
+        border: [{style: solid, width: 1.0, color: "#262B34"}, null, {style: solid, width: 1.0, color: "#F59E0B"}, null]
+      bodyStyles:
+        - fill: {type: solid, color: "#1A1D24"}
+        - fill: {type: solid, color: "#14171D"}
+pages:
+  - pages/01_poster.page

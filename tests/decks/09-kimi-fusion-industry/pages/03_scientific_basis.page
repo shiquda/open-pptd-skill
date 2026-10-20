@@ -1,0 +1,255 @@
+pageType: content
+notes: |
+  Scientific basis slide. Examines the foundational reaction physics of Deuterium-Tritium (D-T) fusion, the derivation of the Lawson triple product criterion, and the critical distinction between scientific plasma gain (Q_plasma) and engineering net electric gain (Q_eng). Emphasizes that commercial grid power requires Q_plasma of 25 to 40 to overcome thermal conversion Carnot limits and cryogenic magnet auxiliary loads.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "01 · SCIENTIFIC BASIS"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Lawson Criterion Defines Ignition Boundary; Scientific Gain Must Precede Engineering Net Power"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Governing fusion cross-sections, energy release fractions, and the fundamental distinction between plasma and plant gain"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Panel 1 - Reaction Physics
+  - elementId: p1-bg
+    elementType: shape
+    bounds: [50, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: p1-header
+    elementType: shape
+    bounds: [50, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: p1-title
+    elementType: text
+    bounds: [58, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "REACTION ENERGETICS & FUEL CYCLE"
+
+  - elementId: p1-content
+    elementType: text
+    bounds: [58, 142, 260, 216]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>D-T Reaction:</b> \( \mathrm{D} + \mathrm{T} \rightarrow {^4\mathrm{He}}\,(3.52\,\mathrm{MeV}) + n\,(14.06\,\mathrm{MeV}) \)</p>
+        <p><br><b>Energy Partition:</b></p>
+        <p>• <b>Alpha Particle (20%):</b> Carries 3.52 MeV; electrically charged, trapped by magnetic field to provide internal plasma self-heating.</p>
+        <p>• <b>Neutron (80%):</b> Carries 14.06 MeV; uncharged, penetrates first wall into breeding blanket to deposit thermal heat and breed tritium.</p>
+        <p><br><b>Aneutronic Alternatives (p-¹¹B, D-³He):</b></p>
+        <p>Eliminates neutron activation, but requires ion temperatures &gt;100 keV (&gt;1 billion K), where Bremsstrahlung radiation losses severely constrain net gain.</p>
+
+  # Panel 2 - Lawson Criterion
+  - elementId: p2-bg
+    elementType: shape
+    bounds: [342, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: p2-header
+    elementType: shape
+    bounds: [342, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: p2-title
+    elementType: text
+    bounds: [350, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "THE LAWSON TRIPLE PRODUCT"
+
+  - elementId: p2-content
+    elementType: text
+    bounds: [350, 142, 260, 216]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Ignition Criterion:</b> \( n \cdot T \cdot \tau_E \ge 3 \times 10^{21} \, \mathrm{keV}\cdot\mathrm{s}\cdot\mathrm{m}^{-3} \)</p>
+        <p><br><b>Key Plasma Variables:</b></p>
+        <p>• <b>\( n \) (Density):</b> Number of fuel ions per unit volume (~10²⁰ m⁻³ for MCF; ~10³¹ m⁻³ for ICF).</p>
+        <p>• <b>\( T \) (Temperature):</b> Optimal reaction cross-section at 10–20 keV (~100–200 million °C).</p>
+        <p>• <b>\( \tau_E \) (Confinement Time):</b> Rate of energy thermal leakage from the core plasma.</p>
+        <p><br><b>Confinement Dichotomy:</b></p>
+        <p>Magnetic approaches pursue high \( \tau_E \) (seconds) at low density; inertial approaches compress fuel to astronomical density for nanoseconds.</p>
+
+  # Panel 3 - Gain Hierarchy
+  - elementId: p3-bg
+    elementType: shape
+    bounds: [634, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: p3-header
+    elementType: shape
+    bounds: [634, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: p3-title
+    elementType: text
+    bounds: [642, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "GAIN HIERARCHY: PLASMA VS PLANT"
+
+  - elementId: p3-content
+    elementType: text
+    bounds: [642, 142, 260, 216]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Scientific Gain:</b> \( Q_{\mathrm{plasma}} = \frac{P_{\mathrm{fusion}}}{P_{\mathrm{heat,in}}} \)</p>
+        <p>• \( Q = 1 \): Scientific break-even (JET 1997: 0.67; NIF 2022: 1.54 target gain).</p>
+        <p>• \( Q = \infty \): True ignition (alpha self-heating balances losses).</p>
+        <p><br><b>Engineering Plant Gain:</b></p>
+        <p>• \( Q_{\mathrm{eng}} = \frac{P_{\mathrm{elec,gross}}}{P_{\mathrm{recirc}}} &gt; 1 \)</p>
+        <p><br><b>The Commercial Multiplier:</b></p>
+        <p>Because thermal conversion efficiency is 35–45% and auxiliary systems (magnets, cryogenics, heating) consume recirculating power, a commercial power station requires \( Q_{\mathrm{plasma}} \ge 25 - 40 \).</p>
+
+  # Watch Indicators Band
+  - elementId: watch-bg
+    elementType: shape
+    bounds: [50, 384, 860, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: watch-accent
+    elementType: shape
+    bounds: [50, 384, 4, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: watch-label
+    elementType: text
+    bounds: [64, 398, 118, 46]
+    content:
+      fontSize: 7.5
+      bold: true
+      color: "$titleNavy"
+      lineHeight: 1.3
+      text: |
+        <p>WATCH INDICATORS</p>
+        <p>2026–2030</p>
+
+  - elementId: watch-1
+    elementType: text
+    bounds: [190, 398, 250, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Demonstrated plasma gain</b></p>
+        <p>0.67 (JET 1997) → 1.54 target gain (NIF 2022)</p>
+
+  - elementId: watch-2
+    elementType: text
+    bounds: [450, 398, 240, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Ion temperature (keV)</b></p>
+        <p>10–20 keV peak D-T cross-section; p-¹¹B needs &gt;100 keV</p>
+
+  - elementId: watch-3
+    elementType: text
+    bounds: [700, 398, 210, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Recirculating power share</b></p>
+        <p>15–30% of gross generation (magnets, cryogenics, heating)</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Physics Takeaway:</b> Achieving Q_plasma &gt; 1 is an essential laboratory proof of concept; commercial power stations require Q_plasma ≥ 25 to achieve net grid feed."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: J.D. Lawson (Proc. Phys. Soc. B, 1957), J. Freidberg 'Plasma Physics and Fusion Energy' (Cambridge), EUROfusion."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 03 / 16"

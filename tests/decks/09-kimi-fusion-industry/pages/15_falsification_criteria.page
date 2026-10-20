@@ -1,0 +1,283 @@
+pageType: content
+notes: |
+  Falsification criteria slide. Outlines four rigorous, observable conditions that would falsify the commercial fusion thesis: failure to demonstrate TBR >= 1.05 in hardware; first-wall replacement intervals under 6 months; irreversible HTS neutron degradation; and economic preemption by advanced fission SMRs or deep geothermal below $45/MWh. Establishes milestone-gated risk management for institutional investors.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "09 · FALSIFICATION CRITERIA"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Four Observable Hard Thresholds Would Falsify the Commercial Fusion Investment Thesis"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Boundary conditions where technological or economic failure invalidates the commercial investment case"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Pillar 1 - Card
+  - elementId: col-1-bg
+    elementType: shape
+    bounds: [50, 106, 203, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$tagRed"}
+
+  - elementId: col-1-header
+    elementType: shape
+    bounds: [50, 106, 203, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$tagRed"}
+
+  - elementId: col-1-title
+    elementType: text
+    bounds: [58, 111, 187, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$white"
+      text: "1. TRITIUM DEFICIT"
+
+  - elementId: col-1-body
+    elementType: text
+    bounds: [58, 142, 187, 216]
+    content:
+      fontSize: 8.2
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Observable Test:</b></p>
+        <p>Integrated blanket test modules fail to demonstrate net breeding (\( \mathrm{TBR} &lt; 1.02 \)) due to structural parasitic neutron capture or extraction chemistry losses.</p>
+        <p><br><b>Fatal Impact:</b></p>
+        <p>DT fusion encounters a hard physical fuel ceiling by 2038 as global CANDU civilian reserves exhaust. Industry is permanently capped at &lt;3 prototype plants without fuel.</p>
+
+  # Pillar 2 - Card
+  - elementId: col-2-bg
+    elementType: shape
+    bounds: [269, 106, 203, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$tagRed"}
+
+  - elementId: col-2-header
+    elementType: shape
+    bounds: [269, 106, 203, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$tagRed"}
+
+  - elementId: col-2-title
+    elementType: text
+    bounds: [277, 111, 187, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$white"
+      text: "2. NEUTRON DAMAGE"
+
+  - elementId: col-2-body
+    elementType: text
+    bounds: [277, 142, 187, 216]
+    content:
+      fontSize: 8.2
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Observable Test:</b></p>
+        <p>14.1 MeV neutron helium embrittlement causes premature fracture or void swelling in first-wall steels, forcing core vessel replacements every <b>&lt;6 months</b>.</p>
+        <p><br><b>Fatal Impact:</b></p>
+        <p>Plant availability collapses below 50%; recurring replacement capital expenses and radioactive waste handling push LCOE &gt;$180/MWh, eliminating economic viability.</p>
+
+  # Pillar 3 - Card
+  - elementId: col-3-bg
+    elementType: shape
+    bounds: [488, 106, 203, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$tagRed"}
+
+  - elementId: col-3-header
+    elementType: shape
+    bounds: [488, 106, 203, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$tagRed"}
+
+  - elementId: col-3-title
+    elementType: text
+    bounds: [496, 111, 187, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$white"
+      text: "3. HTS DEGRADATION"
+
+  - elementId: col-3-body
+    elementType: text
+    bounds: [496, 142, 187, 216]
+    content:
+      fontSize: 8.2
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Observable Test:</b></p>
+        <p>Fast neutron flux degrades REBCO critical current \( J_c \) by &gt;15% per operating year, and room-temperature thermal annealing fails to restore superconductor pinning.</p>
+        <p><br><b>Fatal Impact:</b></p>
+        <p>The 20-year magnet capital amortization model breaks; replacing high-field toroidal coil sets every 3 years renders the capital expenditure un-bankable.</p>
+
+  # Pillar 4 - Card
+  - elementId: col-4-bg
+    elementType: shape
+    bounds: [707, 106, 203, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$tagRed"}
+
+  - elementId: col-4-header
+    elementType: shape
+    bounds: [707, 106, 203, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$tagRed"}
+
+  - elementId: col-4-title
+    elementType: text
+    bounds: [715, 111, 187, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$white"
+      text: "4. BASELOAD PREEMPTION"
+
+  - elementId: col-4-body
+    elementType: text
+    bounds: [715, 142, 187, 216]
+    content:
+      fontSize: 8.2
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Observable Test:</b></p>
+        <p>Advanced Gen-IV fission SMRs, deep enhanced geothermal (EGS), or multi-day storage achieve commercial scale at <b>&lt;$45/MWh firm power</b> before 2035.</p>
+        <p><br><b>Fatal Impact:</b></p>
+        <p>The commercial market window for fusion closes before NOAK scale is reached; fusion is relegated to niche applications (space propulsion, naval combatants).</p>
+
+  # Watch Indicators Band
+  - elementId: watch-bg
+    elementType: shape
+    bounds: [50, 384, 860, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$tagRed"}
+
+  - elementId: watch-accent
+    elementType: shape
+    bounds: [50, 384, 4, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$tagRed"}
+
+  - elementId: watch-label
+    elementType: text
+    bounds: [64, 398, 118, 46]
+    content:
+      fontSize: 7.5
+      bold: true
+      color: "$tagRed"
+      lineHeight: 1.3
+      text: |
+        <p>TRIGGER POINTS</p>
+        <p>2026–2040</p>
+
+  - elementId: watch-1
+    elementType: text
+    bounds: [190, 398, 250, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>TBR outcome in blanket test</b></p>
+        <p>&lt;1.02 in an integrated module caps the industry at prototype scale</p>
+
+  - elementId: watch-2
+    elementType: text
+    bounds: [450, 398, 240, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>First-wall replacement interval</b></p>
+        <p>&lt;6 months of operation pushes LCOE above $180/MWh</p>
+
+  - elementId: watch-3
+    elementType: text
+    bounds: [700, 398, 210, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Competing firm power price</b></p>
+        <p>A &lt;$45/MWh firm benchmark before 2035 closes the window</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$tagRed"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Falsification Discipline:</b> Private capital tranches and policy subsidies should be conditioned strictly on clearing these four physical gates rather than press releases."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Methodology: Popperian Falsification Framework applied to Deep Tech Infrastructure; UKAEA Risk Matrix."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 15 / 16"

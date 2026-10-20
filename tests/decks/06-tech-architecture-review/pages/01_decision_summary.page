@@ -1,0 +1,253 @@
+background: { type: solid, color: "$paper" }
+notes: |
+  各位委员好，今天向架构委员会正式汇报核心交易系统从单机房主备向异地多活的架构演进方案。
+  在经历 2026 年 3 月的同城光纤物理熔断事故后，现有同城冷备架构暴露了 RTO 过长、跨机房数据滞后导致不敢强切的致命问题。
+  本次评审明确提出三地四单元的单元化演进路线：按用户 UID 划分单元内自闭环，保证核心交易写路径就地提交；
+  在发生机房级故障时，实现核心数据 RPO=0、接管时间 RTO<30s。本报告将逐一阐述目标约束、事故因果、选型权衡、架构蓝图、状态机、时序、压测数据及灰度回滚保障。
+elements:
+  # Document Header & Metadata
+  - elementId: doc-tag
+    elementType: text
+    bounds: [45, 36, 500, 16]
+    content:
+      text: "ARCHITECTURE REVIEW · 容灾架构演进决策摘要"
+      fontSize: 9.5
+      bold: true
+      color: "$brand"
+
+  - elementId: doc-meta-top
+    elementType: text
+    bounds: [550, 36, 365, 16]
+    content:
+      text: "评审类型: P0重大架构方案评审 | 状态: 生产就绪决议 | 版本: v2.4-rc3"
+      fontSize: 8.5
+      color: "$muted"
+      align: [right, top]
+
+  - elementId: hero-title
+    elementType: text
+    bounds: [45, 58, 870, 36]
+    content:
+      text: "核心交易系统异地多活容灾架构演进评审"
+      fontSize: 22
+      bold: true
+      color: "$ink"
+
+  - elementId: hero-subtitle
+    elementType: text
+    bounds: [45, 96, 870, 22]
+    content:
+      text: "从同城冷备迈向三地四单元多活架构：RPO=0、RTO<30s 演进路线与生产就绪决议"
+      fontSize: 12
+      color: "$muted"
+
+  - elementId: header-divider
+    elementType: line
+    bounds: [45, 126, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1.5, color: "$hairline" }
+
+  # Pillar 1
+  - elementId: p1-tag
+    elementType: text
+    bounds: [45, 142, 200, 16]
+    content:
+      text: "01 / 架构演进路径"
+      fontSize: 9
+      bold: true
+      color: "$active"
+
+  - elementId: p1-title
+    elementType: text
+    bounds: [45, 162, 200, 22]
+    content:
+      text: "放弃同城冷备，全面单元化"
+      fontSize: 12
+      bold: true
+      color: "$ink"
+
+  - elementId: p1-body
+    elementType: text
+    bounds: [45, 190, 200, 160]
+    content:
+      text: |
+        • 彻底摒弃传统同城单写主备模式，转向以用户 UID 为单一真理维度的单元化多活架构
+        
+        • 构建三地四单元（上海双单元、深圳业务单元、北京容灾单元），物理故障域完全隔离
+        
+        • 状态定性: [目标架构态 / 待委员会决议]
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$ink"
+
+  # Divider between P1 and P2
+  - elementId: div-1
+    elementType: line
+    bounds: [258, 146, 1, 210]
+    points: "0,0 0,210"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # Pillar 2
+  - elementId: p2-tag
+    elementType: text
+    bounds: [270, 142, 200, 16]
+    content:
+      text: "02 / 容灾指标承诺"
+      fontSize: 9
+      bold: true
+      color: "$sync"
+
+  - elementId: p2-title
+    elementType: text
+    bounds: [270, 162, 200, 22]
+    content:
+      text: "RPO=0 零丢失与秒级接管"
+      fontSize: 12
+      bold: true
+      color: "$ink"
+
+  - elementId: p2-body
+    elementType: text
+    bounds: [270, 190, 200, 160]
+    content:
+      text: |
+        • 同城机房级断电/断网事故：RPO=0，接管 RTO < 15s（自动化探测与域名切流）
+        
+        • 跨省极端自然灾害：RPO=0（强一致对账），异地容灾接管 RTO < 30s
+        
+        • 状态定性: [目标指标承诺 / 基于压测仿真]
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$ink"
+
+  # Divider between P2 and P3
+  - elementId: div-2
+    elementType: line
+    bounds: [483, 146, 1, 210]
+    points: "0,0 0,210"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # Pillar 3
+  - elementId: p3-tag
+    elementType: text
+    bounds: [495, 142, 200, 16]
+    content:
+      text: "03 / 写收敛与闭环"
+      fontSize: 9
+      bold: true
+      color: "$brand"
+
+  - elementId: p3-title
+    elementType: text
+    bounds: [495, 162, 200, 22]
+    content:
+      text: "单元内 98.5% 自闭环"
+      fontSize: 12
+      bold: true
+      color: "$ink"
+
+  - elementId: p3-body
+    elementType: text
+    bounds: [495, 190, 200, 160]
+    content:
+      text: |
+        • 核心下单、扣款、撮合路径在单单元内微秒级就地落盘，杜绝跨地域分布式强事务
+        
+        • 1.5% 跨单元划转采用 TCC 异步最终一致性；全量数据通过 DTS 毫秒级异步双向复制
+        
+        • 状态定性: [核心机制假设 / 流量特征验证]
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$ink"
+
+  # Divider between P3 and P4
+  - elementId: div-3
+    elementType: line
+    bounds: [708, 146, 1, 210]
+    points: "0,0 0,210"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # Pillar 4
+  - elementId: p4-tag
+    elementType: text
+    bounds: [720, 142, 195, 16]
+    content:
+      text: "04 / 灰度与回滚闸口"
+      fontSize: 9
+      bold: true
+      color: "$critical"
+
+  - elementId: p4-title
+    elementType: text
+    bounds: [720, 162, 195, 22]
+    content:
+      text: "四阶段渐进式切流防范"
+      fontSize: 12
+      bold: true
+      color: "$ink"
+
+  - elementId: p4-body
+    elementType: text
+    bounds: [720, 190, 195, 160]
+    content:
+      text: |
+        • 影子流量双写 → 5% 小流量灰度 → 20% 常态运行 → 全量多活切换，设立 14 天观察期
+        
+        • 设立确定性回滚红线：复制延迟 >3000ms 或出现 1 笔数据不一致即刻熔断止血
+        
+        • 状态定性: [实施方案 / SRE验证通过]
+      fontSize: 9.5
+      lineHeight: 1.35
+      color: "$ink"
+  # Middle Horizontal Accent Rule
+  - elementId: mid-divider
+    elementType: line
+    bounds: [45, 375, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # Context & Scope Summary Band
+  - elementId: scope-heading
+    elementType: text
+    bounds: [45, 390, 870, 18]
+    content:
+      text: "架构评审范围与边界说明 (Architecture Review Scope & Trust Boundaries)"
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+
+  - elementId: scope-content
+    elementType: text
+    bounds: [45, 414, 870, 75]
+    content:
+      text: |
+        • 覆盖系统范围：证券现货交易网关、用户账户微服务集群、撮合引擎前置、资金分账库及跨中心 DTS 数据总线。
+        • 外部不可控依赖：沪深/京沪政企骨干物理裸纤（基准 RTT 36.8ms，抖动峰值 48.5ms）；电信/联通 BGP 边缘 Anycast DNS 节点。
+        • 决策通过标准：满足 RPO=0 / RTO<30s 容灾硬指标，单单元容量 ≥12,000 TPS 峰值，且核心业务代码改造成本控制在 15 人月以内。
+      fontSize: 9.5
+      lineHeight: 1.4
+      color: "$muted"
+
+  # Bottom Meta
+  - elementId: footer-divider
+    elementType: line
+    bounds: [45, 508, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  - elementId: footer-meta
+    elementType: text
+    bounds: [45, 516, 500, 16]
+    content:
+      text: "基础架构委员会 · SRE可靠性工程部 · 交易中台技术部 | RFC-2026-ARCH-088"
+      fontSize: 8.5
+      color: "$muted"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [840, 516, 75, 16]
+    content:
+      text: "PAGE 01 / 10"
+      fontSize: 8.5
+      color: "$muted"
+      align: [right, top]

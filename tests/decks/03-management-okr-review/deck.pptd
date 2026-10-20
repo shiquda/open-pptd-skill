@@ -1,0 +1,107 @@
+version: v2
+title: "云枢网络 2026 Q3 经营复盘与 Q4 OKR 承诺"
+size: [960, 540]
+theme:
+  colors:
+    bg: "#FBF9EE"
+    surface: "#FFFFFF"
+    surfaceAlt: "#F6F3E7"
+    ink: "#181716"
+    inkSecondary: "#3C3733"
+    muted: "#6B625D"
+    faint: "#A09B93"
+    border: "#CCC5BE"
+    borderLight: "#E5DFD7"
+    accent: "#FDC356"
+    accentLight: "#FFF1D6"
+    accentDeep: "#C68A1B"
+    statusGreen: "#2D6A4F"
+    statusGreenBg: "#E8F4EC"
+    statusGreenBorder: "#A3D9B8"
+    statusAmber: "#D97706"
+    statusAmberBg: "#FEF3C7"
+    statusAmberBorder: "#FCD34D"
+    statusRed: "#B83A2C"
+    statusRedBg: "#FEE2E2"
+    statusRedBorder: "#FCA5A5"
+    tableHeaderBg: "#EFECE1"
+    tableTotalBg: "#ECE8DC"
+    tableLineHeavy: "#181716"
+    tableLineLight: "#DCD6CC"
+  textStyles:
+    title:
+      fontFamily: "MiSans"
+      fontSize: 18
+      bold: true
+      color: "$ink"
+    subtitle:
+      fontFamily: "MiSans"
+      fontSize: 11
+      color: "$muted"
+    body:
+      fontFamily: "思源宋体"
+      fontSize: 11
+      lineHeight: 1.4
+      color: "$ink"
+    bodySans:
+      fontFamily: "MiSans"
+      fontSize: 11
+      lineHeight: 1.4
+      color: "$ink"
+    metric:
+      fontFamily: "MiSans"
+      fontSize: 24
+      bold: true
+      color: "$ink"
+    label:
+      fontFamily: "MiSans"
+      fontSize: 10
+      color: "$muted"
+    badge:
+      fontFamily: "MiSans"
+      fontSize: 10
+      bold: true
+    footer:
+      fontFamily: "MiSans"
+      fontSize: 9
+      color: "$muted"
+  tableStyles:
+    varianceTable:
+      firstRowStyle:
+        fill: { type: solid, color: "$tableHeaderBg" }
+        color: "$ink"
+        bold: true
+        fontSize: 10
+        align: [center, middle]
+        border: [{ style: solid, width: 1.5, color: "$tableLineHeavy" }, null, { style: solid, width: 1.2, color: "$tableLineHeavy" }, null]
+      firstColumnStyle:
+        bold: true
+        color: "$ink"
+        fontSize: 10
+        align: [center, middle]
+      lastRowStyle:
+        fill: { type: solid, color: "$tableTotalBg" }
+        bold: true
+        color: "$ink"
+        fontSize: 10
+        border: [{ style: solid, width: 1.2, color: "$tableLineHeavy" }, null, { style: solid, width: 2, color: "$tableLineHeavy" }, null]
+      bodyStyles:
+        - fill: { type: solid, color: "$surface" }
+          color: "$ink"
+          fontSize: 10
+          border: [{ style: solid, width: 0.5, color: "$tableLineLight" }, null, { style: solid, width: 0.5, color: "$tableLineLight" }, null]
+        - fill: { type: solid, color: "$surfaceAlt" }
+          color: "$ink"
+          fontSize: 10
+          border: [{ style: solid, width: 0.5, color: "$tableLineLight" }, null, { style: solid, width: 0.5, color: "$tableLineLight" }, null]
+      rowOverColumn: true
+pages:
+  - pages/01_cover.page
+  - pages/02_core_metrics.page
+  - pages/03_cohort_mix.page
+  - pages/04_variance_table.page
+  - pages/05_bridge_waterfall.page
+  - pages/06_project_health.page
+  - pages/07_efficiency_cac.page
+  - pages/08_q4_okrs.page
+  - pages/09_swimlane_requests.page

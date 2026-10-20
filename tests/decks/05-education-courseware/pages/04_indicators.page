@@ -1,0 +1,236 @@
+pageType: content
+background:
+  type: solid
+  color: "$white"
+notes: "指示灯是网络设备向外界发出的第一手生理体征。在观察设备时，请学员严格认准两盏核心灯：光猫上的 LOS 灯和路由器上的 WAN/Internet 灯。只要光猫 LOS 亮红灯或闪烁，意味着入户光纤物理断光，此时任何折腾路由器的行为都是徒劳的，必须立刻致电运营商报修。而如果光猫正常常绿，路由器 WAN 口却亮橙色或灭掉，说明两台设备之间的网线接触不良，重新插紧网线即可恢复。"
+elements:
+  - elementId: top-rule
+    elementType: shape
+    bounds: [40, 20, 880, 2]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: nav-section
+    elementType: text
+    bounds: [40, 28, 260, 18]
+    content:
+      text: "阶段二 / 信号识别 (DEMONSTRATION)"
+      fontSize: 9.5
+      bold: true
+      color: "$primaryDeep"
+      letterSpacing: 1.0
+
+  - elementId: running-head
+    elementType: text
+    bounds: [680, 28, 240, 18]
+    content:
+      text: "家庭网络排障实操课 · 硬件状态解码"
+      fontSize: 9.5
+      color: "$grayLight"
+      align: [right, top]
+
+  - elementId: page-title
+    elementType: text
+    bounds: [40, 48, 880, 28]
+    content:
+      text: "查看光猫与路由器三盏核心指示灯，10 秒判断链路通断"
+      style: "$title"
+
+  - elementId: page-subtitle
+    elementType: text
+    bounds: [40, 78, 880, 20]
+    content:
+      text: "硬件指示灯语义解码：电源(POWER)、光信号(LOS/PON)、网络连接(LAN/WAN)"
+      style: "$subtitle"
+
+  - elementId: modem-panel-box
+    elementType: shape
+    bounds: [40, 108, 420, 316]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: modem-panel-header
+    elementType: text
+    bounds: [56, 120, 388, 22]
+    content:
+      text: "<p><strong>【光猫端】PON 与 LOS 核心指示灯诊断法则</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: modem-item-1-icon
+    elementType: icon
+    bounds: [56, 150, 22, 22]
+    iconName: "fas:circle-check"
+    fill: { type: solid, color: "$success" }
+
+  - elementId: modem-item-1-text
+    elementType: text
+    bounds: [86, 148, 358, 40]
+    content:
+      text: "<p><strong>PON 常亮绿色 / LOS 熄灭（正常）：</strong><br/>入户光纤物理链路完好，光衰正常，局端 OLT 握手注册成功。</p>"
+      style: "$body"
+      fontSize: 10
+      lineHeight: 1.3
+
+  - elementId: modem-item-2-icon
+    elementType: icon
+    bounds: [56, 196, 22, 22]
+    iconName: "fas:triangle-exclamation"
+    fill: { type: solid, color: "$warning" }
+
+  - elementId: modem-item-2-text
+    elementType: text
+    bounds: [86, 194, 358, 54]
+    content:
+      text: "<p><strong>LOS 红灯常亮或闪烁（硬故障）：</strong><br/>入户皮线光纤弯折断裂、光分箱断光或光衰大于 -27dBm。<strong>严禁自行拆解光纤，直接拨打运营商客服报修。</strong></p>"
+      style: "$body"
+      fontSize: 10
+      lineHeight: 1.3
+
+  - elementId: modem-item-3-icon
+    elementType: icon
+    bounds: [56, 256, 22, 22]
+    iconName: "fas:arrows-rotate"
+    fill: { type: solid, color: "$orange" }
+
+  - elementId: modem-item-3-text
+    elementType: text
+    bounds: [86, 254, 358, 40]
+    content:
+      text: "<p><strong>PON 绿灯持续闪烁（认证中/配置异常）：</strong><br/>光猫正在向局端发起测距与逻辑认证。若超过 5 分钟未转常亮，可能宽带欠费或局端正在割接。</p>"
+      style: "$body"
+      fontSize: 10
+      lineHeight: 1.3
+
+  - elementId: modem-item-4-icon
+    elementType: icon
+    bounds: [56, 302, 22, 22]
+    iconName: "fas:plug"
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: modem-item-4-text
+    elementType: text
+    bounds: [86, 300, 358, 40]
+    content:
+      text: "<p><strong>LAN 口绿灯闪烁（网线畅通）：</strong><br/>光猫已识别到路由器 WAN 口接入并有数据包传输；若灯全灭，检查连接线是否松落。</p>"
+      style: "$body"
+      fontSize: 10
+      lineHeight: 1.3
+
+  - elementId: modem-item-5-tip
+    elementType: text
+    bounds: [56, 352, 388, 56]
+    content:
+      text: "<p><strong>光猫实操小结：</strong><br/>只要 LOS 亮起红色警报，家庭内部一切网络重置与调优均无意义；只有 PON 绿灯常亮时，方可将排障重心向后端路由器转移。</p>"
+      fontSize: 9.5
+      color: "$grayText"
+      lineHeight: 1.35
+
+  - elementId: router-panel-box
+    elementType: shape
+    bounds: [500, 108, 420, 316]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$cyan" }
+
+  - elementId: router-panel-header
+    elementType: text
+    bounds: [516, 120, 388, 22]
+    content:
+      text: "<p><strong>【无线路由器端】WAN 与 Wi-Fi 指示灯诊断法则</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: router-item-1-icon
+    elementType: icon
+    bounds: [516, 150, 22, 22]
+    iconName: "fas:circle-check"
+    fill: { type: solid, color: "$success" }
+
+  - elementId: router-item-1-text
+    elementType: text
+    bounds: [546, 148, 358, 40]
+    content:
+      text: "<p><strong>Internet / WAN 绿灯常亮或快闪（正常）：</strong><br/>路由器成功通过 PPPoE 拨号或 DHCP 获取到外网 IP 地址，上行连通正常。</p>"
+      style: "$body"
+      fontSize: 10
+      lineHeight: 1.3
+
+  - elementId: router-item-2-icon
+    elementType: icon
+    bounds: [516, 196, 22, 22]
+    iconName: "fas:circle-xmark"
+    fill: { type: solid, color: "$warning" }
+
+  - elementId: router-item-2-text
+    elementType: text
+    bounds: [546, 194, 358, 54]
+    content:
+      text: "<p><strong>Internet / WAN 橙色/红色常亮（断网重灾区）：</strong><br/>网线插错端口（误插 LAN 口）、网线水晶头松脱、光猫未开机或拨号账号密码错误。<strong>优先排查物理网线！</strong></p>"
+      style: "$body"
+      fontSize: 10
+      lineHeight: 1.3
+
+  - elementId: router-item-3-icon
+    elementType: icon
+    bounds: [516, 256, 22, 22]
+    iconName: "fas:wifi"
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: router-item-3-text
+    elementType: text
+    bounds: [546, 254, 358, 40]
+    content:
+      text: "<p><strong>2.4G / 5G WLAN 绿灯闪烁（无线发射正常）：</strong><br/>路由器无线射频芯片工作正常；若此灯熄灭，说明在管理后台误关闭了无线发射功能。</p>"
+      style: "$body"
+      fontSize: 10
+      lineHeight: 1.3
+
+  - elementId: router-item-4-icon
+    elementType: icon
+    bounds: [516, 302, 22, 22]
+    iconName: "fas:power-off"
+    fill: { type: solid, color: "$grayText" }
+
+  - elementId: router-item-4-text
+    elementType: text
+    bounds: [546, 300, 358, 40]
+    content:
+      text: "<p><strong>SYS / POWER 常亮（主控供电正常）：</strong><br/>若系统指示灯持续红灯快闪且无无线信号，可能固件损坏死锁，需进行冷启动。</p>"
+      style: "$body"
+      fontSize: 10
+      lineHeight: 1.3
+
+  - elementId: router-item-5-tip
+    elementType: text
+    bounds: [516, 352, 388, 56]
+    content:
+      text: "<p><strong>路由器实操小结：</strong><br/>绝大多数“Wi-Fi 满格但打不开网页”的情况，低头查看路由器 Internet 灯必定为橙色或红色。此时重新用力按紧网线，听到卡扣声即可恢复。</p>"
+      fontSize: 9.5
+      color: "$grayText"
+      lineHeight: 1.35
+
+  - elementId: bottom-takeaway
+    elementType: text
+    bounds: [40, 438, 880, 52]
+    content:
+      text: "<p><strong>核心自查口诀：</strong>光猫「无红常亮绿」才是好光路；路由「WAN 口变绿」才通大外网。只要 LOS 红灯闪烁，无需对路由器做任何改动，直接拨打运营商客服报障。</p>"
+      fontSize: 11
+      bold: true
+      color: "$primaryDeep"
+
+  - elementId: bottom-source-line
+    elementType: text
+    bounds: [40, 508, 800, 18]
+    content:
+      text: "标准依据：中华人民共和国通信行业标准 YD/T 1475-2006 接入网技术要求——基于以太网方式的无源光网络 (EPON/GPON)"
+      style: "$caption"
+
+  - elementId: bottom-page-number
+    elementType: text
+    bounds: [870, 508, 50, 18]
+    content:
+      text: "04"
+      style: "$caption"
+      align: [right, top]

@@ -1,0 +1,168 @@
+pageType: content
+notes: "在商业模式上，我们避免了纯硬件销售的低毛利，打造了高粘性的‘SaaS 订阅 + 交易协同’飞轮。右表展示了我们在三类客户群体中的单车经济模型：随着车队规模增大，企业版客户由于采购配载算法与接口定制，单车 ARR 高达 $1,420，毛利率超 80%，NDR 达到惊人的 164%，充分证明了产品价值。"
+elements:
+  # Navigation / Chapter locator
+  - elementId: nav-chapter
+    elementType: text
+    bounds: [50, 24, 400, 20]
+    content:
+      style: "$chapter"
+      text: "05 商业模式 | BUSINESS MODEL & UNIT ECONOMICS"
+
+  - elementId: nav-line
+    elementType: line
+    bounds: [50, 48, 860, 1]
+    viewBox: [860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 1, color: "$primary"}
+
+  # Assertion Title & Subtitle
+  - elementId: title
+    elementType: text
+    bounds: [50, 58, 860, 32]
+    content:
+      style: "$title"
+      text: "订阅制 SaaS + 运力撮合双轮驱动，单车年均 ARR 达 $860 且续费率超 138%"
+
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 92, 860, 20]
+    content:
+      style: "$subtitle"
+      text: "从单车硬件监控起步，沿‘SaaS 基础服务 → 算法增值模块 → 冷链协同网络’三阶递进实现价值变现"
+
+  # Left Column: Monetization Model & Unit Economics (w: 360)
+  - elementId: stream-1-title
+    elementType: text
+    bounds: [50, 126, 360, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "1. 运力 SaaS 订阅费 (占比 65%)"
+
+  - elementId: stream-1-body
+    elementType: text
+    bounds: [50, 148, 360, 50]
+    content:
+      style: "$body"
+      text: "• 按车/冷库月费计费 ($40 - $120/台/月)，按年预付<br/>• 硬件按成本直售 ($99/套) 或押金租赁，不占资金"
+
+  - elementId: stream-2-title
+    elementType: text
+    bounds: [50, 202, 360, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "2. 智能算法增值模块 (占比 25%)"
+
+  - elementId: stream-2-body
+    elementType: text
+    bounds: [50, 224, 360, 50]
+    content:
+      style: "$body"
+      text: "• 多温区智能拼车配载引擎 ($3,500/年/企业)<br/>• 动态渡轮时效调度与油耗异常诊断高级功能包"
+
+  - elementId: stream-3-title
+    elementType: text
+    bounds: [50, 278, 360, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "3. 冷运网络协同佣金 (占比 10% 快速增长)"
+
+  - elementId: stream-3-body
+    elementType: text
+    bounds: [50, 300, 360, 50]
+    content:
+      style: "$body"
+      text: "• 闲置冷藏车运力共享撮合收取 <b>2.5%</b> 交易佣金<br/>• 联合东南亚保险机构提供冷链断链险保费分润"
+
+  # Unit Economics Callout (Pine Green light box)
+  - elementId: left-ue-box
+    elementType: shape
+    bounds: [50, 356, 360, 60]
+    shapeName: rect
+    fill: {type: solid, color: "$mint"}
+    border: {style: solid, width: 1, color: "$accent"}
+
+  - elementId: left-ue-txt
+    elementType: text
+    bounds: [60, 362, 340, 48]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$primary"
+      lineHeight: 1.45
+      text: "单车单元模型：LTV $4,470 / CAC $860 = 5.2x<br/>单车投资回收期 5.8 个月 · 客户终身毛利率 78%"
+
+  # Right Column: Native PPTD Table (w: 480)
+  - elementId: right-table-label
+    elementType: text
+    bounds: [430, 126, 480, 22]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: "客户群体分层与单车经济模型 (Unit Economics)"
+
+  - elementId: table-economics
+    elementType: table
+    bounds: [430, 150, 480, 260]
+    columnWidths: [0.26, 0.24, 0.25, 0.25]
+    rowHeights: [0.18, 0.205, 0.205, 0.205, 0.205]
+    style: "$pineTable"
+    rows:
+      - - text: "运营指标"
+        - text: "小型车队<br/>(15车以下)"
+        - text: "区域 3PL<br/>(15-50车)"
+        - text: "跨国巨头<br/>(>50车)"
+      - - text: "适用套餐"
+        - text: "基础监控版"
+        - text: "智慧运营版"
+        - text: "旗舰企业版"
+      - - text: "单车年 ARR"
+        - text: "$480"
+        - text: "$860"
+        - text: "$1,420"
+      - - text: "综合毛利率"
+        - text: "72.5%"
+        - text: "78.2%"
+        - text: "84.0%"
+      - - text: "净留存率 (NDR)"
+        - text: "112%"
+        - text: "138%"
+        - text: "164%"
+
+  # Bottom Synthesis Bar
+  - elementId: so-what-bar
+    elementType: shape
+    bounds: [50, 428, 860, 42]
+    shapeName: rect
+    fill: {type: solid, color: "$bgLight"}
+    border: {style: solid, width: 1, color: "$primary"}
+
+  - elementId: so-what-text
+    elementType: text
+    bounds: [65, 432, 830, 32]
+    content:
+      style: "$synthesis"
+      text: "商业模式闭环：SaaS 沉淀的真实温控与时效轨迹构筑极高迁移门槛，驱动客户从小微车队自然演变为全网交易节点。"
+
+  # Fixed Footer
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 498, 600, 18]
+    content:
+      style: "$caption"
+      text: "数据口径：ColdSync 2023-2024 运营样本测算 (示例数据)"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [810, 498, 100, 18]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "07 / 10"

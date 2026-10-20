@@ -1,0 +1,208 @@
+pageType: content
+background:
+  type: solid
+  color: "$navy"
+notes: "演讲者备注：第六页采用深色暗场（Midnight Navy），聚焦烘焙热力学曲线。针对高海拔极高密生豆，采用平滑RoR（升温速率）连续衰减模型，在一爆后给予13.5%的发展时间比（DTR），在保留挥发性花果香气的同时充分降解绿原酸，避免任何尖锐草本青涩感。"
+elements:
+  # Fixed top-left section marker
+  - elementId: section-marker
+    elementType: shape
+    bounds: [64, 32, 6, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+
+  - elementId: section-num
+    elementType: text
+    bounds: [78, 32, 400, 24]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 16
+      bold: true
+      color: "$white"
+      text: "06 // THERMODYNAMIC ROAST SPECTRUM"
+
+  - elementId: top-meta-right
+    elementType: text
+    bounds: [768, 32, 448, 24]
+    content:
+      fontFamily: "Arial"
+      fontSize: 10
+      bold: true
+      color: "$gridLine"
+      letterSpacing: 2
+      align: [right, middle]
+      text: "30°N ROASTERY // THERMODYNAMICS LAB // 示例品牌（虚构）"
+
+  - elementId: top-divider
+    elementType: line
+    bounds: [64, 68, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$klein"
+
+  # Heavy rule above headline
+  - elementId: headline-rule
+    elementType: line
+    bounds: [64, 95, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 3
+      color: "$white"
+
+  - elementId: page-headline
+    elementType: text
+    bounds: [64, 110, 1152, 45]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 36
+      bold: true
+      color: "$white"
+      lineHeight: 1.15
+      text: "平滑热动力学曲线：释放高密度铁比卡的极性花果香气"
+
+  # Left 8 columns (x: 64, w: 750): Matplotlib roasting curve chart
+  - elementId: roast-chart
+    elementType: image
+    bounds: [64, 165, 750, 440]
+    src: "assets/roast_profile.png"
+    fit:
+      mode: contain
+    border:
+      style: solid
+      width: 1
+      color: "$klein"
+
+  - elementId: roast-caption
+    elementType: text
+    bounds: [64, 615, 750, 24]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 11
+      color: "$gridLine"
+      text: "FIGURE 06.1 // 30°N 保山铁比卡特选微批次实测烘焙温控曲线（BT 豆温 & RoR 升温速率） // 烘焙机型：Giesen W6A"
+
+  # Right 4 columns (x: 846, w: 370): Thermodynamic principles
+  - elementId: roast-param-1-title
+    elementType: text
+    bounds: [846, 165, 370, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 14
+      bold: true
+      color: "$white"
+      letterSpacing: 1
+      text: "01 // 200°C CHARGE & SOAK"
+
+  - elementId: roast-param-1-desc
+    elementType: text
+    bounds: [846, 195, 370, 75]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.5
+      color: "$paper"
+      text: "200°C高蓄热入豆，配合前30秒微负压闷蒸，使极硬生豆迅速完成核心吸热蓄能，回温点精准锁定在1分15秒（92°C）。"
+
+  - elementId: roast-sep-1
+    elementType: line
+    bounds: [846, 280, 370, 0]
+    points: "0,0 370,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$klein"
+
+  - elementId: roast-param-2-title
+    elementType: text
+    bounds: [846, 295, 370, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 14
+      bold: true
+      color: "$white"
+      letterSpacing: 1
+      text: "02 // MONOTONIC RoR DECLINE"
+
+  - elementId: roast-param-2-desc
+    elementType: text
+    bounds: [846, 325, 370, 75]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.5
+      color: "$paper"
+      text: "严格杜绝任何升温失速（Flick）或停滞（Crash）。RoR自28°C/min匀速线性回落至6°C/min，保证梅纳反应产物纯净无杂味。"
+
+  - elementId: roast-sep-2
+    elementType: line
+    bounds: [846, 410, 370, 0]
+    points: "0,0 370,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$klein"
+
+  - elementId: roast-param-3-title
+    elementType: text
+    bounds: [846, 425, 370, 25]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 14
+      bold: true
+      color: "$white"
+      letterSpacing: 1
+      text: "03 // DTR 13.5% & LIGHT DROP"
+
+  - elementId: roast-param-3-desc
+    elementType: text
+    bounds: [846, 455, 370, 75]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 13
+      lineHeight: 1.5
+      color: "$paper"
+      text: "一爆发生于9分12秒（196°C），发展时间比（DTR）严控于13.5%，11分05秒于208°C出锅冷风骤停，完美锁留茉莉花与白桃精油。"
+
+  # Recurring motif star in white
+  - elementId: roast-star
+    elementType: shape
+    bounds: [846, 550, 36, 36]
+    shapeName: star8
+    adjustments: [37500]
+    fill:
+      type: solid
+      color: "$white"
+
+  - elementId: roast-footnote
+    elementType: text
+    bounds: [896, 550, 320, 50]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 11
+      color: "$gridLine"
+      lineHeight: 1.4
+      text: "热动力学理论参考：Scott Rao《The Coffee Roaster's Companion》与SCA热传导烘焙研究报告"
+
+  # Baseline metadata & source
+  - elementId: bottom-divider
+    elementType: line
+    bounds: [64, 650, 1152, 0]
+    points: "0,0 1152,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$klein"
+
+  - elementId: bottom-info
+    elementType: text
+    bounds: [64, 665, 1152, 24]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 10
+      color: "$gridLine"
+      text: "PAGE 06 // 30°N BRAND BOOK // THERMODYNAMIC LOG // 示例品牌（虚构） // ROAST DATA ARCHIVE 2024"

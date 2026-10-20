@@ -1,0 +1,208 @@
+pageType: content
+background:
+  type: solid
+  color: "$white"
+notes: "请各位学员仔细观察本页给出的三组现场线索。不要急于看下一页的答案。先看现象：三个不同设备都断网，说明是全局问题，排除终端个体故障；再看光猫：PON常亮且LOS不亮，说明外部光纤信号完全正常，直接排除运营商断光；最后看路由器：WAN口橙色慢闪，加上大扫除动过电视柜，答案已经呼之欲出。请在心里写下您的三步推导。"
+elements:
+  - elementId: top-rule
+    elementType: shape
+    bounds: [40, 20, 880, 2]
+    shapeName: rect
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: nav-section
+    elementType: text
+    bounds: [40, 28, 260, 18]
+    content:
+      text: "阶段四 / 实践演练 (PRACTICE)"
+      fontSize: 9.5
+      bold: true
+      color: "$primaryDeep"
+      letterSpacing: 1.0
+
+  - elementId: running-head
+    elementType: text
+    bounds: [680, 28, 240, 18]
+    content:
+      text: "家庭网络排障实操课 · 案例演练"
+      fontSize: 9.5
+      color: "$grayLight"
+      align: [right, top]
+
+  - elementId: page-title
+    elementType: text
+    bounds: [40, 48, 880, 28]
+    content:
+      text: "实操演练：客厅电视与手机同时提示「已连接但无网络」，请诊断故障点"
+      style: "$title"
+
+  - elementId: page-subtitle
+    elementType: text
+    bounds: [40, 78, 880, 20]
+    content:
+      text: "练习示例 · 案例情境与第一手现场排查线索（请独立完成三步因果推导，严禁翻看解答）"
+      style: "$subtitle"
+
+  - elementId: practice-tag
+    elementType: shape
+    bounds: [40, 106, 210, 24]
+    shapeName: rect
+    fill: { type: solid, color: "$primaryDeep" }
+
+  - elementId: practice-tag-text
+    elementType: text
+    bounds: [40, 106, 210, 24]
+    content:
+      text: "【练习示例 · 虚拟实操情境】"
+      style: "$badge"
+      align: [center, middle]
+      wrap: false
+      letterSpacing: 0.5
+
+  - elementId: left-clues-box
+    elementType: shape
+    bounds: [40, 138, 420, 310]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$grayBorder" }
+
+  - elementId: left-clues-header
+    elementType: text
+    bounds: [56, 150, 388, 22]
+    content:
+      text: "<p><strong>现场第一手排查线索记录 (Field Evidence)</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: clue-1-box
+    elementType: text
+    bounds: [56, 178, 388, 70]
+    content:
+      text: |
+        <p><strong>线索一：多终端现象交叉观察</strong><br/>
+        • 手机 Wi-Fi 信号显示满格，但打开任意网页均提示「DNS 连接超时」；<br/>
+        • 客厅智能电视弹出「网络未连接，错误代码 ERR_GATEWAY」；<br/>
+        • 卧室笔记本连入 5G Wi-Fi 同样无法收发工作邮件。</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: clue-2-box
+    elementType: text
+    bounds: [56, 256, 388, 76]
+    content:
+      text: |
+        <p><strong>线索二：弱电柜核心硬件指示灯状态</strong><br/>
+        • <strong>光猫（ONT）：</strong>POWER 绿灯常亮，<span style="color:#34A853;"><strong>PON 绿灯常亮</strong></span>，<span style="color:#202124;"><strong>LOS 灯完全熄灭</strong></span>；<br/>
+        • <strong>路由器：</strong>POWER 绿灯常亮，WLAN 绿灯快闪，<span style="color:#EA4335;"><strong>Internet/WAN 指示灯呈橙色慢闪</strong></span>。</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: clue-3-box
+    elementType: text
+    bounds: [56, 340, 388, 60]
+    content:
+      text: |
+        <p><strong>线索三：近期环境变更与生活记录</strong><br/>
+        • 本季度家庭宽带费用昨日刚刚通过手机运营商营业厅完成扣款并收到到账短信；<br/>
+        • 今天上午全家进行客厅扫除，曾移动过电视柜并擦拭过弱电箱周边线缆。</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: clue-4-summary
+    elementType: text
+    bounds: [56, 408, 388, 30]
+    content:
+      text: "<p><strong>注意：</strong>以上线索均为真实排查记录，请结合前述所学模型进行综合推理。</p>"
+      fontSize: 9.2
+      color: "$grayText"
+
+  - elementId: right-tasks-box
+    elementType: shape
+    bounds: [500, 138, 420, 310]
+    shapeName: rect
+    fill: { type: solid, color: "$bgLight" }
+    border: { style: solid, width: 1, color: "$primary" }
+
+  - elementId: right-tasks-header
+    elementType: text
+    bounds: [516, 150, 388, 22]
+    content:
+      text: "<p><strong>学员任务指令书 (Task Directives)</strong></p>"
+      fontSize: 12
+      color: "$primaryDeep"
+
+  - elementId: task-q1
+    elementType: text
+    bounds: [516, 178, 388, 54]
+    content:
+      text: |
+        <p><strong>任务 1：故障定界划分</strong><br/>
+        根据「三台终端同时断网」与「光猫 PON 常亮、LOS 灭」，故障应该被定界在终端接入层、路由互联层、还是运营商局端？依据是什么？</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: task-q2
+    elementType: text
+    bounds: [516, 240, 388, 54]
+    content:
+      text: |
+        <p><strong>任务 2：致障根因推导</strong><br/>
+        结合「路由器 Internet/WAN 指示灯呈橙色慢闪」与「上午曾移动擦拭弱电箱」，最可能导致断网的物理故障点是什么？</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: task-q3
+    elementType: text
+    bounds: [516, 302, 388, 54]
+    content:
+      text: |
+        <p><strong>任务 3：第一现场实操动作</strong><br/>
+        作为家庭排障第一责任人，你走向弱电箱后应当执行的第一个规范物理动作是什么？请说明操作要领与预期的指示灯反馈。</p>
+      style: "$body"
+      fontSize: 9.8
+      lineHeight: 1.35
+
+  - elementId: criteria-badge-box
+    elementType: shape
+    bounds: [516, 366, 388, 68]
+    shapeName: rect
+    fill: { type: solid, color: "$lightBlue" }
+    border: { style: solid, width: 0.75, color: "$primary" }
+
+  - elementId: criteria-badge-text
+    elementType: text
+    bounds: [526, 372, 368, 56]
+    content:
+      text: "<p><strong>达标检验标准：</strong><br/>• 准确排除电信光纤熔接断裂与欠费原因；<br/>• 精准指出光猫到路由器的连接网线松脱或误拔；<br/>• 给出按紧网线听见“咔哒”声并观察 WAN 灯变绿的恢复判定。</p>"
+      fontSize: 9.2
+      color: "$primaryDeep"
+      lineHeight: 1.3
+
+  - elementId: bottom-hint-line
+    elementType: text
+    bounds: [40, 462, 880, 30]
+    content:
+      text: "<p><strong>学习指引：</strong>请将您的诊断推导写在草稿纸上。完成上述三项回答后，请点击翻至第 08 页查看复盘解析与详细因果链。</p>"
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+
+  - elementId: bottom-source-line
+    elementType: text
+    bounds: [40, 508, 800, 18]
+    content:
+      text: "说明：本案例情境与线索属于虚拟练习示例，用于检验排障四步法的综合掌握程度"
+      style: "$caption"
+
+  - elementId: bottom-page-number
+    elementType: text
+    bounds: [870, 508, 50, 18]
+    content:
+      text: "07"
+      style: "$caption"
+      align: [right, top]

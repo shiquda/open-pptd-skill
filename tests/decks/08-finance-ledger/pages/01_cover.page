@@ -1,0 +1,129 @@
+pageType: cover
+background:
+  type: solid
+  color: "$bgDark"
+notes: |
+  尊敬的投委会委员及研究员：本份报告为示例公司2026年中期财务账本与三张表穿透诊断。
+  主体与数据均为投研模型测试用示例数据，测算口径严格遵循中国企业会计准则及证监会第15号编报规则。
+  中报核心特征体现为：收入增长稳健、归母净利润增速高于营收、经营现金流对净利润保持1.20倍健康覆盖。
+elements:
+  # Watermark at right
+  - elementId: cover-watermark
+    elementType: text
+    bounds: [580, 100, 340, 240]
+    content:
+      text: "<p>2026</p><p>H1</p>"
+      fontSize: 88
+      bold: true
+      color: "#202020"
+      lineHeight: 0.95
+      align: [right, top]
+
+  # Masthead / eyebrow
+  - elementId: cover-masthead
+    elementType: text
+    bounds: [52, 70, 520, 24]
+    content:
+      text: "<p>INTERIM FINANCIAL REPORT · FINANCIAL LEDGER</p>"
+      style: "$coverMasthead"
+
+  # Short gold line signature
+  - elementId: cover-gold-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 104, 46, 4]
+    fill:
+      type: solid
+      color: "$primaryGold"
+
+  # Main title
+  - elementId: cover-title
+    elementType: text
+    bounds: [52, 122, 540, 90]
+    content:
+      text: "<p>示例公司 2026 年中报财务账本</p><p>三张表结构解读与资产负债深度穿透</p>"
+      style: "$coverTitle"
+
+  # Subtitle / scope
+  - elementId: cover-subtitle
+    elementType: text
+    bounds: [52, 222, 520, 36]
+    content:
+      text: "<p>主体标识：示例公司（虚构上市标的 · 示例数据） | 报告期：2026年半年度（截至2026-06-30）</p><p>编报标准：中国企业会计准则（CAS） | 审计状态：未经审计中期财务报告</p>"
+      style: "$subtitleDark"
+
+  # Horizontal divider
+  - elementId: cover-divider
+    elementType: shape
+    shapeName: rect
+    bounds: [52, 275, 520, 1]
+    fill:
+      type: solid
+      color: "$darkDivider"
+  - elementId: cover-kpi-1-val
+    elementType: text
+    bounds: [52, 295, 160, 34]
+    content:
+      text: "<p><strong>48.65</strong> <span style=\"font-size: 13pt;\">亿元</span></p>"
+      fontSize: 22
+      bold: true
+      color: "#FFFFFF"
+  - elementId: cover-kpi-1-lbl
+    elementType: text
+    bounds: [52, 332, 160, 30]
+    content:
+      text: "<p><strong>营业总收入</strong></p><p>同比 +14.2% · 主营业务高景气</p>"
+      fontSize: 8.5
+      color: "$supportingGray"
+      lineHeight: 1.3
+
+  # KPI row: Metric 2 (Gold focal metric)
+  - elementId: cover-kpi-2-val
+    elementType: text
+    bounds: [230, 295, 160, 34]
+    content:
+      text: "<p><strong>6.82</strong> <span style=\"font-size: 13pt;\">亿元</span></p>"
+      style: "$kpiValueGold"
+  - elementId: cover-kpi-2-lbl
+    elementType: text
+    bounds: [230, 332, 160, 30]
+    content:
+      text: "<p><strong>归属于母公司净利润</strong></p><p>同比 +18.5% · 净利率提振至14.0%</p>"
+      fontSize: 8.5
+      color: "$primaryGold"
+      lineHeight: 1.3
+
+  # KPI row: Metric 3
+  - elementId: cover-kpi-3-val
+    elementType: text
+    bounds: [410, 295, 160, 34]
+    content:
+      text: "<p><strong>8.15</strong> <span style=\"font-size: 13pt;\">亿元</span></p>"
+      fontSize: 22
+      bold: true
+      color: "#FFFFFF"
+  - elementId: cover-kpi-3-lbl
+    elementType: text
+    bounds: [410, 332, 160, 30]
+    content:
+      text: "<p><strong>经营活动现金流量净额</strong></p><p>净现比 1.20x · 现金回笼质量优良</p>"
+      fontSize: 8.5
+      color: "$supportingGray"
+      lineHeight: 1.3
+
+  # Bottom basis band
+  - elementId: cover-bottom-band
+    elementType: shape
+    shapeName: rect
+    bounds: [0, 495, 960, 45]
+    fill:
+      type: solid
+      color: "$inkBlack"
+  - elementId: cover-bottom-text
+    elementType: text
+    bounds: [52, 503, 856, 30]
+    content:
+      text: "<p>声明与口径说明：本报告所有数字与公司主体均为系统评测及财务模型展示用示例数据。指标定义与财务报表列报规则遵循《企业会计准则第30号——财务报表列报》及证监会《公开发行证券的公司信息披露编报规则第15号》。</p>"
+      fontSize: 8.0
+      color: "$supportingGray"
+      lineHeight: 1.3

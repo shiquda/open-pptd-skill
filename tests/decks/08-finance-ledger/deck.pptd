@@ -1,0 +1,167 @@
+version: v2
+title: 示例公司 2026 年中报财务账本与三张表深度穿透
+size: [960, 540]
+theme:
+  colors:
+    bgWhite: "#FFFFFF"
+    bgDark: "#151515"
+    inkBlack: "#0A0A0A"
+    charcoal: "#3D3C3A"
+    secondaryGray: "#606060"
+    supportingGray: "#A7A7A7"
+    footnoteGray: "#B6B6B6"
+    lightGray: "#D6D6D6"
+    hairline: "#E9E9E9"
+    panelGray: "#F0F0F0"
+    trackGray: "#F3F3F3"
+    primaryGold: "#D6A000"
+    copperBrown: "#A86038"
+    darkDivider: "#302F2D"
+  textStyles:
+    coverTitle:
+      fontSize: 26
+      bold: true
+      color: "#FFFFFF"
+      lineHeight: 1.25
+    coverMasthead:
+      fontSize: 9
+      bold: true
+      color: "$primaryGold"
+      letterSpacing: 2.0
+    slideTitle:
+      fontSize: 17
+      bold: true
+      color: "$inkBlack"
+      lineHeight: 1.2
+    slideTitleDark:
+      fontSize: 17
+      bold: true
+      color: "#FFFFFF"
+      lineHeight: 1.2
+    subtitle:
+      fontSize: 9.5
+      color: "$secondaryGray"
+      lineHeight: 1.3
+    subtitleDark:
+      fontSize: 9.5
+      color: "$supportingGray"
+      lineHeight: 1.3
+    bodyText:
+      fontSize: 9.0
+      color: "$charcoal"
+      lineHeight: 1.4
+    bodyTextDark:
+      fontSize: 9.0
+      color: "$lightGray"
+      lineHeight: 1.4
+    footnote:
+      fontSize: 7.5
+      color: "$footnoteGray"
+    kpiValue:
+      fontSize: 22
+      bold: true
+      color: "$inkBlack"
+    kpiValueGold:
+      fontSize: 22
+      bold: true
+      color: "$primaryGold"
+    kpiLabel:
+      fontSize: 8.5
+      color: "$secondaryGray"
+  tableStyles:
+    ledgerDefault:
+      cellStyle:
+        fontSize: 8.5
+        color: "$charcoal"
+        align: [left, middle]
+        border: [null, null, {style: solid, width: 0.75, color: "$hairline"}, null]
+      firstRowStyle:
+        fontSize: 8.5
+        color: "$inkBlack"
+        bold: true
+        letterSpacing: 0.8
+        align: [center, middle]
+        border: [{style: solid, width: 1.5, color: "$inkBlack"}, null, {style: solid, width: 1.25, color: "$inkBlack"}, null]
+      bodyStyles:
+        - fill: {type: solid, color: "$bgWhite"}
+        - fill: {type: solid, color: "$panelGray"}
+      lastRowStyle:
+        fontSize: 8.5
+        bold: true
+        color: "$inkBlack"
+        border: [{style: solid, width: 1.25, color: "$inkBlack"}, null, {style: solid, width: 1.5, color: "$inkBlack"}, null]
+    ledgerWide:
+      cellStyle:
+        fontSize: 8.0
+        color: "$charcoal"
+        align: [left, middle]
+        border: [null, null, {style: solid, width: 0.5, color: "$hairline"}, null]
+      firstRowStyle:
+        fontSize: 8.0
+        color: "$inkBlack"
+        bold: true
+        letterSpacing: 0.5
+        align: [center, middle]
+        border: [{style: solid, width: 1.5, color: "$inkBlack"}, null, {style: solid, width: 1.25, color: "$inkBlack"}, null]
+      firstColumnStyle:
+        bold: true
+        color: "$inkBlack"
+      lastRowStyle:
+        fontSize: 8.0
+        bold: true
+        color: "$inkBlack"
+        border: [{style: solid, width: 1.25, color: "$inkBlack"}, null, {style: solid, width: 1.5, color: "$inkBlack"}, null]
+      bodyStyles:
+        - fill: {type: solid, color: "$bgWhite"}
+        - fill: {type: solid, color: "$trackGray"}
+    cashFlowMatrix:
+      rowOverColumn: false
+      cellStyle:
+        fontSize: 8.5
+        color: "$charcoal"
+        align: [left, middle]
+        border: [null, null, {style: solid, width: 0.75, color: "$hairline"}, null]
+      firstRowStyle:
+        fontSize: 8.5
+        color: "$inkBlack"
+        bold: true
+        letterSpacing: 0.8
+        align: [center, middle]
+        border: [{style: solid, width: 1.5, color: "$inkBlack"}, null, {style: solid, width: 1.25, color: "$inkBlack"}, null]
+      firstColumnStyle:
+        bold: true
+        color: "$charcoal"
+        fill: {type: solid, color: "$panelGray"}
+        border: [null, {style: solid, width: 0.75, color: "$lightGray"}, {style: solid, width: 0.75, color: "$hairline"}, null]
+      lastRowStyle:
+        fontSize: 8.5
+        bold: true
+        color: "$inkBlack"
+        fill: {type: solid, color: "$panelGray"}
+        border: [{style: solid, width: 1.25, color: "$inkBlack"}, null, {style: solid, width: 1.5, color: "$inkBlack"}, null]
+    stressMatrix:
+      cellStyle:
+        fontSize: 8.5
+        color: "$charcoal"
+        align: [center, middle]
+        border: [{style: solid, width: 0.5, color: "$lightGray"}, {style: solid, width: 0.5, color: "$lightGray"}, {style: solid, width: 0.5, color: "$lightGray"}, {style: solid, width: 0.5, color: "$lightGray"}]
+      firstRowStyle:
+        fontSize: 8.5
+        bold: true
+        color: "$inkBlack"
+        fill: {type: solid, color: "$panelGray"}
+        border: [{style: solid, width: 1.5, color: "$inkBlack"}, {style: solid, width: 0.5, color: "$lightGray"}, {style: solid, width: 1.25, color: "$inkBlack"}, {style: solid, width: 0.5, color: "$lightGray"}]
+      firstColumnStyle:
+        bold: true
+        color: "$inkBlack"
+        fill: {type: solid, color: "$trackGray"}
+pages:
+  - pages/01_cover.page
+  - pages/02_executive_summary.page
+  - pages/03_income_statement.page
+  - pages/04_balance_sheet_wide.page
+  - pages/05_cash_flow.page
+  - pages/06_solvency_matrix.page
+  - pages/07_segment_overflow_probe.page
+  - pages/08_dupont_framework.page
+  - pages/09_investment_verdict.page

@@ -1,0 +1,320 @@
+pageType: content
+background: { type: solid, color: "$bg" }
+notes: |
+  【第 7 页·管委会演讲备注】
+  第 7 页向大家汇报人效与成本费用率审计。
+  
+  请看左侧的人效与三项费用率表现：
+  1. 人均 ARR 达到 68.5 万元/人，同比增长 12.4%，表现优异；
+  2. 研发费用率下降到 28.5%（下降 3.8 个百分点），G&A 管理费用率稳定在 11.2%，证明中后台的精细化运营效果显著；
+  3. 但最大的成本失血点出现在销售与市场费用率（S&M）上：高达 44.2%，超出 38% 的预算上限整整 6.2 个百分点！
+  
+  这直接导致了右侧图表展示的危机——CAC 回本周期一路恶化，从去年初的 12.4 个月拉长到 Q3 的 17.5 个月，严重超出了 14 个月的健康警戒线。
+  
+  漏斗转化率对比图揭示了罪魁祸首：
+  在“POC 技术验证”阶段，标准客转化率高达 45%，而 KA 大客暴跌到 22%！
+  大量大客户借“技术测试”之名，要求我们免费做架构定制与接口联调，售前人员在现场陪跑两个多月，最后因为预算未批或者竞对低价而流单。
+  
+  管理对策：Q4 立即出台 POC 准入门禁，严禁无预算立项的售前无偿驻场，把 S&M 费用率坚决按回 40% 以内。
+elements:
+  # Top Header Menu & Navigation
+  - elementId: nav-line-1
+    elementType: line
+    bounds: [50, 26, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-2
+    elementType: line
+    bounds: [50, 31, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-line-3
+    elementType: line
+    bounds: [50, 36, 16, 2]
+    points: "0,0 16,0"
+    border: { style: solid, width: 1.5, color: "$ink" }
+
+  - elementId: nav-section-tag
+    elementType: text
+    bounds: [74, 25, 480, 16]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$muted"
+      text: "06 成本人效与获客诊断 · CAC 回本与漏斗分析 (示例公司)"
+
+  - elementId: nav-report-title
+    elementType: text
+    bounds: [660, 25, 250, 16]
+    content:
+      align: [right, middle]
+      fontSize: 10
+      color: "$muted"
+      text: "云枢网络 2026 Q3 经营复盘"
+
+  - elementId: header-divider
+    elementType: line
+    bounds: [50, 46, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.8, color: "$border" }
+
+  # Slide Takeaway Title & Subtitle
+  - elementId: page7-title
+    elementType: text
+    bounds: [50, 54, 860, 24]
+    content:
+      fontFamily: "MiSans"
+      fontSize: 17
+      bold: true
+      color: "$ink"
+      text: "研发费用率优化至 28.5%，但获客 CAC 回本周期由 14 个月恶化至 17.5 个月"
+
+  - elementId: page7-subtitle
+    elementType: text
+    bounds: [50, 78, 860, 16]
+    content:
+      fontSize: 10.5
+      color: "$muted"
+      text: "费用与人效结构诊断：中后台规模效应显现，但前线销售资源在长周期 POC 验证中被深度套牢"
+
+  # ================= LEFT COLUMN: 4 EFFICIENCY METRIC CARDS (Width: 380) =================
+  # Card 1: ARR Per Employee
+  - elementId: eff-card1-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 98, 380, 88]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: eff-card1-name
+    elementType: text
+    bounds: [66, 108, 200, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+      text: "人均 ARR 产出 (ARR / FTE)"
+
+  - elementId: eff-card1-status
+    elementType: text
+    bounds: [300, 108, 116, 18]
+    content:
+      align: [right, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$statusGreen"
+      text: "🟢 优良 (+12.4%)"
+
+  - elementId: eff-card1-num
+    elementType: text
+    bounds: [66, 126, 150, 28]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$ink"
+      text: "68.5 万元/人"
+
+  - elementId: eff-card1-desc
+    elementType: text
+    bounds: [66, 154, 350, 26]
+    content:
+      fontSize: 9
+      color: "$muted"
+      text: "全员编制严控在 420 人以内；标准 SaaS 业务占比提升带来显著人效红利。"
+
+  # Card 2: R&D Expense Ratio
+  - elementId: eff-card2-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 196, 380, 88]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: eff-card2-name
+    elementType: text
+    bounds: [66, 206, 200, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+      text: "研发费用率 (R&D Ratio)"
+
+  - elementId: eff-card2-status
+    elementType: text
+    bounds: [300, 206, 116, 18]
+    content:
+      align: [right, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$statusGreen"
+      text: "🟢 优化 (-3.8pct)"
+
+  - elementId: eff-card2-num
+    elementType: text
+    bounds: [66, 224, 150, 28]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$ink"
+      text: "28.5%"
+
+  - elementId: eff-card2-desc
+    elementType: text
+    bounds: [66, 252, 350, 26]
+    content:
+      fontSize: 9
+      color: "$muted"
+      text: "云原生底座标准化复用，通用基础架构研发开销被摊薄，效能明显提升。"
+
+  # Card 3: S&M Expense Ratio (Red Alert)
+  - elementId: eff-card3-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 294, 380, 94]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$statusRedBorder" }
+    adjustments: [4000]
+
+  - elementId: eff-card3-name
+    elementType: text
+    bounds: [66, 304, 200, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$statusRed"
+      text: "销售获客费用率 (S&M Ratio)"
+
+  - elementId: eff-card3-status
+    elementType: text
+    bounds: [300, 304, 116, 18]
+    content:
+      align: [right, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$statusRed"
+      text: "🔴 超标 (+6.2pct)"
+
+  - elementId: eff-card3-num
+    elementType: text
+    bounds: [66, 322, 150, 28]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$statusRed"
+      text: "44.2%"
+
+  - elementId: eff-card3-desc
+    elementType: text
+    bounds: [66, 350, 350, 32]
+    content:
+      fontSize: 9
+      lineHeight: 1.3
+      color: "$inkSecondary"
+      text: "预算目标 ≤38.0%；大客销售周期延长至 132 天，售前架构师免费驻场吞噬销售预算。"
+
+  # Card 4: G&A Expense Ratio
+  - elementId: eff-card4-bg
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [50, 398, 380, 90]
+    fill: { type: solid, color: "$surface" }
+    border: { style: solid, width: 1, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: eff-card4-name
+    elementType: text
+    bounds: [66, 408, 200, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+      text: "管理费用率 (G&A Ratio)"
+
+  - elementId: eff-card4-status
+    elementType: text
+    bounds: [300, 408, 116, 18]
+    content:
+      align: [right, middle]
+      fontSize: 9.5
+      bold: true
+      color: "$statusGreen"
+      text: "🟢 受控 (11.2%)"
+
+  - elementId: eff-card4-num
+    elementType: text
+    bounds: [66, 426, 150, 28]
+    content:
+      fontSize: 20
+      bold: true
+      color: "$ink"
+      text: "11.2%"
+
+  - elementId: eff-card4-desc
+    elementType: text
+    bounds: [66, 454, 350, 26]
+    content:
+      fontSize: 9
+      color: "$muted"
+      text: "差旅与日常运营流程实现全线上自动化审批，行政管理刚性开支压降良好。"
+
+  # ================= RIGHT COLUMN: LOCAL CHART ASSET + TAKEAWAYS (Width: 460) =================
+  - elementId: cac-chart-img
+    elementType: image
+    src: "assets/cac_payback_and_funnel.png"
+    bounds: [450, 98, 460, 240]
+    fit: { mode: "contain" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+
+  - elementId: cac-analysis-box
+    elementType: shape
+    shapeName: "roundRect"
+    bounds: [450, 348, 460, 140]
+    fill: { type: solid, color: "$surfaceAlt" }
+    border: { style: solid, width: 0.8, color: "$borderLight" }
+    adjustments: [4000]
+
+  - elementId: cac-analysis-title
+    elementType: text
+    bounds: [466, 358, 430, 18]
+    content:
+      fontSize: 10.5
+      bold: true
+      color: "$ink"
+      text: "【销售获客效率阻滞根因与止血机制】"
+
+  - elementId: cac-analysis-text
+    elementType: text
+    bounds: [466, 378, 430, 102]
+    content:
+      fontSize: 9.5
+      lineHeight: 1.38
+      color: "$inkSecondary"
+      text: "• <b>商机漏斗 POC 阶段严重卡死：</b>线索从 MQL 到 SQL 转化顺畅（48%），但 POC 阶段大客转化率暴跌至 22%（标准客为 45%），客户把 POC 当无偿定制试探，平均耗时长达 54 天。<br/>• <b>Q4 刚性止血门禁：</b>建立《POC 准入与收费管理办法》，超过 14 天的 POC 必须预收 10% 技术意向金（签约可抵扣），坚决斩断无预算沉没投入。"
+
+  # Footer
+  - elementId: footer-divider
+    elementType: line
+    bounds: [50, 498, 860, 1]
+    points: "0,0.5 860,0.5"
+    border: { style: solid, width: 0.5, color: "$borderLight" }
+
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 506, 680, 16]
+    content:
+      style: "$footer"
+      text: "指标口径：CAC 计算含销售及市场推广全口径薪酬与差旅开支 · 数据来源：云枢网络财务与销售运营系统 (示例公司/假设口径)"
+
+  - elementId: footer-page-num
+    elementType: text
+    bounds: [850, 506, 60, 16]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      bold: true
+      color: "$ink"
+      text: "07 / 09"

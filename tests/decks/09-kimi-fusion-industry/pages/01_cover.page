@@ -1,0 +1,165 @@
+pageType: cover
+background:
+  type: solid
+  color: "$white"
+notes: |
+  Cover slide. Introduces the industry research briefing on controlled nuclear fusion: from scientific experiment to energy industry. Benchmark visual style features clean serif typography, navy architectural accents, neutral institutional branding, and a vector schematic illustrating high-field compact magnetic confinement.
+elements:
+  # Institutional Eyebrow / Kicker
+  - elementId: cover-eyebrow
+    elementType: text
+    bounds: [50, 42, 600, 18]
+    content:
+      fontSize: 9.5
+      bold: true
+      color: "$titleNavy"
+      letterSpacing: 1.2
+      text: "GLOBAL ENERGY & ADVANCED TECHNOLOGY PRACTICE · INDUSTRY RESEARCH BRIEFING"
+
+  # Main Display Title (Serif)
+  - elementId: cover-title
+    elementType: text
+    bounds: [50, 160, 520, 130]
+    content:
+      fontFamily: "思源宋体"
+      fontSize: 32
+      bold: true
+      color: "$ink"
+      lineHeight: 1.2
+      text: |
+        <p>Controlled Nuclear Fusion:</p>
+        <p>From Scientific Experiment</p>
+        <p>to Energy Industry</p>
+
+  # Accent Bar
+  - elementId: cover-accent-bar
+    elementType: shape
+    bounds: [50, 305, 50, 4]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  # Subtitle
+  - elementId: cover-subtitle
+    elementType: text
+    bounds: [50, 325, 480, 48]
+    content:
+      fontSize: 12
+      color: "$textMuted"
+      lineHeight: 1.35
+      text: "Industry research — technology readiness, supply-chain formation, and commercialization pathways"
+
+  # Date Label
+  - elementId: cover-date
+    elementType: text
+    bounds: [50, 415, 200, 22]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$ink"
+      letterSpacing: 1.0
+      text: "OCTOBER 2026"
+
+  # Schematic - Outer Orbit Arc
+  - elementId: sch-outer-arc
+    elementType: shape
+    bounds: [610, 80, 290, 290]
+    shapeName: arc
+    adjustments: [16200000, 0]
+    border: {style: solid, width: 1.2, color: "#94A3B8"}
+
+  # Schematic - Shaded Donut Ring (Chamber Wall)
+  - elementId: sch-donut-ring
+    elementType: shape
+    bounds: [630, 100, 250, 250]
+    shapeName: donut
+    adjustments: [22000]
+    fill: {type: solid, color: "#E2E8F0"}
+    border: {style: solid, width: 1.5, color: "$titleNavy"}
+
+  # Schematic - Dashed Confinement Boundary
+  - elementId: sch-dashed-boundary
+    elementType: shape
+    bounds: [680, 150, 150, 150]
+    shapeName: ellipse
+    border: {style: dash, width: 1.2, color: "$titleNavy"}
+
+  # Schematic - Central Hot Plasma Core
+  - elementId: sch-center-core
+    elementType: shape
+    bounds: [738, 208, 34, 34]
+    shapeName: ellipse
+    fill: {type: solid, color: "$titleNavy"}
+
+  # Schematic - Orbital Magnetic Coils / Nodes
+  - elementId: sch-node-1
+    elementType: shape
+    bounds: [750, 75, 10, 10]
+    shapeName: ellipse
+    fill: {type: solid, color: "$accentBlue"}
+
+  # Node 2
+  - elementId: sch-node-2
+    elementType: shape
+    bounds: [650, 140, 10, 10]
+    shapeName: ellipse
+    fill: {type: solid, color: "$titleNavy"}
+
+  # Node 3
+  - elementId: sch-node-3
+    elementType: shape
+    bounds: [845, 185, 10, 10]
+    shapeName: ellipse
+    fill: {type: solid, color: "$accentBlue"}
+
+  # Node 4
+  - elementId: sch-node-4
+    elementType: shape
+    bounds: [628, 320, 10, 10]
+    shapeName: ellipse
+    fill: {type: solid, color: "$titleNavy"}
+
+  # Node 5
+  - elementId: sch-node-5
+    elementType: shape
+    bounds: [855, 305, 10, 10]
+    shapeName: ellipse
+    fill: {type: solid, color: "$titleNavy"}
+
+  # Schematic Caption
+  - elementId: sch-caption
+    elementType: text
+    bounds: [610, 395, 290, 24]
+    content:
+      fontSize: 8.5
+      italic: true
+      color: "$textLight"
+      align: [center, middle]
+      text: "Compact HTS devices — the industry's cost-curve pivot"
+
+  # Bottom Divider Line
+  - elementId: cover-footer-line
+    elementType: line
+    bounds: [50, 502, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Bottom Meta Text Left
+  - elementId: cover-footer-left
+    elementType: text
+    bounds: [50, 512, 550, 16]
+    content:
+      fontSize: 7.5
+      bold: true
+      color: "$textLight"
+      text: "GLOBAL FUSION RESEARCH INITIATIVE — INDEPENDENT TECHNOLOGY ASSESSMENT"
+
+  # Bottom Meta Text Right
+  - elementId: cover-footer-right
+    elementType: text
+    bounds: [650, 512, 260, 16]
+    content:
+      fontSize: 7.5
+      italic: true
+      color: "$textLight"
+      align: [right, middle]
+      text: "Draft for discussion · October 2026"

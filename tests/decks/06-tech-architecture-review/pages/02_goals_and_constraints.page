@@ -1,0 +1,310 @@
+background: { type: solid, color: "$paper" }
+notes: |
+  本页阐述演进的核心技术指标与物理约束边界。
+  核心目标是将 RTO 从现有的 45 分钟缩短至 30 秒以内，并将核心账务的 RPO 从可能丢单的 30 秒推进至零数据丢失（RPO=0）。
+  但我们必须直面不可逾越的物理现实：沪深直线距离 1200 公里，光纤往返延迟至少 36.8 毫秒。
+  如果在核心交易链路上采用跨地域同步强事务（如两阶段提交或 Paxos 同步），系统的 TPS 会暴跌 30 倍以上。
+  因此，方案必须基于一个关键业务假设：98.5% 的核心写请求可以按用户 UID 收敛在单个单元内部闭环，这是保证低延迟与多活容灾兼得的理论基石。
+elements:
+  # Header
+  - elementId: sec-tag
+    elementType: text
+    bounds: [45, 24, 400, 14]
+    content:
+      text: "02 / 演进目标与硬性约束 | GOALS & CONSTRAINTS"
+      fontSize: 8.5
+      bold: true
+      color: "$muted"
+
+  - elementId: main-title
+    elementType: text
+    bounds: [45, 38, 870, 26]
+    content:
+      text: "演进目标锁定零数据丢失与秒级接管，受限于光纤物理延迟与写收敛边界"
+      fontSize: 16
+      bold: true
+      color: "$ink"
+
+  - elementId: header-line
+    elementType: line
+    bounds: [45, 68, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # Left Track 1: Current Baseline
+  - elementId: t1-label
+    elementType: text
+    bounds: [45, 78, 120, 16]
+    content:
+      text: "[现状基准] 同城冷备"
+      fontSize: 9
+      bold: true
+      color: "$muted"
+
+  - elementId: t1-badge
+    elementType: text
+    bounds: [170, 78, 180, 16]
+    content:
+      text: "生产实测 · 2026-03 事故数据"
+      fontSize: 8.5
+      color: "$critical"
+
+  - elementId: t1-content
+    elementType: text
+    bounds: [45, 96, 580, 52]
+    content:
+      text: |
+        • 架构拓扑：单机房写主库（上海A），深圳灾备中心保持冷备待机态；日常读写流量 100% 倾斜在主中心。
+        • 容灾指标：机房断电/断网事故实测平均 RTO = 45 min；MySQL 异步复制延迟导致潜在丢单窗口 RPO ≤ 30s。
+        • 吞吐与可用性：单机房物理承载上限 18,000 TPS；网络分区时备机房无状态校验与读写接管能力。
+      fontSize: 8.8
+      lineHeight: 1.3
+      color: "$ink"
+
+  - elementId: t1-div
+    elementType: line
+    bounds: [45, 154, 580, 1]
+    points: "0,0 580,0"
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  # Left Track 2: Target Architecture
+  - elementId: t2-label
+    elementType: text
+    bounds: [45, 162, 120, 16]
+    content:
+      text: "[目标指标] 异地多活"
+      fontSize: 9
+      bold: true
+      color: "$active"
+
+  - elementId: t2-badge
+    elementType: text
+    bounds: [170, 162, 180, 16]
+    content:
+      text: "设计承诺 · 生产就绪验收红线"
+      fontSize: 8.5
+      color: "$active"
+
+  - elementId: t2-content
+    elementType: text
+    bounds: [45, 180, 580, 52]
+    content:
+      text: |
+        • 架构拓扑：三地四单元（上海双单元 Cell-SH01/02、深圳 Cell-SZ01、北京容灾单元 Cell-BJ01），物理全隔离。
+        • 容灾指标：同城机房级故障接管 RTO < 15s；跨省极端灾难接管 RTO < 30s；核心账务数据严格保证 RPO = 0。
+        • 吞吐容量：单单元独立承载 12,000 TPS，全集群总吞吐支撑 40,000 TPS 峰值，各单元具备对等承载弹性。
+      fontSize: 8.8
+      lineHeight: 1.3
+      color: "$ink"
+
+  - elementId: t2-div
+    elementType: line
+    bounds: [45, 238, 580, 1]
+    points: "0,0 580,0"
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  # Left Track 3: Physical & Engineering Constraints
+  - elementId: t3-label
+    elementType: text
+    bounds: [45, 246, 120, 16]
+    content:
+      text: "[物理与技术约束]"
+      fontSize: 9
+      bold: true
+      color: "$brand"
+
+  - elementId: t3-badge
+    elementType: text
+    bounds: [170, 246, 180, 16]
+    content:
+      text: "不可逾越物理与成本红线"
+      fontSize: 8.5
+      color: "$brand"
+
+  - elementId: t3-content
+    elementType: text
+    bounds: [45, 264, 580, 52]
+    content:
+      text: |
+        • 光纤物理极限：沪深直线距离 1,200 km，折射率 n≈1.468，单向物理延迟 ≥18.4ms，往返 RTT ≥ 36.8ms。
+        • 事务设计红线：禁止跨地域分布式强一致事务 (2PC/Paxos) 阻塞下单主路径；严禁跨单元同步写穿透。
+        • 成本预算约束：跨省双专线带宽上限 20 Gbps；全局服务器与中间件扩容成本不得超过现有基准的 1.85 倍。
+      fontSize: 8.8
+      lineHeight: 1.3
+      color: "$ink"
+
+  - elementId: t3-div
+    elementType: line
+    bounds: [45, 322, 580, 1]
+    points: "0,0 580,0"
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  # Left Track 4: Assumptions & Boundaries
+  - elementId: t4-label
+    elementType: text
+    bounds: [45, 330, 120, 16]
+    content:
+      text: "[假设前提与边界]"
+      fontSize: 9
+      bold: true
+      color: "$sync"
+
+  - elementId: t4-badge
+    elementType: text
+    bounds: [170, 330, 220, 16]
+    content:
+      text: "设计推演假设 · 示例指标需回放验证"
+      fontSize: 8.5
+      color: "$sync"
+
+  - elementId: t4-content
+    elementType: text
+    bounds: [45, 348, 580, 52]
+    content:
+      text: |
+        • 业务流量特征假设：核心账户写请求 98.5% 可按用户 UID 分片收敛于归属单元，仅 1.5% 为跨单元划转（示例假设）。
+        • 路由收敛耗时假设：全局 Anycast BGP 路由与客户端智能 DNS 解析可在 3.5s 内完成流量重定向与状态同步。
+        • 数据滞后容忍假设：跨地域 DTS 异步复制延迟在 99.9% 场景下 ≤ 150ms，且对账补偿冲正能在 30s 内自愈。
+      fontSize: 8.8
+      lineHeight: 1.3
+      color: "$ink"
+
+  - elementId: t4-div
+    elementType: line
+    bounds: [45, 406, 580, 1]
+    points: "0,0 580,0"
+    border: { style: solid, width: 0.75, color: "$hairline" }
+
+  # Verification Summary Strip
+  - elementId: verify-bar
+    elementType: text
+    bounds: [45, 418, 580, 75]
+    content:
+      text: |
+        [验证手段与判据]:
+        1. 现状度量：提取 2026-03 生产真实熔断故障回放日志，作为 RTO/RPO 比较的唯一样本基准。
+        2. 目标验收：在仿真环境全链路注入 25,000 TPS 持续压力，执行拔线模拟断网，以自动化评测报告判定是否达成 RTO<30s。
+        3. 假设修正：每两周拉取生产交易大盘，若跨单元写穿透率突破 2.5%，即刻启动分片规则二次重平衡。
+      fontSize: 8.5
+      lineHeight: 1.35
+      color: "$muted"
+
+  # Vertical Divider separating Left Tracks and Right Math Sidebar
+  - elementId: side-div
+    elementType: line
+    bounds: [642, 78, 1, 415]
+    points: "0,0 0,415"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  # Right Sidebar: Physical Delay & Math Models
+  - elementId: side-title
+    elementType: text
+    bounds: [655, 78, 260, 16]
+    content:
+      text: "物理时延与丢单积分推演模型"
+      fontSize: 9.5
+      bold: true
+      color: "$ink"
+
+  - elementId: side-subtitle
+    elementType: text
+    bounds: [655, 96, 260, 26]
+    content:
+      text: "光纤介质光速约束与跨域分布式代价推演"
+      fontSize: 8.5
+      color: "$muted"
+
+  # Math Formula 1
+  - elementId: math1-desc
+    elementType: text
+    bounds: [655, 126, 260, 14]
+    content:
+      text: "1. 沪深光纤单向物理传播延迟下限："
+      fontSize: 8
+      bold: true
+      color: "$ink"
+
+  - elementId: math1-expr
+    elementType: text
+    bounds: [655, 142, 260, 28]
+    content:
+      text: "<latex>\\Delta t_{\\text{fiber}} = \\frac{d}{c / n} + t_{\\text{eq}} \\approx 18.4\\,\\text{ms}</latex>"
+      fontSize: 9.5
+      color: "$brand"
+
+  # Math Formula 2
+  - elementId: math2-desc
+    elementType: text
+    bounds: [655, 174, 260, 14]
+    content:
+      text: "2. 跨地域网络往返最小往返时延 (RTT)："
+      fontSize: 8
+      bold: true
+      color: "$ink"
+
+  - elementId: math2-expr
+    elementType: text
+    bounds: [655, 190, 260, 28]
+    content:
+      text: "<latex>\\text{RTT}_{\\text{min}} = 2 \\cdot \\Delta t_{\\text{fiber}} \\ge 36.8\\,\\text{ms}</latex>"
+      fontSize: 9.5
+      color: "$brand"
+
+  # Math Formula 3
+  - elementId: math3-desc
+    elementType: text
+    bounds: [655, 222, 260, 14]
+    content:
+      text: "3. 异步复制单点故障理论丢单量积分："
+      fontSize: 8
+      bold: true
+      color: "$ink"
+
+  - elementId: math3-expr
+    elementType: text
+    bounds: [655, 238, 260, 32]
+    content:
+      text: "<latex>\\text{Loss} = \\int_{t_0 - \\Delta t_{\\text{lag}}}^{t_0} Q_{\\text{write}}(t)\\,dt</latex>"
+      fontSize: 9.5
+      color: "$critical"
+
+  # Math explanation notes
+  - elementId: side-notes
+    elementType: text
+    bounds: [655, 276, 260, 215]
+    content:
+      text: |
+        【理论推论与工程结论】：
+        
+        • 若在核心交易链路引入跨地域同步强事务（如两阶段提交 2PC 或 Paxos 强一致写），每次请求将额外增加至少 36.8ms 物理网络开销。
+        
+        • 在当前 12,000 TPS 峰值下，数据库排队连接数将从 85 暴增至 3,100 以上，导致线程池瞬间枯竭，TPS 骤降 90% 以上。
+        
+        • 唯有坚持「单元内本地事务自闭环 + 跨单元异步数据最终一致」，才能在物理距离约束下兼顾零数据丢失与微秒级极速响应。
+      fontSize: 8.5
+      lineHeight: 1.35
+      color: "$muted"
+
+  # Footer
+  - elementId: footer-line
+    elementType: line
+    bounds: [45, 510, 870, 1]
+    points: "0,0 870,0"
+    border: { style: solid, width: 1, color: "$hairline" }
+
+  - elementId: footer-meta
+    elementType: text
+    bounds: [45, 516, 500, 16]
+    content:
+      text: "交易核心多活架构评审 | 目标与约束基准 | 2026-10-20"
+      fontSize: 8.5
+      color: "$muted"
+
+  - elementId: footer-page
+    elementType: text
+    bounds: [840, 516, 75, 16]
+    content:
+      text: "PAGE 02 / 10"
+      fontSize: 8.5
+      color: "$muted"
+      align: [right, top]

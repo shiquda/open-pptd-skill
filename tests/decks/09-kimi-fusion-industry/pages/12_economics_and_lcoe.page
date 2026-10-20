@@ -1,0 +1,130 @@
+pageType: content
+notes: |
+  Economics and LCOE slide. Incorporates a parametric cost chart modeling levelized cost of electricity against overnight capital costs ($/kW) across varying capacity factors. Contrasts First-of-a-Kind pilot costs ($12k–$16k/kW, >$160/MWh) with Nth-of-a-Kind commercial targets ($3.2k–$4.5k/kW, $55–$78/MWh). Emphasizes that fusion's target market is dispatchable clean firm power replacing retiring fossil and nuclear baseload.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "06 · ECONOMICS & LCOE"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "LCOE Parity ($50–80/MWh) Demands Overnight Capital Below $4,500/kW and 85%+ Capacity Factors"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Parametric techno-economic models for First-of-a-Kind (FOAK) vs Nth-of-a-Kind (NOAK) commercial fusion plants (Projections with stated assumptions)"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Chart Image Left
+  - elementId: chart-lcoe
+    elementType: image
+    bounds: [50, 104, 490, 358]
+    src: "assets/chart_fusion_lcoe.png"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Right Column - Economic Analysis
+  - elementId: right-bg
+    elementType: shape
+    bounds: [552, 104, 358, 358]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: right-header
+    elementType: shape
+    bounds: [552, 104, 358, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: right-title
+    elementType: text
+    bounds: [562, 109, 338, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "CAPITAL BREAKDOWN & DRIVERS (ASSUMPTIONS)"
+
+  - elementId: right-content
+    elementType: text
+    bounds: [562, 138, 338, 316]
+    content:
+      fontSize: 8.1
+      color: "$ink"
+      lineHeight: 1.34
+      text: |
+        <p><b>Overnight Capital Cost (OCC) Breakdown:</b></p>
+        <p>• <b>HTS Magnet System:</b> 28–35% of total plant capex (directly gated by REBCO tape cost curve).</p>
+        <p>• <b>Blanket &amp; Tritium Plant:</b> 14–18% (capital + replacement reserves).</p>
+        <p>• <b>Power Conversion Island:</b> 20–25% (sCO₂ turbomachinery / steam BOP).</p>
+        <p>• <b>Vacuum Vessel, Cryostat &amp; Heating:</b> 12–15%.</p>
+        <p>• <b>Civil Works &amp; Site Licensing:</b> 15–18%.</p>
+        <p><br><b>FOAK vs NOAK Cost Deflation:</b></p>
+        <p>• <b>FOAK Pilot (2032–2036):</b> $12,000–$16,000 / kW (LCOE &gt;$160/MWh); subsidized by sovereign co-funding and innovation grants.</p>
+        <p>• <b>NOAK Commercial (2040+):</b> <b>$3,200–$4,500 / kW</b> (LCOE $55–$78/MWh); requires standardized modular factory fabrication.</p>
+        <p><br><b>Market Value Proposition:</b></p>
+        <p>Fusion is not competing against $25/MWh intermittent solar; it addresses <b>firm, 24/7 dispatchable clean baseload</b> replacing retiring coal and nuclear fleets ($50–$80/MWh market window).</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Economic Thesis:</b> Commercial viability requires NOAK capital costs ≤$4,500/kW and capacity factors ≥85%; target market is dispatchable baseload at $50–$80/MWh."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: Parametric model adapted from Sheffield et al. (Fusion Tech.), ARPA-E ALPHA/BETHE reports (2024), Lazard Levelized Cost of Energy Analysis v17.0."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 12 / 16"

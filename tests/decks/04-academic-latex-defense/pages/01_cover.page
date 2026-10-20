@@ -1,0 +1,110 @@
+pageType: cover
+background:
+  type: solid
+  color: "#FFFFFF"
+notes: |
+  各位答辩委员会专家、老师下午好！我是博士研究生张铭宇，今天我的博士学位论文答辩题目是《面向长上下文推理的稀疏注意力机制——理论建模、动态轻量路由算法与长程推理极限评估》。
+  本课题针对大语言模型长上下文推理面临的计算二次方壁垒与显存墙挑战，系统性研究动态稀疏化注意力理论与算法实现。汇报将从研究背景、证据鸿沟、核心方法、理论推导、实证结果与理论局限展开。
+elements:
+  # Structural top accent rule
+  - elementId: top-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 48, 64, 4]
+    fill:
+      type: solid
+      color: "$primary"
+
+  # Category kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 64, 500, 20]
+    content:
+      fontSize: 11
+      bold: true
+      color: "$primary"
+      letterSpacing: 1.5
+      text: DISSERTATION DEFENSE · 博士学位论文答辩
+
+  # Main title
+  - elementId: main-title
+    elementType: text
+    bounds: [50, 96, 860, 60]
+    content:
+      fontSize: 28
+      bold: true
+      color: "$fg"
+      text: 面向长上下文推理的稀疏注意力机制
+
+  # Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 160, 860, 28]
+    content:
+      fontSize: 15
+      color: "$gray"
+      text: 理论建模、动态轻量路由算法与长程推理极限评估
+
+  # Dividing horizontal line
+  - elementId: div-line
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 206, 860, 1]
+    fill:
+      type: solid
+      color: "$ruleColor"
+  - elementId: meta-info
+    elementType: text
+    bounds: [50, 230, 480, 200]
+    content:
+      fontSize: 13
+      lineHeight: 1.6
+      color: "$fg"
+      text: |
+        <p><strong>答辩人：</strong>张铭宇（计算机系统结构方向）</p>
+        <p><strong>指导教师：</strong>李建华 教授 / 博士生导师</p>
+        <p><strong>答辩委员会主席：</strong>陈立新 教授（清华大学）</p>
+        <p><strong>答辩委员：</strong>王海峰 教授、刘知远 教授、周伯文 教授、肖仰华 教授</p>
+        <p><strong>培养院系：</strong>计算机科学与技术系 · 大模型与认知计算重点实验室</p>
+        <p style="color:#868686; font-size:11.5pt;">答辩时间：2026年10月20日 ｜ 地点：信息科学技术大楼 1-312 报告厅</p>
+
+  # Right column: Theoretical preview panel
+  - elementId: preview-panel-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [560, 230, 350, 220]
+    fill:
+      type: solid
+      color: "$lightGray"
+    border:
+      style: solid
+      width: 1
+      color: "$ruleColor"
+
+  - elementId: preview-header
+    elementType: text
+    bounds: [580, 246, 310, 24]
+    content:
+      fontSize: 12
+      bold: true
+      color: "$primary"
+      text: 论文核心研究命题 (Core Proposition)
+
+  - elementId: preview-formula
+    elementType: text
+    bounds: [580, 280, 310, 70]
+    content:
+      fontSize: 16
+      align: [center, middle]
+      text: |
+        <p>\( \lim_{N \to \infty} \frac{C_{\mathrm{sparse}}(N)}{N \sqrt{N}} = \kappa \cdot \sqrt{k \cdot d_k} \)</p>
+
+  - elementId: preview-desc
+    elementType: text
+    bounds: [580, 356, 310, 80]
+    content:
+      fontSize: 11
+      lineHeight: 1.4
+      color: "$gray"
+      text: |
+        <p>在保持 \( 98.4\% \) 长程全向检索准确率的前提下，证明自注意力理论时间复杂度下界可从 \( O(N^2) \) 严格降阶至 \( O(N^{1.5}) \)，并基于 Triton 实现了全栈端到端加速。</p>

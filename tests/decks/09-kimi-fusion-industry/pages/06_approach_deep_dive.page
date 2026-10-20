@@ -1,0 +1,262 @@
+pageType: content
+notes: |
+  Approach deep dive slide. Analyzes the engineering trade-offs between Tokamaks, Stellarators, and Field-Reversed Configurations (FRCs). Contrasts the tokamak's near-term physics maturity against the stellarator's intrinsic disruption-free steady-state operation and the FRC's potential for direct inductive energy recovery. Concludes that near-term pilots will be dominated by tokamaks, while long-term utility baseload favors stellarator stability.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "02 · APPROACH TAXONOMY"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Magnetic Confinement Splits Between Tokamak Near-Term Readiness and Stellarator Steady-State Stability"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Multi-attribute engineering comparison across magnetic topology, disruption risks, duty cycle, and plant economics"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Comparison Block 1: Tokamak
+  - elementId: card-tokamak-bg
+    elementType: shape
+    bounds: [50, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: card-tokamak-hdr
+    elementType: shape
+    bounds: [50, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: card-tokamak-title
+    elementType: text
+    bounds: [58, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "TOKAMAK (CFS / ENERGY SINGULARITY)"
+
+  - elementId: card-tokamak-content
+    elementType: text
+    bounds: [58, 142, 260, 216]
+    content:
+      fontSize: 8.2
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Magnetic Geometry:</b></p>
+        <p>Axisymmetric torus; relies on strong plasma current (several MA) combined with external toroidal field coils.</p>
+        <p><br><b>Plasma Stability &amp; Disruptions:</b></p>
+        <p>Susceptible to violent plasma disruptions (thermal/current quenches) generating gigawatt-level thermal loads and relativistic runaway electrons.</p>
+        <p><br><b>Operating Duty Cycle:</b></p>
+        <p>Pulsed inductive by default; steady-state requires non-inductive RF/neutral-beam current drive with parasitic energy penalties.</p>
+        <p><br><b>Commercial Assessment:</b></p>
+        <p><b>Advantage:</b> Largest empirical scaling database; earliest pilot deployment (2026–2030).</p>
+        <p><b>Vulnerability:</b> Mechanical fatigue from pulse cycles and disruption structural shocks.</p>
+
+  # Comparison Block 2: Stellarator
+  - elementId: card-stell-bg
+    elementType: shape
+    bounds: [342, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: card-stell-hdr
+    elementType: shape
+    bounds: [342, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: card-stell-title
+    elementType: text
+    bounds: [350, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "STELLARATOR (W7-X / TYPE ONE / PROXIMA)"
+
+  - elementId: card-stell-content
+    elementType: text
+    bounds: [350, 142, 260, 216]
+    content:
+      fontSize: 8.2
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Magnetic Geometry:</b></p>
+        <p>Toroidally asymmetric 3D magnetic cage generated 100% by complex modular non-planar superconducting coils.</p>
+        <p><br><b>Plasma Stability &amp; Disruptions:</b></p>
+        <p><b>Disruption-free by physics law:</b> No net toroidal plasma current; operating regime is intrinsically stable against current-driven kinks.</p>
+        <p><br><b>Operating Duty Cycle:</b></p>
+        <p><b>Continuous steady-state:</b> Wendelstein 7-X demonstrated 30-minute gigajoule plasma discharges with stationary heat flux.</p>
+        <p><br><b>Commercial Assessment:</b></p>
+        <p><b>Advantage:</b> Ideal for utility baseload (high capacity factor &gt;90%, zero cyclic stress).</p>
+        <p><b>Vulnerability:</b> Extreme coil fabrication tolerances (&lt;1 mm) and complicated blanket integration.</p>
+
+  # Comparison Block 3: FRC
+  - elementId: card-frc-bg
+    elementType: shape
+    bounds: [634, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: card-frc-hdr
+    elementType: shape
+    bounds: [634, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: card-frc-title
+    elementType: text
+    bounds: [642, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "FRC / Z-PINCH (HELION / TAE / ZAP)"
+
+  - elementId: card-frc-content
+    elementType: text
+    bounds: [642, 142, 260, 216]
+    content:
+      fontSize: 8.2
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Magnetic Geometry:</b></p>
+        <p>Field-Reversed Configuration; closed magnetic field lines formed inside a cylindrical open-field vacuum chamber.</p>
+        <p><br><b>Plasma Stability &amp; Disruptions:</b></p>
+        <p>Pulsed plasmoids formed, translated, and compressed at high frequency (1–10 Hz); stabilization via sheared axial flows or fast ions.</p>
+        <p><br><b>Operating Duty Cycle:</b></p>
+        <p>Repetitive pulsed operation; relies on high-speed pulsed power capacitor banks discharging millions of amps per pulse.</p>
+        <p><br><b>Commercial Assessment:</b></p>
+        <p><b>Advantage:</b> <b>Direct inductive electricity recovery</b> (Helion) bypasses steam turbines, targeting ~85% efficiency.</p>
+        <p><b>Vulnerability:</b> Unproven thermal insulation at ignition temperatures; fast capacitor degradation.</p>
+
+  # Watch Indicators Band
+  - elementId: watch-bg
+    elementType: shape
+    bounds: [50, 384, 860, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: watch-accent
+    elementType: shape
+    bounds: [50, 384, 4, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: watch-label
+    elementType: text
+    bounds: [64, 398, 118, 46]
+    content:
+      fontSize: 7.5
+      bold: true
+      color: "$titleNavy"
+      lineHeight: 1.3
+      text: |
+        <p>WATCH INDICATORS</p>
+        <p>2026–2030</p>
+
+  - elementId: watch-1
+    elementType: text
+    bounds: [190, 398, 250, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Disruption rate per campaign</b></p>
+        <p>Tokamak structural risk vs disruption-free stellarator operation</p>
+
+  - elementId: watch-2
+    elementType: text
+    bounds: [450, 398, 240, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Continuous pulse length</b></p>
+        <p>W7-X reached 30 min at gigajoule scale (2023)</p>
+
+  - elementId: watch-3
+    elementType: text
+    bounds: [700, 398, 210, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Driver repetition rate</b></p>
+        <p>NIF fires ~1 shot/day; a power plant needs 5–10 Hz</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Strategic Synthesis:</b> Tokamaks hold the fastest path to demonstration (Q &gt; 1); stellarators offer disruption-free baseload utility reliability if coil complexity is solved."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: Max Planck IPP (W7-X results, 2023); CFS ARC conceptual design studies; Helion Energy technical disclosures."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 06 / 16"

@@ -1,0 +1,354 @@
+pageType: content
+background: { type: solid, color: "$paper" }
+notes: |
+  Slide 8: Five Landmark Highlight Events in Gravitational-Wave History.
+  - Presents five transformative milestone events:
+    1. GW150914: First direct detection of gravitational waves; 35.6 + 30.6 -> 62 M_sun binary black hole; proved the existence of stellar-mass binary black holes and radiated 3.0 M_sun c^2.
+    2. GW170817: First multi-messenger detection of a binary neutron star merger; co-detected with gamma-ray burst GRB 170817A (1.74s delay) and optical/infrared kilonova AT2017gfo; constrained the speed of gravity |c_gw - c|/c < 10^-15 and confirmed r-process heavy element nucleosynthesis.
+    3. GW190521: First intermediate-mass black hole (IMBH) remnant (142 M_sun); primary component (85 M_sun) directly inside the pair-instability supernova (PISN) mass gap.
+    4. GW190814: Extreme mass-ratio merger (q = 0.112); 23.2 M_sun black hole colliding with a 2.59 M_sun compact object sitting right in the lower mass gap.
+    5. GW230529: O4 breakthrough compact binary with a primary component in the lower mass gap (3.6 M_sun + 1.4 M_sun), detected with single-detector Livingston data and automated pipeline trigger.
+elements:
+  # Left Rail
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [14, 24, 142, 484]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [18, 30, 134, 84]
+    src: "assets/thumb_detectors.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [18, 122, 134, 84]
+    src: "assets/thumb_timeline.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-3
+    elementType: image
+    bounds: [18, 214, 134, 84]
+    src: "assets/thumb_catalog.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-thumb-4
+    elementType: image
+    bounds: [18, 306, 134, 84]
+    src: "assets/thumb_mass.png"
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: rail-divider
+    elementType: line
+    bounds: [168, 24, 1, 484]
+    points: "0,0 0,484"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Header
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 24, 475, 34]
+    content:
+      style: "$title"
+      text: "Five Transformative Events that Redefined Astrophysics"
+
+  - elementId: slide-category
+    elementType: text
+    bounds: [660, 27, 260, 18]
+    content:
+      style: "$category"
+      align: [right, middle]
+      text: "07 · HIGHLIGHT EVENTS"
+
+  - elementId: header-rule
+    elementType: line
+    bounds: [185, 58, 735, 1]
+    points: "0,0 735,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Center Area: Landmark Events Native Table
+  - elementId: table-events-title
+    elementType: text
+    bounds: [185, 70, 420, 18]
+    content:
+      fontSize: 10
+      bold: true
+      color: "$ink"
+      text: "Catalogue of Canonical Milestone Detections (O1 – O4)"
+
+  - elementId: events-table
+    elementType: table
+    bounds: [185, 92, 420, 230]
+    columnWidths: [0.18, 0.16, 0.22, 0.44]
+    rowHeights: [0.16, 0.21, 0.21, 0.21, 0.21]
+    style:
+      cellStyle:
+        fontFamily: "Liter"
+        fontSize: 8
+        lineHeight: 1.15
+        color: "$ink"
+      firstRowStyle:
+        fill: { type: solid, color: "$highlightBg" }
+        color: "$ink"
+        bold: true
+    rows:
+      - - text: "Event ID"
+        - text: "Run"
+        - text: "Masses (m₁ + m₂)"
+        - text: "Astrophysical Breakthrough"
+      - - text: "GW150914"
+        - text: "O1"
+        - text: "35.6 + 30.6 M☉"
+        - text: "First direct detection; proved stellar BBH systems exist."
+      - - text: "GW170817"
+        - text: "O2"
+        - text: "1.46 + 1.27 M☉"
+        - text: "First BNS multi-messenger merger; tested speed of gravity."
+      - - text: "GW190521"
+        - text: "O3a"
+        - text: "85.0 + 66.0 M☉"
+        - text: "Remnant 142 M☉ IMBH; crossed into forbidden PISN gap."
+      - - text: "GW190814"
+        - text: "O3a"
+        - text: "23.2 + 2.59 M☉"
+        - text: "Extreme ratio q=0.11; companion in 2.2–5.0 M☉ lower gap."
+
+  # Metrics Row Below Table
+  - elementId: metric-box-1
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 332, 134, 60]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: metric-txt-1
+    elementType: text
+    bounds: [190, 338, 124, 48]
+    content:
+      align: [center, middle]
+      fontSize: 14
+      bold: true
+      color: "$primary"
+      text: "1.1 – 150 M☉\n<span style=\"font-size: 8pt; color: #64748B; font-weight: normal;\">Observed Mass Span</span>"
+
+  - elementId: metric-box-2
+    elementType: shape
+    shapeName: rect
+    bounds: [328, 332, 134, 60]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: metric-txt-2
+    elementType: text
+    bounds: [333, 338, 124, 48]
+    content:
+      align: [center, middle]
+      fontSize: 14
+      bold: true
+      color: "$teal"
+      text: "40 Mpc – 5 Gpc\n<span style=\"font-size: 8pt; color: #64748B; font-weight: normal;\">Distance Reach</span>"
+
+  - elementId: metric-box-3
+    elementType: shape
+    shapeName: rect
+    bounds: [471, 332, 134, 60]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: metric-txt-3
+    elementType: text
+    bounds: [476, 338, 124, 48]
+    content:
+      align: [center, middle]
+      fontSize: 14
+      bold: true
+      color: "$accent"
+      text: "&lt; 10⁻¹⁵\n<span style=\"font-size: 8pt; color: #64748B; font-weight: normal;\">|c_gw - c|/c Bound</span>"
+
+  # Highlight Event Detail
+  - elementId: detail-box
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 400, 420, 42]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: detail-txt
+    elementType: text
+    bounds: [193, 404, 404, 34]
+    content:
+      fontSize: 8.5
+      lineHeight: 1.3
+      color: "$ink"
+      text: |
+        <b>GW230529 (O4a Landmark)</b>: Confirmed merger of a 2.5–4.5 M☉ compact object with a 1.2–2.0 M☉ companion, establishing that lower-mass-gap compact binaries merge routinely in the local universe.
+
+  # Right Sidebar
+  - elementId: side-1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 75, 295, 110]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-1-icon
+    elementType: icon
+    iconName: "fas:radiation"
+    bounds: [637, 85, 15, 15]
+    fill: { type: solid, color: "$primary" }
+
+  - elementId: side-1-head
+    elementType: text
+    bounds: [658, 85, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "GW150914: KERR METRIC"
+
+  - elementId: side-1-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 103, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-1-formula
+    elementType: text
+    bounds: [642, 107, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$ink"
+      text: |
+        \( E_{\text{rad}} = (3.0 \pm 0.5)\text{ M}_{\text{sun}} c^2, \; L_{\text{peak}} \approx 3.6 \times 10^{49}\text{ W} \)
+
+  - elementId: side-1-desc
+    elementType: text
+    bounds: [637, 134, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Peak gravitational luminosity briefly outshone the combined electromagnetic power of all stars in the observable universe, matching Kerr spacetime ringdown."
+
+  - elementId: side-2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 195, 295, 118]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-2-icon
+    elementType: icon
+    iconName: "fas:atom"
+    bounds: [637, 205, 15, 15]
+    fill: { type: solid, color: "$teal" }
+
+  - elementId: side-2-head
+    elementType: text
+    bounds: [658, 205, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "GW170817: R-PROCESS FORGE"
+
+  - elementId: side-2-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 223, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-2-formula
+    elementType: text
+    bounds: [642, 227, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$teal"
+      text: |
+        \( |c_{\text{gw}} - c| / c \le 10^{-15} \)
+
+  - elementId: side-2-desc
+    elementType: text
+    bounds: [637, 254, 271, 52]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "Confirmed binary neutron star coalescences as cosmic forges synthesizing lanthanides and heavy r-process elements (gold, platinum, uranium) via radioactive decay."
+
+  - elementId: side-3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [625, 323, 295, 108]
+    fill: { type: solid, color: "$cardBg" }
+    border: { style: solid, width: 1, color: "$border" }
+
+  - elementId: side-3-icon
+    elementType: icon
+    iconName: "fas:infinity"
+    bounds: [637, 333, 15, 15]
+    fill: { type: solid, color: "$accent" }
+
+  - elementId: side-3-head
+    elementType: text
+    bounds: [658, 333, 250, 16]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$muted"
+      text: "GW190521: IMBH BIRTH"
+
+  - elementId: side-3-box
+    elementType: shape
+    shapeName: rect
+    bounds: [637, 351, 271, 26]
+    fill: { type: solid, color: "$highlightBg" }
+    border: { style: solid, width: 1, color: "$borderHair" }
+
+  - elementId: side-3-formula
+    elementType: text
+    bounds: [642, 355, 261, 18]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$accent"
+      text: |
+        \( M_{\text{final}} \approx 142\text{ M}_{\text{sun}}, \quad a_{\text{final}} \approx 0.72 \)
+
+  - elementId: side-3-desc
+    elementType: text
+    bounds: [637, 382, 271, 44]
+    content:
+      style: "$body"
+      fontSize: 9
+      text: "First definitive observational discovery of an intermediate-mass black hole, disproving simple single-star wind mass-loss constraints."
+
+  # Takeaway Line
+  - elementId: footer-takeaway
+    elementType: text
+    bounds: [185, 456, 735, 28]
+    content:
+      style: "$takeaway"
+      text: "<b>Takeaway</b> · <b>Each milestone event solved long-standing puzzles while revealing unexpected astrophysical anomalies.</b>"
+
+  # Sources Line
+  - elementId: footer-sources
+    elementType: text
+    bounds: [185, 490, 680, 20]
+    content:
+      style: "$footer"
+      text: "Sources: Abbott et al., PRL 116, 061102; PRL 119, 161101; PRL 125, 101102; ApJL 896, L44; ApJL 970, L34 · notes/events.md"
+
+  # Page Number
+  - elementId: footer-page
+    elementType: text
+    bounds: [875, 490, 45, 20]
+    content:
+      style: "$footer"
+      align: [right, middle]
+      text: "8"

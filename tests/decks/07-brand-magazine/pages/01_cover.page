@@ -1,0 +1,181 @@
+pageType: cover
+background:
+  type: solid
+  color: "$paper"
+notes: "演讲者备注：欢迎各位莅临北纬三十度烘焙（30°N ROASTERY）2024年度品牌发布会。本手册系统阐述高纬度冷凉微气候如何重构精品咖啡的糖分积累与芳香轮廓。注意：本品牌为基准测试专属示例品牌（虚构），所有行业基准均取自SCA与ICO公开发布之真实数据。"
+elements:
+  # Right color surface: Klein blue full-height field
+  - elementId: blue-surface
+    elementType: shape
+    bounds: [832, 0, 448, 720]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$klein"
+
+  # Top meta hairline
+  - elementId: top-line
+    elementType: line
+    bounds: [64, 56, 736, 0]
+    points: "0,0 736,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  # Top meta information
+  - elementId: top-meta
+    elementType: text
+    bounds: [64, 32, 736, 20]
+    content:
+      style: "$meta"
+      text: "LATITUDE THIRTY NORTH ROASTERY // ANNUAL BRAND BOOK 2024 // 示例品牌（虚构）"
+
+  # Heavy rule above title
+  - elementId: title-heavy-line
+    elementType: line
+    bounds: [64, 130, 736, 0]
+    points: "0,0 736,0"
+    border:
+      style: solid
+      width: 3
+      color: "$ink"
+
+  # Giant display typography: 120pt 30°N with compressed line height & negative letter spacing
+  - elementId: hero-num
+    elementType: text
+    bounds: [64, 145, 680, 135]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 120
+      bold: true
+      color: "$ink"
+      lineHeight: 0.85
+      letterSpacing: -2
+      wrap: false
+      text: "30°N"
+
+  # Subhead with text gradient (Klein blue to Navy)
+  # Subhead with Klein blue brand color
+  - elementId: hero-subhead
+    elementType: text
+    bounds: [64, 290, 720, 36]
+    content:
+      fontFamily: "Arial Black"
+      fontSize: 26
+      bold: true
+      color: "$klein"
+      lineHeight: 1.0
+      letterSpacing: 3
+      text: "COLD TERROIR & SLOW RIPENING"
+
+  # Gradient accent bar (Klein blue to Navy)
+  - elementId: cover-gradient-rule
+    elementType: shape
+    bounds: [64, 335, 720, 6]
+    shapeName: rect
+    fill:
+      type: gradient
+      gradientType: linear
+      angle: 90
+      stops:
+        - position: 0
+          color: "#0038B8"
+        - position: 1
+          color: "#0A194E"
+
+  # Recurring motif: star8 compass mark
+  - elementId: compass-star
+    elementType: shape
+    bounds: [740, 145, 56, 56]
+    shapeName: star8
+    adjustments: [37500]
+    fill:
+      type: solid
+      color: "$klein"
+
+  # Vertical Chinese typography
+  - elementId: vertical-brand-title
+    elementType: text
+    bounds: [64, 350, 40, 320]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 18
+      bold: true
+      color: "$ink"
+      textDirection: vertical
+      lineHeight: 1.15
+      letterSpacing: 2
+      text: "北纬三十度烘焙·年度特刊"
+
+  # Mixed <span style> paragraph
+  - elementId: hero-description
+    elementType: text
+    bounds: [136, 360, 640, 160]
+    content:
+      fontFamily: "PingFang SC"
+      fontSize: 15
+      lineHeight: 1.6
+      color: "$ink"
+      text: |
+        <p><span style="font-size:24px; color:$klein; font-weight:bold;">高海拔极冷慢熟</span> <span style="font-size:14px; color:$muted;">/ 探索全球精品咖啡种植的北方地理极境</span></p>
+        <p style="margin-top:12px;">在北纬30度高山峡谷带，海拔突破2,000米的高原微气候赋予咖啡浆果长达210天的超长生长周期。剧烈昼夜温差驱使糖分深度凝缩，在杯中呈现如水晶般纯澈的茉莉白花香与细腻核果酸质。</p>
+        <p style="margin-top:8px; font-size:12px; color:$muted;">文献基准：SCA 2023 Cupping Protocols / 标定产区：保山潞江坝高海拔微批次</p>
+
+  # Bottom rule and footer
+  - elementId: bottom-line
+    elementType: line
+    bounds: [64, 650, 736, 0]
+    points: "0,0 736,0"
+    border:
+      style: solid
+      width: 0.5
+      color: "$gridLine"
+
+  - elementId: bottom-meta
+    elementType: text
+    bounds: [64, 665, 736, 24]
+    content:
+      style: "$footer"
+      text: "FOLIO 01 // 30°N COFFEE ROASTERY BRAND BOOK // EDITION 2024.1 // ALL RIGHTS RESERVED"
+
+  # Image on Klein blue field: deliberate monochrome texture asset with cover fit and opacity
+  - elementId: cover-img
+    elementType: image
+    bounds: [872, 100, 368, 520]
+    src: "assets/cover_texture.jpg"
+    fit:
+      mode: cover
+    opacity: 0.88
+    border:
+      style: solid
+      width: 1
+      color: "$white"
+
+  # Overlay label on the image
+  - elementId: img-tag
+    elementType: text
+    bounds: [896, 560, 320, 40]
+    content:
+      fontFamily: "Arial"
+      fontSize: 11
+      bold: true
+      color: "$white"
+      letterSpacing: 2
+      text: "FIGURE 01.0 // MONOCHROME TERROIR CELLULAR MATRIX"
+
+animations:
+  - elementId: hero-num
+    effect: fade-in
+    trigger: onClick
+    durationMs: 400
+  - elementId: cover-img
+    effect: fly-in
+    direction: right
+    trigger: withPrevious
+    durationMs: 600
+  - elementId: compass-star
+    effect: wipe-in
+    direction: up
+    trigger: afterPrevious
+    durationMs: 300

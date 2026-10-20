@@ -1,0 +1,253 @@
+pageType: content
+notes: |
+  Strategic roadmap and recommendations slide. Concludes the briefing with an actionable 10-year execution roadmap for three core stakeholder groups: institutional investors (funding supply-chain bottlenecks and milestone-gated tranches), electric utilities (signing early off-take PPAs and repurposing coal sites), and sovereign governments (codifying the US NRC 10 CFR Part 30 materials regulatory framework and funding 14 MeV neutron test facilities).
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "10 · STRATEGIC ROADMAP"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Actionable Roadmap for Investors, Utilities, and Industrial Policymakers Through 2035"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Targeted interventions across regulatory licensing, supply-chain scale-up, and public-private co-investment"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # Column 1: Investors
+  - elementId: col-1-bg
+    elementType: shape
+    bounds: [50, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: col-1-header
+    elementType: shape
+    bounds: [50, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: col-1-title
+    elementType: text
+    bounds: [58, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "1. INSTITUTIONAL INVESTORS"
+
+  - elementId: col-1-content
+    elementType: text
+    bounds: [58, 142, 260, 216]
+    content:
+      fontSize: 8.3
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Pivot to Supply-Chain Monopolies:</b></p>
+        <p>Expand beyond generic reactor startups into critical component moats: REBCO tape manufacturers, high-purity ⁶Li isotope enrichment, and cryogenic vacuum valves.</p>
+        <p><br><b>Milestone-Gated Capital Tranches:</b></p>
+        <p>Condition follow-on Series B/C funding strictly on observable physical criteria (Lawson triple-product progress, divertor steady-state heat removal) rather than company PR milestones.</p>
+        <p><br><b>Syndicated Infrastructure:</b></p>
+        <p>Form joint venture capital consortiums to co-fund capital-intensive manufacturing facilities (e.g. continuous epitaxial tape deposition lines).</p>
+
+  # Column 2: Utilities
+  - elementId: col-2-bg
+    elementType: shape
+    bounds: [342, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: col-2-header
+    elementType: shape
+    bounds: [342, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: col-2-title
+    elementType: text
+    bounds: [350, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "2. UTILITIES & OFF-TAKERS"
+
+  - elementId: col-2-content
+    elementType: text
+    bounds: [350, 142, 260, 216]
+    content:
+      fontSize: 8.3
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Early Capacity Reservation PPAs:</b></p>
+        <p>Structure long-term off-take Power Purchase Agreements (PPAs) around pilot plant capacity reservations, expanding upon Microsoft's 50 MW commitment to Helion (2028).</p>
+        <p><br><b>Brownfield Site Repurposing:</b></p>
+        <p>Initiate early grid interconnection and environmental reviews for compact 200–500 MW fusion units at retiring coal and fission plant sites, saving &gt;40% on civil and transmission capex.</p>
+        <p><br><b>Turbine Island Co-Development:</b></p>
+        <p>Engage directly with fusion vendors to standardize steam and sCO₂ turbine balance-of-plant interfaces to guarantee grid frequency compliance.</p>
+
+  # Column 3: Policymakers
+  - elementId: col-3-bg
+    elementType: shape
+    bounds: [634, 106, 276, 268]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: col-3-header
+    elementType: shape
+    bounds: [634, 106, 276, 28]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: col-3-title
+    elementType: text
+    bounds: [642, 111, 260, 18]
+    content:
+      fontSize: 9
+      bold: true
+      color: "$white"
+      text: "3. REGULATORS & GOVERNMENTS"
+
+  - elementId: col-3-content
+    elementType: text
+    bounds: [642, 142, 260, 216]
+    content:
+      fontSize: 8.3
+      color: "$ink"
+      lineHeight: 1.35
+      text: |
+        <p><b>Harmonized Materials Licensing:</b></p>
+        <p>Codify the US NRC landmark decision (April 2023) regulating fusion under 10 CFR Part 30 byproduct materials rules rather than cumbersome fission reactor mandates (Part 50), avoiding multi-billion regulatory delays.</p>
+        <p><br><b>Strategic Isotope Reserves:</b></p>
+        <p>Establish national strategic stockpiles of enriched Lithium-6 (&gt;90% enrichment required for breeding blankets) and non-military tritium allocations.</p>
+        <p><br><b>14 MeV Neutron User Facilities:</b></p>
+        <p>Accelerate public-private funding for high-flux 14 MeV neutron irradiation sources (IFMIF-DONES / domestic equivalents) to certify commercial first-wall steels.</p>
+
+  # Watch Indicators Band
+  - elementId: watch-bg
+    elementType: shape
+    bounds: [50, 384, 860, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: watch-accent
+    elementType: shape
+    bounds: [50, 384, 4, 74]
+    shapeName: rect
+    fill: {type: solid, color: "$orangeAccent"}
+
+  - elementId: watch-label
+    elementType: text
+    bounds: [64, 398, 118, 46]
+    content:
+      fontSize: 7.5
+      bold: true
+      color: "$titleNavy"
+      lineHeight: 1.3
+      text: |
+        <p>EXECUTION METRICS</p>
+        <p>2026–2035</p>
+
+  - elementId: watch-1
+    elementType: text
+    bounds: [190, 398, 250, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Capital tranches tied to physics gates</b></p>
+        <p>Condition follow-on funding on Lawson progress and divertor endurance</p>
+
+  - elementId: watch-2
+    elementType: text
+    bounds: [450, 398, 240, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Contracted off-take capacity (MW)</b></p>
+        <p>Microsoft–Helion 50 MW PPA is the current benchmark (2028 delivery)</p>
+
+  - elementId: watch-3
+    elementType: text
+    bounds: [700, 398, 210, 46]
+    content:
+      fontSize: 7.5
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>Licences issued under materials rules</b></p>
+        <p>US NRC moved fusion to 10 CFR Part 30 in April 2023</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Final Outlook:</b> Controlled fusion has shifted from a 70-year scientific dream to an engineering industrialization race; winners will be determined by supply-chain execution."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: US Nuclear Regulatory Commission (SECY-23-0001); UK Regulatory Framework for Fusion; GFRI Strategic Roadmap (2026)."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 16 / 16"

@@ -1,0 +1,266 @@
+pageType: content
+notes: |
+  Commercialization scenarios and milestone gates slide. Features a vector-constructed milestone-gate pipeline (Gates 1, 2, and 3) spanning from net electricity output through closed-loop tritium breeding to grid pilot licensing. Employs an asymmetric, non-equal 3-scenario layout (Base Case anchor at 55% probability, flanked by Accelerated and Conservative cases) to evaluate commercialization velocity and utility off-take timing.
+elements:
+  # Header Kicker
+  - elementId: kicker
+    elementType: text
+    bounds: [50, 26, 600, 16]
+    content:
+      style: "$kicker"
+      text: "07 · COMMERCIALIZATION SCENARIOS"
+
+  # Header Title
+  - elementId: title
+    elementType: text
+    bounds: [50, 42, 860, 30]
+    content:
+      style: "$title"
+      text: "Commercial Deployment Follows Three Divergent Timelines Governed by Three Milestone Gates"
+
+  # Header Subtitle
+  - elementId: subtitle
+    elementType: text
+    bounds: [50, 72, 860, 16]
+    content:
+      style: "$subtitle"
+      text: "Milestone-gated commercialization framework contrasting Accelerated, Base, and Conservative adoption paths (Projections)"
+
+  # Header Divider
+  - elementId: header-line
+    elementType: line
+    bounds: [50, 92, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  # --- TOP SECTION: MILESTONE GATES TIMELINE ---
+  - elementId: timeline-axis
+    elementType: line
+    bounds: [80, 132, 800, 1]
+    points: "0,0 800,0"
+    border: {style: solid, width: 2, color: "$titleNavy"}
+    arrow: [null, triangle]
+
+  # Gate 1 Node (x=160, y=124)
+  - elementId: gate-1-node
+    elementType: shape
+    bounds: [152, 124, 18, 18]
+    shapeName: diamond
+    fill: {type: solid, color: "$accentBlue"}
+    border: {style: solid, width: 1.5, color: "$white"}
+
+  - elementId: gate-1-label
+    elementType: text
+    bounds: [80, 146, 170, 75]
+    content:
+      fontSize: 7.8
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>GATE 1 (2027–2030)</b></p>
+        <p><b>Net Electric Proof (\( Q_{\mathrm{eng}} &gt; 1 \))</b></p>
+        <p>• SPARC / Polaris demo</p>
+        <p>• Retires plasma physics risk</p>
+
+  # Gate 2 Node (x=460, y=124)
+  - elementId: gate-2-node
+    elementType: shape
+    bounds: [452, 124, 18, 18]
+    shapeName: diamond
+    fill: {type: solid, color: "$titleNavy"}
+    border: {style: solid, width: 1.5, color: "$white"}
+
+  - elementId: gate-2-label
+    elementType: text
+    bounds: [380, 146, 180, 75]
+    content:
+      fontSize: 7.8
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>GATE 2 (2031–2035)</b></p>
+        <p><b>Tritium Loop &amp; 1,000h Run</b></p>
+        <p>• \( \mathrm{TBR} \ge 1.05 \) validated</p>
+        <p>• Continuous heat exhaust equilibrium</p>
+
+  # Gate 3 Node (x=740, y=124)
+  - elementId: gate-3-node
+    elementType: shape
+    bounds: [732, 124, 18, 18]
+    shapeName: diamond
+    fill: {type: solid, color: "$orangeAccent"}
+    border: {style: solid, width: 1.5, color: "$white"}
+
+  - elementId: gate-3-label
+    elementType: text
+    bounds: [660, 146, 180, 75]
+    content:
+      fontSize: 7.8
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p><b>GATE 3 (2036–2040)</b></p>
+        <p><b>Pilot Grid Feed &amp; Licensing</b></p>
+        <p>• 200–500 MW utility connection</p>
+        <p>• Standardized NRC / IAEA license</p>
+
+  # Section Divider Line
+  - elementId: mid-divider
+    elementType: line
+    bounds: [50, 230, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # --- BOTTOM SECTION: 3 ASYMMETRIC SCENARIOS ---
+  # Left Anchor: Base Case (55% Probability, Width: 430px)
+  - elementId: scen-base-bg
+    elementType: shape
+    bounds: [50, 240, 435, 222]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 1.2, color: "$titleNavy"}
+
+  - elementId: scen-base-hdr
+    elementType: shape
+    bounds: [50, 240, 435, 26]
+    shapeName: rect
+    fill: {type: solid, color: "$titleNavy"}
+
+  - elementId: scen-base-title
+    elementType: text
+    bounds: [60, 244, 415, 18]
+    content:
+      fontSize: 8.8
+      bold: true
+      color: "$white"
+      text: "BASE CASE: STEADY INDUSTRIALIZATION (55% PROBABILITY)"
+
+  - elementId: scen-base-content
+    elementType: text
+    bounds: [60, 272, 415, 182]
+    content:
+      fontSize: 8.1
+      color: "$ink"
+      lineHeight: 1.34
+      text: |
+        <p>• <b>Pilot Demonstration:</b> First 200 MW pilot plant achieves grid synchronization by <b>2036–2038</b> (e.g. CFS ARC or UK STEP).</p>
+        <p>• <b>Supply Chain:</b> Global REBCO tape manufacturing expands 15×; pricing drops to ~$40/meter by 2035. Tritium breeding ratio achieves TBR ~1.06 in prototype blanket modules.</p>
+        <p>• <b>Utility Adoption:</b> Commercial utility procurement commences in 2040; early NOAK fleet delivers 10–25 GW clean baseload by 2048 at <b>$62–$75/MWh LCOE</b>.</p>
+        <p>• <b>Capital Structure:</b> Blended sovereign equity, export-credit support and utility off-take contracts cover the first three units; private cost of capital falls only after Gate 2 evidence.</p>
+        <p>• <b>Workforce &amp; Regulation:</b> Licensing moves through the byproduct-materials route in the US and UK; certified welding and cryogenic trades become the binding labour constraint.</p>
+
+  # Top Right: Accelerated Case (25% Probability, Width: 410px)
+  - elementId: scen-acc-bg
+    elementType: shape
+    bounds: [500, 240, 410, 105]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$accentBlue"}
+
+  - elementId: scen-acc-hdr
+    elementType: shape
+    bounds: [500, 240, 410, 24]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: scen-acc-title
+    elementType: text
+    bounds: [510, 244, 390, 16]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$white"
+      text: "ACCELERATED CASE: SOVEREIGN CRASH PROGRAM (25% PROBABILITY)"
+
+  - elementId: scen-acc-content
+    elementType: text
+    bounds: [510, 268, 390, 72]
+    content:
+      fontSize: 7.8
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p>• Breakthroughs in tape manufacturing reduce REBCO cost below $25/m by 2030; sovereign co-funding de-risks first pilots by <b>2032–2034</b>.</p>
+        <p>• Standardized modular factory production drives NOAK overnight capital below $3,500/kW by 2038 (LCOE &lt;$55/MWh).</p>
+        <p>• First-wall alloys qualified against a domestic 14 MeV source; availability exceeds 88% from the first commercial unit.</p>
+
+  # Bottom Right: Conservative Case (20% Probability, Width: 410px)
+  - elementId: scen-con-bg
+    elementType: shape
+    bounds: [500, 357, 410, 105]
+    shapeName: rect
+    fill: {type: solid, color: "$cardBg"}
+    border: {style: solid, width: 0.8, color: "$borderDark"}
+
+  - elementId: scen-con-hdr
+    elementType: shape
+    bounds: [500, 357, 410, 24]
+    shapeName: rect
+    fill: {type: solid, color: "#64748B"}
+
+  - elementId: scen-con-title
+    elementType: text
+    bounds: [510, 361, 390, 16]
+    content:
+      fontSize: 8.5
+      bold: true
+      color: "$white"
+      text: "CONSERVATIVE CASE: NUCLEAR BOTTLENECK DELAY (20% PROBABILITY)"
+
+  - elementId: scen-con-content
+    elementType: text
+    bounds: [510, 385, 390, 72]
+    content:
+      fontSize: 7.8
+      color: "$ink"
+      lineHeight: 1.3
+      text: |
+        <p>• 14 MeV neutron embrittlement forces first-wall replacements every 9 months, reducing plant capacity factor &lt;60%.</p>
+        <p>• Tritium deficits and licensing bottlenecks delay commercial grid pilots beyond <b>2045+</b>, restricting fusion to niche roles.</p>
+        <p>• Venture consolidation reduces the developer field; HTS tape capacity is absorbed by non-fusion demand.</p>
+
+  # Bottom Synthesis Strip
+  - elementId: synth-bg
+    elementType: shape
+    bounds: [50, 472, 860, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$panelBg"}
+    border: {style: solid, width: 0.8, color: "$border"}
+
+  - elementId: synth-accent
+    elementType: shape
+    bounds: [50, 472, 4, 32]
+    shapeName: rect
+    fill: {type: solid, color: "$accentBlue"}
+
+  - elementId: synth-text
+    elementType: text
+    bounds: [62, 478, 836, 20]
+    content:
+      fontSize: 8.5
+      color: "$ink"
+      text: "<b>Scenario Verdict:</b> Utility procurement decisions will remain frozen until Gate 2 (closed-loop tritium breeding + 1,000h continuous run) is demonstrated on physical hardware (earliest 2033)."
+
+  # Footer Line
+  - elementId: footer-line
+    elementType: line
+    bounds: [50, 514, 860, 1]
+    points: "0,0 860,0"
+    border: {style: solid, width: 0.6, color: "$border"}
+
+  # Footer Source Left
+  - elementId: footer-source
+    elementType: text
+    bounds: [50, 518, 620, 15]
+    content:
+      style: "$caption"
+      text: "Source: US DOE Milestone-Based Fusion Development Program; UK STEP Roadmap; EPRI Fusion Utility Integration Assessment (2024)."
+
+  # Footer Page Right
+  - elementId: footer-page
+    elementType: text
+    bounds: [720, 518, 190, 15]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: "Slide 13 / 16"

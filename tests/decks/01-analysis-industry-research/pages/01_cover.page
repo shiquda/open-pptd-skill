@@ -1,0 +1,108 @@
+pageType: cover
+notes: |
+  各位投委会成员好。今天汇报的课题是《全球储能电池（BESS）产业链格局与中国厂商出海机会》。
+  当前全球储能行业正经历三大历史性转折点：
+  第一，装机需求跨过100GWh临界点，2024至2030年全球新增装机年均复合增速保持在27%以上，成为确定性极高的大赛道；
+  第二，国内大储系统EPC报价击穿0.60元/Wh，上游碳酸锂价格企稳于7-10万元/吨，储能电芯加速向314Ah及5MWh系统迭代，行业进入新一轮重组与产能出清；
+  第三，国内竞争极度白热化倒逼中国优势链条出海，但海外市场面临欧美地缘关税与Tier-1可融资性高门槛。
+  本报告系统解构全产业链价值分布与竞争壁垒，为基金在储能核心部件及系统集成领域的投资决策提供确定性依据。
+elements:
+  # Left decorative dark sidebar
+  - elementId: cover-sidebar
+    elementType: shape
+    shapeName: rect
+    bounds: [0, 0, 14, 540]
+    fill: { type: solid, color: "$dark" }
+
+  # Header category kicker
+  - elementId: cover-kicker
+    elementType: text
+    bounds: [50, 45, 860, 22]
+    content:
+      text: "<p><span style=\"color: #2151FF; font-weight: bold;\">GLOBAL BESS INDUSTRY RESEARCH</span><span style=\"color: #64748B;\">  |  新能源产业深度尽职调查与投资研判</span></p>"
+      letterSpacing: 1.2
+      fontSize: 9.5
+      lineHeight: 1.2
+
+  # Cover Main Title
+  - elementId: cover-title
+    elementType: text
+    bounds: [50, 85, 860, 80]
+    content:
+      style: "$coverTitle"
+      text: "<p>全球储能电池（BESS）产业链格局<br/>与中国厂商出海机会研判</p>"
+      lineHeight: 1.25
+
+  # Cover Subtitle
+  - elementId: cover-subtitle
+    elementType: text
+    bounds: [50, 185, 860, 26]
+    content:
+      style: "$coverSubtitle"
+      text: "<p>基于电芯容量演进、系统度电成本平价、地缘准入壁垒与企业可融资性维度的深度投资评估</p>"
+
+  # Thin separator rule
+  - elementId: cover-divider
+    elementType: line
+    bounds: [50, 225, 860, 1]
+    points: "0,0 860,0"
+    border: { style: solid, width: 1, color: "$border" }
+
+  # Pillar 1 (accent top rule + text; no card container)
+  - elementId: pillar-1-rule
+    elementType: line
+    bounds: [50, 250, 270, 2]
+    points: "0,0 270,0"
+    border: { style: solid, width: 2, color: "$primary" }
+  - elementId: pillar-1-text
+    elementType: text
+    bounds: [50, 264, 270, 130]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">01 / 市场空间与电网驱动</span></strong></p>
+        <p style="margin-top: 8px;"><span style="font-size: 13pt; font-weight: bold; color: #041C2C;">2024–30E CAGR +27.8%</span></p>
+        <p style="margin-top: 10px; color: #334155; line-height: 1.5;">2024E全球新增装机达165 GWh，2030E将超720 GWh。中美欧三极共振，电网侧独立储能与容量电价机制落地，确立长周期商业回报闭环。</p>
+      fontSize: 9.5
+
+  # Pillar 2
+  - elementId: pillar-2-rule
+    elementType: line
+    bounds: [345, 250, 270, 2]
+    points: "0,0 270,0"
+    border: { style: solid, width: 2, color: "$primary" }
+  - elementId: pillar-2-text
+    elementType: text
+    bounds: [345, 264, 270, 130]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">02 / 成本拐点与技术迭代</span></strong></p>
+        <p style="margin-top: 8px;"><span style="font-size: 13pt; font-weight: bold; color: #041C2C;">314Ah+5MWh 渗透率 &gt;70%</span></p>
+        <p style="margin-top: 10px; color: #334155; line-height: 1.5;">碳酸锂均价企稳7-10万元/吨，大储系统中标价破0.60元/Wh。液冷大电芯将LCOS压降至0.25元/kWh以下，平价储能打开电网商业化调峰空间。</p>
+      fontSize: 9.5
+
+  # Pillar 3
+  - elementId: pillar-3-rule
+    elementType: line
+    bounds: [640, 250, 270, 2]
+    points: "0,0 270,0"
+    border: { style: solid, width: 2, color: "$primary" }
+  - elementId: pillar-3-text
+    elementType: text
+    bounds: [640, 264, 270, 130]
+    content:
+      text: |
+        <p><strong><span style="color: #2151FF;">03 / 地缘壁垒与渠道溢价</span></strong></p>
+        <p style="margin-top: 8px;"><span style="font-size: 13pt; font-weight: bold; color: #041C2C;">海外毛利溢价 30%–50%</span></p>
+        <p style="margin-top: 10px; color: #334155; line-height: 1.5;">北美IRA法案与关税新规强化准入门槛。具备BNEF Tier-1可融资性背书、电网建模能力与本土运维团队的企业享有持续订单溢价与超额收益。</p>
+      fontSize: 9.5
+
+  # Metadata block
+  - elementId: cover-meta
+    elementType: text
+    bounds: [50, 430, 860, 50]
+    content:
+      text: |
+        <p><span style="color: #041C2C; font-weight: bold;">呈报机构：</span><span style="color: #475569;">投资决策委员会 (Investment Committee)</span><span style="color: #CBD5E1;">  |  </span><span style="color: #041C2C; font-weight: bold;">研究团队：</span><span style="color: #475569;">新能源与硬科技产业投资组</span><span style="color: #CBD5E1;">  |  </span><span style="color: #041C2C; font-weight: bold;">报告基准：</span><span style="color: #475569;">2024Q3（附2025-2030远景预测）</span></p>
+        <p style="margin-top: 5px;"><span style="color: #2151FF; font-weight: bold;">配置建议：</span><span style="color: #041C2C; font-weight: bold;">重点配置具备海外Tier-1可融资资质的大储集成龙头与高壁垒PCS/温控标的；规避国内低价同质化组装企业</span></p>
+      fontSize: 9
+      lineHeight: 1.3

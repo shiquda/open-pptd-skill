@@ -1,0 +1,256 @@
+pageType: content
+background: { type: solid, color: "$darkBg" }
+notes: |
+  Slide 2: Three Physical Heat Traps and Classroom Microclimate Experiment.
+  Breaks down the thermodynamic causes of urban heat islands:
+  1. Low albedo radiation absorption (alpha = 0.08-0.15)
+  2. Urban canyon geometry and sky view factor (SVF < 0.35)
+  3. Anthropogenic heat ejection (Q_F = 50-150 W/m²)
+  Validates with an empirical handheld IR thermometer field survey table showing a 22.9°C cooling delta between asphalt and tree canopy shade.
+elements:
+  # ---------------- Left Rail ----------------
+  - elementId: rail-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [0, 0, 160, 540]
+    fill: { type: solid, color: "#080C14" }
+    border: { style: solid, width: 1, color: "$borderMuted" }
+
+  - elementId: rail-thumb-1
+    elementType: image
+    bounds: [13, 30, 134, 84]
+    src: "assets/thumb_slide1.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 1, color: "$borderMuted" }
+
+  - elementId: rail-thumb-2
+    elementType: image
+    bounds: [13, 130, 134, 84]
+    src: "assets/thumb_slide2.png"
+    fit: { mode: contain }
+    border: { style: solid, width: 2, color: "$hotOrange" }
+
+  # ---------------- Title & Category ----------------
+  - elementId: slide-title
+    elementType: text
+    bounds: [185, 20, 560, 26]
+    content:
+      style: "$title"
+      fontSize: 15
+      text: "Three Physical Heat Traps Drive the Microclimate Phenomenon"
+
+  - elementId: slide-cat
+    elementType: text
+    bounds: [760, 22, 164, 22]
+    content:
+      style: "$subtitle"
+      align: [right, middle]
+      text: "02 · MECHANISMS & LAB"
+
+  # ---------------- Left Column: 3 Physical Drivers ----------------
+  # Driver 1
+  - elementId: d1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 52, 380, 86]
+    fill: { type: solid, color: "$cardDark" }
+    border: { style: solid, width: 1, color: "$cardDarkBorder" }
+
+  - elementId: d1-badge
+    elementType: text
+    bounds: [195, 58, 360, 16]
+    content:
+      style: "$badge"
+      fontSize: 8.5
+      color: "$hotOrange"
+      text: "1. IMPERVIOUS SURFACE ALBEDO ABSORPTION"
+
+  - elementId: d1-formula
+    elementType: text
+    bounds: [195, 76, 360, 18]
+    content:
+      style: "$code"
+      fontSize: 8
+      color: "$cyanCool"
+      text: |
+        <span style="color:#38BDF8;font-weight:bold;">α ≈ 0.08–0.15</span>  ⇒  Absorbs 85–92% of solar irradiance (S↓)
+
+  - elementId: d1-desc
+    elementType: text
+    bounds: [195, 96, 360, 38]
+    content:
+      style: "$body"
+      fontSize: 7.5
+      text: "Aged asphalt and concrete substrates absorb incoming shortwave flux, converting it into sensible heat and daytime conductive substrate storage (G > 200 W/m²)."
+
+  # Driver 2
+  - elementId: d2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 144, 380, 86]
+    fill: { type: solid, color: "$cardDark" }
+    border: { style: solid, width: 1, color: "$cardDarkBorder" }
+
+  - elementId: d2-badge
+    elementType: text
+    bounds: [195, 150, 360, 16]
+    content:
+      style: "$badge"
+      fontSize: 8.5
+      color: "$hotOrange"
+      text: "2. CANYON TRAPPING & AERODYNAMIC DRAG"
+
+  - elementId: d2-formula
+    elementType: text
+    bounds: [195, 168, 360, 18]
+    content:
+      style: "$code"
+      fontSize: 8
+      color: "$cyanCool"
+      text: |
+        <span style="color:#38BDF8;font-weight:bold;">SVF = cos(θ_canyon) &lt; 0.35</span>  ⇒  Restricts L↑ radiative exitance
+
+  - elementId: d2-desc
+    elementType: text
+    bounds: [195, 188, 360, 38]
+    content:
+      style: "$body"
+      fontSize: 7.5
+      text: "Deep street canyons (H/W > 2.0) trap longwave thermal radiation between opposing facades, while high aerodynamic roughness suppresses convective cooling winds."
+
+  # Driver 3
+  - elementId: d3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 236, 380, 86]
+    fill: { type: solid, color: "$cardDark" }
+    border: { style: solid, width: 1, color: "$cardDarkBorder" }
+
+  - elementId: d3-badge
+    elementType: text
+    bounds: [195, 242, 360, 16]
+    content:
+      style: "$badge"
+      fontSize: 8.5
+      color: "$hotOrange"
+      text: "3. ANTHROPOGENIC HEAT EMISSION (Q_F)"
+
+  - elementId: d3-formula
+    elementType: text
+    bounds: [195, 260, 360, 18]
+    content:
+      style: "$code"
+      fontSize: 8
+      text: |
+        <span style="color:#38BDF8;font-weight:bold;">Q_F ~ 50–150 W/m²</span>  ·  HVAC chillers + traffic exhaust
+  - elementId: d3-desc
+    elementType: text
+    bounds: [195, 280, 360, 38]
+    content:
+      style: "$body"
+      fontSize: 7.5
+      text: "HVAC chillers reject concentrated condenser heat directly into the street canopy, creating a positive feedback loop as indoor air conditioning demand spikes."
+
+  # ---------------- Right Column: Classroom Mini-Lab Experiment ----------------
+  - elementId: lab-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [577, 52, 347, 270]
+    fill: { type: solid, color: "$cardDark" }
+    border: { style: solid, width: 1, color: "$cyanCool" }
+
+  - elementId: lab-title
+    elementType: text
+    bounds: [587, 58, 327, 18]
+    content:
+      style: "$body"
+      fontSize: 8.5
+      bold: true
+      color: "$textWhite"
+      text: "Field Survey: IR Thermometer Microclimate Audit"
+
+  - elementId: lab-intro
+    elementType: text
+    bounds: [587, 76, 327, 22]
+    content:
+      style: "$body"
+      fontSize: 7.5
+      text: "Handheld IR thermometer survey at 14:00 solar noon (T_air = 36.5°C, sunny):"
+
+  - elementId: lab-table
+    elementType: table
+    bounds: [587, 100, 327, 120]
+    columnWidths: [0.32, 0.20, 0.18, 0.30]
+    rowHeights: [0.20, 0.20, 0.20, 0.20, 0.20]
+    style:
+      cellStyle:
+        fontFamily: "Liter"
+        fontSize: 7.5
+        lineHeight: 1.15
+        color: "$textWhite"
+      firstRowStyle:
+        fill: { type: solid, color: "#1E293B" }
+        color: "$cyanCool"
+        bold: true
+    rows:
+      - - text: "Surface Material"
+        - text: "T_surf"
+        - text: "ΔT_air"
+        - text: "Microclimate Role"
+      - - text: "Black Asphalt"
+        - text: "52.4°C"
+        - text: "+15.9 K"
+        - text: "Primary heat emitter"
+      - - text: "Red Brick Pavers"
+        - text: "44.1°C"
+        - text: "+7.6 K"
+        - text: "Moderate heat store"
+      - - text: "Open Turf Grass"
+        - text: "33.8°C"
+        - text: "-2.7 K"
+        - text: "Transpirational cooler"
+      - - text: "Tree Canopy Shade"
+        - text: "29.5°C"
+        - text: "-7.0 K"
+        - text: "Solar radiation shield"
+
+  - elementId: lab-verdict
+    elementType: text
+    bounds: [587, 226, 327, 90]
+    content:
+      style: "$body"
+      fontSize: 7.5
+      text: "<b>Empirical Audit Verdict:</b> Tree canopy cover lowers surface temperature by <b>22.9°C</b> relative to adjacent sunlit asphalt. Shading and vegetative transpiration completely overpower direct solar heating."
+
+  # ---------------- Bottom Epistemological Breakdown ----------------
+  - elementId: bottom-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [185, 330, 739, 114]
+    fill: { type: solid, color: "$cardDark" }
+    border: { style: solid, width: 1, color: "$borderMuted" }
+
+  - elementId: bottom-content
+    elementType: text
+    bounds: [195, 336, 719, 102]
+    content:
+      style: "$body"
+      fontSize: 7.8
+      text: "<b>[Observation Fact]</b> Handheld IR survey measures a 22.9°C surface temperature delta between asphalt and tree shade.<br/><b>[Physical Interpretation]</b> High heat capacity and low albedo turn pavement into secondary radiators; trees divert energy from sensible heat (H) to latent heat (lambda*E).<br/><b>[Policy Intervention]</b> High-albedo cool roofs/pavements (alpha > 0.40) and 30% urban canopy targets mitigate heat wave mortality risks.<br/><b>[Open Question]</b> How do microscale cool-island breezes couple with regional synoptic heat domes during severe stagnation events?"
+
+  # ---------------- Takeaway & Sources ----------------
+  - elementId: takeaway
+    elementType: text
+    bounds: [185, 452, 739, 22]
+    content:
+      style: "$body"
+      fontSize: 9
+      color: "$textWhite"
+      text: "<b>Takeaway</b> · Urban heat islands are thermodynamic energy-balance shifts mitigable by high-albedo materials and vegetative shading."
+
+  - elementId: sources
+    elementType: text
+    bounds: [185, 485, 739, 18]
+    content:
+      style: "$footer"
+      text: "Sources: Santamouris (2014) Energy and Buildings 72; Bowler et al. (2010) Landscape and Urban Planning 97; Akbari et al. (2001)"

@@ -965,7 +965,11 @@ fn render_text(
         Some(TextAutofit::FitShape) => xml.leaf("a:spAutoFit", &[]),
         Some(TextAutofit::FitText) => xml.leaf("a:normAutofit", &[]),
         Some(TextAutofit::Fixed) => xml.leaf("a:noAutofit", &[]),
-        None => xml.leaf("a:normAutofit", &[]),
+        // No autofit declared: OOXML means "do not autofit" (text overflows
+        // rather than shrinking). Emitting `normAutofit` here silently changed
+        // the semantics of every converted deck — PowerPoint would shrink text
+        // on overflow where the source kept its declared size.
+        None => {}
     }
     xml.end("a:bodyPr");
     emit_lst_style(xml, &style, text.placeholder.is_some(), ctx.safe_fonts);
@@ -1491,7 +1495,11 @@ pub(crate) fn render_rich_body(
         Some(TextAutofit::FitShape) => xml.leaf("a:spAutoFit", &[]),
         Some(TextAutofit::FitText) => xml.leaf("a:normAutofit", &[]),
         Some(TextAutofit::Fixed) => xml.leaf("a:noAutofit", &[]),
-        None => xml.leaf("a:normAutofit", &[]),
+        // No autofit declared: OOXML means "do not autofit" (text overflows
+        // rather than shrinking). Emitting `normAutofit` here silently changed
+        // the semantics of every converted deck — PowerPoint would shrink text
+        // on overflow where the source kept its declared size.
+        None => {}
     }
     xml.end("a:bodyPr");
     emit_lst_style(xml, style, is_placeholder, safe_fonts);

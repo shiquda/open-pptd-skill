@@ -51,6 +51,7 @@ For property values that conflict, the first source with a value is found by sea
 | lineHeightPx | Not applied |
 | letterSpacing | `0` |
 | marginTop | `0` |
+| autofit | Not applied — no `a:bodyPr` autofit child is written, which OOXML reads as "do not autofit". Set `shrink`/`fit_shape`/`fixed` only when the deck really needs that behaviour. |
 
 #### 2. Table Cell Styles
 

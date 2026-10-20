@@ -43,7 +43,7 @@ The compiler automatically distinguishes between **display formulas** and **inli
 
 A display formula becomes one Office Math object. PowerPoint and WPS lay it out inline and scale it with the run font size, so the text box only needs to be big enough. LibreOffice (and its PDF export) instead sizes that object to the whole text frame, **stretching width and height independently**: the same formula in 400-wide frames 60 / 120 / 240 tall renders 388×52, 388×104, 388×209 slide units. A frame whose aspect ratio differs from the formula's own aspect therefore produces the squashed or stretched look.
 
-Measured on LibreOffice 25 (`soffice --convert-to pdf`, 150 DPI): `<a:autofit>` makes no difference — `normAutofit`, `noAutofit` and `spAutoFit` all render identically; `wrap="none"` does not change it either.
+Measured on LibreOffice 25 (`soffice --convert-to pdf`, 150 DPI) with a formula box that does not overflow: `<a:autofit>` makes no difference there — `normAutofit`, `noAutofit` and `spAutoFit` render identically; `wrap="none"` does not change it either. It does matter once plain text overflows: LibreOffice honours `normAutofit` and shrinks, so never rely on autofit to hide an oversized box.
 
 What to do:
 

@@ -180,6 +180,11 @@ pub enum TextAutofit {
     Fixed,
 }
 
+// Omitting `autofit` on a text box writes no `a:bodyPr` autofit child, which
+// OOXML defines as "do not autofit" — the same rendering as `fixed`. It is the
+// right choice for round-tripping decks whose boxes simply have no autofit
+// element.
+
 /// Rich text content of a [`Text`] element.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

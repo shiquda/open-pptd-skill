@@ -954,3 +954,56 @@ elements:
     assert!(rels.contains("TargetMode=\"External\""), "{rels}");
     let _ = fs::remove_file(&path);
 }
+
+#[test]
+fn text_boxes_without_autofit_do_not_invent_shrink_to_fit() {
+    // An omitted `autofit` must stay omitted: OOXML reads the absence as
+    // "do not autofit". Writing `normAutofit` instead made PowerPoint shrink
+    // text that the source deck rendered at its declared size, and it broke
+    // round-tripping of decks that never declared an autofit mode.
+    let deck = r#"
+version: v2
+title: Autofit
+size: [960, 540]
+pages: [pages/p.page]
+"#;
+    let page = r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [40, 40, 400, 60]
+    content:
+      fontSize: 18
+      text: plain
+  - elementId: t2
+    elementType: text
+    bounds: [40, 140, 400, 60]
+    content:
+      fontSize: 18
+      autofit: fit_text
+      text: shrink
+"#;
+    let dir = std::env::temp_dir().join(format!("pptd-autofit-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(dir.join("deck.pptd"), deck).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let path = out_path("autofit");
+    let _ = fs::remove_file(&path);
+    PptxWriter::new(&project).build(&path).unwrap();
+    let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
+
+    assert_eq!(
+        slide.matches("<a:normAutofit").count(),
+        1,
+        "only the explicit fit_text box may declare shrink-to-fit"
+    );
+    assert_eq!(slide.matches("<a:spAutoFit").count(), 0);
+    assert!(
+        !slide.contains("<a:noAutofit"),
+        "an unset autofit must not be materialised as noAutofit either"
+    );
+    let _ = fs::remove_file(&path);
+}

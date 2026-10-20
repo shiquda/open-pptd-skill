@@ -107,7 +107,7 @@ Open PPTD 坚持 **「PPTD 源码工程 + 原生可编辑 PPTX」** 双交付路
 - 🌐 **HTML 扩展与文档级标签**：
   - 不支持 HTML 列表标签（`<ul>`, `<ol>`, `<li>`）：富文本仅支持常规段落，列表请使用常规段落配合标号或符号（如 `1. 第一点` 或 `• 第一点`）。
   - 支持 HTML 超链接标签 `<a href="https://…">文本</a>`（编译为 run 级点击目标 + 外部关系）；裸 URL 可直接以纯文本书写。
-  - 不支持 HTML 上标/下标标签（`<sup>`, `<sub>`）：上标与下标请使用原生 LaTeX 数学公式（如 `<latex>x^2</latex>`、`\( H_2O \)`、`\( \sigma_i \)`）。
+  - 支持 HTML 上标/下标标签 `<sup>` / `<sub>`（编译为 run 级 `a:rPr@baseline`；需要非标准偏移时用 `<span style="baseline:20000">`），复杂排版仍可用原生 LaTeX 数学公式（如 `<latex>x^2</latex>`、`\( \sigma_i \)`）。
   - 不支持 HTML 标题、表格与排版标签（`<h1>`~`<h6>`, `<table>`, `<div>`, `<img>` 等）：页面结构必须使用 PPTD 顶层声明的元素（如 `table`, `image`, `shape`, `line`）。
 - 🖼️ **形状图片填充**：形状目前仅支持纯色 (`type: solid`) 与渐变色 (`type: gradient`) 填充；形状的图片填充 (`fill: {type: image}`) 不受支持（`a:blipFill` 目前仅支持页面背景）。若需展示图片，请使用独立的 `image` 元素。
 - 📐 **画布越界元素**：元素的布局尺寸应位于幻灯片画布范围之内；超出画布的元素会在 `pptd check` 阶段被捕获（完全出界报 Error，部分出界报 Warning）。

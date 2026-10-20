@@ -15,6 +15,7 @@
 
 ### 修复
 
+- **富文本上下标与段后距回编丢失**：`<sup>` / `<sub>`（以及 `<span style="baseline:30000">`）编译为 run 级 `a:rPr@baseline`，`pptd convert` 读回同一数值——`30000` / `-25000` 还原为语义标签，其他百分比原样写成 `baseline:N`，不再归一化；`TextContent` 新增 `spaceAfter`（pt，段落级 `<p style="margin-bottom:7px">` 覆盖），`pptd convert` 读取 `a:spcAft/spcPts`（统一值上提到 `spaceAfter`，表格单元格逐段保留），`pptd build` 写回 `a:pPr/a:spcAft`。公式 `mc:Fallback` 的上下标与普通富文本的 `baseline` 互不影响
 - **表格单元格内边距与 autofit 回编丢失**：`Cell` 新增 `margin: {left,right,top,bottom}`（pt）与 `autofit`；`pptd convert` 读取 `a:tcPr@marL/marR/marT/marB` 和单元格 `a:bodyPr` 的 `spAutoFit`/`normAutofit`/`noAutofit`，`pptd build` 原样写出（默认内边距折叠为不写出，保持原有默认行为）。此前自定义内边距被强制改写成 7.2/7.2/3.6/3.6pt，单元格文本重新折行；`pptd check` 拒绝负数内边距
 
 ## [1.4.1] - 2026-10-19

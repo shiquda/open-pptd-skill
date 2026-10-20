@@ -628,6 +628,7 @@ pub fn render_layout_placeholder(
         italic: def.italic.or_else(|| base.and_then(|b| b.italic)),
         line_height: base.and_then(|b| b.line_height),
         line_height_px: None,
+        space_after: None,
         letter_spacing: None,
         align: def.align,
         wrap: None,
@@ -670,6 +671,8 @@ pub struct EffTextStyle {
     pub italic: Option<bool>,
     pub line_height: Option<f64>,
     pub line_height_px: Option<f64>,
+    /// Paragraph space-after in points (`a:spcAft/a:spcPts`).
+    pub space_after: Option<f64>,
     pub letter_spacing: Option<f64>,
     pub align: Option<Alignment>,
     pub wrap: Option<bool>,
@@ -718,6 +721,7 @@ pub fn effective_text_style(theme: Option<&Theme>, content: &TextContent) -> Eff
         line_height_px: content
             .line_height_px
             .or_else(|| base.and_then(|b| b.line_height_px)),
+        space_after: content.space_after,
         letter_spacing: content
             .letter_spacing
             .or_else(|| base.and_then(|b| b.letter_spacing)),
@@ -1032,6 +1036,16 @@ fn render_text(
             xml.leaf("a:spcPts", &[("val", &pts)]);
             xml.end("a:lnSpc");
         }
+        // `spaceAfter` applies to every paragraph, so the plain-text path
+        // carries it too (the converted `spaceAfter` decks arrive here).
+        if let Some(pts) = style
+            .space_after
+            .map(|pt| ((pt * 100.0).round().max(0.0) as u64).to_string())
+        {
+            xml.start("a:spcAft", &[]);
+            xml.leaf("a:spcPts", &[("val", &pts)]);
+            xml.end("a:spcAft");
+        }
         emit_bullet(xml, &style);
         xml.end("a:pPr");
 
@@ -1114,6 +1128,7 @@ fn parse_rich(text: &str) -> Vec<RichPara> {
             line_height: None,
             line_height_px: None,
             margin_top_px: None,
+            margin_bottom_px: None,
             items: parse_runs(line),
         }
     }
@@ -1161,6 +1176,7 @@ fn parse_rich(text: &str) -> Vec<RichPara> {
             .and_then(css_px)
             .filter(|_| css_value(&pairs, "line-height").is_some_and(|v| v.contains("px")));
         let margin_top_px = css_value(&pairs, "margin-top").and_then(css_px);
+        let margin_bottom_px = css_value(&pairs, "margin-bottom").and_then(css_px);
         let close_rel = text[gt + 1..].find("</p>").unwrap_or(text[gt + 1..].len());
         let close = gt + 1 + close_rel;
         paras.push(RichPara {
@@ -1168,6 +1184,7 @@ fn parse_rich(text: &str) -> Vec<RichPara> {
             line_height,
             line_height_px,
             margin_top_px,
+            margin_bottom_px,
             items: parse_runs(&text[gt + 1..close]),
         });
         let after = close + 4;
@@ -1195,6 +1212,9 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
         italic: Option<bool>,
         underline: Option<bool>,
         strike: Option<bool>,
+        /// `a:rPr@baseline` shift in 1000ths of a percent: `<sup>` = 30000,
+        /// `<sub>` = -25000, or an explicit `baseline:N` declaration.
+        baseline: Option<i32>,
         styled: bool,
         /// External hyperlink from `<a href="…">`.
         link: Option<String>,
@@ -1219,7 +1239,7 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                     underline: f.underline,
                     strike: f.strike,
                     styled: f.styled,
-                    baseline: None,
+                    baseline: f.baseline,
                     link: f.link.clone(),
                 }));
             }
@@ -1239,7 +1259,7 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                     underline: f.underline,
                     strike: f.strike,
                     styled: f.styled,
-                    baseline: None,
+                    baseline: f.baseline,
                     link: f.link.clone(),
                 }));
                 rest = "";
@@ -1258,7 +1278,7 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                 underline: f.underline,
                 strike: f.strike,
                 styled: f.styled,
-                baseline: None,
+                baseline: f.baseline,
                 link: f.link.clone(),
             }));
         }
@@ -1313,6 +1333,9 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
         if let Some(v) = css_value(&pairs, "font-style") {
             flags.italic = Some(v != "normal");
         }
+        if let Some(v) = css_value(&pairs, "baseline").and_then(|v| v.parse::<i32>().ok()) {
+            flags.baseline = Some(v);
+        }
         if let Some(dec) = css_value(&pairs, "text-decoration") {
             if dec.contains("underline") {
                 flags.underline = Some(true);
@@ -1328,13 +1351,26 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
             || flags.bold.is_some()
             || flags.italic.is_some()
             || flags.underline.is_some()
-            || flags.strike.is_some();
+            || flags.strike.is_some()
+            || flags.baseline.is_some();
     }
 
     fn is_inline_tag(name: &str) -> bool {
         matches!(
             name,
-            "span" | "strong" | "b" | "em" | "i" | "u" | "s" | "strike" | "del" | "code" | "a"
+            "span"
+                | "strong"
+                | "b"
+                | "em"
+                | "i"
+                | "u"
+                | "s"
+                | "strike"
+                | "del"
+                | "code"
+                | "a"
+                | "sup"
+                | "sub"
         )
     }
 
@@ -1378,6 +1414,7 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                     flags = stack.pop().unwrap_or_default();
                 } else {
                     stack.push(flags.clone());
+                    let inherited_baseline = flags.baseline;
                     if let Some(style) = style_attr(attrs) {
                         apply_css(&mut flags, style);
                     }
@@ -1400,6 +1437,20 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                         }
                         "code" => {
                             flags.family = Some("Consolas".to_string());
+                            flags.styled = true;
+                        }
+                        // PowerPoint's own defaults: 30% raise / 25% lower.
+                        // An explicit `baseline:N` in the tag's style wins.
+                        "sup" => {
+                            if flags.baseline == inherited_baseline {
+                                flags.baseline = Some(30000);
+                            }
+                            flags.styled = true;
+                        }
+                        "sub" => {
+                            if flags.baseline == inherited_baseline {
+                                flags.baseline = Some(-25000);
+                            }
                             flags.styled = true;
                         }
                         "a" => {
@@ -1437,6 +1488,7 @@ fn parse_runs(inner: &str) -> Vec<ParaItem> {
                         && last.italic == run.italic
                         && last.underline == run.underline
                         && last.strike == run.strike
+                        && last.baseline == run.baseline
                         && last.link == run.link;
                     if same && !run.styled {
                         last.text.push_str(&run.text);
@@ -1571,6 +1623,18 @@ pub(crate) fn render_rich_body(
             xml.leaf("a:spcPts", &[("val", &pts)]);
             xml.end("a:spcBef");
         }
+        // Paragraph-level `margin-bottom` (hundredths of a point, same unit
+        // as `margin-top`) wins over the box-level `spaceAfter` in points.
+        let space_after_pts = para
+            .margin_bottom_px
+            .map(|px| (px * 100.0).round())
+            .or_else(|| style.space_after.map(|pt| (pt * 100.0).round()))
+            .map(|v| (v.max(0.0) as u64).to_string());
+        if let Some(pts) = space_after_pts {
+            xml.start("a:spcAft", &[]);
+            xml.leaf("a:spcPts", &[("val", &pts)]);
+            xml.end("a:spcAft");
+        }
         emit_bullet(xml, style);
         xml.end("a:pPr");
 
@@ -1703,6 +1767,10 @@ struct RichPara {
     line_height: Option<f64>,
     line_height_px: Option<f64>,
     margin_top_px: Option<f64>,
+    /// Paragraph space-after override in hundredths of a point (the OOXML
+    /// `a:spcPts@val` unit, labelled `px` in PPTD for symmetry with
+    /// `margin-top`).
+    margin_bottom_px: Option<f64>,
     items: Vec<ParaItem>,
 }
 
@@ -1732,8 +1800,10 @@ fn emit_run_styled(
     // Link-only runs must survive the "explicit style" filter, otherwise
     // `<a href="…">plain text</a>` would be emitted without its click target.
     let run = run.filter(|r| r.styled || r.link.is_some());
-    // Math script runs (baseline set) without an explicit size render at 70%.
-    let baseline = run.and_then(|r| r.baseline);
+    // Script runs (baseline set) without an explicit size render at 70%.
+    // `baseline:0` is an explicit reset back to the normal baseline: no
+    // shift and no size change.
+    let baseline = run.and_then(|r| r.baseline).filter(|b| *b != 0);
     let mut font_size = run.and_then(|r| r.size).or(style.font_size).unwrap_or(18.0);
     if baseline.is_some() && run.and_then(|r| r.size).is_none() {
         font_size *= 0.7;

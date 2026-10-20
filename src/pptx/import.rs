@@ -2089,7 +2089,7 @@ fn map_sp(
         ctx.para_line_spacing = para_line_spacing;
         let saved_mtop = ctx.para_margin_top;
         ctx.para_margin_top = para_margin_top;
-        let mut content = text_content(tx_body, rels, ctx.slots, ctx, &name);
+        let mut content = text_content(tx_body, rels, ctx.slots, ctx, &name, true);
         ctx.para_margin_top = saved_mtop;
         ctx.para_line_spacing = saved_para;
         ctx.defaults = saved_defaults;
@@ -2927,7 +2927,8 @@ fn map_table(
             let row_span = attr(tc, "rowSpan").and_then(|v| v.parse::<u32>().ok());
             let col_span = attr(tc, "gridSpan").and_then(|v| v.parse::<u32>().ok());
             let content =
-                first(tc, "txBody").and_then(|t| text_content(t, rels, ctx.slots, ctx, &name));
+                first(tc, "txBody")
+                    .and_then(|t| text_content(t, rels, ctx.slots, ctx, &name, false));
             let tc_pr = first(tc, "tcPr");
             let fill = tc_pr
                 .and_then(|p| first(p, "solidFill"))
@@ -3536,12 +3537,17 @@ fn body_pr_autofit(body_pr: Option<&XmlEl>) -> Option<TextAutofit> {
 }
 
 /// Build `TextContent` from `p:txBody`. `None` when the box has no text.
+///
+/// `hoist_space_after` moves a uniform per-paragraph `a:spcAft` up to
+/// [`TextContent::space_after`]; table cells pass `false` because [`Cell`]
+/// has no equivalent field and would drop the value.
 fn text_content(
     tx_body: &XmlEl,
     rels: &BTreeMap<String, String>,
     slots: &SlotColors,
     ctx: &mut PageCtx<'_>,
     _name: &str,
+    hoist_space_after: bool,
 ) -> Option<TextContent> {
     let body_pr = first(tx_body, "bodyPr");
     let anchor = body_pr.and_then(|b| attr(b, "anchor")).map(|a| match a {
@@ -3612,6 +3618,8 @@ fn text_content(
         align: Option<HorizontalAlign>,
         line_height: Option<f64>,
         margin_top_px: Option<f64>,
+        /// `a:spcAft` in points.
+        space_after_pt: Option<f64>,
         runs: Vec<(Option<RunStyle>, String, Option<String>)>,
     }
     fn css_align(a: HorizontalAlign) -> &'static str {
@@ -3680,6 +3688,13 @@ fn text_content(
             // Placeholder paragraphs inherit the master/layout `lnSpc`
             // when their own `<a:pPr>` carries none (OOXML chain).
             .or(ctx.para_line_spacing);
+        let sa = p_pr
+            .and_then(|pp| first(pp, "spcAft"))
+            .and_then(|a| first(a, "spcPts"))
+            .and_then(|s| attr(s, "val"))
+            .and_then(|v| v.parse::<f64>().ok())
+            .map(|v| v / 100.0) // spcPts is in hundredths of a point
+            .filter(|v| *v > 0.0);
         let mt = p_pr
             .and_then(|pp| first(pp, "spcBef"))
             .and_then(|b| first(b, "spcPts"))
@@ -3764,6 +3779,7 @@ fn text_content(
             align: algn,
             line_height: ln,
             margin_top_px: mt,
+            space_after_pt: sa,
             runs,
         });
     }
@@ -3777,6 +3793,21 @@ fn text_content(
     }
     if out_lines.is_empty() {
         return None;
+    }
+
+    // A space-after shared by every paragraph hoists to the box level so the
+    // PPTD stays terse; mixed values (and table cells, whose `Cell` has no
+    // equivalent field) keep it per paragraph.
+    let hoisted_space_after = (hoist_space_after
+        && out_lines
+            .iter()
+            .all(|l| l.space_after_pt == out_lines[0].space_after_pt))
+    .then_some(out_lines[0].space_after_pt)
+    .flatten();
+    if hoisted_space_after.is_some() {
+        for line in &mut out_lines {
+            line.space_after_pt = None;
+        }
     }
 
     let first = &out_lines[0];
@@ -3808,7 +3839,9 @@ fn text_content(
                 && l.align == align
                 && l.line_height == line_height
                 && l.margin_top_px.is_none()
+                && l.space_after_pt.is_none()
                 && l.runs[0].0 == run_style
+                && l.runs[0].0.as_ref().and_then(|s| s.baseline).is_none()
                 && l.runs[0].2.is_none()
         });
 
@@ -3833,6 +3866,9 @@ fn text_content(
             if let Some(mt) = l.margin_top_px {
                 style_parts.push(format!("margin-top:{mt}px"));
             }
+            if let Some(sa) = l.space_after_pt {
+                style_parts.push(format!("margin-bottom:{sa}px"));
+            }
             let style_attr = if style_parts.is_empty() {
                 String::new()
             } else {
@@ -3850,7 +3886,10 @@ fn text_content(
                 // Runs that match the box-level style (first paragraph's)
                 // stay plain; anything else gets an explicit wrapper so the
                 // rebuild does not inherit the box style from paragraph 1.
-                if st == &run_style && (st.is_none() || !t.contains('\n')) {
+                if st == &run_style
+                    && (st.is_none() || !t.contains('\n'))
+                    && st.as_ref().and_then(|s| s.baseline).is_none()
+                {
                     let escaped = escape_text(t);
                     markup.push_str(&match link {
                         Some(href) => format!("<a href=\"{}\">{escaped}</a>", escape_attr(href)),
@@ -3893,6 +3932,12 @@ fn text_content(
                         }
                     ));
                 }
+                // Canonical shifts use the semantic tags; any other value
+                // keeps its exact percentage through `baseline:N`.
+                let baseline = st.as_ref().and_then(|s| s.baseline);
+                if let Some(bl) = baseline.filter(|v| *v != 30000 && *v != -25000) {
+                    span_style.push(format!("baseline:{bl}"));
+                }
                 let mut inner = escape_text(t);
                 if !span_style.is_empty() {
                     inner = format!("<span style=\"{}\">{inner}</span>", span_style.join("; "));
@@ -3902,6 +3947,11 @@ fn text_content(
                 }
                 if st.as_ref().is_some_and(|s| s.bold == Some(true)) {
                     inner = format!("<strong>{inner}</strong>");
+                }
+                match baseline {
+                    Some(30000) => inner = format!("<sup>{inner}</sup>"),
+                    Some(-25000) => inner = format!("<sub>{inner}</sub>"),
+                    _ => {}
                 }
                 if let Some(href) = link {
                     inner = format!("<a href=\"{}\">{inner}</a>", escape_attr(href));
@@ -3927,6 +3977,7 @@ fn text_content(
         background_color: None,
         line_height: if uniform { line_height } else { None },
         line_height_px: None,
+        space_after: hoisted_space_after,
         letter_spacing: None,
         margin_top,
         margin_left,
@@ -3967,6 +4018,9 @@ struct RunStyle {
     font_family: Option<FontFamily>,
     bold: Option<bool>,
     italic: Option<bool>,
+    /// `a:rPr@baseline` (1000ths of a percent): positive raises, negative
+    /// lowers. `None` when the run sits on the normal baseline.
+    baseline: Option<i32>,
 }
 
 impl RunStyle {
@@ -3990,6 +4044,11 @@ impl RunStyle {
         let explicit_italic = attr(rpr, "i")
             .and_then(|s| s.parse::<u8>().ok())
             .map(|v| v != 0);
+        // `baseline="0"` is the explicit no-shift value; carrying it would
+        // wrap every ordinary run in a needless tag.
+        let baseline = attr(rpr, "baseline")
+            .and_then(|s| s.parse::<i32>().ok())
+            .filter(|v| *v != 0);
 
         let font_size = explicit_sz.map(|s| s / 100.0).or(defaults.sz);
         let color = explicit_fill.or_else(|| defaults.color.clone());
@@ -4013,6 +4072,7 @@ impl RunStyle {
             font_family,
             bold,
             italic,
+            baseline,
         })
     }
 }

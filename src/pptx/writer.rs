@@ -29,7 +29,7 @@
 //!
 //! Not yet: the declarative chart DSL (`data`/`series`; build fails with an
 //! explicit [`Error::Unsupported`]); rich text tags beyond `p`/`span`/`strong`/`em`/
-//! `u`/`s`/`code`/`a` (`<sup>`/`<sub>`/`<ul>`/`<ol>`/`<li>`); image fills on
+//! `u`/`s`/`code`/`a`/`sup`/`sub` (`<ul>`/`<ol>`/`<li>`); image fills on
 //! shapes (`fill_xml` rejects `Fill::Image` — only backgrounds support
 //! `a:blipFill`); `notes` (notesSlide) and `animations` (`p:timing`) are
 //! not emitted yet.

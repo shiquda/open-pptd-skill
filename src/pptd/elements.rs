@@ -210,6 +210,10 @@ pub struct TextContent {
     pub line_height: Option<f64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub line_height_px: Option<f64>,
+    /// Space after every paragraph in points (`a:spcAft` / `a:spcPts`); a
+    /// paragraph's `<p style="margin-bottom:Npx">` overrides it. Absent → 0.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub space_after: Option<f64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub letter_spacing: Option<f64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

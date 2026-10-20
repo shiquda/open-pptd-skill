@@ -49,6 +49,7 @@ For property values that conflict, the first source with a value is found by sea
 | italic | `false` |
 | lineHeight | `1` |
 | lineHeightPx | Not applied |
+| spaceAfter | `0` |
 | letterSpacing | `0` |
 | marginTop | `0` |
 | autofit | Not applied — no `a:bodyPr` autofit child is written, which OOXML reads as "do not autofit". Set `shrink`/`fit_shape`/`fixed` only when the deck really needs that behaviour. |
@@ -568,6 +569,7 @@ interface TextContent {
   backgroundColor?: Color;                     // text background color (e.g., text highlight)
   lineHeight?: number;                         // line-height multiple
   lineHeightPx?: number;                       // fixed line height (px)
+  spaceAfter?: number;                         // space after every paragraph, in pt (a paragraph's `margin-bottom` overrides it)
   letterSpacing?: number;
   marginTop?: number;
 
@@ -643,8 +645,8 @@ interface TextContent {
 | `<em>` | Italic | `<em>emphasis</em>` |
 | `<u>` | Underline | `<u>underline</u>` |
 | `<s>` | Strikethrough | `<s>deleted</s>` |
-| `<sup>` | *(暂不支持 / Unsupported)* 上标，请使用 LaTeX 公式 `\( x^2 \)` 代替 | — |
-| `<sub>` | *(暂不支持 / Unsupported)* 下标，请使用 LaTeX 公式 `\( x_i \)` 代替 | — |
+| `<sup>` | 上标（`a:rPr@baseline="30000"`；未显式指定字号时自动缩至 70%） | `x<sup>2</sup>` |
+| `<sub>` | 下标（`a:rPr@baseline="-25000"`；未显式指定字号时自动缩至 70%） | `H<sub>2</sub>O` |
 | `<a href="...">` | 超链接，写入 run 级 `<a:hlinkClick>` + 外部关系（同一 URL 去重） | `<a href="https://example.com">example</a>` |
 | `<ul>` | *(暂不支持 / Unsupported)* 无序列表，编译器会报错拦截，请直接在段落中写项目符号 `•` | — |
 | `<ol>` | *(暂不支持 / Unsupported)* 有序列表，编译器会报错拦截，请直接在段落中写序号 `1.` | — |
@@ -661,6 +663,7 @@ interface TextContent {
 | `text-align` | Paragraph horizontal alignment | `left` / `center` / `right` / `justify` / `distributed` | `<p style="text-align:center">…</p>` |
 | `line-height` | Line height; **unitless** is treated as a `lineHeight` multiple, **with `px`** as a `lineHeightPx` fixed value | number (e.g. `1.5`) or px string (e.g. `24px`) | `<p style="line-height:1.6">…</p>` |
 | `margin-top` | Spacing before the paragraph | px string (e.g. `8px`) | `<p style="margin-top:8px">…</p>` |
+| `margin-bottom` | Spacing after the paragraph (`a:spcAft`, in hundredths of a point — the same unit `margin-top` uses), overriding `content.spaceAfter` | px string (e.g. `7px` = 7pt) | `<p style="margin-bottom:7px">…</p>` |
 | `margin-left` | Left margin | px string (e.g. `12px`) | `<p style="margin-left:12px">…</p>` |
 | `margin-right` | Right margin | px string (e.g. `12px`) | `<p style="margin-right:12px">…</p>` |
 
@@ -690,6 +693,7 @@ Styles apply only to the text inside that `<span>`.
 | `font-size` | Font size | px string (e.g. `24px`) | `<span style="font-size:24px">…</span>` |
 | `font-family` | Font family | Font name (e.g. `Arial`, `"Arial, 微软雅黑"`) | `<span style="font-family:Arial">…</span>` |
 | `background-color` | Text background color | [Color](#color) (HEX6 / HEX8 / theme reference) | `<span style="background-color:$accent">…</span>` |
+| `baseline` | Baseline shift (`a:rPr@baseline`, 1000ths of a percent: positive raises, negative lowers); round-trip keeps the exact source value | integer (e.g. `30000`, `-25000`, `20000`) | `<span style="baseline:20000">…</span>` |
 
 
 ```yaml

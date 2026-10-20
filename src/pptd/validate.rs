@@ -1041,14 +1041,14 @@ fn check_rich_text_tags(text: &Text, page_idx: usize, out: &mut Vec<Diagnostic>)
             let name_clean = name.trim_start_matches('/');
             const VALID_TAGS: &[&str] = &[
                 "p", "span", "strong", "b", "em", "i", "u", "s", "strike", "del", "br", "code",
-                "latex", "a",
+                "latex", "a", "sup", "sub",
             ];
             if !VALID_TAGS.contains(&name_clean) {
                 diag(
                     out,
                     page_idx,
                     format!(
-                        "text `{}` contains unsupported tag `<{name}>` (supported: <p>, <span>, <strong>, <em>, <b>, <i>, <u>, <s>, <a href>, <code>, <latex>, <br>)",
+                        "text `{}` contains unsupported tag `<{name}>` (supported: <p>, <span>, <strong>, <em>, <b>, <i>, <u>, <s>, <sup>, <sub>, <a href>, <code>, <latex>, <br>)",
                         text.common.element_id
                     ),
                 );
@@ -1450,6 +1450,7 @@ fn check_page_raw_yaml(project: &Project, page_idx: usize, out: &mut Vec<Diagnos
                             "backgroundColor",
                             "lineHeight",
                             "lineHeightPx",
+                            "spaceAfter",
                             "letterSpacing",
                             "align",
                             "wrap",

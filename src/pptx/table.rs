@@ -459,6 +459,7 @@ fn cell_eff_style(acc: &CellAcc) -> EffTextStyle {
         italic: acc.italic,
         line_height: acc.line_height,
         line_height_px: acc.line_height_px,
+        space_after: None,
         letter_spacing: acc.letter_spacing,
         align,
         wrap: None,

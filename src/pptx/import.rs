@@ -4089,7 +4089,36 @@ fn parse_part(zip: &mut zip::ZipArchive<fs::File>, part: &str) -> Result<XmlEl> 
     reader
         .read_to_end(&mut data)
         .map_err(|e| Error::Invalid(format!("read part {part}: {e}")))?;
-    XmlEl::parse(data.as_slice()).map_err(|e| Error::Invalid(format!("parse XML in {part}: {e}")))
+    parse_xml(data.as_slice()).map_err(|e| Error::Invalid(format!("parse XML in {part}: {e}")))
+}
+
+/// Parse an OOXML part without losing whitespace-only text.
+///
+/// `xml-rs` reports whitespace-only character data as `Whitespace` events and
+/// `xmltree` drops those. DrawingML stores significant spaces that way —
+/// `<a:t> </a:t>` (usually with `xml:space="preserve"`) is the canonical
+/// spacer run between differently styled runs. Dropping the node silently
+/// glued `Intro`/`arXiv:…` together.
+fn parse_xml(data: &[u8]) -> std::result::Result<XmlEl, xmltree::ParseError> {
+    let config = xmltree::ParserConfig::new().whitespace_to_characters(true);
+    let mut root = XmlEl::parse_with_config(data, config)?;
+    drop_indentation(&mut root);
+    Ok(root)
+}
+
+/// `whitespace_to_characters` also surfaces the indentation between elements;
+/// keep text nodes only where the schema carries character data (`a:t`,
+/// `m:t`). Everything else is formatting and must stay invisible to
+/// `get_text`/`first` helpers.
+fn drop_indentation(el: &mut XmlEl) {
+    let text_bearing = el.name == "t";
+    el.children.retain(|node| match node {
+        xmltree::XMLNode::Text(text) => text_bearing || !text.trim().is_empty(),
+        _ => true,
+    });
+    for child in el.children.iter_mut().filter_map(|n| n.as_mut_element()) {
+        drop_indentation(child);
+    }
 }
 
 fn children<'a>(el: &'a XmlEl, name: &str) -> Vec<&'a XmlEl> {
@@ -4132,7 +4161,98 @@ mod tests {
     use super::*;
 
     fn parse(xml: &str) -> XmlEl {
-        XmlEl::parse(xml.as_bytes()).expect("valid test XML")
+        parse_xml(xml.as_bytes()).expect("valid test XML")
+    }
+
+    fn page_ctx<'a>(
+        slots: &'a SlotColors,
+        media: &'a mut BTreeMap<String, String>,
+        skipped: &'a mut Vec<Skipped>,
+        charts: &'a HashMap<String, ChartInfo>,
+    ) -> PageCtx<'a> {
+        PageCtx {
+            page_no: 0,
+            slots,
+            defaults: MasterDefaults::default(),
+            master_line_spacing: None,
+            para_line_spacing: None,
+            para_margin_top: None,
+            master_spc_bef: None,
+            layout_placeholders: BTreeMap::new(),
+            fonts: fonts(),
+            used_ids: BTreeSet::new(),
+            media,
+            skipped,
+            charts,
+            fallback_bg: None,
+            layout_key: None,
+            groups: HashMap::new(),
+            group_seq: 0,
+            in_master: false,
+        }
+    }
+
+    #[test]
+    fn whitespace_only_runs_survive_extraction() {
+        // `<a:t> </a:t>` between a bold label and a hyperlink run: the spacer
+        // used to be discarded by the XML parser, gluing the neighbours.
+        let tx_body = parse(
+            r#"<txBody xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+<a:p><a:r><a:rPr b="1"/><a:t>Intro</a:t></a:r>
+<a:r><a:rPr><a:solidFill><a:srgbClr val="2A2724"/></a:solidFill></a:rPr><a:t xml:space="preserve"> </a:t></a:r>
+<a:r><a:rPr><a:solidFill><a:srgbClr val="58758A"/></a:solidFill><a:hlinkClick r:id="rId1"/></a:rPr><a:t>arXiv:2605.27223</a:t></a:r></a:p>
+</txBody>"#,
+        );
+        let slots = SlotColors::new();
+        let mut media = BTreeMap::new();
+        let mut skipped = Vec::new();
+        let charts = HashMap::new();
+        let rels = BTreeMap::from([("rId1".to_string(), "https://arxiv.org/abs/2605.27223".to_string())]);
+        let mut ctx = page_ctx(&slots, &mut media, &mut skipped, &charts);
+        let content = text_content(&tx_body, &rels, &slots, &mut ctx, "t", true)
+            .expect("box has text");
+        assert!(
+            content.text.contains("Intro<span")
+                && content.text.contains("> </span><a href"),
+            "spacer run lost: {}",
+            content.text
+        );
+
+        // Leading/trailing spaces inside one run must survive untrimmed.
+        let tx_body = parse(
+            r#"<txBody xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:p><a:r><a:t xml:space="preserve">  padded label  </a:t></a:r></a:p></txBody>"#,
+        );
+        let mut ctx = page_ctx(&slots, &mut media, &mut skipped, &charts);
+        let content = text_content(&tx_body, &BTreeMap::new(), &slots, &mut ctx, "t", true)
+            .expect("box has text");
+        assert!(
+            content.text.contains("  padded label  "),
+            "edge spaces trimmed: {}",
+            content.text
+        );
+    }
+
+    #[test]
+    fn whitespace_runs_at_paragraph_edges_survive_extraction() {
+        let tx_body = parse(
+            r#"<txBody xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:p><a:r><a:t xml:space="preserve"> </a:t></a:r><a:r><a:rPr b="1"/><a:t>x</a:t></a:r><a:r><a:t xml:space="preserve"> </a:t></a:r></a:p></txBody>"#,
+        );
+        let slots = SlotColors::new();
+        let mut media = BTreeMap::new();
+        let mut skipped = Vec::new();
+        let charts = HashMap::new();
+        let mut ctx = page_ctx(&slots, &mut media, &mut skipped, &charts);
+        let content = text_content(&tx_body, &BTreeMap::new(), &slots, &mut ctx, "t", true)
+            .expect("box has text");
+        let inner = content
+            .text
+            .trim_start_matches("<p>")
+            .trim_end_matches("</p>");
+        assert!(
+            inner.starts_with(' ') && inner.ends_with(' '),
+            "edge spacer run lost: {}",
+            content.text
+        );
     }
 
     fn fonts() -> ThemeFonts {

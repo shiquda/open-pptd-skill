@@ -734,6 +734,83 @@ fn richtext_baseline_roundtrips_exactly() {
 }
 
 #[test]
+fn whitespace_only_runs_roundtrip_through_convert_and_build() {
+    let work = temp_dir("whitespace-runs");
+    let dir = work.join("src");
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(
+        dir.join("deck.pptd"),
+        "version: v2\ntitle: Whitespace Roundtrip\nsize: [960, 540]\npages: [pages/p.page]\n",
+    )
+    .unwrap();
+    fs::write(
+        dir.join("pages/p.page"),
+        r#"elements:
+  - elementId: t1
+    elementType: text
+    bounds: [40, 40, 800, 120]
+    content:
+      fontSize: 18
+      text: |
+        <p>Intro<span style="font-weight:400"> </span><a href="https://arxiv.org/abs/2605.27223">arXiv:2605.27223</a><span style="font-weight:400"> · </span>Methods</p>
+"#,
+    )
+    .unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let first = work.join("first.pptx");
+    pptx::writer::PptxWriter::new(&project).build(&first).unwrap();
+    let first_xml = read_part(&first, "ppt/slides/slide1.xml");
+    let intro_at = first_xml.find("<a:t>Intro</a:t>").expect(&first_xml);
+    let spacer_at = first_xml
+        .find("<a:t xml:space=\"preserve\"> </a:t>")
+        .expect(&first_xml);
+    let link_at = first_xml
+        .find("<a:t>arXiv:2605.27223</a:t>")
+        .expect(&first_xml);
+    assert!(
+        intro_at < spacer_at && spacer_at < link_at,
+        "spacer run must stay between Intro and arXiv: {first_xml}"
+    );
+    assert!(
+        first_xml.contains("<a:t xml:space=\"preserve\"> · </a:t>"),
+        "edge spaces need xml:space=preserve: {first_xml}"
+    );
+
+    let converted = work.join("converted");
+    pptx::import::convert_pptx_to_pptd(&first, &converted).unwrap();
+    let decompiled = pptd::load_project(&converted.join("deck.pptd")).unwrap();
+    let text = match &decompiled.pages[0].elements[0] {
+        pptd::Element::Text(t) => t.content.text.clone(),
+        other => panic!("expected text element, got {other:?}"),
+    };
+    assert!(
+        text.contains("Intro <a href=\"https://arxiv.org/abs/2605.27223\">"),
+        "converted rich text lost the spacer run: {text}"
+    );
+    assert!(
+        text.contains(" · Methods"),
+        "converted rich text trimmed the run edges: {text}"
+    );
+
+    let second = work.join("second.pptx");
+    pptx::writer::PptxWriter::new(&decompiled)
+        .build(&second)
+        .unwrap();
+    let second_xml = read_part(&second, "ppt/slides/slide1.xml");
+    assert!(
+        second_xml.contains("<a:t xml:space=\"preserve\">Intro </a:t>"),
+        "rebuilt run must keep its trailing space: {second_xml}"
+    );
+    assert!(
+        second_xml.contains("<a:t xml:space=\"preserve\"> · Methods</a:t>"),
+        "rebuilt run must keep both edge spaces: {second_xml}"
+    );
+
+    let _ = fs::remove_dir_all(&work);
+}
+
+#[test]
 fn space_after_roundtrips_in_boxes_and_cells() {
     let work = temp_dir("space-after");
     let dir = work.join("src");

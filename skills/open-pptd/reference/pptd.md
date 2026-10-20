@@ -656,6 +656,8 @@ interface TextContent {
 
 `<p>`, `<li>`, `<span>`, and every inline tag (`<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<s>`, `<code>`, `<a>`) may use `style="..."`; the tag's own meaning and the style declarations combine, so `<strong style="color:#C00000">` is bold red. Nested tags restore the enclosing style when they close. Color-type values may all use theme references (e.g. `$primary`), resolved per the [Color](#color) rules.
 
+**Whitespace is significant.** Leading/trailing spaces and whitespace-only runs are preserved verbatim: `pptd build` emits `<a:t xml:space="preserve"> </a:t>` for them, and `pptd convert` reads them back without trimming, including inside table cells. A standalone space between differently styled runs keeps them from touching, e.g. `<strong>Intro</strong><span style="font-weight:400"> </span><a href="https://arxiv.org/abs/2605.27223">arXiv:2605.27223</a>` rebuilds as `Intro arXiv:2605.27223`. Do not rely on indentation or line breaks in the YAML block scalar for spacing between runs; write the spaces inside the paragraph text.
+
 1. **Paragraph styles (only `<p>` supports them)**
 
 | Property | Description | Values | Example |

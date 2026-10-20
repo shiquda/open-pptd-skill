@@ -87,14 +87,17 @@ impl Xml {
     /// empty first line and shift the whole text block (visible with
     /// `anchor="ctr"`).
     pub fn text_elem(&mut self, name: &str, text: &str) {
-        self.write_indent();
-        self.buf.push('<');
-        self.buf.push_str(name);
-        self.buf.push('>');
-        self.buf.push_str(&escape(text));
-        self.buf.push_str("</");
-        self.buf.push_str(name);
-        self.buf.push_str(">\n");
+        // DrawingML treats leading/trailing spaces (and whitespace-only runs)
+        // as significant, but consumers are allowed to trim them unless
+        // `xml:space="preserve"` is present.
+        let attrs: &[(&str, &str)] = if text.starts_with(char::is_whitespace)
+            || text.ends_with(char::is_whitespace)
+        {
+            &[("xml:space", "preserve")]
+        } else {
+            &[]
+        };
+        self.inline_text(name, attrs, text);
     }
 
     /// `name` (with `attrs`) containing the escaped `text` as its only

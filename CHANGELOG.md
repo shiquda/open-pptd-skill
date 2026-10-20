@@ -15,6 +15,7 @@
 
 ### 修复
 
+- **富文本纯空白 run 被静默丢弃**：`pptd convert` 解析 XML 时，`xml-rs` 把纯空白字符数据上报为 `Whitespace` 事件、`xmltree` 直接丢弃，导致 `<a:t xml:space="preserve"> </a:t>` 这类独立空格 run 消失，粗体/链接/常规混排文本粘连（官方 gwtc-5 第 10 页 `IntroarXiv:2605.27223`）。解析改为保留文本节点（仅丢弃元素间缩进），空白 run 与首尾空格原样提取；`pptd build` 对含首尾空白的 `<a:t>` 写出 `xml:space="preserve"`，表格单元格同样生效
 - **富文本上下标与段后距回编丢失**：`<sup>` / `<sub>`（以及 `<span style="baseline:30000">`）编译为 run 级 `a:rPr@baseline`，`pptd convert` 读回同一数值——`30000` / `-25000` 还原为语义标签，其他百分比原样写成 `baseline:N`，不再归一化；`TextContent` 新增 `spaceAfter`（pt，段落级 `<p style="margin-bottom:7px">` 覆盖），`pptd convert` 读取 `a:spcAft/spcPts`（统一值上提到 `spaceAfter`，表格单元格逐段保留），`pptd build` 写回 `a:pPr/a:spcAft`。公式 `mc:Fallback` 的上下标与普通富文本的 `baseline` 互不影响
 - **表格单元格内边距与 autofit 回编丢失**：`Cell` 新增 `margin: {left,right,top,bottom}`（pt）与 `autofit`；`pptd convert` 读取 `a:tcPr@marL/marR/marT/marB` 和单元格 `a:bodyPr` 的 `spAutoFit`/`normAutofit`/`noAutofit`，`pptd build` 原样写出（默认内边距折叠为不写出，保持原有默认行为）。此前自定义内边距被强制改写成 7.2/7.2/3.6/3.6pt，单元格文本重新折行；`pptd check` 拒绝负数内边距
 

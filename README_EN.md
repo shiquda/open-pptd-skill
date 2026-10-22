@@ -2,15 +2,19 @@
 
 [简体中文](README.md) | [English](README_EN.md)
 
-[![GitHub Release](https://img.shields.io/github/v/release/shiquda/open-pptd-skill?label=release)](https://github.com/shiquda/open-pptd-skill/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![CI](https://github.com/shiquda/open-pptd-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/shiquda/open-pptd-skill/actions/workflows/ci.yml)
-[![Node >= 18](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org)
-[![Rust >= 1.85](https://img.shields.io/badge/rust-%3E%3D1.85-orange)](https://www.rust-lang.org)
+**Open PPTD** is an offline PowerPoint / PPTX generator and agent skill for AI coding agents and developers: author YAML-based PPTD, compile editable PPTX with native Rust, and convert PPTX back to PPTD, without a browser or cloud service for builds and conversions.
 
-**Open PPTD** is an open-source declarative presentation toolkit and AI Agent skill tailored for AI coding agents (Claude Code, Cursor, Codex, WorkBuddy, Windsurf, Multica) and developers. Built on the open **PPTD** (Declarative Presentation Language) YAML specification, it provides a **100% offline, sub-second native Rust compiler (`pptd` CLI)** and an out-of-the-box agent skill.
+```bash
+npx skills add https://github.com/shiquda/open-pptd-skill -g -y -a codex
+```
 
-It completely eliminates brittle dependencies on web sessions, headless browsers, cookies, or cloud API tokens, delivering fully editable, vector-sharp native PowerPoint (`.pptx`) decks and round-trippable project directories directly on your local machine.
+This example installs for Codex; replace `codex` with your agent's skills identifier.
+
+Skill installation requires a network connection; builds and conversions run offline once the local `pptd` compiler is ready. [Full setup](#-quick-setup-agent-first-installation-recommended) · [Syntax and boundaries](skills/open-pptd/reference/pptd.md) · [MIT license](LICENSE) / [Third-party notices](NOTICE)
+
+[![Editable Xiaomi YU7 slides generated from PPTD, shown in PowerPoint](docs/images/example-yu7-pptx.png)](example/yu7-ppt/)
+
+[PPTD source](example/yu7-ppt/) → `pptd build example/yu7-ppt/yu7.pptd -o yu7.pptx` → the image above shows the generated PPTX in PowerPoint.
 
 ---
 

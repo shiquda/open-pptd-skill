@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">Open PPTD — offline PowerPoint for coding agents</title>
+  <desc id="desc">PPTD YAML source becomes an editable PPTX. A real generated Xiaomi YU7 presentation is shown in PowerPoint.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#122744"/><stop offset="1" stop-color="#125763"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#367ca3" stop-opacity=".5"/><stop offset="1" stop-color="#367ca3" stop-opacity="0"/></radialGradient>
+    <clipPath id="screen"><rect x="564" y="156" width="656" height="369" rx="8"/></clipPath>
+  </defs>
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <ellipse cx="200" cy="80" rx="680" ry="440" fill="url(#glow)"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#fff">
+    <text x="60" y="88" font-size="19" letter-spacing="3" fill="#b8dce5">AGENT SKILL / POWERPOINT</text>
+    <text x="60" y="196" font-size="64" font-weight="700">Open PPTD</text>
+    <text x="60" y="257" font-size="31">Editable slides.</text>
+    <text x="60" y="300" font-size="31">Built offline.</text>
+    <text x="60" y="363" font-size="20" fill="#c6dfe8">Native Rust. No browser.</text>
+    <text x="60" y="395" font-size="20" fill="#c6dfe8">No cloud service for compilation.</text>
+    <rect x="60" y="449" width="426" height="66" rx="8" fill="#0b253d" stroke="#558c9f"/>
+    <text x="88" y="491" font-size="25" font-family="Menlo, Consolas, monospace">PPTD  ↔  PPTX</text>
+    <text x="564" y="135" font-size="17" fill="#c6dfe8">REAL OUTPUT · EDITABLE IN POWERPOINT</text>
+    <image x="564" y="156" width="656" height="369" xlink:href="example-yu7-pptx.png" clip-path="url(#screen)"/>
+    <text x="60" y="587" font-size="20" fill="#c6dfe8">github.com/shiquda/open-pptd-skill</text>
+    <text x="1220" y="587" text-anchor="end" font-size="17" fill="#c6dfe8">PPTX generator · MIT code</text>
+  </g>
+</svg>

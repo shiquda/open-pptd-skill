@@ -42,7 +42,9 @@
     "README_EN.md",
     "theme.md",
     "theme_EN.md",
-    "LICENSE"
+    "LICENSE",
+    "LICENSE-MIT",
+    "NOTICE"
   ],
   "scripts": {
     "test": "node --test",

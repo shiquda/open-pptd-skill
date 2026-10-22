@@ -1,0 +1,28 @@
+Open PPTD — third-party notices and attribution
+
+The project code is licensed under the MIT License; see LICENSE.
+Retain this NOTICE and the applicable licenses when redistributing.
+
+open-kimi-ppt-skill / PPTD specification
+Copyright (c) 2026 Binaryify Zhuang
+https://github.com/acnlie/open-kimi-ppt-skill
+Licensed under the MIT License.
+Open PPTD evolved from this project's PPTD declarative slide language and
+agent skill. Thanks to Binaryify Zhuang for the original work.
+
+slideforge compiler
+Copyright (c) 2025 meatRoll (original notice; see LICENSE-MIT)
+Copyright (c) 2026 meatRoll (attribution retained from this project's LICENSE)
+https://github.com/meatRoll/slideforge
+Licensed under the MIT License; original license preserved in LICENSE-MIT.
+The Rust compiler originated in slideforge and is now maintained in the
+Open PPTD repository by shiquda and contributors, with extensions for rich
+text, LaTeX mathematics, speaker notes, icons, and validation.
+
+Font Awesome Free 6.7.2 — Solid Icons
+Copyright Fonticons, Inc.
+https://fontawesome.com/license/free
+The embedded vector icon dataset (assets/fa-solid-icons.json) is licensed
+under the Creative Commons Attribution 4.0 International license (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/
+The MIT License for the project code does not replace this icon license.

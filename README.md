@@ -2,15 +2,19 @@
 
 [简体中文](README.md) | [English](README_EN.md)
 
-[![GitHub Release](https://img.shields.io/github/v/release/shiquda/open-pptd-skill?label=release)](https://github.com/shiquda/open-pptd-skill/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![CI](https://github.com/shiquda/open-pptd-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/shiquda/open-pptd-skill/actions/workflows/ci.yml)
-[![Node >= 18](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org)
-[![Rust >= 1.85](https://img.shields.io/badge/rust-%3E%3D1.85-orange)](https://www.rust-lang.org)
+**Open PPTD** 是面向 AI Coding Agent 与开发者的离线 PowerPoint / PPTX generator 和 agent skill：用 YAML 编写 PPTD，以原生 Rust 编译器生成可编辑 PPTX，也可将 PPTX 反编译为 PPTD；构建与转换无需浏览器或云端服务。
 
-**Open PPTD** 是面向 AI Coding Agent（Claude Code、Cursor、Codex、WorkBuddy、Windsurf、Multica 等）与开发者的开源声明式幻灯片套件。基于开放的 **PPTD**（Declarative Presentation Language）YAML 规范，提供 **100% 本地离线、毫秒级响应** 的原生 Rust 编译器（`pptd` CLI）与开箱即用的 Agent 技能。
+```bash
+npx skills add https://github.com/shiquda/open-pptd-skill -g -y -a codex
+```
 
-彻底剔除对网页端会话、无头浏览器、Cookie 凭证与云端接口的脆弱依赖，在本地毫秒级生成真实可编辑、带矢量图形与数学公式的原生 `.pptx` 成品及双向工程。
+上例安装到 Codex；使用其他 Agent 时，将 `codex` 换成对应的 skills Agent 标识。
+
+安装技能需要网络；本地 `pptd` 编译器就绪后，构建与转换可离线运行。[完整安装步骤](#-快速安装与就绪首选且唯一推荐) · [语法与能力边界](skills/open-pptd/reference/pptd.md) · [MIT 许可证](LICENSE) / [第三方署名](NOTICE)
+
+[![由 PPTD 生成的小米 YU7 PPTX，在 PowerPoint 中显示可编辑幻灯片](docs/images/example-yu7-pptx.png)](example/yu7-ppt/)
+
+[PPTD 源码](example/yu7-ppt/) → `pptd build example/yu7-ppt/yu7.pptd -o yu7.pptx` → 上图为生成的 PPTX 在 PowerPoint 中的效果。
 
 ---
 

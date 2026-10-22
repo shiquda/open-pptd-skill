@@ -4,6 +4,14 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Documentation and distribution
+
+- Keep standard MIT terms and copyright notices in `LICENSE`; move third-party provenance to `NOTICE` and include it and the original `LICENSE-MIT` in npm packages.
+- Put positioning, installation, a real PowerPoint output screenshot, and its PPTD source on the first screen of both READMEs.
+- Add `docs/images/social-preview.png` (1280×640) and its editable SVG source for the maintainer to upload in GitHub Settings.
+
 ## [1.4.2] - 2026-10-20
 
 ### Added

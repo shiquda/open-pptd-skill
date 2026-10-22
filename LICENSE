@@ -22,13 +22,3 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
----
-
-### Third-Party Licenses & Attributions (第三方协议与致谢说明)
-
-- **open-kimi-ppt-skill**:
-  本项目基于 Binaryify Zhuang 开发的 `open-kimi-ppt-skill`（MIT 许可证，https://github.com/acnlie/open-kimi-ppt-skill）演进重构，在此鸣谢原作者对 PPTD 声明式幻灯片语言理念及 Agent 技能的奠基性贡献。
-- **slideforge**:
-  底层 Rust 编译引擎源自原作者 meatRoll 创建的开源项目 `slideforge`（MIT 许可证，https://github.com/meatRoll/slideforge），由 shiquda 及其贡献者进行了深度二次开发（丰富富文本下划线/删除线排版、增强 LaTeX 数学公式渲染、实现完整演讲者备注 notesSlide 关系链、扩充 1422 个矢量图标库并强化 check 严格静态校验诊断），现正式合并并入 Open PPTD 单体代码库统一维护。在此向原作者 meatRoll 致以诚挚感谢。
-- **Font Awesome Free 6 (Solid Icons)**:
-  本项目内嵌的矢量图标数据集来源于 Font Awesome 6.7.2（CC BY 4.0 许可证，https://fontawesome.com/license/free）。

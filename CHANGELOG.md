@@ -4,6 +4,14 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [Unreleased]
+
+### 文档与分发
+
+- `LICENSE` 保留标准 MIT 条款与版权声明，第三方来源说明迁移至 `NOTICE`；npm 分发同时保留 `NOTICE` 与原始 `LICENSE-MIT`。
+- 中英文 README 首屏加入明确定位、安装命令、真实 PowerPoint 效果图及对应 PPTD 源码入口。
+- 新增 `docs/images/social-preview.png`（1280×640）及可编辑 SVG 源文件；由仓库维护者在 GitHub Settings 中上传。
+
 ## [1.4.2] - 2026-10-20
 
 ### 新增

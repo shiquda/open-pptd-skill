@@ -59,6 +59,7 @@ jobs:
           cp "target/$TARGET/release/pptd" dist/
           cp "target/$TARGET/release/open-pptd" dist/ 2>/dev/null || true
           cp README.md LICENSE* dist/ 2>/dev/null || true
+          cp NOTICE dist/
           tar -czf "$ARCHIVE" -C dist .
           echo "ARCHIVE_PATH=$ARCHIVE" >> "$GITHUB_ENV"
 
@@ -77,6 +78,7 @@ jobs:
           if (Test-Path README.md) { Copy-Item README.md dist/ }
           if (Test-Path LICENSE) { Copy-Item LICENSE dist/ }
           if (Test-Path LICENSE-MIT) { Copy-Item LICENSE-MIT dist/ }
+          Copy-Item NOTICE dist/ -ErrorAction Stop
           Compress-Archive -Path dist/* -DestinationPath $archive
           "ARCHIVE_PATH=$archive" | Out-File -FilePath $env:GITHUB_ENV -Append
 

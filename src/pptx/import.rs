@@ -517,6 +517,8 @@ pub fn convert_pptx_to_pptd(input: &Path, out_dir: &Path) -> Result<ConvertRepor
     let presentation = Presentation {
         version: "v2".to_string(),
         title,
+        author: None,
+        description: None,
         custom_fonts: Vec::new(),
         size,
         // Converted decks must round-trip the source typography: no safety
@@ -1648,6 +1650,8 @@ fn extract_slide(
     }
 
     Ok(Page {
+        version: None,
+        title: None,
         page_type: None,
         layout: ctx.layout_key.clone(),
         background,

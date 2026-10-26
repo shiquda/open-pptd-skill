@@ -6,6 +6,11 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Improvements & Robustness
+
+- **Single-source AST field validation**: eliminated duplicate hand-written field allowlists in `validate.rs` by single-sourcing allowed YAML properties directly from typed AST struct definitions (`Presentation`, `Page`, `ElementCommon`, `TextContent`, `ShapeDef`, `Cell`, `Animation`, and element variants) backed by compile-time exhaustiveness guards, preventing regression of supported fields (such as `cropShape`, `softEdge`, `customFonts`, table `fill`) being falsely rejected as unknown while preserving batch diagnostic reporting without fail-fast truncation.
+- **XML writer tag pairing stack protection**: `pptx::xml::Xml` now enforces start/end tag pairing via a tag stack, asserting matching tag names on `end()` and verifying zero unclosed tags on `into_string()`, preventing silent XML malformation.
+
 ### Security
 
 - **Removed the remote-pipe install entry point**: deleted `skills/open-pptd/scripts/install_binary.sh`. Both READMEs, `SKILL.md`, and `reference/cli.md` no longer steer anyone to `curl … | bash`; the only automated install path is `python3 skills/open-pptd/scripts/install_binary.py` from a local checkout.

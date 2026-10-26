@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+### 改进与健壮性
+
+- **类型定义与输入校验同源（消除手写重复白名单）**：PPTD AST 结构体（`Presentation`、`Page`、`ElementCommon`、`TextContent`、`ShapeDef`、`Cell`、`Animation` 及各元素变体）通过编译期穷举守卫直接导出合法字段集合，彻底废除 `validate.rs` 中 5 处容易与 AST 脱节的手写白名单数组；新增/调整 AST 字段时若未同步字段声明直接触发 Rust 编译期报错，根治合法字段（如 `cropShape`、`softEdge`、`customFonts`、表格 `fill` 等）被手写清单漏改误拒的隐患；保留既有一趟检查收集全部诊断的体验，不简单换成首错即停。
+- **XML 标签配对运行时栈保护**：`pptx::xml::Xml` 引入标签配对栈校验（`tag_stack`），严格在 `Xml::start` 与 `Xml::end` 时校验标签名匹配，并在 `into_string()` 完成文档时断言无未闭合标签，杜绝因手动 XML 拼装导致的标签错配或漏闭合。
+
 ### 安全
 
 - **移除远程管道安装入口**：删除 `skills/open-pptd/scripts/install_binary.sh`。中英文 README、`SKILL.md` 与 `reference/cli.md` 不再引导 `curl … | bash`；`pptd` 的唯一自动安装路径是本地检出中的 `python3 skills/open-pptd/scripts/install_binary.py`。

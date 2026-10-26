@@ -5,6 +5,60 @@
 //! format specification so that a project can be parsed, validated and
 //! eventually written back losslessly.
 
+/// Helper macro to attach a compile-time exhaustiveness guard and a static list
+/// of known YAML field names to an AST struct.
+///
+/// If any field is added, removed, or renamed on `$struct_name` without updating
+/// this declaration, `_exhaustiveness_guard` will produce a compile-time error.
+#[macro_export]
+macro_rules! define_field_names {
+    (
+        $struct_name:ident {
+            $( $field:ident : $name:literal ),* $(,)?
+        } $( extra: [ $( $extra:literal ),* $(,)? ] )?
+    ) => {
+        impl $struct_name {
+            /// Known YAML field names accepted for this struct.
+            pub const KNOWN_FIELDS: &'static [&'static str] = &[
+                $( $name, )*
+                $( $( $extra, )* )?
+            ];
+
+            #[doc(hidden)]
+            #[inline(always)]
+            pub fn _exhaustiveness_guard(dummy: &Self) {
+                let Self { $( $field: _ ),* } = dummy;
+            }
+        }
+    };
+}
+
+/// Helper macro to attach a compile-time exhaustiveness guard and a static list
+/// of known YAML field names for an element struct that flattens `ElementCommon`.
+#[macro_export]
+macro_rules! define_element_fields {
+    (
+        $struct_name:ident {
+            common: _,
+            $( $field:ident : $name:literal ),* $(,)?
+        } $( extra: [ $( $extra:literal ),* $(,)? ] )?
+    ) => {
+        impl $struct_name {
+            /// Known YAML field names specific to this element type (excluding flattened common fields).
+            pub const OWN_FIELDS: &'static [&'static str] = &[
+                $( $name, )*
+                $( $( $extra, )* )?
+            ];
+
+            #[doc(hidden)]
+            #[inline(always)]
+            pub fn _exhaustiveness_guard(dummy: &Self) {
+                let Self { common: _, $( $field: _ ),* } = dummy;
+            }
+        }
+    };
+}
+
 pub mod animation;
 pub mod ast;
 pub mod chart;

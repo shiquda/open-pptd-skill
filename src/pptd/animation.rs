@@ -33,6 +33,20 @@ pub struct Animation {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub amount: Option<f64>,
 }
+crate::define_field_names!(Animation {
+    element_id: "elementId",
+    effect: "effect",
+    trigger: "trigger",
+    direction: "direction",
+    duration_ms: "durationMs",
+    delay_ms: "delayMs",
+    easing: "easing",
+    repeat: "repeat",
+    path: "path",
+    color: "color",
+    amount: "amount",
+});
+
 
 /// Animation effects: entrance / emphasis / exit / motion-path.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

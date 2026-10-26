@@ -19,7 +19,12 @@ pub struct Presentation {
     /// Optional presentation title.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
-    /// Custom fonts (e.g. Google Fonts CSS URLs) used by the deck.
+    /// Optional presentation author.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub author: Option<String>,
+    /// Optional presentation description.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub custom_fonts: Vec<CustomFont>,
     /// Canvas size in px; e.g. `[960, 540]` for 16:9.
@@ -40,13 +45,32 @@ pub struct Presentation {
     /// Relative paths to the page files, e.g. `pages/1_cover.page`.
     pub pages: Vec<String>,
 }
+crate::define_field_names!(Presentation {
+    version: "version",
+    title: "title",
+    author: "author",
+    description: "description",
+    custom_fonts: "customFonts",
+    size: "size",
+    safe_fonts: "safeFonts",
+    theme: "theme",
+    layouts: "layouts",
+    pages: "pages",
+});
+
 
 /// A single slide. Page files are loaded only through the main entry file.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Page {
-    /// Category label; does not affect rendering.
+    /// Optional slide format version (e.g. `"v2"`).
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// Optional slide title.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    /// Category label; does not affect rendering.
+    #[serde(default, alias = "pageType", skip_serializing_if = "Option::is_none")]
     pub page_type: Option<String>,
     /// SlideForge extension: references a key in
     /// [`Presentation::layouts`]. When set, the page inherits the layout's
@@ -75,3 +99,14 @@ pub struct Page {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub groups: Option<HashMap<String, GroupDef>>,
 }
+crate::define_field_names!(Page {
+    version: "version",
+    title: "title",
+    page_type: "page_type",
+    layout: "layout",
+    background: "background",
+    notes: "notes",
+    elements: "elements",
+    animations: "animations",
+    groups: "groups",
+} extra: ["pageType"]);

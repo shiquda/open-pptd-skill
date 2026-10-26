@@ -24,6 +24,7 @@ pub fn escape(text: &str) -> String {
 pub struct Xml {
     buf: String,
     indent: usize,
+    tag_stack: Vec<String>,
 }
 
 impl Xml {
@@ -32,6 +33,7 @@ impl Xml {
         Self {
             buf: String::from("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"),
             indent: 0,
+            tag_stack: Vec::new(),
         }
     }
 
@@ -40,17 +42,24 @@ impl Xml {
         self.push_open(name, attrs);
         self.indent += 1;
         self.buf.push('\n');
+        self.tag_stack.push(name.to_string());
     }
 
     /// Close an element opened by [`Xml::start`].
     pub fn end(&mut self, name: &str) {
-        self.indent -= 1;
+        let expected = self.tag_stack.pop().unwrap_or_else(|| {
+            panic!("Xml::end(\"{name}\") called on empty tag stack");
+        });
+        assert_eq!(
+            expected, name,
+            "XML tag mismatch: attempted to close <{expected}> with </{name}>"
+        );
+        self.indent = self.indent.saturating_sub(1);
         self.write_indent();
         self.buf.push_str("</");
         self.buf.push_str(name);
         self.buf.push_str(">\n");
     }
-
     /// A self-closing element.
     pub fn leaf(&mut self, name: &str, attrs: &[(&str, &str)]) {
         self.write_indent();
@@ -123,9 +132,13 @@ impl Xml {
 
     /// Emit the document and return the final string.
     pub fn into_string(self) -> String {
+        assert!(
+            self.tag_stack.is_empty(),
+            "unclosed XML tags remaining when finishing document: {:?}",
+            self.tag_stack
+        );
         self.buf
     }
-
     fn push_open(&mut self, name: &str, attrs: &[(&str, &str)]) {
         self.write_indent();
         self.buf.push('<');
@@ -144,5 +157,47 @@ impl Xml {
         for _ in 0..self.indent {
             self.buf.push_str("  ");
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn well_paired_tags_succeed() {
+        let mut xml = Xml::new();
+        xml.start("root", &[]);
+        xml.start("child", &[("attr", "val")]);
+        xml.leaf("leaf", &[]);
+        xml.end("child");
+        xml.end("root");
+        let s = xml.into_string();
+        assert!(s.contains("<root>"));
+        assert!(s.contains("</root>"));
+    }
+
+    #[test]
+    #[should_panic(expected = "XML tag mismatch: attempted to close <p:sp> with </p:grpSp>")]
+    fn mismatched_tags_panic() {
+        let mut xml = Xml::new();
+        xml.start("p:sp", &[]);
+        xml.end("p:grpSp");
+    }
+
+    #[test]
+    #[should_panic(expected = "Xml::end(\"p:sp\") called on empty tag stack")]
+    fn empty_stack_end_panics() {
+        let mut xml = Xml::new();
+        xml.end("p:sp");
+    }
+
+    #[test]
+    #[should_panic(expected = "unclosed XML tags remaining when finishing document: [\"p:sld\", \"p:cSld\"]")]
+    fn unclosed_tags_panic_on_into_string() {
+        let mut xml = Xml::new();
+        xml.start("p:sld", &[]);
+        xml.start("p:cSld", &[]);
+        let _ = xml.into_string();
     }
 }

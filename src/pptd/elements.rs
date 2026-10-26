@@ -48,6 +48,17 @@ pub struct ElementCommon {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub link: Option<String>,
 }
+crate::define_field_names!(ElementCommon {
+    element_id: "elementId",
+    bounds: "bounds",
+    rotation: "rotation",
+    opacity: "opacity",
+    flip: "flip",
+    group_id: "groupId",
+    group_bounds: "groupBounds",
+    link: "link",
+} extra: ["elementType", "type"]);
+
 
 /// Any element on a page, discriminated by the `elementType` field:
 /// internally-tagged, payload merged into the same map as the tag.
@@ -158,6 +169,24 @@ impl Element {
             Element::Chart(e) => &mut e.common,
         }
     }
+
+    /// True if `field` is a known YAML property for an element of type `elem_type`.
+    pub fn is_known_field(elem_type: &str, field: &str) -> bool {
+        if ElementCommon::KNOWN_FIELDS.contains(&field) {
+            return true;
+        }
+        match elem_type {
+            "text" => Text::OWN_FIELDS.contains(&field),
+            "shape" => Shape::OWN_FIELDS.contains(&field),
+            "line" => Line::OWN_FIELDS.contains(&field),
+            "image" => Image::OWN_FIELDS.contains(&field),
+            "video" | "audio" => Media::OWN_FIELDS.contains(&field),
+            "icon" => Icon::OWN_FIELDS.contains(&field),
+            "table" => Table::OWN_FIELDS.contains(&field),
+            "chart" => super::chart::Chart::OWN_FIELDS.contains(&field),
+            _ => false,
+        }
+    }
 }
 
 /// Text direction of a text box.
@@ -226,7 +255,7 @@ pub struct TextContent {
     pub margin_bottom: Option<f64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub autofit: Option<TextAutofit>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, alias = "direction", skip_serializing_if = "Option::is_none")]
     pub text_direction: Option<TextDirection>,
     /// Whether the text wraps; defaults to `true`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -260,6 +289,36 @@ pub struct TextContent {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub shadow: Option<Shadow>,
 }
+crate::define_field_names!(TextContent {
+    text: "text",
+    style: "style",
+    color: "color",
+    font_size: "fontSize",
+    font_family: "fontFamily",
+    bold: "bold",
+    italic: "italic",
+    background_color: "backgroundColor",
+    line_height: "lineHeight",
+    line_height_px: "lineHeightPx",
+    space_after: "spaceAfter",
+    letter_spacing: "letterSpacing",
+    margin_top: "marginTop",
+    margin_left: "marginLeft",
+    margin_right: "marginRight",
+    margin_bottom: "marginBottom",
+    autofit: "autofit",
+    text_direction: "textDirection",
+    wrap: "wrap",
+    body_pr_extras: "bodyPrExtras",
+    align: "align",
+    bullet_char: "bulletChar",
+    bullet_font: "bulletFont",
+    list_margin: "listMargin",
+    list_indent: "listIndent",
+    gradient: "gradient",
+    shadow: "shadow",
+} extra: ["direction"]);
+
 
 /// `elementType: text` — a text box.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -282,6 +341,14 @@ pub struct Text {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub placeholder: Option<String>,
 }
+crate::define_element_fields!(Text {
+    common: _,
+    content: "content",
+    fill: "fill",
+    border: "border",
+    placeholder: "placeholder",
+});
+
 
 /// `elementType: shape` — a built-in or custom geometry.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -306,6 +373,17 @@ pub struct Shape {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub shadow: Option<Shadow>,
 }
+crate::define_element_fields!(Shape {
+    common: _,
+    shape_name: "shapeName",
+    adjustments: "adjustments",
+    view_box: "viewBox",
+    path: "path",
+    fill: "fill",
+    border: "border",
+    shadow: "shadow",
+});
+
 
 /// Arrowhead style for a [`Line`] element.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -351,6 +429,16 @@ pub struct Line {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub shadow: Option<Shadow>,
 }
+crate::define_element_fields!(Line {
+    common: _,
+    view_box: "viewBox",
+    points: "points",
+    curve: "curve",
+    arrow: "arrow",
+    border: "border",
+    shadow: "shadow",
+});
+
 
 /// Shape definition reused by `Image.cropShape` and `Bar.symbol`.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -365,6 +453,13 @@ pub struct ShapeDef {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
 }
+crate::define_field_names!(ShapeDef {
+    shape_name: "shapeName",
+    adjustments: "adjustments",
+    view_box: "viewBox",
+    path: "path",
+});
+
 
 /// `elementType: image`.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -390,6 +485,17 @@ pub struct Image {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub soft_edge: Option<f64>,
 }
+crate::define_element_fields!(Image {
+    common: _,
+    src: "src",
+    crop_shape: "cropShape",
+    fit: "fit",
+    crop: "crop",
+    border: "border",
+    shadow: "shadow",
+    soft_edge: "softEdge",
+});
+
 
 /// `elementType: video` / `elementType: audio` — an embedded media clip.
 /// Rendered as the OOXML media picture (`p:pic` whose `nvPr` carries
@@ -408,6 +514,12 @@ pub struct Media {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub poster: Option<String>,
 }
+crate::define_element_fields!(Media {
+    common: _,
+    src: "src",
+    poster: "poster",
+});
+
 
 /// `elementType: icon` — a Font Awesome icon drawn from the embedded solid
 /// subset (FA 6.7.2), `iconName` is `style:name` (the style prefix is ignored).
@@ -426,6 +538,14 @@ pub struct Icon {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub shadow: Option<Shadow>,
 }
+crate::define_element_fields!(Icon {
+    common: _,
+    icon_name: "iconName",
+    fill: "fill",
+    border: "border",
+    shadow: "shadow",
+});
+
 
 /// Cell text insets in points (`a:tcPr@marL/marR/marT/marB`). Unset sides
 /// keep PowerPoint's defaults: 7.2 pt left/right, 3.6 pt top/bottom.
@@ -441,6 +561,13 @@ pub struct CellMargin {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub bottom: Option<f64>,
 }
+crate::define_field_names!(CellMargin {
+    left: "left",
+    right: "right",
+    top: "top",
+    bottom: "bottom",
+});
+
 
 impl CellMargin {
     /// PowerPoint's default insets in points (0.1in horizontal, 0.05in
@@ -503,6 +630,28 @@ pub struct Cell {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub col_span: Option<u32>,
 }
+crate::define_field_names!(Cell {
+    text: "text",
+    text_style: "textStyle",
+    color: "color",
+    font_size: "fontSize",
+    font_family: "fontFamily",
+    bold: "bold",
+    italic: "italic",
+    background_color: "backgroundColor",
+    line_height: "lineHeight",
+    line_height_px: "lineHeightPx",
+    letter_spacing: "letterSpacing",
+    margin_top: "marginTop",
+    margin: "margin",
+    autofit: "autofit",
+    fill: "fill",
+    border: "border",
+    align: "align",
+    row_span: "rowSpan",
+    col_span: "colSpan",
+});
+
 
 /// `elementType: table`.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -524,6 +673,16 @@ pub struct Table {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub shadow: Option<Shadow>,
 }
+crate::define_element_fields!(Table {
+    common: _,
+    column_widths: "columnWidths",
+    row_heights: "rowHeights",
+    rows: "rows",
+    style: "style",
+    fill: "fill",
+    shadow: "shadow",
+});
+
 
 // ---------------------------------------------------------------------------
 // SlideForge group extension (flat PPTD + reconstructed `<p:grpSp>).

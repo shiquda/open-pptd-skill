@@ -105,6 +105,29 @@ pub struct Chart {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub shadow: Option<Shadow>,
 }
+crate::define_element_fields!(Chart {
+    common: _,
+    chart_part: "chartPart",
+    workbook_part: "workbookPart",
+    chart_kind: "chartKind",
+    data: "data",
+    series: "series",
+    series_defaults: "seriesDefaults",
+    title: "title",
+    legend: "legend",
+    data_labels: "dataLabels",
+    x_axis: "xAxis",
+    y_axis: "yAxis",
+    spoke_axis: "spokeAxis",
+    bar_width: "barWidth",
+    bar_gap: "barGap",
+    category_gap: "categoryGap",
+    font_family: "fontFamily",
+    fill: "fill",
+    border: "border",
+    shadow: "shadow",
+});
+
 
 impl Chart {
     /// A chart carried as native OOXML parts (`pptd convert` output): the

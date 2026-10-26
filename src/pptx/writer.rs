@@ -591,6 +591,12 @@ fn core_properties_xml(presentation: &Presentation) -> PackageEntry {
     if let Some(title) = &presentation.title {
         x.text_elem("dc:title", title);
     }
+    if let Some(author) = &presentation.author {
+        x.text_elem("dc:creator", author);
+    }
+    if let Some(desc) = &presentation.description {
+        x.text_elem("dc:description", desc);
+    }
     // Fixed timestamp: deterministic builds (no clock in the artifact).
     x.inline_text(
         "dcterms:modified",

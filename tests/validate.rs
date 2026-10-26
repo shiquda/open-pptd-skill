@@ -754,3 +754,150 @@ elements:
         "a zero-area rect is a modelling mistake: {issues:?}"
     );
 }
+
+#[test]
+fn nested_unknown_fields_in_image_crop_shape_are_reported() {
+    let page = r#"
+elements:
+  - elementId: img1
+    elementType: image
+    bounds: [0, 0, 100, 100]
+    src: assets/pic.png
+    cropShape:
+      shapeName: roundRect
+      bogusField: 123
+"#;
+    let dir = std::env::temp_dir().join(format!("test-cropshape-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::create_dir_all(dir.join("assets")).unwrap();
+    fs::write(dir.join("deck.pptd"), MINIMAL_DECK).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+    fs::write(dir.join("assets/pic.png"), b"\x89PNG\r\n\x1a\n").unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        issues.iter().any(|d| d.message.contains("image `img1` cropShape has unknown field `bogusField`")),
+        "expected cropShape unknown field diagnostic, got {issues:?}"
+    );
+}
+
+#[test]
+fn nested_unknown_fields_in_table_cells_are_reported() {
+    let page = r##"
+elements:
+  - elementId: tbl1
+    elementType: table
+    bounds: [0, 0, 400, 200]
+    columnWidths: [0.5, 0.5]
+    rowHeights: [0.5, 0.5]
+    rows:
+      - - text: "cell 1"
+          bogusCellField: true
+        - text: "cell 2"
+      - - text: "cell 3"
+        - text: "cell 4"
+"##;
+    let entry = tmp_deck("table-cell-unknown", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        issues.iter().any(|d| d.message.contains("table `tbl1` cell has unknown field `bogusCellField`")),
+        "expected table cell unknown field diagnostic, got {issues:?}"
+    );
+}
+
+#[test]
+fn nested_unknown_fields_in_animations_are_reported() {
+    let page = r#"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [0, 0, 100, 50]
+    content:
+      text: "hello"
+animations:
+  - elementId: t1
+    effect: fade-in
+    bogusAnimProp: 99
+"#;
+    let entry = tmp_deck("anim-unknown", MINIMAL_DECK, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+    assert!(
+        issues.iter().any(|d| d.message.contains("animation on page has unknown field `bogusAnimProp`")),
+        "expected animation unknown field diagnostic, got {issues:?}"
+    );
+}
+
+#[test]
+fn batch_unknown_field_diagnostics_report_all_issues_in_single_run() {
+    let deck = "version: v2\nsize: [960, 540]\nbogusManifest: 1\npages:\n  - pages/p.page\n";
+    let page = r##"
+bogusPageHeader: "test"
+elements:
+  - elementId: t1
+    elementType: text
+    bounds: [0, 0, 100, 50]
+    bogusElemField1: true
+    bogusElemField2: false
+    content:
+      text: "hello"
+      bogusContent1: 1
+      bogusContent2: 2
+"##;
+    let entry = tmp_deck("batch-unknown", deck, &[("p.page", page)]);
+    let project = pptd::load_project(Path::new(&entry)).unwrap();
+    let issues = validate_project(&project);
+
+    assert!(issues.iter().any(|d| d.message.contains("unknown field `bogusManifest` in deck manifest")));
+    assert!(issues.iter().any(|d| d.message.contains("unknown field `bogusPageHeader` on page")));
+    assert!(issues.iter().any(|d| d.message.contains("element `t1` has unknown field `bogusElemField1`")));
+    assert!(issues.iter().any(|d| d.message.contains("element `t1` has unknown field `bogusElemField2`")));
+    assert!(issues.iter().any(|d| d.message.contains("text `t1` content has unknown field `bogusContent1`")));
+    assert!(issues.iter().any(|d| d.message.contains("text `t1` content has unknown field `bogusContent2`")));
+    // Ensure that none of the 6 diagnostics were skipped due to fail-fast
+    let unknown_count = issues.iter().filter(|d| d.message.contains("unknown field")).count();
+    assert_eq!(unknown_count, 6, "all 6 unknown fields must be reported in one pass: {issues:?}");
+}
+
+#[test]
+fn single_source_known_fields_coverage() {
+    use open_pptd::pptd::animation::Animation;
+    use open_pptd::pptd::ast::{Page, Presentation};
+    use open_pptd::pptd::chart::Chart;
+    use open_pptd::pptd::elements::{
+        Cell, CellMargin, Element, ElementCommon, Icon, Image, Line, Media, Shape, ShapeDef, Table,
+        Text, TextContent,
+    };
+
+    assert!(!Presentation::KNOWN_FIELDS.is_empty());
+    assert!(!Page::KNOWN_FIELDS.is_empty());
+    assert!(!Animation::KNOWN_FIELDS.is_empty());
+    assert!(!ElementCommon::KNOWN_FIELDS.is_empty());
+    assert!(!TextContent::KNOWN_FIELDS.is_empty());
+    assert!(!ShapeDef::KNOWN_FIELDS.is_empty());
+    assert!(!CellMargin::KNOWN_FIELDS.is_empty());
+    assert!(!Cell::KNOWN_FIELDS.is_empty());
+    assert!(!Text::OWN_FIELDS.is_empty());
+    assert!(!Shape::OWN_FIELDS.is_empty());
+    assert!(!Line::OWN_FIELDS.is_empty());
+    assert!(!Image::OWN_FIELDS.is_empty());
+    assert!(!Media::OWN_FIELDS.is_empty());
+    assert!(!Icon::OWN_FIELDS.is_empty());
+    assert!(!Table::OWN_FIELDS.is_empty());
+    assert!(!Chart::OWN_FIELDS.is_empty());
+
+    // Verify Element::is_known_field dispatches correctly
+    assert!(Element::is_known_field("text", "elementId"));
+    assert!(Element::is_known_field("text", "content"));
+    assert!(Element::is_known_field("shape", "shapeName"));
+    assert!(Element::is_known_field("line", "points"));
+    assert!(Element::is_known_field("image", "cropShape"));
+    assert!(Element::is_known_field("image", "softEdge"));
+    assert!(Element::is_known_field("table", "fill"));
+    assert!(Element::is_known_field("chart", "chartPart"));
+    assert!(!Element::is_known_field("text", "shapeName"));
+    assert!(!Element::is_known_field("shape", "content"));
+}

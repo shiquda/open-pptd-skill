@@ -21,12 +21,13 @@
 use std::collections::HashSet;
 use std::path::Path;
 
+use super::animation::Animation;
+use super::ast::{Page, Presentation};
 use super::chart::Chart;
-use super::elements::{Element, Shape, Text};
+use super::elements::{Cell, Element, Shape, ShapeDef, Text, TextContent};
 use super::shared::{Border, BorderSpec, Color, Fill, Shadow};
 use super::theme::{TableStyleRef, Theme};
-use super::{Page, Project};
-
+use super::Project;
 /// A single validation finding.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Diagnostic {
@@ -1253,31 +1254,17 @@ fn check_presentation_raw_yaml(project: &Project, out: &mut Vec<Diagnostic>) {
     // name picked up a sibling `deck.pptd` and silently skipped the entry the
     // caller asked to validate.
     let path = &project.entry_path;
-    {
-        if let Ok(content) = std::fs::read_to_string(path) {
-            if let Ok(serde_yaml::Value::Mapping(map)) =
-                serde_yaml::from_str::<serde_yaml::Value>(&content)
-            {
-                const VALID_PRES_KEYS: &[&str] = &[
-                    "version",
-                    "title",
-                    "size",
-                    "theme",
-                    "pages",
-                    "layouts",
-                    "author",
-                    "description",
-                    "customFonts",
-                    "safeFonts",
-                ];
-                for (k, _) in &map {
-                    if let serde_yaml::Value::String(s) = k {
-                        if !VALID_PRES_KEYS.contains(&s.as_str()) {
-                            out.push(Diagnostic {
-                                page: None,
-                                message: format!("unknown field `{s}` in deck manifest"),
-                            });
-                        }
+    if let Ok(content) = std::fs::read_to_string(path) {
+        if let Ok(serde_yaml::Value::Mapping(map)) =
+            serde_yaml::from_str::<serde_yaml::Value>(&content)
+        {
+            for (k, _) in &map {
+                if let serde_yaml::Value::String(s) = k {
+                    if !Presentation::KNOWN_FIELDS.contains(&s.as_str()) {
+                        out.push(Diagnostic {
+                            page: None,
+                            message: format!("unknown field `{s}` in deck manifest"),
+                        });
                     }
                 }
             }
@@ -1299,22 +1286,28 @@ fn check_page_raw_yaml(project: &Project, page_idx: usize, out: &mut Vec<Diagnos
         return;
     };
 
-    const VALID_PAGE_KEYS: &[&str] = &[
-        "version",
-        "title",
-        "pageType",
-        "page_type",
-        "background",
-        "layout",
-        "notes",
-        "elements",
-        "animations",
-        "groups",
-    ];
     for (k, _) in &map {
         if let serde_yaml::Value::String(s) = k {
-            if !VALID_PAGE_KEYS.contains(&s.as_str()) {
+            if !Page::KNOWN_FIELDS.contains(&s.as_str()) {
                 diag(out, page_idx, format!("unknown field `{s}` on page"));
+            }
+        }
+    }
+
+    if let Some(serde_yaml::Value::Sequence(anims)) = map.get("animations") {
+        for anim in anims {
+            if let serde_yaml::Value::Mapping(amap) = anim {
+                for (k, _) in amap {
+                    if let serde_yaml::Value::String(s) = k {
+                        if !Animation::KNOWN_FIELDS.contains(&s.as_str()) {
+                            diag(
+                                out,
+                                page_idx,
+                                format!("animation on page has unknown field `{s}`"),
+                            );
+                        }
+                    }
+                }
             }
         }
     }
@@ -1332,102 +1325,9 @@ fn check_page_raw_yaml(project: &Project, page_idx: usize, out: &mut Vec<Diagnos
                     .and_then(|v| v.as_str())
                     .unwrap_or("text");
 
-                const COMMON_KEYS: &[&str] = &[
-                    "elementId",
-                    "elementType",
-                    "type",
-                    "bounds",
-                    "rotation",
-                    "opacity",
-                    "flip",
-                    "groupId",
-                    "groupBounds",
-                    "className",
-                    "style",
-                    "order",
-                    "link",
-                ];
-                let type_keys: &[&str] = match elem_type {
-                    "text" => &[
-                        "content",
-                        "fill",
-                        "border",
-                        "shadow",
-                        "padding",
-                        "shape",
-                        "placeholder",
-                    ],
-                    "shape" => &[
-                        "shapeName",
-                        "fill",
-                        "border",
-                        "shadow",
-                        "viewBox",
-                        "path",
-                        "adjustments",
-                    ],
-                    "line" => &[
-                        "viewBox",
-                        "points",
-                        "curve",
-                        "arrow",
-                        "border",
-                        "shadow",
-                        "stroke",
-                        "fill",
-                        "startArrow",
-                        "endArrow",
-                        "startPoint",
-                        "endPoint",
-                    ],
-                    "icon" => &["iconName", "viewBox", "path", "fill", "border", "shadow"],
-                    "image" => &[
-                        "src",
-                        "crop",
-                        "fit",
-                        "border",
-                        "shadow",
-                        "opacity",
-                        "cropShape",
-                        "softEdge",
-                    ],
-                    "table" => &[
-                        "rows",
-                        "columnWidths",
-                        "rowHeights",
-                        "style",
-                        "fill",
-                        "border",
-                        "shadow",
-                        "cellPadding",
-                    ],
-                    "video" | "audio" => &["src", "poster", "autoplay", "loop"],
-                    "chart" => &[
-                        "chartPart",
-                        "workbookPart",
-                        "chartKind",
-                        "data",
-                        "series",
-                        "seriesDefaults",
-                        "title",
-                        "legend",
-                        "dataLabels",
-                        "xAxis",
-                        "yAxis",
-                        "spokeAxis",
-                        "barWidth",
-                        "barGap",
-                        "categoryGap",
-                        "fill",
-                        "border",
-                        "fontFamily",
-                    ],
-                    _ => &[],
-                };
-
                 for (k, _) in emap {
                     if let serde_yaml::Value::String(s) = k {
-                        if !COMMON_KEYS.contains(&s.as_str()) && !type_keys.contains(&s.as_str()) {
+                        if !Element::is_known_field(elem_type, s.as_str()) {
                             diag(
                                 out,
                                 page_idx,
@@ -1439,44 +1339,50 @@ fn check_page_raw_yaml(project: &Project, page_idx: usize, out: &mut Vec<Diagnos
 
                 if elem_type == "text" {
                     if let Some(serde_yaml::Value::Mapping(cmap)) = emap.get("content") {
-                        const CONTENT_KEYS: &[&str] = &[
-                            "text",
-                            "style",
-                            "color",
-                            "fontFamily",
-                            "fontSize",
-                            "bold",
-                            "italic",
-                            "backgroundColor",
-                            "lineHeight",
-                            "lineHeightPx",
-                            "spaceAfter",
-                            "letterSpacing",
-                            "align",
-                            "wrap",
-                            "direction",
-                            "textDirection",
-                            "autofit",
-                            "marginTop",
-                            "marginLeft",
-                            "marginRight",
-                            "marginBottom",
-                            "bodyPrExtras",
-                            "gradient",
-                            "shadow",
-                            "bulletChar",
-                            "bulletFont",
-                            "listMargin",
-                            "listIndent",
-                        ];
                         for (k, _) in cmap {
                             if let serde_yaml::Value::String(s) = k {
-                                if !CONTENT_KEYS.contains(&s.as_str()) {
+                                if !TextContent::KNOWN_FIELDS.contains(&s.as_str()) {
                                     diag(
                                         out,
                                         page_idx,
                                         format!("text `{elem_id}` content has unknown field `{s}`"),
                                     );
+                                }
+                            }
+                        }
+                    }
+                } else if elem_type == "image" {
+                    if let Some(serde_yaml::Value::Mapping(smap)) = emap.get("cropShape") {
+                        for (k, _) in smap {
+                            if let serde_yaml::Value::String(s) = k {
+                                if !ShapeDef::KNOWN_FIELDS.contains(&s.as_str()) {
+                                    diag(
+                                        out,
+                                        page_idx,
+                                        format!("image `{elem_id}` cropShape has unknown field `{s}`"),
+                                    );
+                                }
+                            }
+                        }
+                    }
+                } else if elem_type == "table" {
+                    if let Some(serde_yaml::Value::Sequence(rows)) = emap.get("rows") {
+                        for row in rows {
+                            if let serde_yaml::Value::Sequence(cells) = row {
+                                for cell in cells {
+                                    if let serde_yaml::Value::Mapping(cell_map) = cell {
+                                        for (k, _) in cell_map {
+                                            if let serde_yaml::Value::String(s) = k {
+                                                if !Cell::KNOWN_FIELDS.contains(&s.as_str()) {
+                                                    diag(
+                                                        out,
+                                                        page_idx,
+                                                        format!("table `{elem_id}` cell has unknown field `{s}`"),
+                                                    );
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

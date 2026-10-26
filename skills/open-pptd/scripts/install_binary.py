@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Standalone installer for the `pptd` native PPTD compiler binary.
 
-Downloads the pre-compiled binary with SHA256 checksum verification from
-GitHub Releases for macOS (arm64 & x86_64), Linux (x86_64 & aarch64), or Windows (x86_64),
-or falls back smoothly to `cargo install` if pre-compiled assets are unavailable.
+Downloads a pinned pre-compiled binary from GitHub Releases for macOS (arm64 & x86_64),
+Linux (x86_64 & aarch64), or Windows (x86_64), and refuses to install it unless the
+archive SHA-256 matches the release's `SHA256SUMS.txt`. When the pinned archive or its
+checksum is unavailable, the installer falls back to `cargo install --tag v<version>`
+so the source side is pinned to the same version as the binaries.
 """
 
 from __future__ import annotations
@@ -27,7 +29,7 @@ from typing import Optional, Tuple
 
 REPO = "shiquda/open-pptd-skill"
 REPO_CANDIDATES = ["shiquda/open-pptd-skill"]
-VERSION = "1.4.1"
+VERSION = "1.4.2"
 
 
 def detect_target(version: str = VERSION) -> Optional[Tuple[str, list[str]]]:
@@ -177,7 +179,7 @@ def find_pptd(min_version: Optional[str] = None) -> Optional[Path]:
 find_slideforge = find_pptd
 
 def fetch_checksums(version: str) -> dict[str, str]:
-    """Fetch SHA256SUMS.txt from candidate GitHub releases if available."""
+    """Fetch SHA256SUMS.txt from candidate GitHub releases; empty when unavailable."""
     for repo in REPO_CANDIDATES:
         sums_url = f"https://github.com/{repo}/releases/download/v{version}/SHA256SUMS.txt"
         req = urllib.request.Request(
@@ -238,22 +240,23 @@ def install_from_release(dest_dir: Path, version: str = VERSION) -> Path:
             f"Failed to download prebuilt binary for v{version} from candidate repositories {REPO_CANDIDATES}: {last_err}"
         )
 
-    # SHA256 checksum verification
+    # SHA256 verification is mandatory: an archive we cannot verify is never installed.
     expected_sums = fetch_checksums(version)
-    if chosen_archive in expected_sums:
-        expected_sha = expected_sums[chosen_archive]
-        actual_sha = hashlib.sha256(data).hexdigest()
-        if actual_sha.lower() != expected_sha.lower():
-            raise RuntimeError(
-                f"SHA256 checksum mismatch for {chosen_archive}!\n"
-                f"  Expected: {expected_sha}\n"
-                f"  Actual:   {actual_sha}\n"
-                f"The downloaded archive may be corrupted or compromised."
-            )
-        print(f"[open-pptd] SHA256 checksum verified: {actual_sha[:12]}...")
-    else:
-        actual_sha = hashlib.sha256(data).hexdigest()
-        print(f"[open-pptd] SHA256 (unverified): {actual_sha[:12]}...")
+    expected_sha = expected_sums.get(chosen_archive)
+    if not expected_sha:
+        raise RuntimeError(
+            f"v{version} has no SHA256SUMS.txt entry for '{chosen_archive}'; refusing to install an unverified binary. "
+            f"Install from pinned source instead: cargo install --git https://github.com/{REPO}.git --tag v{version}"
+        )
+    actual_sha = hashlib.sha256(data).hexdigest()
+    if actual_sha.lower() != expected_sha.lower():
+        raise RuntimeError(
+            f"SHA256 checksum mismatch for {chosen_archive}!\n"
+            f"  Expected: {expected_sha}\n"
+            f"  Actual:   {actual_sha}\n"
+            f"The downloaded archive may be corrupted or compromised."
+        )
+    print(f"[open-pptd] SHA256 verified for {chosen_archive}: {actual_sha}")
 
     dest_dir.mkdir(parents=True, exist_ok=True)
     is_win = platform.system().lower() == "windows"
@@ -296,11 +299,11 @@ def install_from_release(dest_dir: Path, version: str = VERSION) -> Path:
                 shutil.copy2(dest_path, open_pptd_bin)
             except Exception:
                 pass
-    print(f"[open-pptd] Installed pptd to: {dest_path}")
+    print(f"[open-pptd] Installed pptd v{version} from {chosen_archive} (SHA256 {actual_sha}) to: {dest_path}")
     return dest_path
 
 
-def install_from_cargo(dest_dir: Path) -> Path:
+def install_from_cargo(dest_dir: Path, version: str = VERSION) -> Path:
     print("[open-pptd] Attempting fallback compilation via cargo...", file=sys.stderr)
     cargo_bin = shutil.which("cargo")
     if not cargo_bin:
@@ -308,7 +311,17 @@ def install_from_cargo(dest_dir: Path) -> Path:
 
     dest_dir.mkdir(parents=True, exist_ok=True)
     install_root = dest_dir.parent if dest_dir.name == "bin" else dest_dir
-    cmd = ["cargo", "install", "--git", f"https://github.com/{REPO}.git", "--root", str(install_root), "--force"]
+    cmd = [
+        "cargo",
+        "install",
+        "--git",
+        f"https://github.com/{REPO}.git",
+        "--tag",
+        f"v{version}",
+        "--root",
+        str(install_root),
+        "--force",
+    ]
     print(f"[open-pptd] Running: {' '.join(cmd)}")
     subprocess.run(cmd, check=True)
 
@@ -372,7 +385,7 @@ def ensure_pptd(force_reinstall: bool = False, install_dir: Optional[Path] = Non
 
     # 2. Try cargo fallback
     try:
-        installed = install_from_cargo(install_dir)
+        installed = install_from_cargo(install_dir, version=version)
         v_out = probe_binary_version(installed)
         if not v_out or is_version_outdated(v_out, version):
             raise RuntimeError(f"Cargo compiled binary reported '{v_out}', expected version {version}")

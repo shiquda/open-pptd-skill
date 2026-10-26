@@ -49,8 +49,8 @@ python3 skills/open-pptd/scripts/validate_pptx.py <output.pptx> --expected-pages
 ## 🛠️ 异常分支与恢复指引 (Failure Branches)
 
 1. **下载或网络受限**：
-   - `install_binary.py` 会自动回退至本地 `cargo install --git`。
-   - 若本地无 Rust 工具链，可从 Release 页面手动下载解压至 `~/.local/bin/pptd`。
+   - `install_binary.py` 会自动回退至固定 tag 的 `cargo install --git … --tag v<version>`。
+   - 若本地无 Rust 工具链，可从 Release 页面手动下载归档与 `SHA256SUMS.txt`，本地校验后解压至 `~/.local/bin/pptd`。
 2. **`pptd check` 报错**：
    - 检查 `shapeName` 是否拼写错误（必须为 DrawingML 预设形状如 `roundRect`, `rect`, `ellipse`, `diamond` 等）。
    - 检查 `$color` 引用是否已在 `theme.colors` 中声明。

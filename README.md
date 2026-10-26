@@ -37,9 +37,13 @@ npx skills add https://github.com/shiquda/open-pptd-skill -g -y -a codex
 4. 配置完成后向我汇报已就绪。
 ```
 
-> **安装命令说明**：
-> - **标准生态命令**：使用技能包管理器 `npx skills add https://github.com/shiquda/open-pptd-skill -g -y`（或 `npx skills add shiquda/open-pptd-skill -g -y`）。该命令会做整仓克隆：完整 Git 历史约 110MB（当前工作树约 31MB），若在受限网络下克隆超时，请改用下方备用命令。
-> - **npm/npx 兼容命令（推荐备用）**：使用 `npx github:shiquda/open-pptd-skill install -y` 直接分发安装，避免全量 Git Clone 超时。
+> **安装模型（分清两件事，不要把 npx 当成编译器本体）**：
+> - **① 安装入口 = Skill 文本分发**。`npx skills add https://github.com/shiquda/open-pptd-skill -g -y` 是生态内的 **skills 包管理器**（第三方 CLI）的安装入口；`npx github:shiquda/open-pptd-skill install -y` 是本仓自带的 Node 分发器，作为整仓克隆超时时的备用入口。两者都**只负责把 SKILL.md / reference / 脚本复制到 Agent 技能目录**，不会构建 PPT、不下载编译器、也不在构建期参与运行。
+> - **② 运行时 = 原生 Rust 编译器 `pptd`**。真正的 PPTD → PPTX 编译由单文件原生 Rust 二进制完成（毫秒级、完全离线、构建期零 Node 依赖），由上一步的 `python3 …/install_binary.py` 从**固定 GitHub Release 版本**安装并校验 SHA256。
+>
+> 关于克隆体积：`skills add` 会做整仓克隆（完整 Git 历史约 110MB，工作树约 31MB）；受限网络下请改用 `npx github:shiquda/open-pptd-skill install -y`。
+>
+> 安全边界：本项目**不提供也不建议** `curl … | bash` 形式的远程管道安装；二进制一律从固定 Release 取包并强制校验 `SHA256SUMS.txt`，校验失败即中止并回退到固定 tag 的源码编译。
 ---
 
 ## 💬 让 Agent 制作 PPT（日常使用）
@@ -148,16 +152,27 @@ my_presentation/
 如果您需要脱离 Agent 在本地终端中直接调用 `pptd` CLI 进行开发或调试，可以通过以下方式安装与运行：
 
 ### 1. 手动安装 CLI
-```bash
-# 方式 A：通过 curl 脚本一键下载预编译包到 ~/.local/bin/pptd
-curl -fsSL https://raw.githubusercontent.com/shiquda/open-pptd-skill/main/skills/open-pptd/scripts/install_binary.sh | bash
+`pptd` 是原生 Rust 单文件二进制，只有一条自动化安装路径：运行仓库内的 Python 安装脚本（在本地检出中或已安装的 skill 目录中执行）。它从固定 Release 版本取包并强制校验 SHA256，**不支持也不建议** `curl … | bash` 之类的远程管道安装。
 
-# 方式 B：通过 Python 跨平台安装脚本
+```bash
+# 方式 A（推荐）：Python 跨平台安装脚本 —— 固定版本 + 强制 SHA256 校验
 python3 skills/open-pptd/scripts/install_binary.py
 
-# 方式 C：通过 Rust / Cargo 从源码编译安装
-cargo install --git https://github.com/shiquda/open-pptd-skill.git
+# 方式 B：从源码编译（固定 Release tag，与二进制同版本）
+cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.2
+
+# 方式 C：手动下载并自行校验
+# 1) 从 https://github.com/shiquda/open-pptd-skill/releases 下载对应平台的
+#    pptd-<version>-<os>.tar.gz（Windows 为 .zip）与 SHA256SUMS.txt
+# 2) 校验：sha256sum -c SHA256SUMS.txt --ignore-missing  或  shasum -a 256 <archive>
+# 3) 解压出 pptd 放到 ~/.local/bin（或其他 PATH 目录）并 chmod +x
 ```
+
+安装器行为（可核验）：
+- 版本固定为脚本内的 `VERSION`（当前 `1.4.2`），只访问该 tag 的 Release 资产；
+- 归档必须与 Release 的 `SHA256SUMS.txt` 条目**逐字节一致**，缺条目、取不到校验文件或校验不匹配都会中止安装，绝不会静默安装未校验的二进制；
+- 下载不可用时回退到 `cargo install --tag v<version>`；仍失败则打印手动安装指引并以非零码退出；
+- 日志会打印所装版本号与校验通过的 SHA256。
 
 ### 2. 核心 CLI 命令
 - **语义与结构静态质检**：

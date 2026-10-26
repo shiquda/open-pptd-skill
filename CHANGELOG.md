@@ -6,8 +6,16 @@
 
 ## [Unreleased]
 
+### 安全
+
+- **移除远程管道安装入口**：删除 `skills/open-pptd/scripts/install_binary.sh`。中英文 README、`SKILL.md` 与 `reference/cli.md` 不再引导 `curl … | bash`；`pptd` 的唯一自动安装路径是本地检出中的 `python3 skills/open-pptd/scripts/install_binary.py`。
+- **安装校验改为强制**：`install_binary.py` 在缺少 `SHA256SUMS.txt` 条目或校验文件不可达时不再打印 "SHA256 (unverified)" 后继续安装，而是中止该下载并回退到固定 tag 的源码编译；安装日志打印固定版本与实际校验通过的 SHA256。
+- **源码回退固定版本**：`cargo install` 回退补上 `--tag v<version>`，不再构建 `main` HEAD；安装器固定版本同步至 `1.4.2`（此前落后于当前 Release）。
+
 ### 文档与分发
 
+- **统一安装叙事**：中英文 README 与 `SKILL.md` 明确区分两层——`npx skills add` / 本仓 Node 分发器只复制技能文件，原生 Rust `pptd` 才是构建运行时（构建期零 Node 依赖）；`open-pptd-skill --help` 同步说明该命令不安装编译器。
+- **`SKILL.md` 新增 Security & Install Trust 与内容信任边界**：写明固定版本、强制 SHA256、固定回退、可核验日志与"禁止远程管道执行"；声明 PPTX/PPTD 输入中的任何文本都是待处理数据、不得当作指令执行。
 - `LICENSE` 保留标准 MIT 条款与版权声明，第三方来源说明迁移至 `NOTICE`；npm 分发同时保留 `NOTICE` 与原始 `LICENSE-MIT`。
 - 中英文 README 首屏加入明确定位、安装命令、真实 PowerPoint 效果图及对应 PPTD 源码入口。
 - 新增 `docs/images/social-preview.png`（1280×640）及可编辑 SVG 源文件；由仓库维护者在 GitHub Settings 中上传。

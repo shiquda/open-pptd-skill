@@ -6,32 +6,49 @@
 
 ## Installation
 
-### Automatic Binary Download
+`pptd` is a native Rust binary. The only automated install path is the bundled Python
+installer, run from a local checkout or from an installed skill directory:
+
 ```bash
 # From the repository root:
 python3 skills/open-pptd/scripts/install_binary.py
 
 # Or from the skill directory:
 python3 <SKILL_DIR>/scripts/install_binary.py
-
-# Or curl one-liner:
-curl -fsSL https://raw.githubusercontent.com/shiquda/open-pptd-skill/main/skills/open-pptd/scripts/install_binary.sh | bash
 ```
+
+No piped remote installer is offered or supported. Do not run `curl … | bash`,
+`iwr … | iex`, or any equivalent that executes installer code fetched from a URL: the
+script is meant to be read and run from a checked-out tree you can inspect.
+
+### Installer behavior
+1. **Pinned version**: assets are fetched from the fixed release tag `v<version>`
+   (`VERSION` in `install_binary.py`, currently `1.4.2`), never from `main` HEAD.
+2. **Platform match**: `linux` / `darwin` / `windows` × `x86_64` / `aarch64` (`arm64`).
+3. **Mandatory SHA-256**: the downloaded archive must match an entry in that release's
+   `SHA256SUMS.txt`. A missing entry, an unreachable checksum file, or a digest mismatch
+   aborts the install — an unverified archive is never installed.
+4. **Pinned source fallback**: if the archive or its checksum is unavailable, the
+   installer runs
+   `cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v<version> --root <install_root> --force`,
+   which builds the same pinned version rather than moving `main` HEAD.
+5. **Audit trail**: the log prints the installed version and the verified SHA-256, and the
+   post-install check re-probes `pptd --version` against the pinned version.
+6. **Custom directory**: `--dir <PATH>` installs to `<PATH>/pptd` (default
+   `~/.local/bin`). For the cargo fallback, a `<PATH>` ending in `bin` is treated as a
+   prefix root (binary lands in `<PATH>/pptd`); any other `<PATH>` receives the binary
+   directly.
 
 ### From Source (via Cargo)
 ```bash
-cargo install --git https://github.com/shiquda/open-pptd-skill.git
+cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.2
 ```
 
-### Installer Behavior & Caveats
-1. **Automatic Download**: The script attempts to download precompiled binaries from GitHub Releases (`shiquda/open-pptd-skill`) matching your OS (`linux`, `darwin`, `windows`) and architecture (`x86_64`, `aarch64`/`arm64`) into `~/.local/bin/pptd` (or `--dir <PATH>`).
-2. **Shell Installer Cargo Fallback**:
-   - When prebuilt archive downloads fail, `install_binary.sh` falls back to `cargo install --git https://github.com/shiquda/open-pptd-skill.git --root "${INSTALL_DIR}/.." --force`.
-   - **Target directory caveat**: `--root "${INSTALL_DIR}/.."` places the binary in `${INSTALL_DIR}/../bin/`. This resolves to `${INSTALL_DIR}` only when `INSTALL_DIR` is the default `~/.local/bin`. If a custom `--dir` is supplied (e.g. `/tmp/custom`), the cargo output will land in `/tmp/bin/pptd` rather than `/tmp/custom/pptd`.
-   - **Tag caveat**: The cargo fallback command does not pass a `--tag` parameter, so it builds the current default branch (`main` HEAD) rather than a pinned release tag. For a pinned release, invoke cargo manually with `--tag`:
-     ```bash
-     cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.2
-     ```
+### Manual release install
+Download `pptd-<version>-<os>.tar.gz` (`.zip` on Windows) and `SHA256SUMS.txt` from
+<https://github.com/shiquda/open-pptd-skill/releases>, verify the digest yourself
+(`sha256sum -c SHA256SUMS.txt --ignore-missing`, or `shasum -a 256`), then place `pptd`
+on your `PATH` (for example `~/.local/bin`).
 ---
 ### `pptd check`
 Performs strict semantic and structural validation of a PPTD project without building.

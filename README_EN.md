@@ -37,9 +37,13 @@ Please install and set up the open-pptd presentation skill for me:
 4. Notify me when setup is complete and ready.
 ```
 
-> **Installation Command Notes**:
-> - **Standard Ecosystem Command**: Use standard skill managers via `npx skills add https://github.com/shiquda/open-pptd-skill -g -y` (or `npx skills add shiquda/open-pptd-skill -g -y`). That command performs a full clone: the complete git history is ~110MB (the current working tree is ~31MB). If the clone times out under constrained networks, use the fallback command below.
-> - **Direct npm/npx Compatibility (Recommended Fallback)**: Use `npx github:shiquda/open-pptd-skill install -y` to install directly and avoid full git clone timeouts.
+> **Install model (two separate things — `npx` is not the compiler)**:
+> - **① Entry point = skill text distribution.** `npx skills add https://github.com/shiquda/open-pptd-skill -g -y` is the install entry of the ecosystem **skills package manager** (a third-party CLI); `npx github:shiquda/open-pptd-skill install -y` is this repo's own Node distributor, offered as the fallback when a full clone times out. Both **only copy SKILL.md / references / scripts into an agent skills directory**. Neither builds slides, downloads the compiler, or participates in a build.
+> - **② Runtime = the native Rust compiler `pptd`.** The actual PPTD → PPTX compilation runs on a single-file native Rust binary (milliseconds, fully offline, zero Node dependency at build time), installed by `python3 …/install_binary.py` from a **pinned GitHub Release version** with SHA-256 verification.
+>
+> Clone size: `skills add` performs a full clone (complete Git history ~110MB, working tree ~31MB); on constrained networks use `npx github:shiquda/open-pptd-skill install -y` instead.
+>
+> Security boundary: this project **does not ship and does not recommend** `curl … | bash` remote-pipe installation. Binaries always come from the pinned release and must match `SHA256SUMS.txt`; a failed check aborts the download and falls back to a source build at the same pinned tag.
 ---
 
 ## 💬 Generating Presentations with AI (Daily Usage)
@@ -148,16 +152,27 @@ For detailed specifications and guides, see:
 If you need to invoke the `pptd` compiler directly in your terminal for debugging:
 
 ### 1. Manual CLI Installation
-```bash
-# Method A: Automatic download script to ~/.local/bin/pptd
-curl -fsSL https://raw.githubusercontent.com/shiquda/open-pptd-skill/main/skills/open-pptd/scripts/install_binary.sh | bash
+`pptd` is a single native Rust binary with exactly one automated install path: the bundled Python installer, run from a local checkout or an already-installed skill directory. It downloads a pinned release and enforces SHA-256; **no `curl … | bash` remote-pipe install is offered or supported**.
 
-# Method B: Cross-platform Python installer
+```bash
+# Method A (recommended): Python cross-platform installer — pinned version + mandatory SHA-256
 python3 skills/open-pptd/scripts/install_binary.py
 
-# Method C: Install from source using Cargo
-cargo install --git https://github.com/shiquda/open-pptd-skill.git
+# Method B: Build from source at the pinned release tag (same version as the binaries)
+cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.2
+
+# Method C: Download manually and verify yourself
+# 1) From https://github.com/shiquda/open-pptd-skill/releases download
+#    pptd-<version>-<os>.tar.gz (.zip on Windows) plus SHA256SUMS.txt
+# 2) Verify: sha256sum -c SHA256SUMS.txt --ignore-missing  (or: shasum -a 256 <archive>)
+# 3) Extract pptd into ~/.local/bin (or any PATH directory) and chmod +x
 ```
+
+Installer behaviour, verifiable in the source:
+- The version is pinned in the script (`VERSION`, currently `1.4.2`); only that tag's release assets are fetched.
+- The archive must match its `SHA256SUMS.txt` entry byte for byte. A missing entry, an unreachable checksum file, or a mismatch aborts the install — an unverified binary is never installed silently.
+- When the download is unavailable it falls back to `cargo install --tag v<version>`; if that fails too, it prints manual instructions and exits non-zero.
+- The log prints the installed version and the verified SHA-256.
 
 ### 2. Core CLI Commands
 - **Static Diagnostics**: `pptd check my_project/deck.pptd`

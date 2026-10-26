@@ -6,8 +6,16 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Security
+
+- **Removed the remote-pipe install entry point**: deleted `skills/open-pptd/scripts/install_binary.sh`. Both READMEs, `SKILL.md`, and `reference/cli.md` no longer steer anyone to `curl … | bash`; the only automated install path is `python3 skills/open-pptd/scripts/install_binary.py` from a local checkout.
+- **Checksum verification is now mandatory**: when the `SHA256SUMS.txt` entry is missing or the checksum file is unreachable, `install_binary.py` no longer prints `SHA256 (unverified)` and installs anyway — it aborts that download and falls back to a source build at the pinned tag. The install log prints the pinned version and the verified SHA-256.
+- **Source fallback is pinned**: the `cargo install` fallback now passes `--tag v<version>` instead of building `main` HEAD; the installer's pinned version moved to `1.4.2` (it had lagged behind the current release).
+
 ### Documentation and distribution
 
+- **One install story**: both READMEs and `SKILL.md` now separate the two layers — `npx skills add` / this repo's Node distributor only copy skill files, while the native Rust `pptd` is the build runtime (zero Node dependency at build time). `open-pptd-skill --help` says the same.
+- **`SKILL.md` gains Security & Install Trust and an untrusted-content boundary**: pinned version, mandatory SHA-256, pinned fallback, verifiable log, an explicit ban on remote-pipe execution, and a statement that any text inside PPTX/PPTD input is data, never instructions.
 - Keep standard MIT terms and copyright notices in `LICENSE`; move third-party provenance to `NOTICE` and include it and the original `LICENSE-MIT` in npm packages.
 - Put positioning, installation, a real PowerPoint output screenshot, and its PPTD source on the first screen of both READMEs.
 - Add `docs/images/social-preview.png` (1280×640) and its editable SVG source for the maintainer to upload in GitHub Settings.

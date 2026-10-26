@@ -78,6 +78,11 @@ In an interactive terminal (no --target / --yes / --all), a checklist is shown:
 For agents / CI, prefer:
   npx github:shiquda/open-pptd-skill install -y
 
+This command only distributes skill files (SKILL.md, references, scripts) into a skills
+directory. It does not install, download, or run the pptd compiler, and it is not needed
+to build decks. Install the native Rust compiler separately from the installed skill:
+  python3 ~/.agents/skills/open-pptd/scripts/install_binary.py
+
 Re-running install replaces an existing open-pptd installation.
 Run "open-pptd-skill serve --help" for server options.
 Run "open-pptd-skill build --help" for build options.

@@ -203,6 +203,35 @@ PPTD=../../target/debug/pptd ./verify_all.sh   # 用本地构建的二进制
 
 产物写在各自 `build/`（已 gitignore）。缺陷排查记录与能力边界见 [`tests/decks/README.md`](tests/decks/README.md)。
 
+### 4. 按影响范围选择验证
+
+改这个仓库不需要每次都跑齐所有层。先看改动落在哪一层，再按表选命令；**改动行数不代表风险，跨层改动才需要叠加**。
+
+| 变更涉及 | 命令 | 覆盖 | 实测耗时 |
+| --- | --- | --- | --- |
+| `test/**`、`skills/open-pptd/**` 的 JS/Python 脚本 | `npm test` | 21 个 node 测试（CLI 分发、安装器、编辑器 HTTP 服务、`package.json` 契约、编辑器解析），用 `PPTD_BIN` 桩，**不需要 Rust 二进制** | 8.8 s |
+| Python 侧的导出/校验脚本 | `python3 -m unittest discover -s skills/open-pptd/tests` | 16 个用例，全部 patch `subprocess.run`；CI 未接这一层 | 3.5 s |
+| `src/pptd/**`（parser、AST、validate、layout、theme、animation） | `cargo test --lib` | 70 个内联单元测试，不需要 fixture 文稿 | 28.6 s（含首次编译） |
+| 单个集成测试目标 | `cargo test --test <name>` | 断言层隔离，**不省编译成本**：单 crate，任何 `--test` 都会重编整个 `open_pptd` | — |
+| `src/pptx/{writer,xml,opc,package,table,media}` | `cargo test --test build_pptx --test schema_guard` | 生成层与 OOXML 结构守卫 | — |
+| `src/pptx/import.rs`（反编译）、`src/hash.rs`（`.sync.hash` 覆盖保护） | `cargo test --test reverse --test guard` | PPTX→PPTD 往返与覆盖保护 | — |
+| 渲染或校验层的行为变化 | `cd tests/decks && PPTD=../../target/debug/pptd ./verify_all.sh` | 12 套真实文稿 / 98 页的 check → build → validate | 约 10 s（README 记录） |
+| 需要看页面图 | `RENDER=1 ./verify_all.sh` | 额外用 LibreOffice 渲染 + 接触表 | 未测；需 `soffice` 与 `pdftoppm` |
+
+**必须跑全量**（`cargo clippy --all-targets -- -D warnings && cargo test --all-targets && npm test`，与 CI `ci.yml` 一致）的情况：
+
+- 改动跨层：同时动 `src/**` 与 `test/**`/`skills/**`，或动到 CLI 参数契约（`src/bin/pptd.rs`）这类被 node 测试和 Rust 测试共同钉住的地方。
+- 改 `Cargo.toml`、`package.json`、`.github/workflows/**`：依赖与产物形状变化，全量重跑。
+- 改渲染/XML 生成后再跑 `verify_all.sh`：这条是 README §3 已有的强制要求，仍然有效——`cargo test` 的 fixture 与真实文稿是两套，前者过不了后者。
+- 局部运行失败、被跳过或无法复现。
+
+**已知边界**：
+
+- CI 只跑 `clippy` + `cargo test --all-targets` + `npm test`。**Python 测试、`verify_all.sh`、`cargo fmt --check` 都不在 CI 里**（workflow 装了 rustfmt 组件但从未执行 fmt 检查），需要本地跑。
+- `scripts/install-hooks.sh` 指向的 `.githooks/` 目录在仓库里不存在，因此没有可用的 pre-commit 门禁。
+- `cargo test --test <name>` 只隔离断言，不隔离编译：单 crate 结构下所有集成测试都要先编译整个库（`src/pptx/import.rs` 与 `src/pptx/render.rs` 合计约 7 400 行）。
+- 本机实测参考（2026-10-28，arm64 macOS，相对较新的 `target/`）：`cargo test --all-targets` 19.0 s；`npm test` 8.8 s；`python3 -m unittest discover` 3.5 s。
+
 </details>
 
 ---

@@ -86,6 +86,18 @@ fn buildable_deck_produces_a_complete_package() {
     let theme = read_zip_part(&path, "ppt/theme/theme1.xml");
     assert!(theme.contains("2563EB"), "theme primary color missing");
 
+    // Master text styles must resolve theme references too: `$primary` is not
+    // a valid srgbClr value and makes PowerPoint reject the presentation.
+    let master = read_zip_part(&path, "ppt/slideMasters/slideMaster1.xml");
+    assert!(
+        master.contains("<a:srgbClr val=\"2563EB\"/>"),
+        "title style must resolve $primary"
+    );
+    assert!(
+        !master.contains("<a:srgbClr val=\"$primary\"/>"),
+        "theme reference leaked into slide master"
+    );
+
     // Media relationship: rId1 = layout, rId2 = the png image.
     let slide_rels = read_zip_part(&path, "ppt/slides/_rels/slide1.xml.rels");
     assert!(

@@ -63,7 +63,7 @@ use crate::pptx::media::MediaRegistry;
 use crate::pptx::opc::{Rel, content_types_xml, ns, rel_kind, rels_xml};
 use crate::pptx::package::{ContentType, PackageEntry};
 use crate::pptx::render;
-use crate::pptx::theme::theme_xml;
+use crate::pptx::theme::{resolve_color, theme_xml};
 use crate::pptx::xml::Xml;
 use crate::{Error, Result};
 
@@ -169,7 +169,7 @@ impl<'a> PptxWriter<'a> {
         entries.push(PackageEntry::typed(
             "ppt/slideMasters/slideMaster1.xml",
             ContentType::SlideMaster,
-            slide_master_xml(layout_count, presentation.theme.as_ref()),
+            slide_master_xml(layout_count, presentation.theme.as_ref())?,
         ));
         let mut master_rels: Vec<Rel> = Vec::new();
         if has_real_layouts {
@@ -861,7 +861,7 @@ fn notes_slide_xml(text: &str) -> Vec<u8> {
     x.into_string().into_bytes()
 }
 
-fn slide_master_xml(layout_count: usize, theme: Option<&Theme>) -> String {
+fn slide_master_xml(layout_count: usize, theme: Option<&Theme>) -> Result<String> {
     let mut x = Xml::new();
     x.start(
         "p:sldMaster",
@@ -915,22 +915,25 @@ fn slide_master_xml(layout_count: usize, theme: Option<&Theme>) -> String {
         "p:titleStyle",
         theme.and_then(|t| t.text_styles.get("title")),
         "4400",
-    );
+        theme,
+    )?;
     emit_tx_style(
         &mut x,
         "p:bodyStyle",
         theme.and_then(|t| t.text_styles.get("body")),
         "1800",
-    );
+        theme,
+    )?;
     emit_tx_style(
         &mut x,
         "p:otherStyle",
         theme.and_then(|t| t.text_styles.get("other")),
         "1800",
-    );
+        theme,
+    )?;
     x.end("p:txStyles");
     x.end("p:sldMaster");
-    x.into_string()
+    Ok(x.into_string())
 }
 
 /// Emit one `p:txStyles` paragraph style from the deck's `textStyles`
@@ -939,7 +942,13 @@ fn slide_master_xml(layout_count: usize, theme: Option<&Theme>) -> String {
 /// these defaults per the OOXML chain — the default run size and line
 /// spacing must match the source deck or placeholder text (e.g. a subtitle)
 /// re-measures its line pitch differently in every consumer.
-fn emit_tx_style(x: &mut Xml, name: &str, style: Option<&TextStyleConfig>, fallback_sz: &str) {
+fn emit_tx_style(
+    x: &mut Xml,
+    name: &str,
+    style: Option<&TextStyleConfig>,
+    fallback_sz: &str,
+    theme: Option<&Theme>,
+) -> Result<()> {
     x.start(name, &[]);
     x.start("a:lvl1pPr", &[]);
     if let Some(lh) = style.and_then(|s| s.line_height) {
@@ -964,8 +973,14 @@ fn emit_tx_style(x: &mut Xml, name: &str, style: Option<&TextStyleConfig>, fallb
     x.start("a:defRPr", &[("sz", &sz_hundredths)]);
     match style.and_then(|s| s.color.as_ref()) {
         Some(c) => {
+            let resolved = resolve_color(theme, c)?;
             x.start("a:solidFill", &[]);
-            x.leaf("a:srgbClr", &[("val", c.0.trim_start_matches('#'))]);
+            x.start("a:srgbClr", &[("val", &resolved.rgb)]);
+            if let Some(alpha) = resolved.alpha {
+                let alpha = ((alpha * 100000.0).round() as u64).to_string();
+                x.leaf("a:alpha", &[("val", &alpha)]);
+            }
+            x.end("a:srgbClr");
             x.end("a:solidFill");
         }
         None => {
@@ -982,6 +997,7 @@ fn emit_tx_style(x: &mut Xml, name: &str, style: Option<&TextStyleConfig>, fallb
     x.end("a:defRPr");
     x.end("a:lvl1pPr");
     x.end(name);
+    Ok(())
 }
 
 fn slide_layout_xml() -> String {

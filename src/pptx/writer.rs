@@ -974,14 +974,7 @@ fn emit_tx_style(
     match style.and_then(|s| s.color.as_ref()) {
         Some(c) => {
             let resolved = resolve_color(theme, c)?;
-            x.start("a:solidFill", &[]);
-            x.start("a:srgbClr", &[("val", &resolved.rgb)]);
-            if let Some(alpha) = resolved.alpha {
-                let alpha = ((alpha * 100000.0).round() as u64).to_string();
-                x.leaf("a:alpha", &[("val", &alpha)]);
-            }
-            x.end("a:srgbClr");
-            x.end("a:solidFill");
+            render::emit_fill_color(x, &resolved);
         }
         None => {
             x.start("a:solidFill", &[]);

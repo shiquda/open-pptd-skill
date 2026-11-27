@@ -6,6 +6,10 @@
 
 ## [Unreleased]
 
+### 修复
+
+- **母版与占位符文本样式写出裸主题色引用**：`p:titleStyle` / `p:bodyStyle` / `p:otherStyle` 与 slide 占位符的 `a:lstStyle` 之前把 `$primary` 这类主题引用原样写进 `a:srgbClr val`，产出非法 OOXML，PowerPoint 打开时报错。两处现在统一经 `resolve_color` 解析，HEX8 颜色的透明度以 `a:alpha` 保留；`tests/build_pptx.rs` 分别为母版与占位符加了回归断言。
+
 ### 改进与健壮性
 
 - **类型定义与输入校验同源（消除手写重复白名单）**：PPTD AST 结构体（`Presentation`、`Page`、`ElementCommon`、`TextContent`、`ShapeDef`、`Cell`、`Animation` 及各元素变体）通过编译期穷举守卫直接导出合法字段集合，彻底废除 `validate.rs` 中 5 处容易与 AST 脱节的手写白名单数组；新增/调整 AST 字段时若未同步字段声明直接触发 Rust 编译期报错，根治合法字段（如 `cropShape`、`softEdge`、`customFonts`、表格 `fill` 等）被手写清单漏改误拒的隐患；保留既有一趟检查收集全部诊断的体验，不简单换成首错即停。

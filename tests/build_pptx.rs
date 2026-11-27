@@ -90,11 +90,11 @@ fn buildable_deck_produces_a_complete_package() {
     // a valid srgbClr value and makes PowerPoint reject the presentation.
     let master = read_zip_part(&path, "ppt/slideMasters/slideMaster1.xml");
     assert!(
-        master.contains("<a:srgbClr val=\"2563EB\"/>"),
+        master.contains("val=\"2563EB\""),
         "title style must resolve $primary"
     );
     assert!(
-        !master.contains("<a:srgbClr val=\"$primary\"/>"),
+        !master.contains("$primary"),
         "theme reference leaked into slide master"
     );
 
@@ -1017,5 +1017,56 @@ elements:
         !slide.contains("<a:noAutofit"),
         "an unset autofit must not be materialised as noAutofit either"
     );
+    let _ = fs::remove_file(&path);
+}
+
+#[test]
+fn placeholder_text_style_resolves_theme_colors() {
+    let deck = r##"version: v2
+title: Placeholder theme colours
+size: [960, 540]
+theme:
+  colors:
+    primary: "#2563EB"
+  textStyles:
+    title:
+      fontSize: 40
+      color: "$primary"
+pages:
+  - pages/p.page
+"##;
+    let page = r#"pageType: content
+elements:
+  - elementId: title
+    elementType: text
+    placeholder: title
+    bounds: [60, 40, 800, 90]
+    content:
+      style: "$title"
+      text: Placeholder colour
+"#;
+    let dir = std::env::temp_dir().join(format!("pptd-ph-theme-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&dir);
+    fs::create_dir_all(dir.join("pages")).unwrap();
+    fs::write(dir.join("deck.pptd"), deck).unwrap();
+    fs::write(dir.join("pages/p.page"), page).unwrap();
+
+    let project = pptd::load_project(&dir.join("deck.pptd")).unwrap();
+    let path = out_path("ph-theme");
+    let _ = fs::remove_file(&path);
+    PptxWriter::new(&project).build(&path).unwrap();
+    let slide = read_zip_part(&path, "ppt/slides/slide1.xml");
+
+    // The placeholder's `a:lstStyle` inherits `$title`, whose colour is
+    // `$primary`; a raw token is invalid OOXML and blocks PowerPoint.
+    assert!(
+        slide.contains("val=\"2563EB\""),
+        "placeholder lstStyle must resolve $primary: {slide}"
+    );
+    assert!(
+        !slide.contains('$'),
+        "theme reference leaked into slide XML: {slide}"
+    );
+    let _ = fs::remove_dir_all(&dir);
     let _ = fs::remove_file(&path);
 }

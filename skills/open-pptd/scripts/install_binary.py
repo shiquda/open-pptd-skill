@@ -29,7 +29,7 @@ from typing import Optional, Tuple
 
 REPO = "shiquda/open-pptd-skill"
 REPO_CANDIDATES = ["shiquda/open-pptd-skill"]
-VERSION = "1.4.2"
+VERSION = "1.4.3"
 
 
 def detect_target(version: str = VERSION) -> Optional[Tuple[str, list[str]]]:

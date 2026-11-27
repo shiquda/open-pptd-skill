@@ -47,7 +47,7 @@ python3 <SKILL_DIR>/scripts/validate_pptx.py <output.pptx> --render-images
 
 对本 Skill 的安装与运行，遵循以下固定约束：
 
-1. **固定版本**：`install_binary.py` 内的 `VERSION` 是唯一可信版本源（当前 `1.4.2`），只访问该 Release tag 的资产，不跟随 `main` 分支。
+1. **固定版本**：`install_binary.py` 内的 `VERSION` 是唯一可信版本源（当前 `1.4.3`），只访问该 Release tag 的资产，不跟随 `main` 分支。
 2. **强制 SHA256 校验**：下载的归档必须与 Release 的 `SHA256SUMS.txt` 条目一致。**校验条目缺失、校验文件取不到、或摘要不匹配都会中止安装**——绝不静默安装不可核验的二进制。
 3. **固定回退**：下载不可用时回退 `cargo install --git … --tag v<version>`（源码与二进制同版本）；仍失败则打印手动安装指引并以非零码退出，不做任何"猜路径继续执行"。
 4. **日志可核验**：安装结束会打印所装版本与校验通过的 SHA256，并重新探测 `pptd --version` 与目标版本比对。

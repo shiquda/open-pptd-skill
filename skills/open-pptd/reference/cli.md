@@ -23,7 +23,7 @@ script is meant to be read and run from a checked-out tree you can inspect.
 
 ### Installer behavior
 1. **Pinned version**: assets are fetched from the fixed release tag `v<version>`
-   (`VERSION` in `install_binary.py`, currently `1.4.2`), never from `main` HEAD.
+   (`VERSION` in `install_binary.py`, currently `1.4.3`), never from `main` HEAD.
 2. **Platform match**: `linux` / `darwin` / `windows` × `x86_64` / `aarch64` (`arm64`).
 3. **Mandatory SHA-256**: the downloaded archive must match an entry in that release's
    `SHA256SUMS.txt`. A missing entry, an unreachable checksum file, or a digest mismatch
@@ -41,7 +41,7 @@ script is meant to be read and run from a checked-out tree you can inspect.
 
 ### From Source (via Cargo)
 ```bash
-cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.2
+cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.3
 ```
 
 ### Manual release install

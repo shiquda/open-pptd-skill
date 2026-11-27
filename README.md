@@ -159,7 +159,7 @@ my_presentation/
 python3 skills/open-pptd/scripts/install_binary.py
 
 # 方式 B：从源码编译（固定 Release tag，与二进制同版本）
-cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.2
+cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.3
 
 # 方式 C：手动下载并自行校验
 # 1) 从 https://github.com/shiquda/open-pptd-skill/releases 下载对应平台的
@@ -169,7 +169,7 @@ cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.2
 ```
 
 安装器行为（可核验）：
-- 版本固定为脚本内的 `VERSION`（当前 `1.4.2`），只访问该 tag 的 Release 资产；
+- 版本固定为脚本内的 `VERSION`（当前 `1.4.3`），只访问该 tag 的 Release 资产；
 - 归档必须与 Release 的 `SHA256SUMS.txt` 条目**逐字节一致**，缺条目、取不到校验文件或校验不匹配都会中止安装，绝不会静默安装未校验的二进制；
 - 下载不可用时回退到 `cargo install --tag v<version>`；仍失败则打印手动安装指引并以非零码退出；
 - 日志会打印所装版本号与校验通过的 SHA256。

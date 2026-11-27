@@ -4,7 +4,7 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
-## [Unreleased]
+## [1.4.3] - 2026-11-27
 
 ### 修复
 

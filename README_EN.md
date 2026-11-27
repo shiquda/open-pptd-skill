@@ -159,7 +159,7 @@ If you need to invoke the `pptd` compiler directly in your terminal for debuggin
 python3 skills/open-pptd/scripts/install_binary.py
 
 # Method B: Build from source at the pinned release tag (same version as the binaries)
-cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.2
+cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.3
 
 # Method C: Download manually and verify yourself
 # 1) From https://github.com/shiquda/open-pptd-skill/releases download
@@ -169,7 +169,7 @@ cargo install --git https://github.com/shiquda/open-pptd-skill.git --tag v1.4.2
 ```
 
 Installer behaviour, verifiable in the source:
-- The version is pinned in the script (`VERSION`, currently `1.4.2`); only that tag's release assets are fetched.
+- The version is pinned in the script (`VERSION`, currently `1.4.3`); only that tag's release assets are fetched.
 - The archive must match its `SHA256SUMS.txt` entry byte for byte. A missing entry, an unreachable checksum file, or a mismatch aborts the install — an unverified binary is never installed silently.
 - When the download is unavailable it falls back to `cargo install --tag v<version>`; if that fails too, it prints manual instructions and exits non-zero.
 - The log prints the installed version and the verified SHA-256.

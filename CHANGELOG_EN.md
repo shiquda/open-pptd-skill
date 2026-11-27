@@ -6,6 +6,10 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Raw theme references written into master and placeholder text styles**: `p:titleStyle` / `p:bodyStyle` / `p:otherStyle` and slide placeholder `a:lstStyle` emitted `$primary` verbatim as `a:srgbClr val`, which is invalid OOXML and makes PowerPoint reject the deck. Both now resolve through `resolve_color`, HEX8 alpha is preserved as `a:alpha`, and `tests/build_pptx.rs` asserts that neither the master nor a placeholder leaks a token.
+
 ### Improvements & Robustness
 
 - **Single-source AST field validation**: eliminated duplicate hand-written field allowlists in `validate.rs` by single-sourcing allowed YAML properties directly from typed AST struct definitions (`Presentation`, `Page`, `ElementCommon`, `TextContent`, `ShapeDef`, `Cell`, `Animation`, and element variants) backed by compile-time exhaustiveness guards, preventing regression of supported fields (such as `cropShape`, `softEdge`, `customFonts`, table `fill`) being falsely rejected as unknown while preserving batch diagnostic reporting without fail-fast truncation.

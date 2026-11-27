@@ -369,7 +369,7 @@ fn srgb(xml: &mut Xml, rgb: &str, alpha: Option<f64>) {
     xml.end("a:srgbClr");
 }
 
-fn emit_fill_color(xml: &mut Xml, color: &ResolvedColor) {
+pub(crate) fn emit_fill_color(xml: &mut Xml, color: &ResolvedColor) {
     xml.start("a:solidFill", &[]);
     srgb(xml, &color.rgb, color.alpha);
     xml.end("a:solidFill");
@@ -649,7 +649,7 @@ pub fn render_layout_placeholder(
 
     xml.start("p:txBody", &[]);
     xml.leaf("a:bodyPr", &[]);
-    emit_lst_style(xml, &style, true, ctx.safe_fonts);
+    emit_lst_style(xml, &style, true, ctx.safe_fonts, ctx.theme);
     xml.leaf("a:p", &[]);
     xml.end("p:txBody");
     xml.end("p:sp");
@@ -780,7 +780,13 @@ fn emit_bullet(xml: &mut Xml, style: &EffTextStyle) {
 /// effective style (algn/lnSpc/spcBef/defRPr) so slide placeholders inherit
 /// the layout/master text style (font/size/colour/bold/align/spacing) —
 /// e.g. an empty slide title shows the layout's prompt in blue/bold 24pt.
-fn emit_lst_style(xml: &mut Xml, style: &EffTextStyle, is_placeholder: bool, safe_fonts: bool) {
+fn emit_lst_style(
+    xml: &mut Xml,
+    style: &EffTextStyle,
+    is_placeholder: bool,
+    safe_fonts: bool,
+    theme: Option<&Theme>,
+) {
     if !is_placeholder {
         xml.leaf("a:lstStyle", &[]);
         return;
@@ -828,9 +834,15 @@ fn emit_lst_style(xml: &mut Xml, style: &EffTextStyle, is_placeholder: bool, saf
     if has_rpr {
         xml.start("a:defRPr", &rpr_attrs);
         if let Some(c) = &style.color {
-            xml.start("a:solidFill", &[]);
-            xml.leaf("a:srgbClr", &[("val", c.0.trim_start_matches('#'))]);
-            xml.end("a:solidFill");
+            // Same rule as the master text styles: `$primary` is not a valid
+            // `srgbClr` value, so resolve theme references here too and keep
+            // HEX8 alpha. Fall back to the raw value when the theme cannot
+            // resolve it (mirrors the placeholder-geometry path above).
+            let resolved = resolve_color(theme, c).unwrap_or(ResolvedColor {
+                rgb: c.0.trim_start_matches('#').to_owned(),
+                alpha: None,
+            });
+            emit_fill_color(xml, &resolved);
         }
         if let Some(f) = &style.font_family {
             match f {
@@ -927,7 +939,7 @@ fn render_text(
     if is_empty_placeholder {
         xml.start("p:txBody", &[]);
         xml.leaf("a:bodyPr", &[]);
-        emit_lst_style(xml, &style, true, ctx.safe_fonts);
+        emit_lst_style(xml, &style, true, ctx.safe_fonts, ctx.theme);
         xml.leaf("a:p", &[]);
         xml.end("p:txBody");
         xml.end("p:sp");
@@ -994,7 +1006,13 @@ fn render_text(
         None => {}
     }
     xml.end("a:bodyPr");
-    emit_lst_style(xml, &style, text.placeholder.is_some(), ctx.safe_fonts);
+    emit_lst_style(
+        xml,
+        &style,
+        text.placeholder.is_some(),
+        ctx.safe_fonts,
+        ctx.theme,
+    );
 
     // Plain text: every line becomes one paragraph (the `<p>` equivalence).
     let sz = (style.font_size.unwrap_or(18.0) * 100.0)
@@ -1572,7 +1590,7 @@ pub(crate) fn render_rich_body(
         None => {}
     }
     xml.end("a:bodyPr");
-    emit_lst_style(xml, style, is_placeholder, safe_fonts);
+    emit_lst_style(xml, style, is_placeholder, safe_fonts, theme);
 
     for para in parse_rich(text) {
         xml.start("a:p", &[]);
